@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
         app:showAsAction="always" />
+
+    <item android:id="@+id/mapIcon"
+        android:icon="@drawable/ic_map"
+        android:title="@string/map"
+        app:showAsAction="always" />
 </menu>

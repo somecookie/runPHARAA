@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         // Set icons
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_near_me);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_favourites);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.profileIcon:
                 //Intent profileIntent = new Intent(getBaseContext(), ProfileActivity.class);
                 //startActivity(profileIntent);
+                return true;
+            case R.id.mapIcon:
                 return true;
             default:
         }
