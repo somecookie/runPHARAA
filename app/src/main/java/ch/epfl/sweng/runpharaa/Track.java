@@ -2,6 +2,9 @@ package ch.epfl.sweng.runpharaa;
 
 import android.media.Image;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class Track
 {
     private static int uid;
@@ -15,14 +18,14 @@ public class Track
     private static double track_length;
     private static int average_time_length;
     private static double height_diff;
-    //TODO: make a list of Tags attribute (maybe object or enumeration for the Tags type)
+    private static Set<Tag> tags;
 
     //Reviews
     private static int likes;
     private static int dislikes;
     private static double like_ratio;
-    //TODO: make list of reviews (create Review Type)
-    //TODO: maybe add other review attributes
+    private static ArrayList<Review> reviews;//TODO: maybe change add/remove review fonction and maybe change to Set since they will be unique
+    //TODO: maybe add other review/feedback attributes
 
 
     public Track() {
@@ -68,6 +71,22 @@ public class Track
         Track.like_ratio = like_ratio;
     }
 
+    public static Set<Tag> getTags() {
+        return tags;
+    }
+
+    public static void setTags(Set<Tag> tags) {
+        Track.tags = tags;
+    }
+
+    public static ArrayList<Review> getReviews() {
+        return reviews;
+    }
+
+    public static void setReviews(ArrayList<Review> reviews) {
+        Track.reviews = reviews;
+    }
+
     public static int getUid() {
         return uid;
     }
@@ -106,5 +125,60 @@ public class Track
 
     public static double getLike_ratio() {
         return like_ratio;
+    }
+
+
+    /**
+     * Add a new tag to the @tags set if it does not already contains it
+     * @param tag
+     */
+    public static void addTag(Tag tag)
+    {
+        tags.add(tag);
+    }
+
+    /**
+     * Remove a tag of the @tags set if it already contains it
+     * @param tag
+     */
+    public static void removeTag(Tag tag)
+    {
+        tags.remove(tag);
+    }
+
+    /**
+     * Add new tags to the @tags set if it does not already contains them
+     * @param newTags
+     */
+    public static void addTags(Set<Tag> newTags)
+    {
+        tags.addAll(newTags);
+    }
+
+    /**
+     * Remove tags of the @tags set if it already contains them
+     * @param tagsToRemove
+     */
+    public static void removeTags(Set<Tag> tagsToRemove)
+    {
+        tags.removeAll(tagsToRemove);
+    }
+
+    /**
+     * Add a new review to the list of @reviews
+     * @param review
+     */
+    public static void addReview(Review review)
+    {
+        reviews.add(review);
+    }
+
+    /**
+     * Remove the first occurence of the give review in @reviews
+     * @param review
+     */
+    public static void removeReview(Review review)
+    {
+        reviews.remove(review);
     }
 }
