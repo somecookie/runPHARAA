@@ -28,7 +28,21 @@ public class Track
     //TODO: maybe add other review/feedback attributes
 
 
-    public Track() {
+    //TODO: Make more constructors
+    public Track(int uid, int creator_id, Image image, String location, double track_length, int average_time_length, double height_diff, Set<Tag> tags, int likes, int dislikes, double like_ratio, ArrayList<Review> reviews)
+    {
+        this.uid = uid;
+        this.creator_id = creator_id;
+        this.image = image;
+        this.location = location;
+        this.track_length = track_length;
+        this.average_time_length = average_time_length;
+        this.height_diff = height_diff;
+        this.tags = tags;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.like_ratio = like_ratio;
+        this.reviews = reviews;
     }
 
     public static void setUid(int uid) {
