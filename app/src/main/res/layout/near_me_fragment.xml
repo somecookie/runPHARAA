@@ -4,4 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorFragmentBackground">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardListId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
