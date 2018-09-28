@@ -35,9 +35,9 @@ public class FragmentNearMe extends Fragment {
         listCardItem.add(new CardItem());
         listCardItem.add(new CardItem());
 
-        Adapter adapter = new Adapter(getActivity() /*container.getContext()*/, listCardItem);
+        Adapter adapter = new Adapter(getActivity(), listCardItem);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity() /*container.getContext()*/));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return v;
     }
