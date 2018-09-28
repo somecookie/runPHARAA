@@ -7,22 +7,22 @@ import java.util.Set;
 
 public class Track
 {
-    private static int uid;
+    private final int uid;
     //TODO: list of longitude latitude (maybe make object/sub-class) talk with Ricardo
-    private static int creator_id;
-    private static Image image; //TODO: check if it is the right type
+    private final int creator_id;
+    private final Image image; //TODO: check if it is the right type
 
 
     //Track specifics
-    private static String location;
-    private static double track_length;
-    private static int average_time_length;
-    private static double height_diff;
-    private static Set<Tag> tags;
+    private final String location;
+    private final double track_length;
+    private final int average_time_length;
+    private final double height_diff;
+    private final Set<Tag> tags;
 
     //Reviews
-    private static Reactions reactions;
-    private static ArrayList<Review> reviews;//TODO: maybe change add/remove review fonction and maybe change to Set since they will be unique
+    private final Reactions reactions;
+    private final ArrayList<Review> reviews;//TODO: maybe change add/remove review fonction and maybe change to Set since they will be unique
     //TODO: maybe add other review/feedback attributes
 
 
@@ -41,92 +41,11 @@ public class Track
         this.reviews = reviews;
     }
 
-    public static void setUid(int uid) {
-        Track.uid = uid;
-    }
-
-    public static void setCreator_id(int creator_id) {
-        Track.creator_id = creator_id;
-    }
-
-    public static void setImage(Image image) {
-        Track.image = image;
-    }
-
-    public static void setLocation(String location) {
-        Track.location = location;
-    }
-
-    public static void setTrack_length(double track_length) {
-        Track.track_length = track_length;
-    }
-
-    public static void setAverage_time_length(int average_time_length) {
-        Track.average_time_length = average_time_length;
-    }
-
-    public static void setHeight_diff(double height_diff) {
-        Track.height_diff = height_diff;
-    }
-
-
-    public static Set<Tag> getTags() {
-        return tags;
-    }
-
-    public static void setTags(Set<Tag> tags) {
-        Track.tags = tags;
-    }
-
-    public static ArrayList<Review> getReviews() {
-        return reviews;
-    }
-
-    public static Reactions getReactions() {
-        return reactions;
-    }
-
-    public static void setReactions(Reactions reactions) {
-        Track.reactions = reactions;
-    }
-
-    public static void setReviews(ArrayList<Review> reviews) {
-        Track.reviews = reviews;
-    }
-
-    public static int getUid() {
-        return uid;
-    }
-
-    public static int getCreator_id() {
-        return creator_id;
-    }
-
-    public static Image getImage() {
-        return image;
-    }
-
-    public static String getLocation() {
-        return location;
-    }
-
-    public static double getTrack_length() {
-        return track_length;
-    }
-
-    public static int getAverage_time_length() {
-        return average_time_length;
-    }
-
-    public static double getHeight_diff() {
-        return height_diff;
-    }
-
-
+    /*
     /**
      * Add a new tag to the @tags set if it does not already contains it
      * @param tag
-     */
+     *
     public static void addTag(Tag tag)
     {
         tags.add(tag);
@@ -135,7 +54,7 @@ public class Track
     /**
      * Remove a tag of the @tags set if it already contains it
      * @param tag
-     */
+     *
     public static void removeTag(Tag tag)
     {
         tags.remove(tag);
@@ -144,7 +63,7 @@ public class Track
     /**
      * Add new tags to the @tags set if it does not already contains them
      * @param newTags
-     */
+     *
     public static void addTags(Set<Tag> newTags)
     {
         tags.addAll(newTags);
@@ -153,7 +72,7 @@ public class Track
     /**
      * Remove tags of the @tags set if it already contains them
      * @param tagsToRemove
-     */
+     *
     public static void removeTags(Set<Tag> tagsToRemove)
     {
         tags.removeAll(tagsToRemove);
@@ -162,7 +81,7 @@ public class Track
     /**
      * Add a new review to the list of @reviews
      * @param review
-     */
+     *
     public static void addReview(Review review)
     {
         reviews.add(review);
@@ -171,9 +90,10 @@ public class Track
     /**
      * Remove the first occurence of the give review in @reviews
      * @param review
-     */
+     *
     public static void removeReview(Review review)
     {
         reviews.remove(review);
     }
+    */
 }
