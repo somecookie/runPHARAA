@@ -1,5 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
+//import java.lang.Object.net.degreedays.geo.LongLat;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -10,7 +12,7 @@ public class User {
     private static File picture = null;
     private static ArrayList<Track> list_of_created_tracks = new ArrayList<>();
     private static ArrayList<Track> list_of_pref = new ArrayList<>();
-    //TODO: set localisation champ
+    //private static LongLat localisation = new LongLat(0 , 0);
     private static Boolean admin = false;
     private static int uId = -1;
 
