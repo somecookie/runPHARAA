@@ -26,6 +26,7 @@ local.properties
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
 *.iml
+.idea/caches/build_file_checksums.ser
 
 # OS-specific files
 .DS_Store
