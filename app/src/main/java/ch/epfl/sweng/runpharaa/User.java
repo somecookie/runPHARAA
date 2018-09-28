@@ -1,89 +1,68 @@
 package ch.epfl.sweng.runpharaa;
 
-//import java.lang.Object.net.degreedays.geo.LongLat;
+import android.location.Location;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class User {
+public final class User {
 
-    private static String name = "";
+    private final String name;
     //TODO: put default picture
-    private static File picture = null;
-    private static ArrayList<Track> list_of_created_tracks = new ArrayList<>();
-    private static ArrayList<Track> list_of_pref = new ArrayList<>();
-    //private static LongLat localisation = new LongLat(0 , 0);
-    private static Boolean admin = false;
-    private static int uId = -1;
+    private final File picture;
+    private final ArrayList<Track> list_of_created_tracks;
+    private final ArrayList<Track> list_of_pref;
+    private final Location location;
+    private final boolean admin;
+    private final int uId;
 
 
-    public User(String name, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, Boolean admin, int uId){
+    public User(String name, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, Location location, Boolean admin, int uId){
         //TODO: set localisation champ in constructor
         this.name = name;
         this.picture = picture;
         this.list_of_created_tracks = list_of_created_tracks;
         this.list_of_pref = list_of_pref;
+        this.location = location;
         this.admin = admin;
         this.uId = uId;
     }
 
     //TODO : Other constructor for different case : No pictures, no tracks
 
-    /*
-        List of getter
-     */
 
-    public static String getName() {
-        return name;
-    }
-
-    public static File getPicture() {
-        return picture;
-    }
-
-    public static ArrayList<Track> getList_of_created_tracks() {
-        return list_of_created_tracks;
-    }
-
-    public static ArrayList<Track> getList_of_pref() {
-        return list_of_pref;
-    }
-
-    public static Boolean isAdmin() {
-        return admin;
-    }
-
-    public static int getuId() {
-        return uId;
-    }
 
     /*
         List of setter
      */
-
-    public static void setName(String name) {
-        User.name = name;
+    /*
+    public User withName(String newName) {
+        return new User(newName, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
-    public static void setPicture(File picture) {
-        User.picture = picture;
+    public User withPicture(File newPicture) {
+        return new User(name, newPicture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
-    public static void setList_of_created_tracks(ArrayList<Track> list_of_created_tracks) {
-        User.list_of_created_tracks = list_of_created_tracks;
+    public User withList_of_created_tracks(ArrayList<Track> new_list_of_created_tracks) {
+        return new User(name, picture, new_list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
-    public static void setList_of_pref(ArrayList<Track> list_of_pref) {
-        User.list_of_pref = list_of_pref;
+    public User withList_of_pref(ArrayList<Track> new_list_of_pref) {
+        return new User(name, picture, list_of_created_tracks, new_list_of_pref, location, admin, uId);
     }
 
-    public static void setAdmin(Boolean admin) {
-        User.admin = admin;
+    public User withAdmin(Boolean newAdmin) {
+        return new User(name, picture, list_of_created_tracks, list_of_pref, location, newAdmin, uId);
     }
 
-    public static void setuId(int uId) {
-        User.uId = uId;
+    public User withLocation(Location newLocation) {
+        return new User(name, picture, list_of_created_tracks, list_of_pref, newLocation, admin, uId);
     }
 
+    public User withuId(int newuId) {
+        return new User(name, picture, list_of_created_tracks, list_of_pref, location, admin, newuId);
+    }
+*/
 
 }
