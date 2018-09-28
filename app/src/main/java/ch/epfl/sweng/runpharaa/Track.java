@@ -21,15 +21,13 @@ public class Track
     private static Set<Tag> tags;
 
     //Reviews
-    private static int likes;
-    private static int dislikes;
-    private static double like_ratio;
+    private static Reactions reactions;
     private static ArrayList<Review> reviews;//TODO: maybe change add/remove review fonction and maybe change to Set since they will be unique
     //TODO: maybe add other review/feedback attributes
 
 
     //TODO: Make more constructors
-    public Track(int uid, int creator_id, Image image, String location, double track_length, int average_time_length, double height_diff, Set<Tag> tags, int likes, int dislikes, double like_ratio, ArrayList<Review> reviews)
+    public Track(int uid, int creator_id, Image image, String location, double track_length, int average_time_length, double height_diff, Set<Tag> tags, Reactions reactions, ArrayList<Review> reviews)
     {
         this.uid = uid;
         this.creator_id = creator_id;
@@ -39,9 +37,7 @@ public class Track
         this.average_time_length = average_time_length;
         this.height_diff = height_diff;
         this.tags = tags;
-        this.likes = likes;
-        this.dislikes = dislikes;
-        this.like_ratio = like_ratio;
+        this.reactions = reactions;
         this.reviews = reviews;
     }
 
@@ -73,17 +69,6 @@ public class Track
         Track.height_diff = height_diff;
     }
 
-    public static void setLikes(int likes) {
-        Track.likes = likes;
-    }
-
-    public static void setDislikes(int dislikes) {
-        Track.dislikes = dislikes;
-    }
-
-    public static void setLike_ratio(double like_ratio) {
-        Track.like_ratio = like_ratio;
-    }
 
     public static Set<Tag> getTags() {
         return tags;
@@ -95,6 +80,14 @@ public class Track
 
     public static ArrayList<Review> getReviews() {
         return reviews;
+    }
+
+    public static Reactions getReactions() {
+        return reactions;
+    }
+
+    public static void setReactions(Reactions reactions) {
+        Track.reactions = reactions;
     }
 
     public static void setReviews(ArrayList<Review> reviews) {
@@ -127,18 +120,6 @@ public class Track
 
     public static double getHeight_diff() {
         return height_diff;
-    }
-
-    public static int getLikes() {
-        return likes;
-    }
-
-    public static int getDislikes() {
-        return dislikes;
-    }
-
-    public static double getLike_ratio() {
-        return like_ratio;
     }
 
 
