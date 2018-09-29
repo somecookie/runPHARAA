@@ -1,12 +1,13 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -38,9 +39,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add a marker at EPFL and move the camera
+        LatLng INM = new LatLng(46.518510, 6.563199);
+        mMap.addMarker(new MarkerOptions().position(INM).title("Marker in INM"));
+
+        int transparentBlue = 0x4f0000ff;
+        int transBlueBorder = 0x8f0000ff;
+
+        //add a circle of 2km around the current location
+        mMap.addCircle(new CircleOptions()
+                .center(INM)
+                .radius(2000)
+                .fillColor(transparentBlue)
+                .strokeColor(transBlueBorder));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(INM));
     }
 }

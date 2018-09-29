@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public final class User {
-
+    private static final int RADIUS = 5;
     private final String name;
     //TODO: put default picture
     private final File picture;
