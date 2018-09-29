@@ -43,8 +43,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng INM = new LatLng(46.518510, 6.563199);
         mMap.addMarker(new MarkerOptions().position(INM).title("Marker in INM"));
 
-        int transparentBlue = 0x4f0000ff;
-        int transBlueBorder = 0x8f0000ff;
+        int transparentBlue = 0x2f0000ff;
+        int transBlueBorder = 0x000000ff;
 
         //add a circle of 2km around the current location
         mMap.addCircle(new CircleOptions()
