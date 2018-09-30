@@ -38,10 +38,14 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.runpharaa.MainActivity" />
         </activity>
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
+
 
 </manifest>
