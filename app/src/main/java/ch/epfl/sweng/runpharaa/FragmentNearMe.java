@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +31,11 @@ public class FragmentNearMe extends Fragment {
         List<CardItem> listCardItem = new ArrayList<>();
 
         // Add cards to the cardList
-        listCardItem.add(new CardItem(R.drawable.forest));
-        listCardItem.add(new CardItem());
-        listCardItem.add(new CardItem());
-        listCardItem.add(new CardItem());
-        listCardItem.add(new CardItem());
+        listCardItem.add(new CardItem(R.drawable.centre_sportif, "Centre Sportif"));
+        listCardItem.add(new CardItem(R.drawable.rolex, "Rolex"));
+        listCardItem.add(new CardItem(R.drawable.ouchy, "Ouchy"));
+        listCardItem.add(new CardItem(R.drawable.innovation_park, "Innovation Park"));
+        listCardItem.add(new CardItem(R.drawable.saint_francois, "Saint-Francois"));
 
         Adapter adapter = new Adapter(getActivity(), listCardItem);
         recyclerView.setAdapter(adapter);
@@ -65,6 +66,7 @@ public class FragmentNearMe extends Fragment {
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground());
+            viewHolder.name.setText(listCardItem.get(position).getName());
         }
 
         @Override
@@ -76,10 +78,12 @@ public class FragmentNearMe extends Fragment {
             // Buttons, images and texts on the cards will be created here
 
             ImageView background_img;
+            TextView name;
 
             public viewHolder(@NonNull View itemView) {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
+                name = itemView.findViewById(R.id.nameID);
             }
         }
     }
