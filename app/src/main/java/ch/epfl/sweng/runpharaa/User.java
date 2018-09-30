@@ -22,7 +22,7 @@ public final class User {
     private final int uId;
 
 
-    public User(String name, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, Location location, Boolean admin, int uId){
+    public User(String name, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId){
         this.name = name;
         this.picture = picture;
         this.list_of_created_tracks = list_of_created_tracks;
