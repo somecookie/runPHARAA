@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public final class User {
     private static final int RADIUS = 2000;
