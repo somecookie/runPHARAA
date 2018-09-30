@@ -1,7 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.annotation.TargetApi;
-import android.location.Location;
 import android.os.Build;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public final class User {
-    private static final int RADIUS = 2000;
+    private int preferredRadius = 2000;
     private final String name;
     //TODO: put default picture
     private final File picture;
@@ -22,14 +21,24 @@ public final class User {
     private final int uId;
 
 
-    public User(String name, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId){
+    public User(String name,int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId){
+        this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
         this.list_of_created_tracks = list_of_created_tracks;
         this.list_of_pref = list_of_pref;
-        this.location = new LatLng(46.518577, 6.563165); //TODO must be change to the real location of the user(for now in INM)
+        this.location = location;
         this.admin = admin;
         this.uId = uId;
+    }
+
+    public User(String name, LatLng location, int preferredRadius){
+        //TODO must be changed later when the user's login and the database are on
+        this(name,preferredRadius, null, null, null, location, false, 0);
+    }
+
+    public int getPreferredRadius() {
+        return preferredRadius;
     }
 
     /**
@@ -43,7 +52,7 @@ public final class User {
 
         //filter the tracks that start too far from the location
         for(Track tr: allTracks){
-            if(tr.distance(location) <= RADIUS){
+            if(tr.distance(location) <= preferredRadius){
                 nm.add(tr);
             }
         }
@@ -61,6 +70,18 @@ public final class User {
         });
 
         return nm;
+    }
+
+    /**
+     * Getter for the user's location
+     * @return location
+     */
+    public LatLng getLocation(){
+        return location;
+    }
+
+    public String getName(){
+        return name;
     }
 
 
