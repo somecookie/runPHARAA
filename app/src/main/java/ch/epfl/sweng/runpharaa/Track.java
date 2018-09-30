@@ -59,6 +59,14 @@ public class Track
         this(path, 0, 0, null, "Test", 0, 0, 0,null, null, null);
     }
 
+    public Track(String name,LatLng[] path){
+        this(path,0,0,null,name,0,0,0,null,null,null);
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
     //must either delete it or do it again when the database is on
     public static ArrayList<Track> allTracks(){
         LatLng coord0 = new LatLng(46.518577, 6.563165); //inm
@@ -76,12 +84,12 @@ public class Track
         LatLng coord12 = new LatLng(46.521412, 6.627383); //Flon
 
         ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track(new LatLng[]{coord1, coord2}));
-        all.add(new Track(new LatLng[]{coord3, coord4}));
-        all.add(new Track(new LatLng[]{coord5, coord6}));
-        all.add(new Track(new LatLng[]{coord7, coord0}));
-        all.add(new Track(new LatLng[]{coord8, coord9}));
-        all.add(new Track(new LatLng[]{coord10, coord11, coord12}));
+        all.add(new Track("Banane->Centre Sportif",new LatLng[]{coord1, coord2}));
+        all.add(new Track("Innovation Parc -> BC",new LatLng[]{coord4, coord3}));
+        all.add(new Track("Rolex -> Swisstech", new LatLng[]{coord5, coord6}));
+        all.add(new Track("Sat -> INM",new LatLng[]{coord7, coord0}));
+        all.add(new Track("Ouchy -> Gare",new LatLng[]{coord8, coord9}));
+        all.add(new Track("SF -> Cath -> Flon", new LatLng[]{coord10, coord11, coord12}));
 
         return all;
 

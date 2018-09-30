@@ -44,6 +44,16 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            details.useVersion '26.1.0'
+        }
+
+    }
+}
+
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
