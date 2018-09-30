@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#6d8773</color>
     <color name="colorAccent">#8d6e63</color>
     <color name="colorFragmentBackground">#ffffff</color>
+    <color name="circle_blue">#2f0000ff</color>
 </resources>
