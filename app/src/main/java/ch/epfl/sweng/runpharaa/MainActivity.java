@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 //startActivity(profileIntent);
                 return true;
             case R.id.mapIcon:
+                Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
+                startActivity(mapIntent);
                 return true;
             default:
         }
