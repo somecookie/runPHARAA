@@ -80,11 +80,20 @@ public final class User {
         return location;
     }
 
+    /**
+     * Return the name of the user
+     * @return name
+     */
     public String getName(){
         return name;
     }
 
-    public void setLocation(LatLng newLocation) {
+
+    /**
+     * Update the user's location
+     * @param newLocation
+     */
+    public void setLocation(LatLng newLocation){
         this.location = newLocation;
     }
 
