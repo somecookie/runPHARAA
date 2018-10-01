@@ -16,7 +16,7 @@ public final class User {
     private final File picture;
     private final ArrayList<Track> list_of_created_tracks;
     private final ArrayList<Track> list_of_pref;
-    private final LatLng location;
+    private LatLng location;
     private final boolean admin;
     private final int uId;
 
@@ -84,39 +84,8 @@ public final class User {
         return name;
     }
 
-
-
-    /*
-        List of setter
-     */
-    /*
-    public User withName(String newName) {
-        return new User(newName, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
+    public void setLocation(LatLng newLocation) {
+        this.location = newLocation;
     }
-
-    public User withPicture(File newPicture) {
-        return new User(name, newPicture, list_of_created_tracks, list_of_pref, location, admin, uId);
-    }
-
-    public User withList_of_created_tracks(ArrayList<Track> new_list_of_created_tracks) {
-        return new User(name, picture, new_list_of_created_tracks, list_of_pref, location, admin, uId);
-    }
-
-    public User withList_of_pref(ArrayList<Track> new_list_of_pref) {
-        return new User(name, picture, list_of_created_tracks, new_list_of_pref, location, admin, uId);
-    }
-
-    public User withAdmin(Boolean newAdmin) {
-        return new User(name, picture, list_of_created_tracks, list_of_pref, location, newAdmin, uId);
-    }
-
-    public User withLocation(Location newLocation) {
-        return new User(name, picture, list_of_created_tracks, list_of_pref, newLocation, admin, uId);
-    }
-
-    public User withuId(int newuId) {
-        return new User(name, picture, list_of_created_tracks, list_of_pref, location, admin, newuId);
-    }
-*/
 
 }
