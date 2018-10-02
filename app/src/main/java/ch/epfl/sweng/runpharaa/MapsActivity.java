@@ -30,15 +30,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    public static final String TAG = MapsActivity.class.getSimpleName();
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleMap mMap;
     private LatLng INM_coord = new LatLng(46.518510, 6.563199);
     private User fake_user = new User("Toto", INM_coord, 2000);
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
     private GoogleApiClient mGoogleApiClient;
-    public static final String TAG = MapsActivity.class.getSimpleName();
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
     private boolean permission = false;
 
@@ -76,13 +74,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * Send request to enable location if it is not already enable
+     */
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-        }
+    }
 
     @SuppressLint("MissingPermission")
     @Override
@@ -201,11 +202,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setMarkers(){
         mMap.clear();
 
-        /*mMap.addMarker(new MarkerOptions().
-                position(fake_user.getLocation())
-                .title(fake_user.getName()+"'s location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
-
         int transparentBlue = 0x2f0000ff;
         int transBlueBorder = 0x000000ff;
 
@@ -241,6 +237,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setMarkers();
     }
 
+    /**
+     * Set up the location request object
+     */
     private void createLocationRequest(){
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
