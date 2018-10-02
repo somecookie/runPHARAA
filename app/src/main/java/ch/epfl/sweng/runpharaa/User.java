@@ -20,6 +20,8 @@ public final class User {
     private final boolean admin;
     private final int uId;
 
+    public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 6000);
+
 
     public User(String name,int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId){
         this.preferredRadius = preferredRadius;
