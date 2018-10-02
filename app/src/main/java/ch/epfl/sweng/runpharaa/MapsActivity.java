@@ -97,7 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             enableLocationUpdate();
 
-            handleNewLocation(location);
+            handleLastLocation(location);
 
         } else {
             enableMyLocation();
