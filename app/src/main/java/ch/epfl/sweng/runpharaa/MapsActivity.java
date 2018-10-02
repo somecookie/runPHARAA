@@ -75,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     /**
-     * Send request to enable location if it is not already enable
+     * Send request to enable location if it is not already enablez
      */
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -90,30 +90,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "Location services connected.");
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            if (!(mMap == null)) {
-                mMap.setMyLocationEnabled(true);
-            }
+            enableLocationUpdate();
 
-            Log.i(TAG, "Permission granted.");
+            handleNewLocation(location);
 
-            if (location == null) {
-                Log.i(TAG, "Location null.");
-                if (permission) {
-                    Log.i(TAG, "Location request update.");
-                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-                }
-            } else {
-                Log.i(TAG, " new Location.");
-                handleNewLocation(location);
-            }
-
-        }else {
+        } else {
             enableMyLocation();
+        }
+
+    }
+
+    @SuppressLint("MissingPermission")
+    /**
+     * Method that update the current location with last location
+     */
+    private void handleLastLocation(Location location){
+
+        if (location == null) {
+            Log.i(TAG, "Location null.");
+            if (permission) {
+                Log.i(TAG, "Location request update.");
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
+        } else {
+            Log.i(TAG, " new Location.");
+            handleNewLocation(location);
         }
 
     }
@@ -143,7 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onResume();
         mGoogleApiClient.connect();
 
-        if(!(mMap == null)) {
+        if (!(mMap == null)) {
             mMap.setMyLocationEnabled(true);
         }
     }
@@ -170,30 +176,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "Permission granted");
-
-                    setMarkers();
-
-                    createLocationRequest();
-
-                    permission = true;
-
-                } else {
-                    Log.i(TAG, "Permission not granted");
-
-                }
-
-                if (mMap != null & permission) {
-                    // Access to the location has been granted to the app.
-                    mMap.setMyLocationEnabled(true);
-                }
-
+                requestPermissionResultFineLocation(grantResults);
                 return;
 
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void requestPermissionResultFineLocation(int[] grantResults) {
+
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission granted");
+
+            setMarkers();
+
+            createLocationRequest();
+
+            permission = true;
+
+        } else {
+            Log.i(TAG, "Permission not granted");
+
+        }
+
+        if (mMap != null & permission) {
+            mMap.setMyLocationEnabled(true);
+        }
+
     }
 
     /**
@@ -246,6 +257,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(5 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+    }
+
+    @SuppressLint("MissingPermission")
+    /**
+     * Enable location update
+     */
+    private void enableLocationUpdate() {
+        if (!(mMap == null)) {
+            mMap.setMyLocationEnabled(true);
+        }
     }
 
 }
