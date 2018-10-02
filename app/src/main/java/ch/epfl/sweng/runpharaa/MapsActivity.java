@@ -72,15 +72,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      */
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         // Add a marker at the user's location
-        mMap.addMarker(new MarkerOptions().
+        /*mMap.addMarker(new MarkerOptions().
                 position(fake_user.getLocation())
                 .title(fake_user.getName()+"'s location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                */
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             permission = true;
@@ -101,6 +103,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         }
+
+        mMap.setMyLocationEnabled(true);
+
     }
 
     @SuppressLint("MissingPermission")
@@ -118,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 handleNewLocation(location);
             }
         }
-        
+
     }
 
     @Override
@@ -186,10 +191,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setMarkers(){
         mMap.clear();
 
-        mMap.addMarker(new MarkerOptions().
+        /*mMap.addMarker(new MarkerOptions().
                 position(fake_user.getLocation())
                 .title(fake_user.getName()+"'s location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
 
         int transparentBlue = 0x2f0000ff;
         int transBlueBorder = 0x000000ff;
