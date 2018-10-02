@@ -41,8 +41,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleMap mMap;
-    private LatLng INM_coord = new LatLng(46.518510, 6.563199);
-    private User fake_user = new User("Toto", INM_coord, 2000);
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private boolean permission = false;
@@ -224,14 +222,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //add a circle of 2km around the current location
         mMap.addCircle(new CircleOptions()
-                .center(fake_user.getLocation())
-                .radius(2000)
+                .center(FAKE_USER.getLocation())
+                .radius(FAKE_USER.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(fake_user.getLocation()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for(Track tr : fake_user.tracksNearMe()){
+        for(Track tr : FAKE_USER.tracksNearMe()){
             mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));
@@ -250,7 +248,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        fake_user.setLocation( new LatLng(currentLatitude, currentLongitude));
+        FAKE_USER.setLocation( new LatLng(currentLatitude, currentLongitude));
 
         setMarkers();
     }
