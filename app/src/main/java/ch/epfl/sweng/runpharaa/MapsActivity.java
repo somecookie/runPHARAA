@@ -27,8 +27,15 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
+
+
+
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+
 
     public static final String TAG = MapsActivity.class.getSimpleName();
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -69,7 +76,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         enableMyLocation();
 
     }
@@ -230,6 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));
         }
+
     }
 
 
