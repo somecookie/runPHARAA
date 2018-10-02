@@ -33,11 +33,6 @@ public class FragmentNearMe extends Fragment {
         List<CardItem> listCardItem = new ArrayList<>();
 
         // Add cards to the cardList
-        /*listCardItem.add(new CardItem(R.drawable.centre_sportif, "Centre Sportif"));
-        listCardItem.add(new CardItem(R.drawable.rolex, "Rolex"));
-        listCardItem.add(new CardItem(R.drawable.ouchy, "Ouchy"));
-        listCardItem.add(new CardItem(R.drawable.innovation_park, "Innovation Park"));
-        listCardItem.add(new CardItem(R.drawable.saint_francois, "Saint-Francois"));*/
         for(Track t : FAKE_USER.tracksNearMe())
             listCardItem.add(t.getCardItem());
 
