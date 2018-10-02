@@ -14,11 +14,11 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private LatLng INM_coord = new LatLng(46.518510, 6.563199);
-    private User fake_user = new User("Toto", INM_coord, 2000);
     private int circle_blue = 0x2f0000ff; //should be in values
 
     @Override
@@ -41,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //add a marker for each starting point inside the preferred radius
-        for(Track tr : fake_user.tracksNearMe()){
+        for(Track tr : FAKE_USER.tracksNearMe()){
             mMap.addMarker(new MarkerOptions()
             .position(tr.getStartingPoint())
             .title(tr.getLocation()));
@@ -49,16 +49,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker at the user's location
         mMap.addMarker(new MarkerOptions().
-                position(fake_user.getLocation())
-                .title(fake_user.getName()+"'s location")
+                position(FAKE_USER.getLocation())
+                .title(FAKE_USER.getName()+"'s location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         //add a circle of 2km around the current location
         mMap.addCircle(new CircleOptions()
-                .center(fake_user.getLocation())
-                .radius(fake_user.getPreferredRadius())
+                .center(FAKE_USER.getLocation())
+                .radius(FAKE_USER.getPreferredRadius())
                 .fillColor(circle_blue)
                 .strokeWidth(0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(fake_user.getLocation()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
     }
 }

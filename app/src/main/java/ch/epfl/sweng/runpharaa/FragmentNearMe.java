@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
+
 public class FragmentNearMe extends Fragment {
     View v;
     public FragmentNearMe(){
@@ -31,11 +33,13 @@ public class FragmentNearMe extends Fragment {
         List<CardItem> listCardItem = new ArrayList<>();
 
         // Add cards to the cardList
-        listCardItem.add(new CardItem(R.drawable.centre_sportif, "Centre Sportif"));
+        /*listCardItem.add(new CardItem(R.drawable.centre_sportif, "Centre Sportif"));
         listCardItem.add(new CardItem(R.drawable.rolex, "Rolex"));
         listCardItem.add(new CardItem(R.drawable.ouchy, "Ouchy"));
         listCardItem.add(new CardItem(R.drawable.innovation_park, "Innovation Park"));
-        listCardItem.add(new CardItem(R.drawable.saint_francois, "Saint-Francois"));
+        listCardItem.add(new CardItem(R.drawable.saint_francois, "Saint-Francois"));*/
+        for(Track t : FAKE_USER.tracksNearMe())
+            listCardItem.add(t.getCardItem());
 
         Adapter adapter = new Adapter(getActivity(), listCardItem);
         recyclerView.setAdapter(adapter);
