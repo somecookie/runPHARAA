@@ -12,10 +12,10 @@ public class ReactionsTest {
         int dislikes = 3;
         Reactions reac = new Reactions(likes, dislikes);
 
-        assertEquals(reac.getLikes(), likes);
-        assertEquals(reac.getDislikes(), dislikes);
-        assertEquals(reac.getLikesCount(), likes - dislikes);
-        assertEquals(reac.getLikesRatio(), (likes / (likes + dislikes)), 0);
+        assertEquals(likes, reac.getLikes());
+        assertEquals(dislikes, reac.getDislikes());
+        assertEquals(likes - dislikes, reac.getLikesCount());
+        assertEquals((likes / (likes + dislikes)), reac.getLikesRatio(),  0);
     }
 
     @Test
@@ -23,7 +23,7 @@ public class ReactionsTest {
     {
         Reactions reac = new Reactions(0,0);
 
-        assertEquals(reac.getLikesRatio(), 1,0);
+        assertEquals(1, reac.getLikesRatio(), 0);
     }
 
     @Test
@@ -31,18 +31,18 @@ public class ReactionsTest {
     {
         Reactions reac = new Reactions();
 
-        assertEquals(reac.getLikes(), 0);
-        assertEquals(reac.getDislikes(), 0);
+        assertEquals(0, reac.getLikes());
+        assertEquals(0, reac.getDislikes());
 
         Reactions reac2 = reac.withNewLike();
 
-        assertEquals(reac2.getLikes(), 1);
-        assertEquals(reac2.getDislikes(), 0);
+        assertEquals(1, reac2.getLikes());
+        assertEquals(0, reac2.getDislikes());
 
         Reactions reac3 = reac2.withNewDislike();
 
-        assertEquals(reac3.getLikes(), 1);
-        assertEquals(reac3.getDislikes(), 1);
-        assertEquals(reac3.getLikesRatio(), 1/2, 0);
+        assertEquals(1, reac3.getLikes());
+        assertEquals(1, reac3.getDislikes());
+        assertEquals(1/2, reac3.getLikesRatio(), 0);
     }
 }
