@@ -18,6 +18,7 @@ local.properties
 .idea/*
 *.iml
 .idea/caches/build_file_checksums.ser
+.travis.yml.swp
 
 # OS-specific files
 .DS_Store
