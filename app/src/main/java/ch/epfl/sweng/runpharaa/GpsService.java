@@ -22,7 +22,7 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
 
     private final static long TIME_INTERVAL = 5000;
     private final static long MIN_TIME_INTERVAL = 1000;
-    private final static float MIN_DISTANCE = 10;
+    private final static float MIN_DISTANCE = 5;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -61,8 +61,6 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         if(mLocationRequest == null)
             initLocationRequest();
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        sendNewLocation(location);
     }
 
     @Override

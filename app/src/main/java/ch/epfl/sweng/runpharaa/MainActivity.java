@@ -107,18 +107,15 @@ public class MainActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case GPS_PERMISSIONS_REQUEST_CODE: {
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                    launchGeoLocalisation();
-                } else {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED)
                     requestPermissions();
-                }
-
             }
         }
     }
 
     /**
      * Verifies if we need to ask for the GPS permissions
+     *
      * @return true if we need to request permissions, false otherwise
      */
     private boolean requestPermissions() {

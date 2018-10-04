@@ -47,11 +47,11 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!creating){
+                if (!creating) {
                     creating = true;
                     createButton.setText("STOP");
                 } else {
-                    if(points.size() < 2) {
+                    if (points.size() < 2) {
                         Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
                     } else {
                         creating = false;
@@ -72,6 +72,7 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
     }
 
     @Override
@@ -83,9 +84,11 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopGeoLocalisation();
-        if(receiver != null)
-            unregisterReceiver(receiver);
+        if (isFinishing()) {
+            stopGeoLocalisation();
+            if (receiver != null)
+                unregisterReceiver(receiver);
+        }
     }
 
     public void stopGeoLocalisation() {
@@ -94,13 +97,13 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
     }
 
     private void initReceiver() {
-        if(receiver == null){
+        if (receiver == null) {
             receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     // Receive new location
-                    location = (Location)intent.getExtras().get("new_location");
-                    if(location != null)
+                    location = (Location) intent.getExtras().get("new_location");
+                    if (location != null)
                         handleNewLocation();
                 }
             };
@@ -109,19 +112,21 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
     }
 
     private void handleNewLocation() {
-        // Store new location
-        locations.add(location);
-        // Add new point
-        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-        points.add(current);
-        // Move camera
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
-        // Clear map
-        googleMap.clear();
-        // Draw path
-        lines = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
-        lines.addAll(points);
-        googleMap.addPolyline(lines);
+        if(creating) {
+            // Store new location
+            locations.add(location);
+            // Add new point
+            LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+            points.add(current);
+            // Move camera
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+            // Clear map
+            googleMap.clear();
+            // Draw path
+            lines = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
+            lines.addAll(points);
+            googleMap.addPolyline(lines);
+        }
     }
 
     private void launchSecondPart() {
@@ -130,5 +135,6 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
         i.putExtra("points", points.toArray(new LatLng[points.size()]));
         i.putExtra("locations", locations.toArray(new Location[locations.size()]));
         startActivity(i);
+        finish();
     }
 }

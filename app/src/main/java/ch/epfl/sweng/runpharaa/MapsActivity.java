@@ -5,11 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,7 +65,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void stopGeoLocalisation() {
+    /**
+     * Stops the GPS service and location updates
+     */
+    private void stopGeoLocalisation() {
         Intent i = new Intent(getApplicationContext(), GpsService.class);
         stopService(i);
     }
@@ -81,12 +82,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int transparentBlue = 0x2f0000ff;
         int transBlueBorder = 0x000000ff;
 
-        //add a circle of 2km around the current location
+        //add a circle around the current location
         mMap.addCircle(new CircleOptions()
                 .center(FAKE_USER.getLocation())
                 .radius(FAKE_USER.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
+        //follow the user
         mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
@@ -111,6 +113,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setMarkers();
     }
 
+    /**
+     * Prepares the broadcast receiver to get location updates from the GPS service
+     */
     private void initReceiver() {
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
