@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReactionsTest {
 
@@ -16,6 +17,24 @@ public class ReactionsTest {
         assertEquals(dislikes, reac.getDislikes());
         assertEquals(likes - dislikes, reac.getLikesCount());
         assertEquals((likes / (likes + dislikes)), reac.getLikesRatio(),  0);
+    }
+
+    @Test
+    public void constructorNegativeLikeTest(){
+        try{
+            Reactions r = new Reactions(-1, 2);
+        } catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void constructorNegativeDislikeTest(){
+        try{
+            Reactions r = new Reactions(100, -2);
+        } catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
     }
 
     @Test

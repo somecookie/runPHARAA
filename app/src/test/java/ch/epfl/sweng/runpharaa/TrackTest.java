@@ -48,8 +48,8 @@ public class TrackTest {
         LatLng[] path1 ={coord1, coord2};
         LatLng[] path2 ={coord2, coord1};
 
-        Track tr1 = new Track(path1);
-        Track tr2 = new Track(path2);
+        Track tr1 = new Track("Track1", path1);
+        Track tr2 = new Track("Track2", path2);
 
         assert(tr1.distance(coord2) == tr2.distance(coord1));
     }
