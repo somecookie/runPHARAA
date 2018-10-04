@@ -1,28 +1,20 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -30,21 +22,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
 
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
-
-
-
-    public static final String TAG = MapsActivity.class.getSimpleName();
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private boolean permission = false;
-
+    private BroadcastReceiver receiver;
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +37,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-
+        initReceiver();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initReceiver();
+    }
 
     /**
      * Manipulates the map once available.
@@ -74,147 +54,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        enableMyLocation();
-
-    }
-
-    /**
-     * Send request to enable location if it is not already enablez
-     */
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.i(TAG, "Location services connected.");
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-            enableLocationUpdate();
-
-            handleLastLocation(location);
-
-        } else {
-            enableMyLocation();
-        }
-
-    }
-
-    @SuppressLint("MissingPermission")
-    /**
-     * Method that update the current location with last location
-     */
-    private void handleLastLocation(Location location){
-
-        if (location == null) {
-            Log.i(TAG, "Location null.");
-            if (permission) {
-                Log.i(TAG, "Location request update.");
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            }
-        } else {
-            Log.i(TAG, " new Location.");
-            handleNewLocation(location);
-        }
-
+        mMap.setMyLocationEnabled(true);
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Location services suspended. Please reconnect.");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            stopGeoLocalisation();
+            if (receiver != null)
+                unregisterReceiver(receiver);
         }
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mGoogleApiClient.connect();
-
-        if (!(mMap == null)) {
-            mMap.setMyLocationEnabled(true);
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        handleNewLocation(location);
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                requestPermissionResultFineLocation(grantResults);
-                return;
-
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private void requestPermissionResultFineLocation(int[] grantResults) {
-
-        if (grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission granted");
-
-            setMarkers();
-
-            createLocationRequest();
-
-            permission = true;
-
-        } else {
-            Log.i(TAG, "Permission not granted");
-
-        }
-
-        if (mMap != null & permission) {
-            mMap.setMyLocationEnabled(true);
-        }
-
+    public void stopGeoLocalisation() {
+        Intent i = new Intent(getApplicationContext(), GpsService.class);
+        stopService(i);
     }
 
     /**
      * Clear the actual map from all its markers and set the new ones
      */
-    private void setMarkers(){
+    private void setMarkers() {
         mMap.clear();
 
         int transparentBlue = 0x2f0000ff;
@@ -229,7 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for(Track tr : FAKE_USER.tracksNearMe()){
+        for (Track tr : FAKE_USER.tracksNearMe()) {
             mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));
@@ -237,41 +98,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
     /**
      * Update the user location when receiving a new location and update the markers
-     * @param location the new location
      */
-    private void handleNewLocation(Location location) {
-        Log.d(TAG, location.toString());
+    private void handleNewLocation() {
 
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        FAKE_USER.setLocation( new LatLng(currentLatitude, currentLongitude));
+        FAKE_USER.setLocation(new LatLng(currentLatitude, currentLongitude));
 
         setMarkers();
     }
 
-    /**
-     * Set up the location request object
-     */
-    private void createLocationRequest(){
-        // Create the LocationRequest object
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(5 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-    }
-
-    @SuppressLint("MissingPermission")
-    /**
-     * Enable location update
-     */
-    private void enableLocationUpdate() {
-        if (!(mMap == null)) {
-            mMap.setMyLocationEnabled(true);
+    private void initReceiver() {
+        if (receiver == null) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    // Receive new location
+                    location = (Location) intent.getExtras().get("new_location");
+                    if (location != null)
+                        handleNewLocation();
+                }
+            };
         }
+        registerReceiver(receiver, new IntentFilter("location_update"));
     }
-
 }
