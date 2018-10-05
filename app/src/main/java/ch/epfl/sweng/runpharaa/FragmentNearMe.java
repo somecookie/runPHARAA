@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,8 +19,10 @@ import java.util.List;
 
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
-public class FragmentNearMe extends Fragment {
+public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
+    SwipeRefreshLayout swipeLayout;
+
     public FragmentNearMe(){
 
     }
@@ -28,6 +31,12 @@ public class FragmentNearMe extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.near_me_fragment, container, false);
+
+        // Setup for refresh on swipe
+        swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        // swipeLayout.setColorSchemeColors(getResources().getColor());
+
 
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
         List<CardItem> listCardItem = new ArrayList<>();
@@ -42,6 +51,22 @@ public class FragmentNearMe extends Fragment {
 
         return v;
     }
+
+    @Override
+    public void onRefresh() {
+        RecyclerView recyclerView = v.findViewById(R.id.cardListId);
+        List<CardItem> listCardItem = new ArrayList<>();
+
+        // Add cards to the cardList
+        for(Track t : FAKE_USER.tracksNearMe())
+            listCardItem.add(t.getCardItem());
+
+        Adapter adapter = new Adapter(getActivity(), listCardItem);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        swipeLayout.setRefreshing(false);
+    }
+
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
 
