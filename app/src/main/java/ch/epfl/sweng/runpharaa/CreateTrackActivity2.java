@@ -46,8 +46,7 @@ public class CreateTrackActivity2 extends Activity {
             }
         });
         // Get the extras
-        Bundle b = getIntent().getExtras();
-        handleExtras(b);
+        handleExtras();
         // Show extracted info
         totalDistanceText.setText(String.format("Total distance: %.2f m", totalDistance));
         totalElevationText.setText(String.format("Total altitude difference: %.2f m", totalElevationChange));
@@ -55,28 +54,35 @@ public class CreateTrackActivity2 extends Activity {
 
     /**
      * Extracts information from the bundle
-     * @param bundle the bundle to extract the information from
      */
-    private void handleExtras(Bundle bundle) {
+    private void handleExtras() {
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             Parcelable[] a = bundle.getParcelableArray("locations");
             locations = Arrays.copyOf(a, a.length, Location[].class);
             a = bundle.getParcelableArray("points");
             points = Arrays.copyOf(a, a.length, LatLng[].class);
 
-            // TODO: will we store this info somewhere ? What additional info do we want to show ?
-            // Get total elevation difference and total distance
-            for (int i = 0; i < locations.length; ++i) {
-                Location l = locations[i];
-                double altitude = l.getAltitude();
-                if (altitude < minAltitude)
-                    minAltitude = altitude;
-                if (altitude > maxAltitude)
-                    maxAltitude = altitude;
-                if (i != 0)
-                    totalDistance += l.distanceTo(locations[i - 1]);
-            }
-            totalElevationChange = maxAltitude - minAltitude;
+            computeValues();
         }
+    }
+
+    /**
+     * Computes the total distance and total altitude difference of the track
+     */
+    private void computeValues() {
+        // TODO: will we store this info somewhere ? What additional info do we want to show ?
+        for (int i = 0; i < locations.length; ++i) {
+            Location l = locations[i];
+            double altitude = l.getAltitude();
+            if (altitude < minAltitude)
+                minAltitude = altitude;
+            if (altitude > maxAltitude)
+                maxAltitude = altitude;
+            if (i != 0)
+                totalDistance += l.distanceTo(locations[i - 1]);
+        }
+        // TODO: the altitudes completely off right now, try to fix
+        totalElevationChange = maxAltitude - minAltitude;
     }
 }

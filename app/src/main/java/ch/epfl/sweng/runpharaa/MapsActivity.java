@@ -1,13 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,11 +14,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private BroadcastReceiver receiver;
-    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +27,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        initReceiver();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         initReceiver();
     }
 
@@ -65,12 +51,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /**
-     * Stops the GPS service and location updates
-     */
-    private void stopGeoLocalisation() {
-        Intent i = new Intent(getApplicationContext(), GpsService.class);
-        stopService(i);
+    @Override
+    protected void handleNewLocation() {
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        FAKE_USER.setLocation(new LatLng(currentLatitude, currentLongitude));
+
+        setMarkers();
     }
 
     /**
@@ -98,36 +87,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .title(tr.getLocation()));
         }
 
-    }
-
-    /**
-     * Update the user location when receiving a new location and update the markers
-     */
-    private void handleNewLocation() {
-
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
-
-        FAKE_USER.setLocation(new LatLng(currentLatitude, currentLongitude));
-
-        setMarkers();
-    }
-
-    /**
-     * Prepares the broadcast receiver to get location updates from the GPS service
-     */
-    private void initReceiver() {
-        if (receiver == null) {
-            receiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    // Receive new location
-                    location = (Location) intent.getExtras().get("new_location");
-                    if (location != null)
-                        handleNewLocation();
-                }
-            };
-        }
-        registerReceiver(receiver, new IntentFilter("location_update"));
     }
 }

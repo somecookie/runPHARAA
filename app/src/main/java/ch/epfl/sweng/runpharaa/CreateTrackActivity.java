@@ -1,15 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,15 +19,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
-public class CreateTrackActivity extends FragmentActivity implements OnMapReadyCallback {
+public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
-    private BroadcastReceiver receiver;
     private PolylineOptions lines;
     private ArrayList<LatLng> points = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
     private boolean creating;
     private GoogleMap googleMap;
-    private Location location;
     private Button createButton;
 
     @Override
@@ -44,24 +38,7 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
         // Setup button
         createButton = findViewById(R.id.start_create_button);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!creating) {
-                    creating = true;
-                    createButton.setText("STOP");
-                } else {
-                    if (points.size() < 2) {
-                        Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
-                    } else {
-                        creating = false;
-                        stopGeoLocalisation();
-                        createButton.setText("PROCESSING");
-                        launchSecondPart();
-                    }
-                }
-            }
-        });
+        createButton.setOnClickListener(buttonOnClickListener);
         createButton.setText("START");
         // Setup broadcast receiver
         initReceiver();
@@ -76,12 +53,6 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        initReceiver();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (isFinishing()) {
@@ -91,27 +62,8 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
-    public void stopGeoLocalisation() {
-        Intent i = new Intent(getApplicationContext(), GpsService.class);
-        stopService(i);
-    }
-
-    private void initReceiver() {
-        if (receiver == null) {
-            receiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    // Receive new location
-                    location = (Location) intent.getExtras().get("new_location");
-                    if (location != null)
-                        handleNewLocation();
-                }
-            };
-        }
-        registerReceiver(receiver, new IntentFilter("location_update"));
-    }
-
-    private void handleNewLocation() {
+    @Override
+    protected void handleNewLocation() {
         // Move camera
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
@@ -129,6 +81,9 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    /**
+     * Starts the second part of creating a track
+     */
     private void launchSecondPart() {
         Intent i = new Intent(getApplicationContext(), CreateTrackActivity2.class);
         // Add the extras
@@ -137,4 +92,26 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
         startActivity(i);
         finish();
     }
+
+    /**
+     * The listener used for the main button
+     */
+    private View.OnClickListener buttonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!creating) {
+                creating = true;
+                createButton.setText("STOP");
+            } else {
+                if (points.size() < 2) {
+                    Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
+                } else {
+                    creating = false;
+                    stopGeoLocalisation();
+                    createButton.setText("PROCESSING");
+                    launchSecondPart();
+                }
+            }
+        }
+    };
 }

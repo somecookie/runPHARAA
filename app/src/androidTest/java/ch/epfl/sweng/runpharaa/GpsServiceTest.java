@@ -60,15 +60,16 @@ public class GpsServiceTest {
 
     @Test
     public void correctlyLaunchesServiceOnMapView() {
-        onView(withId(R.id.mapIcon)).perform(click());
-        assertTrue(isMyServiceRunning(GpsService.class));
-        pressBack();
-        assertTrue(!isMyServiceRunning(GpsService.class));
+        turnsGpsServiceOnandOff(R.id.mapIcon);
     }
 
     @Test
     public void correctlyLaunchesServiceOnCreateTrack1() {
-        onView(withId(R.id.fab)).perform(click());
+        turnsGpsServiceOnandOff(R.id.fab);
+    }
+
+    private void turnsGpsServiceOnandOff(int id) {
+        onView(withId(id)).perform(click());
         assertTrue(isMyServiceRunning(GpsService.class));
         pressBack();
         assertTrue(!isMyServiceRunning(GpsService.class));
