@@ -1,7 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.media.Image;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
