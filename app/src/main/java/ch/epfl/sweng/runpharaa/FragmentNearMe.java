@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng; // TODO: remove
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         v = inflater.inflate(R.layout.near_me_fragment, container, false);
 
         // Setup for refresh on swipe
-        swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_container);
+        swipeLayout = v.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
@@ -55,6 +53,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
+        // Create a fresh recyclerView and listCardItem
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
         List<CardItem> listCardItem = new ArrayList<>();
 
@@ -65,6 +64,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         Adapter adapter = new Adapter(getActivity(), listCardItem);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // Stop refreshing once it is done
         swipeLayout.setRefreshing(false);
     }
 
