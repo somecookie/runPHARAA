@@ -61,14 +61,16 @@ public final class User {
         }
 
         //order them from the nearest to the furthest
-        Collections.sort(nm,(new Comparator<Track>() {
+        Collections.sort(nm, new Comparator<Track>() {
             @Override
             public int compare(Track o1, Track o2) {
                 double d1 = o1.distance(location);
                 double d2 = o2.distance(location);
-                return Double.compare(d1, d2);
+                if(d1 < d2) return -1;
+                else if(d1 == d2) return 0;
+                else return 1;
             }
-        }));
+        });
 
         return nm;
     }
