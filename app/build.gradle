@@ -38,8 +38,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.1' //dependency for google maps
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     //dependency for google maps
+    implementation 'com.google.firebase:firebase-database:16.0.3'
 
-    implementation 'com.google.firebase:firebase-database:11.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -52,6 +52,7 @@ configurations.all {
         if (requested.group == 'com.android.support') {
             details.useVersion '26.1.0'
         }
+
 
     }
 }
