@@ -22,7 +22,7 @@ public class Reactions {
         {
             throw new IllegalArgumentException("likes argument strictly smaller than zero");
         }
-        if(likes < 0)
+        if(dislikes < 0)
         {
             throw new IllegalArgumentException("dislikes argument strictly smaller than zero");
         }
