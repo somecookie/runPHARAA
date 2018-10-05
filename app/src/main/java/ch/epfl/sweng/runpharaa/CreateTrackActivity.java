@@ -112,14 +112,14 @@ public class CreateTrackActivity extends FragmentActivity implements OnMapReadyC
     }
 
     private void handleNewLocation() {
+        // Move camera
+        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
         if(creating) {
             // Store new location
             locations.add(location);
             // Add new point
-            LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
             points.add(current);
-            // Move camera
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
             // Clear map
             googleMap.clear();
             // Draw path

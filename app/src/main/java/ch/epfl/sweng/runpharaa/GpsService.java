@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -61,6 +62,8 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         if(mLocationRequest == null)
             initLocationRequest();
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        sendNewLocation(location);
     }
 
     @Override
