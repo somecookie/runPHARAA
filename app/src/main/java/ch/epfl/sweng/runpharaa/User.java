@@ -22,7 +22,6 @@ public final class User {
 
     public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-
     public User(String name,int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId){
         this.preferredRadius = preferredRadius;
         this.name = name;
