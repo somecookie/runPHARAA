@@ -33,7 +33,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         v = inflater.inflate(R.layout.near_me_fragment, container, false);
 
         // Setup for refresh on swipe
-        swipeLayout = v.findViewById(R.id.swipe_container);
+        swipeLayout = v.findViewById(R.id.refreshNearMe);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
