@@ -75,7 +75,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     /**
-     *
+     * Create the recyclerView and the list of cardItem used to draw the list of tracks "near me".
+     * This function is called when the fragment is created and each time the list is refreshed.
      */
     public void loadData() {
         // Create a fresh recyclerView and listCardItem
@@ -126,7 +127,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             ImageView background_img;
             TextView name;
-
+            
             public viewHolder(@NonNull View itemView) {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
