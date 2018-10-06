@@ -14,23 +14,25 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:importantForAutofill="no"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:hint="@string/email"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:visibility="invisible" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:importantForAutofill="no"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:visibility="invisible" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -44,6 +46,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/common_signin_button_text"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,6 +57,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
