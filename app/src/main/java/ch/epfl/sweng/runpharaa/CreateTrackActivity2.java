@@ -28,13 +28,13 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
-    private TextView totalDistanceText, totalElevationText;
+    private TextView totalDistanceText, totalAltitudeText;
     private EditText nameText;
     private double minAltitude = Double.POSITIVE_INFINITY;
     private double maxAltitude = Double.NEGATIVE_INFINITY;
     private Location[] locations;
     private LatLng[] points;
-    private double totalDistance, totalElevationChange;
+    private double totalDistance, totalAltitudeChange;
     private Button createButton;
 
     @Override
@@ -42,7 +42,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_track_2);
         totalDistanceText = findViewById(R.id.create_text_total_distance);
-        totalElevationText = findViewById(R.id.create_text_total_elevation);
+        totalAltitudeText = findViewById(R.id.create_text_total_altitude);
         nameText = findViewById(R.id.create_text_name);
         createButton = findViewById(R.id.create_track_button);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +76,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
             // Show extracted info
             totalDistanceText.setText(String.format("Total distance: %.2f m", totalDistance));
-            totalElevationText.setText(String.format("Total altitude difference: %.2f m", totalElevationChange));
+            totalAltitudeText.setText(String.format("Total altitude difference: %.2f m", totalAltitudeChange));
         }
     }
 
@@ -87,16 +87,24 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         // TODO: will we store this info somewhere ? What additional info do we want to show ?
         for (int i = 0; i < locations.length; ++i) {
             Location l = locations[i];
-            double altitude = l.getAltitude();
-            if (altitude < minAltitude)
-                minAltitude = altitude;
-            if (altitude > maxAltitude)
-                maxAltitude = altitude;
+            updateMinAndMaxAltitude(l.getAltitude());
             if (i != 0)
                 totalDistance += l.distanceTo(locations[i - 1]);
         }
         // TODO: the altitudes completely off right now, try to fix
-        totalElevationChange = maxAltitude - minAltitude;
+        totalAltitudeChange = maxAltitude - minAltitude;
+    }
+
+    /**
+     * Updates the max and min altitudes according to a new altitude
+     *
+     * @param a the new altitude
+     */
+    private void updateMinAndMaxAltitude(double a) {
+        if (a < minAltitude)
+            minAltitude = a;
+        if (a > maxAltitude)
+            maxAltitude = a;
     }
 
     @Override
@@ -111,7 +119,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             }
         });
         // Adapt padding to fit markers
-        map.setPadding(50,150,50, 50);
+        map.setPadding(50, 150, 50, 50);
         handleExtras();
         drawTrackOnMap();
     }
@@ -120,10 +128,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
      * Draws the full track and markers on the map
      */
     private void drawTrackOnMap() {
-        if(map != null && points != null) {
+        if (map != null && points != null) {
             // Get correct zoom
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-            for(LatLng point : points)
+            for (LatLng point : points)
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
@@ -131,7 +139,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));
             // Add markers (start = green, finish = red)
             map.addMarker(new MarkerOptions().position(points[0]).icon(defaultMarker(150)).alpha(0.8f));
-            map.addMarker(new MarkerOptions().position(points[points.length-1]).icon(defaultMarker(20)).alpha(0.8f));
+            map.addMarker(new MarkerOptions().position(points[points.length - 1]).icon(defaultMarker(20)).alpha(0.8f));
         }
     }
 }

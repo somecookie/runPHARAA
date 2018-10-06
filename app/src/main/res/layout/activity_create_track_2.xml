@@ -37,7 +37,7 @@
             android:text="" />
 
         <TextView
-            android:id="@+id/create_text_total_elevation"
+            android:id="@+id/create_text_total_altitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
