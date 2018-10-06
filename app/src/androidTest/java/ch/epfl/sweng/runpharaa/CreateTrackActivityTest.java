@@ -62,7 +62,7 @@ public class CreateTrackActivityTest {
         createButtonTextMatches("START");
     }
 
-    @Test
+    /*@Test
     public void buttonWorksCorrectly() {
         onView(withId(R.id.fab)).perform(click());
         // Let map load
@@ -71,7 +71,7 @@ public class CreateTrackActivityTest {
         createButtonTextMatches("STOP");
         onView(withId(R.id.start_create_button)).perform(scrollTo()).perform(click());
         onView(withText("You need at least 2 points to create a track !")).inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
-    }
+    }*/
 
     private void createButtonTextMatches(String text) {
         onView(withId(R.id.start_create_button)).check(matches(withText(text)));
