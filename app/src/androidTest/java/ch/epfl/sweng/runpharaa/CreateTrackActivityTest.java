@@ -67,9 +67,9 @@ public class CreateTrackActivityTest {
         onView(withId(R.id.fab)).perform(click());
         // Let map load
         sleep(5000);
-        onView(withId(R.id.start_create_button)).perform(click());
+        onView(withId(R.id.start_create_button)).perform(scrollTo()).perform(click());
         createButtonTextMatches("STOP");
-        onView(withId(R.id.start_create_button)).perform(click());
+        onView(withId(R.id.start_create_button)).perform(scrollTo()).perform(click());
         onView(withText("You need at least 2 points to create a track !")).inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
     }
 
