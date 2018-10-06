@@ -37,22 +37,47 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
-        RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-        List<CardItem> listCardItem = new ArrayList<>();
-
-        // Add cards to the cardList
-        for(Track t : FAKE_USER.tracksNearMe())
-            listCardItem.add(t.getCardItem());
-
-        Adapter adapter = new Adapter(getActivity(), listCardItem);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // Load if the fragment is visible
+        if (getUserVisibleHint()) {
+            loadData();
+        }
 
         return v;
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // If the fragment is visible, reload the data
+        if (isVisibleToUser && isResumed()) {
+            onResume();
+        }
+    }
+
+    @Override
     public void onRefresh() {
+        loadData();
+
+        // Stop refreshing once it is done
+        swipeLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Do nothing if the fragment is not visible
+        if (!getUserVisibleHint()) {
+            return;
+        }
+        // Else load the data
+        loadData();
+    }
+
+    /**
+     *
+     */
+    public void loadData() {
         // Create a fresh recyclerView and listCardItem
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
         List<CardItem> listCardItem = new ArrayList<>();
@@ -64,11 +89,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         Adapter adapter = new Adapter(getActivity(), listCardItem);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        // Stop refreshing once it is done
-        swipeLayout.setRefreshing(false);
     }
-
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
 
