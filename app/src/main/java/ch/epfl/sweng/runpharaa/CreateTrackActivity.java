@@ -40,8 +40,6 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         createButton = findViewById(R.id.start_create_button);
         createButton.setOnClickListener(buttonOnClickListener);
         createButton.setText("START");
-        // Setup broadcast receiver
-        initReceiver();
     }
 
     @SuppressLint("MissingPermission")
@@ -53,21 +51,11 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isFinishing()) {
-            stopGeoLocalisation();
-            if (receiver != null)
-                unregisterReceiver(receiver);
-        }
-    }
-
-    @Override
     protected void handleNewLocation() {
         // Move camera
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
-        if(creating) {
+        if (creating) {
             // Store new location
             locations.add(location);
             // Add new point
@@ -102,6 +90,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
             if (!creating) {
                 creating = true;
                 createButton.setText("STOP");
+                handleNewLocation();
             } else {
                 if (points.size() < 2) {
                     Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();

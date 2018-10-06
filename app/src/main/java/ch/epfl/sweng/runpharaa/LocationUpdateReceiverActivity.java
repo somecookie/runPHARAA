@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
 public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
@@ -14,8 +16,35 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
 
     protected abstract void handleNewLocation();
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Launches the Gps service to get location updates
+        Intent i = new Intent(getApplicationContext(), GpsService.class);
+        startService(i);
+
+        initReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            stopGeoLocalisation();
+            if (receiver != null)
+                unregisterReceiver(receiver);
+        }
+    }
+
     /**
-     * Initializes the broadcast receiver
+     * Initializes the broadcast receiver to receive updates on the location
      */
     protected void initReceiver() {
         if (receiver == null) {
@@ -38,12 +67,6 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
     protected void stopGeoLocalisation() {
         Intent i = new Intent(getApplicationContext(), GpsService.class);
         stopService(i);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initReceiver();
     }
 
 }

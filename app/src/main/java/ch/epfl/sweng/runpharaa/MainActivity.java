@@ -58,20 +58,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchGeoLocalisation();
                 Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
                 startActivity(createTrack);
             }
         });
 
-    }
-
-    /**
-     * Activates the GPS service
-     */
-    private void launchGeoLocalisation() {
-        Intent i = new Intent(getApplicationContext(), GpsService.class);
-        startService(i);
     }
 
     @Override
@@ -93,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 //startActivity(profileIntent);
                 return true;
             case R.id.mapIcon:
-                launchGeoLocalisation();
                 Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
                 startActivity(mapIntent);
                 return true;

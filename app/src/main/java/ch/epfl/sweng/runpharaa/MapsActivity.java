@@ -26,8 +26,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        initReceiver();
     }
 
     /**
@@ -39,16 +37,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isFinishing()) {
-            stopGeoLocalisation();
-            if (receiver != null)
-                unregisterReceiver(receiver);
-        }
     }
 
     @Override
