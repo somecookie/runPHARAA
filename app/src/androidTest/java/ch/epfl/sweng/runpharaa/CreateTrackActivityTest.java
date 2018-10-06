@@ -17,6 +17,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -54,16 +55,22 @@ public class CreateTrackActivityTest {
     }
 
     @Test
-    public void buttonWorksCorrectly() {
+    public void buttonAppearsCorrectly() {
         onView(withId(R.id.fab)).perform(click());
         // Let map load
         sleep(5000);
         createButtonTextMatches("START");
+    }
+
+    @Test
+    public void buttonWorksCorrectly() {
+        onView(withId(R.id.fab)).perform(click());
+        // Let map load
+        sleep(5000);
         onView(withId(R.id.start_create_button)).perform(click());
         createButtonTextMatches("STOP");
         onView(withId(R.id.start_create_button)).perform(click());
         onView(withText("You need at least 2 points to create a track !")).inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
-        onView(withId(R.id.start_create_button)).perform(click());
     }
 
     private void createButtonTextMatches(String text) {
