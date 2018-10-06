@@ -39,20 +39,6 @@ public class GpsServiceTest {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION);
 
-    @Before
-    public void grantPermission() {
-        ArrayList<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        for (int i = 0; i < permissions.size(); i++) {
-            String command = String.format("pm grant %s %s", getTargetContext().getPackageName(), permissions.get(i));
-            getInstrumentation().getUiAutomation().executeShellCommand(command);
-            // Wait a bit until the command is finished
-            SystemClock.sleep(500);
-        }
-    }
-
     @Test
     public void doesNotLaunchGpsServiceInitially() {
         assertTrue(!isMyServiceRunning(GpsService.class));

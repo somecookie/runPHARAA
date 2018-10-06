@@ -17,13 +17,9 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Tests the CreateTrack activity (first part of creation)
@@ -39,20 +35,6 @@ public class CreateTrackActivityTest {
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION);
-
-    @Before
-    public void grantPermission() {
-        ArrayList<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        for (int i = 0; i < permissions.size(); i++) {
-            String command = String.format("pm grant %s %s", getTargetContext().getPackageName(), permissions.get(i));
-            getInstrumentation().getUiAutomation().executeShellCommand(command);
-            // Wait a bit until the command is finished
-            sleep(500);
-        }
-    }
 
     @Test
     public void buttonAppearsCorrectly() {
