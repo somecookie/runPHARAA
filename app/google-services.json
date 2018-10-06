@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "749688716059",
+    "firebase_url": "https://runpharaa.firebaseio.com",
+    "project_id": "runpharaa",
+    "storage_bucket": "runpharaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749688716059:android:ab1824306a0c6960",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.runpharaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "749688716059-gfnot2fltngcc7h581a1q8aaid2ca6ua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.runpharaa",
+            "certificate_hash": "aa80a8ab29fe239d2e90ee61a39f332fd8723ab3"
+          }
+        },
+        {
+          "client_id": "749688716059-meol0p82jv7ecrg9siroik91go3n8qnr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.runpharaa",
+            "certificate_hash": "b49de9bdb458ec41af4676e25e95943911573c17"
+          }
+        },
+        {
+          "client_id": "749688716059-irhcscil8u3mqeli992a3q51icminul1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYnrdaPVB2AvnoPYsGDnuENbwMvfybon4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "749688716059-irhcscil8u3mqeli992a3q51icminul1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
