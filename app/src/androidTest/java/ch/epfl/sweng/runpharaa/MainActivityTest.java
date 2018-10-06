@@ -28,6 +28,8 @@ public class MainActivityTest {
 
     @Test
     public void testOpenMaps(){
+        onView(withId(R.id.profileIcon)).perform(click());
+        onView(withId(R.id.settingsIcon)).perform(click());
         onView(withId(R.id.mapIcon)).perform(click());
 
         //TODO: check that correct activity has been launched
