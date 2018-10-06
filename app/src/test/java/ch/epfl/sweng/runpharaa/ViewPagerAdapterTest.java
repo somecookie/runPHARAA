@@ -7,7 +7,7 @@ import org.junit.Test;
 public class ViewPagerAdapterTest {
 
     @Test
-    public void constructorTest(){
+    public void constructorGetterSetterTest(){
         ViewPagerAdapter v = new ViewPagerAdapter(null);
     }
 
