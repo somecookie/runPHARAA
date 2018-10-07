@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settingsIcon:
-                //Intent settingsIntent = new Intent(getBaseContext(), SettingsActivity.class);
-                //startActivity(settingsIntent);
+                Intent settingsIntent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             case R.id.profileIcon:
                 //Intent profileIntent = new Intent(getBaseContext(), ProfileActivity.class);
