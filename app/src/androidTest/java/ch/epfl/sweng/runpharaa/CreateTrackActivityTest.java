@@ -64,8 +64,8 @@ public class CreateTrackActivityTest {
     public void handleClickStartCorrectly(){
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.start_create_button)).perform(click());
-        sleep(5000);
-        onView(withId(R.id.start_create_button)).perform(click());
+        //sleep(5000);
+        //onView(withId(R.id.start_create_button)).perform(click());
     }
 
 }
