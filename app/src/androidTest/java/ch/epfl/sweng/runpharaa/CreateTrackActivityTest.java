@@ -16,6 +16,7 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -57,6 +58,14 @@ public class CreateTrackActivityTest {
 
     private void createButtonTextMatches(String text) {
         onView(withId(R.id.start_create_button)).check(matches(withText(text)));
+    }
+
+    @Test
+    public void handleClickStartCorrectly(){
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.start_create_button)).perform(click());
+        sleep(5000);
+        onView(withId(R.id.start_create_button)).perform(click());
     }
 
 }
