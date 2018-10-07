@@ -19,6 +19,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
@@ -37,11 +38,14 @@ public class MainActivityTest {
 
     @Test
     public void testChangeFragment() {
+        onView(withId(R.id.tabLayoutId)).perform(swipeDown());
         onView(withId(R.id.tabLayoutId)).perform(swipeRight()).perform(swipeRight());
         }
 
     @Test
     public void testOpenMaps(){
+        onView(withId(R.id.profileIcon)).perform(click());
+        onView(withId(R.id.settingsIcon)).perform(click());
         onView(withId(R.id.mapIcon)).perform(click());
 
         //TODO: check that correct activity has been launched
