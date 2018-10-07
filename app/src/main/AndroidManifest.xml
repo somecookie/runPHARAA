@@ -9,6 +9,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +38,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.runpharaa.MainActivity" />
         </activity>
+        <activity android:name=".CreateTrackActivity" />
+        <activity android:name=".CreateTrackActivity2" />
+
+        <service android:name=".GpsService" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -46,7 +51,6 @@
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

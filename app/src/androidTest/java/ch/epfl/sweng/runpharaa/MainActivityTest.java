@@ -1,13 +1,21 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.Manifest;
+import android.os.SystemClock;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -21,6 +29,12 @@ public class MainActivityTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
+
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION);
+
     @Test
     public void testChangeFragment() {
         onView(withId(R.id.tabLayoutId)).perform(swipeRight()).perform(swipeRight());
