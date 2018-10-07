@@ -43,7 +43,6 @@ public class CreateTrackActivityTest {
         // Let map load
         sleep(5000);
         createButtonTextMatches("START");
-        onView(withId(R.id.start_create_button)).perform(click());
     }
 
     /*@Test
