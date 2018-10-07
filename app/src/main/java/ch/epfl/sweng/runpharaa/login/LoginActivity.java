@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.signInBut:
+                launchApp();
                 break;
             case R.id.sign_in_button:
                 signIn();
@@ -115,8 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             Toast.makeText(getBaseContext(), "Signed in.", Toast.LENGTH_SHORT).show();
-            Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(launchIntent);
+            launchApp();
         }else{
             findViewById(R.id.email).setVisibility(View.VISIBLE);
             findViewById(R.id.password).setVisibility(View.VISIBLE);
@@ -131,6 +131,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    /**
+     * Launch the main app
+     */
+    private void launchApp(){
+        Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(launchIntent);
     }
 
 
