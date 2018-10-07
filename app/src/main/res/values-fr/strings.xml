@@ -6,5 +6,6 @@
     <string name="password">Mot de passe</string>
     <string name="map">Carte</string>
     <string name="title_activity_login">Connexion</string>
+    <string name="welcome">Bonjour</string>
 
 </resources>

@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            Toast.makeText(getBaseContext(), "Signed in.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome)+" "+currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
             launchApp();
         }else{
             findViewById(R.id.email).setVisibility(View.VISIBLE);
