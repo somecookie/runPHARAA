@@ -8,5 +8,6 @@
     <string name="title_activity_login">Connexion</string>
     <string name="welcome">Bonjour</string>
     <string name="signOut">Se déconnecter</string>
+    <string name="loggedOut">Déconnecté(e)</string>
 
 </resources>

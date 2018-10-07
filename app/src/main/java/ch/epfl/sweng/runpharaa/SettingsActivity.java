@@ -1,11 +1,15 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sign_out_button:
                 signOut();
                 break;
@@ -34,22 +38,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void signOut(){
+    private void signOut() {
 
         FirebaseAuth.getInstance().signOut();
-        Intent login = new Intent(getBaseContext(), LoginActivity.class);
-        startActivity(login);
 
-        //TODO: handle the google account
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
-        /**mGoogleSignInClient.signOut().addOnCompleteListener(this,
+        // Build a GoogleSignInClient with the options specified by gso.
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
                         Intent login = new Intent(getBaseContext(), LoginActivity.class);
                         startActivity(login);
                     }
-                });**/
+                });
 
 
     }

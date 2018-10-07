@@ -10,4 +10,5 @@
     <string name="password">Password</string>
     <string name="welcome">Welcome</string>
     <string name="signOut">Sign Out</string>
+    <string name="loggedOut">Logged out.</string>
 </resources>
