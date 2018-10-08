@@ -9,13 +9,16 @@ android:
     - android-27
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-27
+    # Some extras
+    - addon-google_apis-google-27
+    - extra-google-google_play_services
 
 notifications:
   email: false
 
 before_script:
   # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t android-27 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-27 --abi google-apis/armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
