@@ -6,11 +6,11 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-27
+    - android-24
     # The system image, to run an emulator during the tests
-    - sys-img-armeabi-v7a-android-27
+    - sys-img-armeabi-v7a-android-24
     # Some extras
-    - addon-google_apis-google-27
+    - addon-google_apis-google-24
     - extra-google-google_play_services
 
 notifications:
@@ -18,7 +18,7 @@ notifications:
 
 before_script:
   # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t android-27 --abi google-apis/armeabi-v7a
+  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
