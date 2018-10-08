@@ -7,11 +7,11 @@
     android:layout_height="200dp">
 
     <ImageView
-        android:scaleType="centerCrop"
         android:id="@+id/cardBackgroundId"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +19,6 @@
         app:srcCompat="@android:color/holo_blue_light" />
 
     <TextView
-        android:textStyle="bold"
-        android:textColor="#fff"
         android:id="@+id/nameID"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
@@ -30,6 +28,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="Title"
+        android:textColor="#fff"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

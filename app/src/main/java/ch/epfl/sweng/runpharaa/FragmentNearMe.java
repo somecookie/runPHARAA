@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +26,10 @@ public class FragmentNearMe extends Fragment {
 
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(CardItem item);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,12 +37,20 @@ public class FragmentNearMe extends Fragment {
 
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
         List<CardItem> listCardItem = new ArrayList<>();
+        OnItemClickListener listener = new OnItemClickListener() {
+            @Override
+            public void onItemClick(CardItem item) {
+                Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                intent.putExtra("TrackID", item.getParentTrackID());
+                startActivity(intent);
+            }
+        };
 
         // Add cards to the cardList
         for(Track t : FAKE_USER.tracksNearMe())
             listCardItem.add(t.getCardItem());
 
-        Adapter adapter = new Adapter(getActivity(), listCardItem);
+        Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -47,10 +61,12 @@ public class FragmentNearMe extends Fragment {
 
         Context context;
         List<CardItem> listCardItem;
+        OnItemClickListener listener;
 
-        public Adapter(Context context, List<CardItem> listCardItem) {
+        public Adapter(Context context, List<CardItem> listCardItem, OnItemClickListener listener) {
             this.context = context;
             this.listCardItem = listCardItem;
+            this.listener = listener;
         }
 
         @NonNull
@@ -66,6 +82,7 @@ public class FragmentNearMe extends Fragment {
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground());
             viewHolder.name.setText(listCardItem.get(position).getName());
+            viewHolder.bind(listCardItem.get(position), listener);
         }
 
         @Override
@@ -83,6 +100,14 @@ public class FragmentNearMe extends Fragment {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
                 name = itemView.findViewById(R.id.nameID);
+            }
+
+            public void bind(final CardItem item, final OnItemClickListener listener) {
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        listener.onItemClick(item);
+                    }
+                });
             }
         }
     }
