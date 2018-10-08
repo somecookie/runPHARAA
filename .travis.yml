@@ -10,8 +10,10 @@ android:
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-24
     # Some extras
-    - addon-google_apis-google-24
     - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-28
 
 notifications:
   email: false
