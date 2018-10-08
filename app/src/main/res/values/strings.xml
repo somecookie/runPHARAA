@@ -1,7 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RunPHARAA</string>
     <string name="settings">Settings</string>
-    <string name="profile">Profile</string>
+    <string name="profile" translatable="false">Profile</string>
     <string name="map">Map</string>
     <string name="title_activity_maps">Near me</string>
+    <string name="title_activity_login">Login</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="welcome">Welcome</string>
+    <string name="signOut">Sign Out</string>
+    <string name="loggedOut">Logged out.</string>
 </resources>
