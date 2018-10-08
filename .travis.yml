@@ -21,7 +21,7 @@ notifications:
 before_script:
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+  - emulator -avd test -no-skin -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
   - adb shell input keyevent 82
