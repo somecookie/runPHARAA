@@ -34,7 +34,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private double maxAltitude = Double.NEGATIVE_INFINITY;
     private Location[] locations;
     private LatLng[] points;
-    private double totalDistance, totalAltitudeChange;
+    private double totalDistance = 0.0, totalAltitudeChange = 0.0;
     private Button createButton;
 
     @Override
