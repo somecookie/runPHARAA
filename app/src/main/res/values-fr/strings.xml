@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RunPHARAA</string>
+    <string name="settings">Paramètres</string>
+    <string name="title_activity_maps">Proche</string>
+    <string name="password">Mot de passe</string>
+    <string name="map">Carte</string>
+    <string name="title_activity_login">Connexion</string>
+    <string name="welcome">Bonjour</string>
+    <string name="signOut">Se déconnecter</string>
+    <string name="loggedOut">Déconnecté(e)</string>
+
+</resources>
