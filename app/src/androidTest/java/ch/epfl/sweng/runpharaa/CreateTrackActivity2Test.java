@@ -7,10 +7,14 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Build;
 import android.os.SystemClock;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.android.gms.common.internal.Constants;
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,8 +40,16 @@ public class CreateTrackActivity2Test {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION);
 
+    @Before
+    public void grantPermissions() {
+        InstrumentationRegistry
+                .getInstrumentation()
+                .getUiAutomation()
+                .executeShellCommand(String.format("appops set %s android:mock_location allow", mActivityRule.getActivity().getPackageName()));
+    }
+
     @Test
-    public void createTrackWorksWithTwoFakePoints(){
+    public void createTrackWorksWithTwoFakePoints() {
         locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Let map load
         sleep(2000);
@@ -55,7 +67,7 @@ public class CreateTrackActivity2Test {
     private LocationManager locMgr;
 
     private void setMock(double latitude, double longitude, float accuracy) {
-        locMgr.addTestProvider (LocationManager.GPS_PROVIDER,
+        locMgr.addTestProvider(LocationManager.GPS_PROVIDER,
                 "requiresNetwork" == "",
                 "requiresSatellite" == "",
                 "requiresCell" == "",
@@ -80,7 +92,8 @@ public class CreateTrackActivity2Test {
 
         locMgr.setTestProviderStatus(LocationManager.GPS_PROVIDER,
                 LocationProvider.AVAILABLE,
-                null,System.currentTimeMillis());
+                null, System.currentTimeMillis());
 
-        locMgr.setTestProviderLocation(LocationManager.GPS_PROVIDER, newLocation);}
+        locMgr.setTestProviderLocation(LocationManager.GPS_PROVIDER, newLocation);
+    }
 }
