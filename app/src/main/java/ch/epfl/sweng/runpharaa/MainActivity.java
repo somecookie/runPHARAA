@@ -14,11 +14,14 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        client = new Client();
 
         tabLayout = findViewById(R.id.tabLayoutId);
         viewPager = findViewById(R.id.viewPagerId);

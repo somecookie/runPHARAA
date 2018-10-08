@@ -2,11 +2,15 @@ package ch.epfl.sweng.runpharaa;
 
 import android.media.Image;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+@IgnoreExtraProperties
 public class Track
 {
     private final int uid;
@@ -137,6 +141,17 @@ public class Track
         return R*c;
     }
 
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("location", location);
+        result.put("LatLng", path);
+
+        return result;
+    }
+
+    public LatLng[] getPath(){
+        return path;
+    }
     /*
     /**
      * Add a new tag to the @tags set if it does not already contains it
