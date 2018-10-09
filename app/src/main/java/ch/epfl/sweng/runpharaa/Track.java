@@ -61,12 +61,20 @@ public class Track
     }
 
     //Testing purposes
+    public Track(LatLng[] path){
+        this(0,0,0,"Test", path,0,0,0,null,0,0,null,null);
+    }
+
     public Track(String name, LatLng[] path){
-        this(0, 0, 0, name, path,0, 0,0, null, 0,0,null,null);
+        this(0,0,0, name, path,0,0,0, null, 0,0,null,null);
+    }
+
+    public Track(String name, int image, LatLng[] path){
+        this(0,0, image, name, path,0,0,0,null,0,0,null,null);
     }
 
     public Track(int tid, int image, String name, LatLng[] path, double track_length, int average_time, int likes, int favourites){
-        this(tid, 0, image, name, path, track_length, average_time,0,null, likes, favourites, null, null);
+        this(tid,0, image, name, path, track_length, average_time,0,null, likes, favourites, null, null);
     }
 
     //TODO: either delete this or do it again when the database is on
