@@ -38,8 +38,7 @@ dependencies {
 
     //dependecies for Google maps
     implementation 'com.google.android.gms:play-services-maps:15.0.1' //dependency for google maps
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-//dependency for google maps
+    implementation 'com.google.android.gms:play-services-location:15.0.1' //dependency for google maps
 
     //dependencies for firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'
@@ -51,8 +50,6 @@ dependencies {
     //dependencies for Google's authentication
     implementation 'com.google.firebase:firebase-auth:16.0.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-
-
 
     testImplementation 'junit:junit:4.12'
 
