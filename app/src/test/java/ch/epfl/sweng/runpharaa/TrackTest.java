@@ -57,7 +57,7 @@ public class TrackTest {
     @Test
     public void allTracksTest(){
         ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track("Banane->Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772), new LatLng(46.519380, 6.580669)}));
+        all.add(new Track("Banane -> Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772), new LatLng(46.519380, 6.580669)}));
         all.add(new Track("Innovation Parc -> BC",R.drawable.innovation_park,new LatLng[]{new LatLng(46.517563, 6.562350), new LatLng(46.518475, 6.561960)}));
         all.add(new Track("Rolex -> Swisstech",R.drawable.rolex, new LatLng[]{new LatLng(46.518447, 6.568238), new LatLng(46.523206, 6.564945)}));
         all.add(new Track("Sat -> INM",R.drawable.rolex, new LatLng[]{new LatLng(46.520566, 6.567820), new LatLng(46.518577, 6.563165)}));
@@ -72,7 +72,7 @@ public class TrackTest {
 
     @Test
     public void getStartingPointTest(){
-        Track t = new Track("Banane->Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
+        Track t = new Track("Banane -> Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
 
         assertEquals(new LatLng(46.522735, 6.579772), t.getStartingPoint());
     }
