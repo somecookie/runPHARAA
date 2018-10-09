@@ -61,8 +61,8 @@ public class Track
     }
 
     //Testing purposes
-    public Track(LatLng[] path){
-        this(0, 0, 0,"Test", path,0, 0,0, null, 0,0,null,null);
+    public Track(String name, LatLng[] path){
+        this(0, 0, 0, name, path,0, 0,0, null, 0,0,null,null);
     }
 
     public Track(int tid, int image, String name, LatLng[] path, double track_length, int average_time, int likes, int favourites){
@@ -86,7 +86,7 @@ public class Track
         LatLng coord12 = new LatLng(46.521412, 6.627383); //Flon
 
         ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track(0, R.drawable.centre_sportif, "Banane->Centre Sportif", new LatLng[]{coord1, coord2}, 350, 10, 3, 4));
+        all.add(new Track(0, R.drawable.centre_sportif, "Banane -> Centre Sportif", new LatLng[]{coord1, coord2}, 350, 10, 3, 4));
         all.add(new Track(1, R.drawable.innovation_park, "Innovation Parc -> BC", new LatLng[]{coord4, coord3}, 300, 2, 1, 1));
         all.add(new Track(2, R.drawable.rolex, "Rolex -> Swisstech", new LatLng[]{coord5, coord6}, 850, 8, 4, 2));
         all.add(new Track(3, R.drawable.rolex, "Sat -> INM", new LatLng[]{coord7, coord0}, 450, 5, 6, 7));
