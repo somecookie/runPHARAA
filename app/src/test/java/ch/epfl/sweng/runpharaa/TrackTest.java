@@ -27,7 +27,7 @@ public class TrackTest {
     public void constructorPathLength1Test(){
         LatLng[] path = {new LatLng(1.221, 2.133)};
         try {
-            Track t = new Track("Toto", 1, path);
+            Track t = new Track(0,"Toto", 1, path);
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -57,12 +57,12 @@ public class TrackTest {
     @Test
     public void allTracksTest(){
         ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track("Banane -> Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772), new LatLng(46.519380, 6.580669)}));
-        all.add(new Track("Innovation Parc -> BC",R.drawable.innovation_park,new LatLng[]{new LatLng(46.517563, 6.562350), new LatLng(46.518475, 6.561960)}));
-        all.add(new Track("Rolex -> Swisstech",R.drawable.rolex, new LatLng[]{new LatLng(46.518447, 6.568238), new LatLng(46.523206, 6.564945)}));
-        all.add(new Track("Sat -> INM",R.drawable.rolex, new LatLng[]{new LatLng(46.520566, 6.567820), new LatLng(46.518577, 6.563165)}));
-        all.add(new Track("Ouchy -> Gare",R.drawable.ouchy, new LatLng[]{new LatLng(46.506279, 6.626111), new LatLng(46.517210, 6.630105)}));
-        all.add(new Track("SF -> Cath -> Flon",R.drawable.saint_francois, new LatLng[]{new LatLng(46.519531, 6.633149), new LatLng(46.522638, 6.634971), new LatLng(46.521412, 6.627383)}));
+        all.add(new Track(0,"Banane -> Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772), new LatLng(46.519380, 6.580669)}));
+        all.add(new Track(1,"Innovation Parc -> BC",R.drawable.innovation_park,new LatLng[]{new LatLng(46.517563, 6.562350), new LatLng(46.518475, 6.561960)}));
+        all.add(new Track(2,"Rolex -> Swisstech",R.drawable.rolex, new LatLng[]{new LatLng(46.518447, 6.568238), new LatLng(46.523206, 6.564945)}));
+        all.add(new Track(3,"Sat -> INM",R.drawable.rolex, new LatLng[]{new LatLng(46.520566, 6.567820), new LatLng(46.518577, 6.563165)}));
+        all.add(new Track(4,"Ouchy -> Gare",R.drawable.ouchy, new LatLng[]{new LatLng(46.506279, 6.626111), new LatLng(46.517210, 6.630105)}));
+        all.add(new Track(5,"SF -> Cath -> Flon",R.drawable.saint_francois, new LatLng[]{new LatLng(46.519531, 6.633149), new LatLng(46.522638, 6.634971), new LatLng(46.521412, 6.627383)}));
 
         //Test done in function of the location, maybe override equals in tracks to test
         for(int i = 0; i < all.size(); i++){
@@ -72,23 +72,38 @@ public class TrackTest {
 
     @Test
     public void getStartingPointTest(){
-        Track t = new Track("Banane -> Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
+        Track t = new Track(0,"Banane -> Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
 
         assertEquals(new LatLng(46.522735, 6.579772), t.getStartingPoint());
     }
 
     @Test
     public void getLocationTest(){
-        Track t = new Track("TestLocation",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
+        Track t = new Track(0,"TestLocation",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
 
         assertEquals("TestLocation", t.getLocation());
     }
 
     @Test
     public void getCardItemTest(){
-        Track t = new Track("ici",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
+        Track t = new Track(0,"ici",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
 
         assertEquals(new CardItem(R.drawable.centre_sportif, "ici", 0).getBackground(), t.getCardItem().getBackground());
         assertEquals(new CardItem(R.drawable.centre_sportif, "ici", 0).getName(), t.getCardItem().getName());
+        assertEquals(new CardItem(R.drawable.centre_sportif, "ici", 0).getParentTrackID(), t.getCardItem().getParentTrackID());
+    }
+
+    @Test
+    public void testConstructor(){
+        Track t = new Track(0, R.drawable.centre_sportif,"TestLocation", new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)},
+                            0, 0, 0, 0);
+
+        assertEquals(0, t.getCreator_id());
+        assertEquals("TestLocation", t.getLocation());
+        assertEquals(R.drawable.centre_sportif, t.getImage());
+        assertEquals(0, t.getTrack_length(), 0);
+        assertEquals(0, t.getAverage_time_length(), 0);
+        assertEquals(0, t.getLikes());
+        assertEquals(0, t.getFavourites());
     }
 }

@@ -31,7 +31,6 @@ public class Track
     private final Reactions reactions;
     private final ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
 
-
     //TODO: Make more constructors
     public Track(int tid, int creator_id, int image, String location, LatLng[] path, double track_length, double average_time_length,
                  double height_diff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews)
@@ -69,7 +68,7 @@ public class Track
         this(0,0,0, name, path,0,0,0, null, 0,0,null,null);
     }
 
-    public Track(String name, int image, LatLng[] path){
+    public Track(int tid, String name, int image, LatLng[] path){
         this(0,0, image, name, path,0,0,0,null,0,0,null,null);
     }
 
