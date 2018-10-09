@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,8 +21,10 @@ import java.util.List;
 
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
-public class FragmentNearMe extends Fragment {
+public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
+    SwipeRefreshLayout swipeLayout;
+
     public FragmentNearMe(){
 
     }
@@ -35,6 +38,54 @@ public class FragmentNearMe extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.near_me_fragment, container, false);
 
+        // Setup for refresh on swipe
+        swipeLayout = v.findViewById(R.id.refreshNearMe);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
+
+        // Load if the fragment is visible
+        if (getUserVisibleHint()) {
+            loadData();
+        }
+
+        return v;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // If the fragment is visible, reload the data
+        if (isVisibleToUser && isResumed()) {
+            onResume();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
+
+        // Stop refreshing once it is done
+        swipeLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Do nothing if the fragment is not visible
+        if (!getUserVisibleHint()) {
+            return;
+        }
+        // Else load the data
+        loadData();
+    }
+
+    /**
+     * Create the recyclerView and the list of cardItem used to draw the list of tracks "near me".
+     * This function is called when the fragment is created and each time the list is refreshed.
+     */
+    public void loadData() {
+        // Create a fresh recyclerView and listCardItem
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
         List<CardItem> listCardItem = new ArrayList<>();
         OnItemClickListener listener = new OnItemClickListener() {
@@ -53,8 +104,6 @@ public class FragmentNearMe extends Fragment {
         Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        return v;
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
@@ -95,7 +144,7 @@ public class FragmentNearMe extends Fragment {
 
             ImageView background_img;
             TextView name;
-
+            
             public viewHolder(@NonNull View itemView) {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
