@@ -88,7 +88,7 @@ public class TrackTest {
     public void getCardItemTest(){
         Track t = new Track("ici",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
 
-        assertEquals(new CardItem(R.drawable.centre_sportif, "ici").getBackground(), t.getCardItem().getBackground());
-        assertEquals(new CardItem(R.drawable.centre_sportif, "ici").getName(), t.getCardItem().getName());
+        assertEquals(new CardItem(R.drawable.centre_sportif, "ici", 0).getBackground(), t.getCardItem().getBackground());
+        assertEquals(new CardItem(R.drawable.centre_sportif, "ici", 0).getName(), t.getCardItem().getName());
     }
 }
