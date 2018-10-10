@@ -43,8 +43,7 @@ dependencies {
 
     //dependecies for Google maps
     implementation 'com.google.android.gms:play-services-maps:15.0.1' //dependency for google maps
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-//dependency for google maps
+    implementation 'com.google.android.gms:play-services-location:15.0.1' //dependency for google maps
 
     //dependencies for firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'
@@ -61,8 +60,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:+"
     testImplementation "org.mockito:mockito-inline:+"
     androidTestImplementation "org.mockito:mockito-android:+"
-
-
 
     testImplementation 'junit:junit:4.12'
 

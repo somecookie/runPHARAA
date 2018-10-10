@@ -46,10 +46,12 @@
         <activity android:name=".CreateTrackActivity2" />
 
         <service android:name=".GpsService" />
-
+		
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
+        <activity android:name=".TrackPropertiesActivity"></activity>
 
         <activity
             android:name=".login.LoginActivity"
