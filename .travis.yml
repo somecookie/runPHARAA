@@ -6,22 +6,17 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-24
+    - android-22
     # The system image, to run an emulator during the tests
-    - sys-img-armeabi-v7a-android-24
-    # Some extras
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - addon-google_apis-google-28
+    - sys-img-armeabi-v7a-android-22
 
 notifications:
   email: false
 
 before_script:
   # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-window &
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
   - adb shell input keyevent 82
