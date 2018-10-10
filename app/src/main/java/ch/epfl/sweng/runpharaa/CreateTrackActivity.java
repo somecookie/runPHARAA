@@ -90,7 +90,10 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
             if (!creating) {
                 creating = true;
                 createButton.setText("STOP");
-                handleNewLocation();
+                if (location == null)
+                    Toast.makeText(getBaseContext(), "Location not acquired yet !", Toast.LENGTH_SHORT).show();
+                else
+                    handleNewLocation();
             } else {
                 if (points.size() < 2) {
                     Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();

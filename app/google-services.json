@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "749688716059-a73e2rk2ivta994jn3kvdej2ug8s0b8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.runpharaa",
+            "certificate_hash": "3dd4f46ad3d0a61fcb509223f8d2e6d0fa3ba9d3"
+          }
+        },
+        {
           "client_id": "749688716059-irhcscil8u3mqeli992a3q51icminul1.apps.googleusercontent.com",
           "client_type": 3
         }
