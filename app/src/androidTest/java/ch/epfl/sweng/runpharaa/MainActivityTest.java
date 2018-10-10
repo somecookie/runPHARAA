@@ -45,7 +45,11 @@ public class MainActivityTest {
     @Test
     public void testOpenMaps(){
         onView(withId(R.id.mapIcon)).perform(click());
-
         //TODO: check that correct activity has been launched
+    }
+
+    @Test
+    public void testOpenSettings(){
+        onView(withId(R.id.settingsIcon)).perform(click());
     }
 }

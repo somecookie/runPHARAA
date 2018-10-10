@@ -46,7 +46,7 @@ public class CreateTrackActivity2Test {
             Manifest.permission.ACCESS_COARSE_LOCATION);
 
 
-    @Test
+    /*@Test
     public void addNameAndConfirmTest(){
         locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
         onView(withId(R.id.start_create_button)).perform(click());
@@ -60,7 +60,7 @@ public class CreateTrackActivity2Test {
         //onView(withId(R.id.create_text_name)).perform(typeText("Track1")).perform(closeSoftKeyboard());
         //onView(withId(R.id.create_track_button)).perform(click());
 
-    }
+    }*/
 
     private void setMock(double latitude, double longitude, float accuracy) {
         locMgr.addTestProvider (LocationManager.GPS_PROVIDER,

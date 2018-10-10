@@ -3,7 +3,6 @@ package ch.epfl.sweng.runpharaa.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +33,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
 
 
-    private GoogleSignInClient mGoogleSignInClient;
+    //Needed public to mock access
+    public static GoogleSignInClient mGoogleSignInClient;
 
 
     @Override
@@ -111,13 +111,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Updates the user interface. Launch the app if the user is already signed in.
+     *
      * @param currentUser
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome)+" "+currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
             launchApp();
-        }else{
+        } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
             findViewById(R.id.password).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
@@ -128,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Prompts the user to select a Google account to sign in with
      */
-    private void signIn(){
+    private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -136,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Launch the main app
      */
-    private void launchApp(){
+    private void launchApp() {
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(launchIntent);
     }
