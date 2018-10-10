@@ -13,7 +13,6 @@ import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 public class TrackPropertiesActivity extends AppCompatActivity {
 
     //TODO: Check if ScrollView is working!
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
