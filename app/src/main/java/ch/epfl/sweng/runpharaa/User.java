@@ -23,7 +23,7 @@ public final class User {
 
     public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name,int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId){
+    public User(String name, int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId) {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
@@ -34,9 +34,9 @@ public final class User {
         this.uId = uId;
     }
 
-    public User(String name, LatLng location, int preferredRadius){
+    public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name,preferredRadius, null, null, null, location, false, 0);
+        this(name, preferredRadius, null, null, null, location, false, 0);
     }
 
     public int getPreferredRadius() {
@@ -45,16 +45,17 @@ public final class User {
 
     /**
      * Make an ordered list of all the tracks that are in a RADIUS of 2km.
+     *
      * @return ordered list of tracks
      */
     @TargetApi(Build.VERSION_CODES.N)
-    public ArrayList<Track> tracksNearMe(){
+    public ArrayList<Track> tracksNearMe() {
         ArrayList<Track> nm = new ArrayList<>();
         ArrayList<Track> allTracks = Track.allTracks(); //Todo muste be changed when the database is done
 
         //filter the tracks that start too far from the location
-        for(Track tr: allTracks){
-            if(tr.distance(location) <= preferredRadius){
+        for (Track tr : allTracks) {
+            if (tr.distance(location) <= preferredRadius) {
                 nm.add(tr);
             }
         }
@@ -65,8 +66,8 @@ public final class User {
             public int compare(Track o1, Track o2) {
                 double d1 = o1.distance(location);
                 double d2 = o2.distance(location);
-                if(d1 < d2) return -1;
-                else if(d1 == d2) return 0;
+                if (d1 < d2) return -1;
+                else if (d1 == d2) return 0;
                 else return 1;
             }
         });
@@ -76,26 +77,29 @@ public final class User {
 
     /**
      * Getter for the user's location
+     *
      * @return location
      */
-    public LatLng getLocation(){
+    public LatLng getLocation() {
         return location;
     }
 
     /**
      * Return the name of the user
+     *
      * @return name
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 
 
     /**
      * Update the user's location
+     *
      * @param newLocation
      */
-    public void setLocation(LatLng newLocation){
+    public void setLocation(LatLng newLocation) {
         this.location = newLocation;
     }
 

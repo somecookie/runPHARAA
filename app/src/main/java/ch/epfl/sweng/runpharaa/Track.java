@@ -13,28 +13,31 @@ import java.util.Set;
 @IgnoreExtraProperties
 public class Track
 {
-    private final int uid;
-    private final LatLng[] path;
-    private final LatLng startingPoint;
-    private final int creator_id;
-    private final int image; //TODO: check if it is the right type
-
+    //Track identifiers
+    private final int tid;
+    private final int creator_id; //TODO: Make a map from creator_if -> name?
+    private final int image;
+    private final CardItem cardItem;
 
     //Track specifics
     private final String location;
-    private final double track_length;
-    private final int average_time_length;
+    private final LatLng[] path;
+    private final LatLng startingPoint;
+    private final double track_length;        //meters
+    private final double average_time_length; //minutes
+    //private final String difficulty;  //TODO: Build a range for each difficulty based on height difference: easy = < 1m? Or create this based on the difficulty users report for same track?
     private final double height_diff;
     private final Set<Tag> tags;
 
     //Reviews
+    private final int likes;
+    private final int favourites;
     private final Reactions reactions;
-    private final ArrayList<Review> reviews;//TODO: maybe change add/remove review fonction and maybe change to Set since they will be unique
-    //TODO: maybe add other review/feedback attributes
-
+    private final ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
 
     //TODO: Make more constructors
-    public Track(LatLng[] path, int uid, int creator_id, int image, String location, double track_length, int average_time_length, double height_diff, Set<Tag> tags, Reactions reactions, ArrayList<Review> reviews)
+    public Track(int tid, int creator_id, int image, String location, LatLng[] path, double track_length, double average_time_length,
+                 double height_diff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews)
     {
         if(path == null){
             throw new NullPointerException("The path must me defined.");
@@ -43,9 +46,10 @@ public class Track
         }else{
             this.path = path;
             this.startingPoint = path[0];
+            this.cardItem = new CardItem(image, location, tid);
         }
 
-        this.uid = uid;
+        this.tid = tid;
         this.creator_id = creator_id;
         this.image = image;
         this.location = location;
@@ -53,28 +57,30 @@ public class Track
         this.average_time_length = average_time_length;
         this.height_diff = height_diff;
         this.tags = tags;
+        this.likes = likes;
+        this.favourites = favourites;
         this.reactions = reactions;
         this.reviews = reviews;
     }
 
-    //testing puposes
+    //Testing purposes
     public Track(LatLng[] path){
-        this(path, 0, 0, 0, "Test", 0, 0, 0,null, null, null);
+        this(0,0,0,"Test", path,0,0,0,null,0,0,null,null);
     }
 
-    public Track(String name,LatLng[] path){
-        this(path,0,0,0,name,0,0,0,null,null,null);
+    public Track(String name, LatLng[] path){
+        this(0,0,0, name, path,0,0,0, null, 0,0,null,null);
     }
 
-    public Track(String name, int image, LatLng[] path){
-        this(path,0,0,image ,name,0,0,0,null,null,null);
+    public Track(int tid, String name, int image, LatLng[] path){
+        this(0,0, image, name, path,0,0,0,null,0,0,null,null);
     }
 
-    public String getLocation() {
-        return location;
+    public Track(int tid, int image, String name, LatLng[] path, double track_length, int average_time, int likes, int favourites){
+        this(tid,0, image, name, path, track_length, average_time,0,null, likes, favourites, null, null);
     }
 
-    //must either delete it or do it again when the database is on
+    //TODO: either delete this or do it again when the database is on
     public static ArrayList<Track> allTracks(){
         LatLng coord0 = new LatLng(46.518577, 6.563165); //inm
         LatLng coord1 = new LatLng(46.522735, 6.579772); //Banane
@@ -86,29 +92,57 @@ public class Track
         LatLng coord7 = new LatLng(46.520566, 6.567820); //Sat
         LatLng coord8 = new LatLng(46.506279, 6.626111); //Ouchy
         LatLng coord9 = new LatLng(46.517210, 6.630105); //Gare
-        LatLng coord10 = new LatLng(46.519531, 6.633149);//Saint-Francois
+        LatLng coord10 = new LatLng(46.519531, 6.633149);// Saint-Francois
         LatLng coord11 = new LatLng(46.522638, 6.634971); //Cathédrale
         LatLng coord12 = new LatLng(46.521412, 6.627383); //Flon
 
         ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track("Banane->Centre Sportif",R.drawable.centre_sportif ,new LatLng[]{coord1, coord2}));
-        all.add(new Track("Innovation Parc -> BC",R.drawable.innovation_park,new LatLng[]{coord4, coord3}));
-        all.add(new Track("Rolex -> Swisstech",R.drawable.rolex, new LatLng[]{coord5, coord6}));
-        all.add(new Track("Sat -> INM",R.drawable.rolex, new LatLng[]{coord7, coord0}));
-        all.add(new Track("Ouchy -> Gare",R.drawable.ouchy, new LatLng[]{coord8, coord9}));
-        all.add(new Track("SF -> Cath -> Flon",R.drawable.saint_francois, new LatLng[]{coord10, coord11, coord12}));
+        all.add(new Track(0, R.drawable.centre_sportif, "Banane -> Centre Sportif", new LatLng[]{coord1, coord2}, 350, 10, 3, 4));
+        all.add(new Track(1, R.drawable.innovation_park, "Innovation Parc -> BC", new LatLng[]{coord4, coord3}, 300, 2, 1, 1));
+        all.add(new Track(2, R.drawable.rolex, "Rolex -> Swisstech", new LatLng[]{coord5, coord6}, 850, 8, 4, 2));
+        all.add(new Track(3, R.drawable.rolex, "Sat -> INM", new LatLng[]{coord7, coord0}, 450, 5, 6, 7));
+        all.add(new Track(4, R.drawable.ouchy, "Ouchy -> Gare", new LatLng[]{coord8, coord9}, 1300, 20, 10, 12));
+        all.add(new Track(5, R.drawable.saint_francois, "SF -> Cath -> Flon", new LatLng[]{coord10, coord11, coord12}, 0, 0, 0,0));
 
         return all;
 
     }
 
     public CardItem getCardItem() {
-        return new CardItem(image, location);
+        return this.cardItem;
     }
 
     public LatLng getStartingPoint() {
         return startingPoint;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public int getUid() { return tid; }
+
+    public LatLng[] getPath() { return path; }
+
+    public int getCreator_id() { return creator_id; }
+
+    public int getImage() { return image; }
+
+    public double getTrack_length() { return track_length; }
+
+    public double getAverage_time_length() { return average_time_length; }
+
+    public double getHeight_diff() { return height_diff; }
+
+    public Set<Tag> getTags() { return tags; }
+
+    public int getLikes() { return likes; }
+
+    public int getFavourites() { return favourites; }
+
+    public Reactions getReactions() { return reactions; }
+
+    public ArrayList<Review> getReviews() { return reviews; }
 
     /**
      * Compute the distance in meters between a track (its starting point) and a given coordinate.
@@ -160,51 +194,5 @@ public class Track
     public static void addTag(Tag tag)
     {
         tags.add(tag);
-    }
-
-    /**
-     * Remove a tag of the @tags set if it already contains it
-     * @param tag
-     *
-    public static void removeTag(Tag tag)
-    {
-        tags.remove(tag);
-    }
-
-    /**
-     * Add new tags to the @tags set if it does not already contains them
-     * @param newTags
-     *
-    public static void addTags(Set<Tag> newTags)
-    {
-        tags.addAll(newTags);
-    }
-
-    /**
-     * Remove tags of the @tags set if it already contains them
-     * @param tagsToRemove
-     *
-    public static void removeTags(Set<Tag> tagsToRemove)
-    {
-        tags.removeAll(tagsToRemove);
-    }
-
-    /**
-     * Add a new review to the list of @reviews
-     * @param review
-     *
-    public static void addReview(Review review)
-    {
-        reviews.add(review);
-    }
-
-    /**
-     * Remove the first occurence of the give review in @reviews
-     * @param review
-     *
-    public static void removeReview(Review review)
-    {
-        reviews.remove(review);
-    }
-    */
+    }*/
 }
