@@ -48,7 +48,7 @@ public class CreateTrackActivity2Test {
                 .executeShellCommand(String.format("appops set %s android:mock_location allow", mActivityRule.getActivity().getPackageName()));
     }
 
-    @Test
+    /*@Test
     public void createTrackWorksWithTwoFakePoints() {
         locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Let map load
@@ -62,7 +62,7 @@ public class CreateTrackActivity2Test {
         onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
         onView(withId(R.id.create_text_name)).perform(typeText("Random name")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_track_button)).perform(click());
-    }
+    }*/
 
     private LocationManager locMgr;
 
