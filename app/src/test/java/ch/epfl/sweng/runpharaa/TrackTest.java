@@ -11,6 +11,8 @@ import static org.junit.Assert.assertTrue;
 
 public class TrackTest {
 
+    Track tracko = new Track();
+
     LatLng coord1 = new LatLng(46.518577, 6.563165); //inm
     LatLng coord2 = new LatLng(46.519380, 6.580669); //centre sportif
 

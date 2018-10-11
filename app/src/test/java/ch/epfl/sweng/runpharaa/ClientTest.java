@@ -1,8 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
-import org.junit.Test;
-
-import static junit.framework.TestCase.assertEquals;
+import org.junit.runners.JUnit4;
 
 public class ClientTest {
 

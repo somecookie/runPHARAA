@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.app.admin.DeviceAdminInfo;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
@@ -11,6 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Client {
     private FirebaseDatabase mFirebaseDatabase;
@@ -21,11 +24,15 @@ public class Client {
 
     public Client()
     {
+
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference();
 
-        //If there is other thing that Track object on the data base then use addChildEventListener on Tracks
-        mRef.addValueEventListener(new ValueEventListener() {
+        //writeNewDummy("0", "Test Location");
+
+        /*If there is other thing that Track object on the data base then use addChildEventListener on Tracks
+        /*mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 initTracksList(dataSnapshot);
@@ -35,7 +42,27 @@ public class Client {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });*/
+
+        mRef.child("dummies").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()) {
+                    Dummy dummy = s.getValue(Dummy.class);
+                    Log.i("Database Read", dummy.name);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
+    }
+
+    private void writeNewDummy(String dummyId, String name) {
+        Dummy dummy = new Dummy(name);
+        mRef.child("dummies").child(dummyId).setValue(dummy);
     }
 
     private void initTracksList(DataSnapshot dataSnapshot) {
@@ -46,6 +73,5 @@ public class Client {
             tracks.add(new Track(location, latLngs));
         }
     }
-
 
 }
