@@ -21,7 +21,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -49,7 +51,11 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             @Override
             public void onClick(View v) {
                 // Create track
-                Track t = new Track(nameText.getText().toString(), points);
+                List<CustLatLng> custPoints = new ArrayList<>();
+                for(LatLng l : points){
+                    custPoints.add(new CustLatLng(l.latitude, l.longitude));
+                }
+                Track t = new Track(nameText.getText().toString(), custPoints);
                 // TODO: add track to created tracks
                 Toast.makeText(getApplicationContext(), "New track was successfully created !", Toast.LENGTH_LONG).show();
                 finish();

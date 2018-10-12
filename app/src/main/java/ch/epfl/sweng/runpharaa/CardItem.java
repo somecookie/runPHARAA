@@ -4,13 +4,13 @@ public class CardItem {
 
     private int background;
     private String name;
-    private int parentTrackID;
+    private String parentTrackID;
 
     public CardItem() {
 
     }
 
-    public CardItem(int background, String name, int parentTrackID) {
+    public CardItem(int background, String name, String parentTrackID) {
         this.background = background;
         this.name = name;
         this.parentTrackID = parentTrackID;
@@ -24,7 +24,7 @@ public class CardItem {
         return name;
     }
 
-    public int getParentTrackID() {
+    public String getParentTrackID() {
         return parentTrackID;
     }
 
@@ -36,7 +36,7 @@ public class CardItem {
         this.name = name;
     }
 
-    public void setParentTrackID(int parentTrackID) {
+    public void setParentTrackID(String parentTrackID) {
         this.parentTrackID = parentTrackID;
     }
 }

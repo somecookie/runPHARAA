@@ -1,64 +1,70 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.media.Image;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@IgnoreExtraProperties
 public class Track
 {
     //Track identifiers
-    private int tid;
-    private int creator_id; //TODO: Make a map from creator_if -> name?
+    private String trackUid;
+    private String creatorUid; //TODO: Make a map from creator_if -> name?
     @Exclude
-    private int image;
+    private int image;//TODO for database download into local file
+    private String imageStoragePath;
     @Exclude
     private CardItem cardItem;
 
     //Track specifics
     private String location;
-    private LatLng[] path;
-    private LatLng startingPoint;
-    private double track_length;        //meters
-    private double average_time_length; //minutes
+    private List<CustLatLng> path;
+    private CustLatLng startingPoint;
+    private double trackLength;        //meters
+    private double averageTimeLength; //minutes
     //private final String difficulty;  //TODO: Build a range for each difficulty based on height difference: easy = < 1m? Or create this based on the difficulty users report for same track?
-    private double height_diff;
+    private double heightDiff;
+    @Exclude
     private Set<Tag> tags;
 
     //Reviews
+    @Exclude
     private int likes;
+    @Exclude
     private int favourites;
+    @Exclude
     private Reactions reactions;
+    @Exclude
     private ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
 
     //TODO: Make more constructors
-    public Track(int tid, int creator_id, int image, String location, LatLng[] path, double track_length, double average_time_length,
-                 double height_diff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews)
+    public Track(String trackUid, String creatorUid, int image, String imageStoragePath, String location, List<CustLatLng> path, double trackLength, double averageTimeLength,
+                 double heightDiff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews)
     {
         if(path == null){
             throw new NullPointerException("The path must me defined.");
-        }else if(path.length < 2){
+        }else if(path.size() < 2){
             throw  new IllegalArgumentException("The path must contain at least 2 points (start and end).");
         }else{
             this.path = path;
-            this.startingPoint = path[0];
-            this.cardItem = new CardItem(image, location, tid);
+            this.startingPoint = path.get(0);
+            this.cardItem = new CardItem(image, location, trackUid);
         }
 
-        this.tid = tid;
-        this.creator_id = creator_id;
+        this.trackUid = trackUid;
+        this.creatorUid = creatorUid;
         this.image = image;
+        this.imageStoragePath = imageStoragePath;
         this.location = location;
-        this.track_length = track_length;
-        this.average_time_length = average_time_length;
-        this.height_diff = height_diff;
+        this.trackLength = trackLength;
+        this.averageTimeLength = averageTimeLength;
+        this.heightDiff = heightDiff;
         this.tags = tags;
         this.likes = likes;
         this.favourites = favourites;
@@ -67,90 +73,101 @@ public class Track
     }
 
     //Testing purposes
-    public Track(LatLng[] path){
-        this(0,0,0,"Test", path,0,0,0,null,0,0,null,null);
+    public Track(List<CustLatLng> path){
+        this("0","0",0,"","Test", path,0,0,0,null,0,0,null,null);
     }
 
-    public Track(String name, LatLng[] path){
-        this(0,0,0, name, path,0,0,0, null, 0,0,null,null);
+    public Track(String name, List<CustLatLng> path){
+        this("0","0",0,"", name, path,0,0,0, null, 0,0,null,null);
     }
 
-    public Track(int tid, String name, int image, LatLng[] path){
-        this(0,0, image, name, path,0,0,0,null,0,0,null,null);
+    public Track(String trackUid, String name, int image, List<CustLatLng> path){
+        this(trackUid,"0", image,"", name, path,0,0,0,null,0,0,null,null);
     }
 
-    public Track(int tid, int image, String name, LatLng[] path, double track_length, int average_time, int likes, int favourites){
-        this(tid,0, image, name, path, track_length, average_time,0,null, likes, favourites, null, null);
+    public Track(String trackUid, int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
+        this(trackUid,"0", image,"", name, path, track_length, average_time,0,null, likes, favourites, null, null);
     }
 
     public Track(String name){
-        this(0,0,0, name, new LatLng[]{new LatLng(46.522735, 6.579772), new LatLng(46.519380, 6.580669)},0,0,0, null, 0,0,null,null);
+        this("0","0",0, name,"", Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),0,0,0, null, 0,0,null,null);
+    }
+
+    public Track(int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
+        this("0","0", image,"", name, path, track_length, average_time,0,null, likes, favourites, null, null);
     }
 
     public Track() {} // Default constructor required for calls to DataSnapshot.getValue(Track.class): Firebase Database
 
     //TODO: either delete this or do it again when the database is on
     public static ArrayList<Track> allTracks(){
-        LatLng coord0 = new LatLng(46.518577, 6.563165); //inm
-        LatLng coord1 = new LatLng(46.522735, 6.579772); //Banane
-        LatLng coord2 = new LatLng(46.519380, 6.580669); //centre sportif
-        LatLng coord3 = new LatLng(46.518475, 6.561960); //BC
-        LatLng coord4 = new LatLng(46.517563, 6.562350); //Innovation parc
-        LatLng coord5 = new LatLng(46.518447, 6.568238); //Rolex
-        LatLng coord6 = new LatLng(46.523206, 6.564945); //SwissTech
-        LatLng coord7 = new LatLng(46.520566, 6.567820); //Sat
-        LatLng coord8 = new LatLng(46.506279, 6.626111); //Ouchy
-        LatLng coord9 = new LatLng(46.517210, 6.630105); //Gare
-        LatLng coord10 = new LatLng(46.519531, 6.633149);// Saint-Francois
-        LatLng coord11 = new LatLng(46.522638, 6.634971); //Cathédrale
-        LatLng coord12 = new LatLng(46.521412, 6.627383); //Flon
+        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
+        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
+        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
+        CustLatLng coord3 = new CustLatLng(46.518475, 6.561960); //BC
+        CustLatLng coord4 = new CustLatLng(46.517563, 6.562350); //Innovation parc
+        CustLatLng coord5 = new CustLatLng(46.518447, 6.568238); //Rolex
+        CustLatLng coord6 = new CustLatLng(46.523206, 6.564945); //SwissTech
+        CustLatLng coord7 = new CustLatLng(46.520566, 6.567820); //Sat
+        CustLatLng coord8 = new CustLatLng(46.506279, 6.626111); //Ouchy
+        CustLatLng coord9 = new CustLatLng(46.517210, 6.630105); //Gare
+        CustLatLng coord10 = new CustLatLng(46.519531, 6.633149);// Saint-Francois
+        CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
+        CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
 
         ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track(0, R.drawable.centre_sportif, "Banane -> Centre Sportif", new LatLng[]{coord1, coord2}, 350, 10, 3, 4));
-        all.add(new Track(1, R.drawable.innovation_park, "Innovation Parc -> BC", new LatLng[]{coord4, coord3}, 300, 2, 1, 1));
-        all.add(new Track(2, R.drawable.rolex, "Rolex -> Swisstech", new LatLng[]{coord5, coord6}, 850, 8, 4, 2));
-        all.add(new Track(3, R.drawable.rolex, "Sat -> INM", new LatLng[]{coord7, coord0}, 450, 5, 6, 7));
-        all.add(new Track(4, R.drawable.ouchy, "Ouchy -> Gare", new LatLng[]{coord8, coord9}, 1300, 20, 10, 12));
-        all.add(new Track(5, R.drawable.saint_francois, "SF -> Cath -> Flon", new LatLng[]{coord10, coord11, coord12}, 0, 0, 0,0));
+        all.add(new Track("0", R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
+        all.add(new Track("1", R.drawable.innovation_park, "Innovation Parc -> BC", Arrays.asList(coord4, coord3), 300, 2, 1, 1));
+        all.add(new Track("2", R.drawable.rolex, "Rolex -> Swisstech",Arrays.asList(coord5, coord6), 850, 8, 4, 2));
+        all.add(new Track("3", R.drawable.rolex, "Sat -> INM", Arrays.asList(coord7, coord0), 450, 5, 6, 7));
+        all.add(new Track("4", R.drawable.ouchy, "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
+        all.add(new Track("5", R.drawable.saint_francois, "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
 
         return all;
 
     }
 
+    @Exclude
     public CardItem getCardItem() {
         return this.cardItem;
     }
 
     public LatLng getStartingPoint() {
-        return startingPoint;
+        return new LatLng(startingPoint.getLatitude(), startingPoint.getLongitude());
     }
 
     public String getLocation() {
         return location;
     }
 
-    public int getUid() { return tid; }
+    public String getTrackUid() { return trackUid; }
 
-    public LatLng[] getPath() { return path; }
+    public void setTrackUid(String trackUid) { this.trackUid = trackUid; }
 
-    public int getCreator_id() { return creator_id; }
+    public List<CustLatLng> getPath() { return path; }
 
+    public String getCreatorUid() { return creatorUid; }
+
+    @Exclude
     public int getImage() { return image; }
 
-    public double getTrack_length() { return track_length; }
+    public double getTrackLength() { return trackLength; }
 
-    public double getAverage_time_length() { return average_time_length; }
+    public double getAverageTimeLength() { return averageTimeLength; }
 
-    public double getHeight_diff() { return height_diff; }
+    public double getHeightDiff() { return heightDiff; }
 
+    @Exclude
     public Set<Tag> getTags() { return tags; }
 
     public int getLikes() { return likes; }
 
     public int getFavourites() { return favourites; }
 
+    @Exclude
     public Reactions getReactions() { return reactions; }
 
+    @Exclude
     public ArrayList<Review> getReviews() { return reviews; }
 
     /**
@@ -164,11 +181,11 @@ public class Track
         int R = 6378137; //Earth's mean radius in meter
 
         //angular differences in radians
-        double dLat = Math.toRadians(other.latitude - this.startingPoint.latitude);
-        double dLong = Math.toRadians(other.longitude-this.startingPoint.longitude);
+        double dLat = Math.toRadians(other.latitude - this.startingPoint.getLatitude());
+        double dLong = Math.toRadians(other.longitude-this.startingPoint.getLongitude());
 
         //this' and other's latitudes in radians
-        double lat1 = Math.toRadians(this.startingPoint.latitude);
+        double lat1 = Math.toRadians(this.startingPoint.getLatitude());
         double lat2 = Math.toRadians(other.latitude);
 
         //compute some factor a

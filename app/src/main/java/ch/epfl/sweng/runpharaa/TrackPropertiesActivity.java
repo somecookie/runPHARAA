@@ -18,7 +18,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
-        int trackID = intent.getIntExtra("TrackID", 0);
+        String trackID = intent.getStringExtra("TrackID");
         Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID);
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
@@ -31,10 +31,10 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         trackCreator.setText(/*track.getCreator_id()*/"Creator: Test User");
 
         TextView trackDuration = findViewById(R.id.trackDurationID);
-        trackDuration.setText("Duration: " + track.getAverage_time_length() + " minutes");
+        trackDuration.setText("Duration: " + track.getAverageTimeLength() + " minutes");
 
         TextView trackLength = findViewById(R.id.trackLengthID);
-        trackLength.setText("Length: " + Double.toString(track.getTrack_length()) + "m");
+        trackLength.setText("Length: " + Double.toString(track.getTrackLength()) + "m");
 
         /*
         TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
@@ -55,9 +55,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         */
     }
 
-    private Track getTrackByID(ArrayList<Track> tracks, int trackID) {
+    private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
         for (Track t: tracks) {
-            if (t.getUid() == trackID) {
+            if (t.getTrackUid().equals(trackID)) {
                 return t;
             }
         }
