@@ -1,8 +1,16 @@
 package ch.epfl.sweng.runpharaa.login;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -25,11 +36,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.User;
+import ch.epfl.sweng.runpharaa.location.Utils;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
+    private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
+
 
     //Shared instance of the FirebaseAuth
     private FirebaseAuth mAuth;
@@ -38,11 +52,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //Needed public to mock access
     public static GoogleSignInClient mGoogleSignInClient;
 
+    private LatLng lastLocation = new LatLng(46.520566, 6.567820);
+    private Location l;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        requestPermissions();
+
+        l = Utils.getCurrLocation(this);
+
+        lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
 
         //add listener to the buttons
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -118,8 +141,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
+            lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), null, null, new LatLng(46.520566, 6.567820) , false, currentUser.getUid());
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), null, null, lastLocation , false, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
@@ -158,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), null, null, new LatLng(46.520566, 6.567820), false, user.getUid());
+                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), null, null, lastLocation, false, user.getUid());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -169,5 +193,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case GPS_PERMISSIONS_REQUEST_CODE: {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED)
+                    requestPermissions();
+            }
+        }
+    }
+
+    /**
+     * Verifies if we need to ask for the GPS permissions
+     *
+     * @return true if we need to request permissions, false otherwise
+     */
+    private boolean requestPermissions() {
+        if (Build.VERSION.SDK_INT > 23 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
+            return true;
+        }
+        return false;
+    }
 
 }

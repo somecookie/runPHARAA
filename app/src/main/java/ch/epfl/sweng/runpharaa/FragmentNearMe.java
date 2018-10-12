@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,9 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.runpharaa.location.Utils;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
@@ -83,6 +89,10 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      * This function is called when the fragment is created and each time the list is refreshed.
      */
     public void loadData() {
+
+        Location l = Utils.getCurrLocation(getActivity());
+        User.get().setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
+
         // Create a fresh recyclerView and listCardItem
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
         List<CardItem> listCardItem = new ArrayList<>();
@@ -97,8 +107,12 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
         // Add cards to the cardList
         if(User.get() != null) {
+            Toast.makeText(getContext(), "Position :" + User.get().getLocation().toString(), Toast.LENGTH_LONG).show();
             for (Track t : User.get().tracksNearMe())
                 listCardItem.add(t.getCardItem());
+        } else {
+            Toast.makeText(getContext(), "USER NULL", Toast.LENGTH_LONG).show();
+
         }
 
         Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
