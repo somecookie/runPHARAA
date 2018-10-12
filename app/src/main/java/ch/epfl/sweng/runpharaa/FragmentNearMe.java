@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,24 +87,34 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      */
     public void loadData() {
         // Create a fresh recyclerView and listCardItem
-        RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-        List<CardItem> listCardItem = new ArrayList<>();
-        OnItemClickListener listener = new OnItemClickListener() {
-            @Override
-            public void onItemClick(CardItem item) {
-                Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                intent.putExtra("TrackID", item.getParentTrackID());
-                startActivity(intent);
-            }
-        };
+        if(!FAKE_USER.tracksNearMe().isEmpty()) {
+            v.findViewById(R.id.emptyMessage).setVisibility(View.GONE);
+            RecyclerView recyclerView = v.findViewById(R.id.cardListId);
 
-        // Add cards to the cardList
-        for(Track t : FAKE_USER.tracksNearMe())
-            listCardItem.add(t.getCardItem());
+            v.setVisibility(View.VISIBLE);
 
-        Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            List<CardItem> listCardItem = new ArrayList<>();
+            OnItemClickListener listener = new OnItemClickListener() {
+                @Override
+                public void onItemClick(CardItem item) {
+                    Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                    intent.putExtra("TrackID", item.getParentTrackID());
+                    startActivity(intent);
+                }
+            };
+
+            // Add cards to the cardList
+            for (Track t : FAKE_USER.tracksNearMe())
+                listCardItem.add(t.getCardItem());
+
+            Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }else{
+            v.findViewById(R.id.cardListId).setVisibility(View.GONE);
+            v.findViewById(R.id.emptyMessage).setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "Empty", Toast.LENGTH_LONG).show();
+        }
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {

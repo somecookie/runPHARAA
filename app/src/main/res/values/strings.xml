@@ -11,4 +11,7 @@
     <string name="welcome">Welcome</string>
     <string name="signOut">Sign Out</string>
     <string name="loggedOut">Logged out.</string>
+    <string name="no_tracks">Oops! There are no tracks nearby</string>
+    <string name="no_follow">Try following someone!</string>
+    <string name="no_favorite">Try adding a track to your favorite!</string>
 </resources>

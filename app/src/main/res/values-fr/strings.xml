@@ -9,5 +9,8 @@
     <string name="welcome">Bonjour</string>
     <string name="signOut">Se déconnecter</string>
     <string name="loggedOut">Déconnecté(e)</string>
+    <string name="no_tracks">Oops! Il n\'y a pas de parcours dans les parages</string>
+    <string name="no_follow">Essaie de suivre quelqu\'un!</string>
+    <string name="no_favorite">Ajoute un parcours en favoris!</string>
 
 </resources>
