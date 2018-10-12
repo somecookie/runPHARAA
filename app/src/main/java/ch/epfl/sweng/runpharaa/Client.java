@@ -1,26 +1,30 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.app.admin.DeviceAdminInfo;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Client {
 
     public final static String TRACKS_PATH = "tracks";
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mRef;
+    private DatabaseReference mDataBaseRef;
+    private FirebaseStorage mFirebaseStorage;
+    private StorageReference mStorageRef;
 
 
     public ArrayList<Track> tracks;
@@ -31,7 +35,9 @@ public class Client {
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRef = FirebaseDatabase.getInstance().getReference();
+        mDataBaseRef = mFirebaseDatabase.getReference();
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mStorageRef = mFirebaseStorage.getReference();
 
         CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
@@ -47,10 +53,10 @@ public class Client {
         CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
         CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
 
-        writeNewTrack(new Track(R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
+        //writeNewTrack(new Track(R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
 
         /*If there is other thing that Track object on the data base then use addChildEventListener on Tracks
-        /*mRef.addValueEventListener(new ValueEventListener() {
+        /*mDataBaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 initTracksList(dataSnapshot);
@@ -62,7 +68,19 @@ public class Client {
             }
         });*/
 
-        mRef.child(TRACKS_PATH).addValueEventListener(new ValueEventListener() {
+        mStorageRef.child("TrackImages/centre_sportif.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("Read image uri", uri.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Read image uri", "Fail to read uri");
+            }
+        });
+
+        mDataBaseRef.child(TRACKS_PATH).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.getChildren()) {
@@ -80,9 +98,9 @@ public class Client {
     }
 
     private void writeNewTrack(Track track) {
-        String key = mRef.child(TRACKS_PATH).push().getKey();
+        String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
         track.setTrackUid(key);
-        mRef.child(TRACKS_PATH).child(key).setValue(track);
+        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track);
     }
 
     /*
