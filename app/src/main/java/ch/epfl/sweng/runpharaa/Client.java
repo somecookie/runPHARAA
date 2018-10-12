@@ -4,6 +4,7 @@ import android.app.admin.DeviceAdminInfo;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +30,7 @@ public class Client {
         mRef = FirebaseDatabase.getInstance().getReference();
 
 
-        writeNewDummy("0", "Test Location", Arrays.asList(new LatLng(46.522735, 6.579772), new LatLng(46.519380, 6.580669)));
+        writeNewDummy("0", "Test Location", Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)));
 
         /*If there is other thing that Track object on the data base then use addChildEventListener on Tracks
         /*mRef.addValueEventListener(new ValueEventListener() {
@@ -49,7 +50,8 @@ public class Client {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.getChildren()) {
                     Dummy dummy = s.getValue(Dummy.class);
-                    Log.i("Database Read", dummy.name);
+                    Log.d("Database Read name", dummy.name);
+                    Log.d("Database Read LatLng", dummy.listTest.toString());
                 }
             }
 
@@ -60,7 +62,7 @@ public class Client {
         });
     }
 
-    private void writeNewDummy(String dummyId, String name, List<LatLng> listTest) {
+    private void writeNewDummy(String dummyId, String name, List<CustLatLng> listTest) {
         Dummy dummy = new Dummy(name, listTest);
         mRef.child("dummies").child(dummyId).setValue(dummy);
     }

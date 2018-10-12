@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.media.Image;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ public class Track
     //Track identifiers
     private int tid;
     private int creator_id; //TODO: Make a map from creator_if -> name?
+    @Exclude
     private int image;
+    @Exclude
     private CardItem cardItem;
 
     //Track specifics

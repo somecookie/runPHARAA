@@ -5,13 +5,13 @@ import java.util.List;
 public class Dummy {
 
     public String name;
-    public List<LatLng> listTest;
+    public List<CustLatLng> listTest;
 
     public Dummy() {
 
     }
 
-    public Dummy(String name, List<LatLng> listTest) {
+    public Dummy(String name, List<CustLatLng> listTest) {
         this.name = name;
         this.listTest = listTest;
     }

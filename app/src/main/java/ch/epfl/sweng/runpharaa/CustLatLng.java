@@ -1,12 +1,12 @@
 package ch.epfl.sweng.runpharaa;
 
-public class LatLng {
+public class CustLatLng {
     private Double latitude;
     private Double longitude;
 
-    public LatLng() {}
+    public CustLatLng() {}
 
-    public LatLng(Double latitude, Double longitude) {
+    public CustLatLng(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
