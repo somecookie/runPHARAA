@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.runpharaa.Users.Profile.UsersProfileActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
@@ -86,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
                 return true;
             case R.id.profileIcon:
-                //Intent profileIntent = new Intent(getBaseContext(), ProfileActivity.class);
-                //startActivity(profileIntent);
+                Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);
+                startActivity(profileIntent);
                 return true;
             case R.id.mapIcon:
                 Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);

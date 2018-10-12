@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
-
 public class TrackPropertiesActivity extends AppCompatActivity {
 
     //TODO: Check if ScrollView is working!
@@ -19,7 +17,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
         int trackID = intent.getIntExtra("TrackID", 0);
-        Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID);
+        Track track = getTrackByID(User.get().tracksNearMe(), trackID);
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
         trackBackground.setImageResource(track.getImage());

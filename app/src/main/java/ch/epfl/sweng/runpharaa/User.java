@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.annotation.TargetApi;
+import android.net.Uri;
 import android.os.Build;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -9,21 +10,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
+
+import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
 public final class User {
     private int preferredRadius = 2000;
     private final String name;
     //TODO: put default picture
-    private final File picture;
+    private final Uri picture;
     private final ArrayList<Track> list_of_created_tracks;
     private final ArrayList<Track> list_of_pref;
     private LatLng location;
     private final boolean admin;
-    private final int uId;
+    private final String uId;
 
-    public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
+    private static User instance;
 
-    public User(String name, int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId) {
+    //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
+
+    public User(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId) {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
@@ -36,7 +42,7 @@ public final class User {
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, null, null, location, false, 0);
+        this(name, preferredRadius, null, null, null, location, false, "");
     }
 
     public int getPreferredRadius() {
@@ -101,6 +107,22 @@ public final class User {
      */
     public void setLocation(LatLng newLocation) {
         this.location = newLocation;
+    }
+
+    public static User get(){
+        if(User.instance == null){
+            //GET CURRENT USER
+        }
+
+        return instance;
+    }
+
+    public Uri getPicture(){
+        return picture;
+    }
+
+    public static void set(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId){
+        instance = new User(name, preferredRadius, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
 }

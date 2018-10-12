@@ -57,9 +57,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     //dependencies for mockito
-    testImplementation "org.mockito:mockito-core:+"
-    testImplementation "org.mockito:mockito-inline:+"
-    androidTestImplementation "org.mockito:mockito-android:+"
+    //testImplementation "org.mockito:mockito-core:+"
+    //testImplementation "org.mockito:mockito-inline:+"
+    //androidTestImplementation "org.mockito:mockito-android:+"
 
     testImplementation 'junit:junit:4.12'
 

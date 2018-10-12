@@ -19,8 +19,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
-
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
     SwipeRefreshLayout swipeLayout;
@@ -98,8 +96,10 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         };
 
         // Add cards to the cardList
-        for(Track t : FAKE_USER.tracksNearMe())
-            listCardItem.add(t.getCardItem());
+        if(User.get() != null) {
+            for (Track t : User.get().tracksNearMe())
+                listCardItem.add(t.getCardItem());
+        }
 
         Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
         recyclerView.setAdapter(adapter);

@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -23,6 +24,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.User;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -117,6 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), null, null, new LatLng(46.520566, 6.567820) , false, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
@@ -155,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), null, null, new LatLng(46.520566, 6.567820), false, user.getUid());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
