@@ -66,10 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         requestPermissions();
 
-        l = Utils.getCurrLocation(this);
-
-        lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
-
         //add listener to the buttons
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.signInBut).setOnClickListener(this);
@@ -144,6 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
+            requestPermissions();
             lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
             User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation , false, currentUser.getUid());
@@ -202,8 +199,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case GPS_PERMISSIONS_REQUEST_CODE: {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED)
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED){
                     requestPermissions();
+                }
+                
             }
         }
     }
@@ -222,6 +221,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
             return true;
         }
+
+        l = Utils.getCurrLocation(this);
+        lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
+
         return false;
     }
 
