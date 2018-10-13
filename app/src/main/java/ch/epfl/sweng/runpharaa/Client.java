@@ -16,6 +16,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Client {
 
@@ -27,7 +30,7 @@ public class Client {
     private StorageReference mStorageRef;
 
 
-    public ArrayList<Track> tracks;
+    public List<Track> tracksNearMe = new ArrayList<>();
 
 
     public Client()
@@ -54,6 +57,12 @@ public class Client {
         CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
 
         //writeNewTrack(new Track(R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
+        //writeNewTrack(new Track(R.drawable.innovation_park, "Innovation Parc -> BC", Arrays.asList(coord4, coord3), 300, 2, 1, 1));
+        //writeNewTrack(new Track(R.drawable.rolex, "Rolex -> Swisstech",Arrays.asList(coord5, coord6), 850, 8, 4, 2));
+        //writeNewTrack(new Track(R.drawable.rolex, "Sat -> INM", Arrays.asList(coord7, coord0), 450, 5, 6, 7));
+        //writeNewTrack(new Track(R.drawable.ouchy, "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
+        //writeNewTrack(new Track(R.drawable.saint_francois, "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
+
 
         /*If there is other thing that Track object on the data base then use addChildEventListener on Tracks
         /*mDataBaseRef.addValueEventListener(new ValueEventListener() {
@@ -68,6 +77,7 @@ public class Client {
             }
         });*/
 
+        /*
         mStorageRef.child("TrackImages/centre_sportif.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -79,14 +89,16 @@ public class Client {
                 Log.d("Read image uri", "Fail to read uri");
             }
         });
+        */
 
         mDataBaseRef.child(TRACKS_PATH).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.getChildren()) {
-                    Track track = s.getValue(Track.class);
-                    Log.d("Database Read location", track.getLocation());
-                }
+                //for (DataSnapshot s : dataSnapshot.getChildren()) {
+                //    Track track = s.getValue(Track.class);
+                //    Log.d("Database Read location", track.getLocation());
+                //}
+                initTracksNearMe(dataSnapshot);
 
             }
 
@@ -97,10 +109,57 @@ public class Client {
         });
     }
 
+    /**
+     * Track a {@link Track} and add it to the database
+     * @param track
+     */
     private void writeNewTrack(Track track) {
+        //Generate a new key in the database
         String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
+        //TODO maybe use less we can get the key with getKey()
         track.setTrackUid(key);
+        //Put track in database
         mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track);
+    }
+
+    private void initTracksNearMe(DataSnapshot dataSnapshot){
+        List<String> trackToRetrieveKeys = new ArrayList<>();
+        CustLatLng userLocation = new CustLatLng(User.FAKE_USER.getLocation().latitude, User.FAKE_USER.getLocation().longitude);
+        int userPreferredRadius = User.FAKE_USER.getPreferredRadius();
+        for(DataSnapshot c : dataSnapshot.getChildren()){
+            if(distance(c.child("startingPoint").getValue(CustLatLng.class), userLocation) <= userPreferredRadius){
+                Track t = c.getValue(Track.class);
+                tracksNearMe.add(t);
+            }
+        }
+        for (Track t : tracksNearMe){
+            Log.d("Track Near Me", t.getLocation());
+        }
+    }
+
+    //TODO Put in util class
+    public double distance(CustLatLng startingPoint, CustLatLng userLocation){
+        int R = 6378137; //Earth's mean radius in meter
+
+        //angular differences in radians
+        double dLat = Math.toRadians(userLocation.getLatitude() - startingPoint.getLatitude());
+        double dLong = Math.toRadians(userLocation.getLongitude() - startingPoint.getLongitude());
+
+        //this' and other's latitudes in radians
+        double lat1 = Math.toRadians(startingPoint.getLatitude());
+        double lat2 = Math.toRadians(userLocation.getLatitude());
+
+        //compute some factor a
+        double a1 = Math.sin(dLat/2)*Math.sin(dLat/2);
+        double a2 = Math.cos(lat1)*Math.cos(lat2);
+        double a3 = Math.sin(dLong/2)*Math.sin(dLong/2);
+
+        double a = a1 + a2*a3;
+
+        //compute some factor c
+        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R*c;
     }
 
     /*
