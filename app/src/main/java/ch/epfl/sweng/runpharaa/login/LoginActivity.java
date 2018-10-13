@@ -33,8 +33,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.Track;
 import ch.epfl.sweng.runpharaa.User;
 import ch.epfl.sweng.runpharaa.location.Utils;
 
@@ -143,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (currentUser != null) {
             lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), null, null, lastLocation , false, currentUser.getUid());
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation , false, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
@@ -182,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), null, null, lastLocation, false, user.getUid());
+                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation, false, user.getUid());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

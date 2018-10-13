@@ -33,6 +33,14 @@ public class UsersProfileActivity extends AppCompatActivity {
         TextView v = findViewById(R.id.user_name);
         v.setText(actualUser.getName());
 
+        TextView v1 = findViewById(R.id.nbTracks);
+        int nbTracks = actualUser.getCreatedTracks().size();
+        v1.setText(Integer.toString(nbTracks));
+
+        TextView v2 = findViewById(R.id.nbFav);
+        int nbFav = actualUser.getFavoriteTracks().size();
+        v2.setText(Integer.toString(nbFav));
+
         new DownloadImageTask((ImageView) findViewById(R.id.profile_picture))
                 .execute(actualUser.getPicture().toString());
     }

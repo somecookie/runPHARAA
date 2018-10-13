@@ -14,11 +14,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class Utils {
 
-    /*@SuppressLint("MissingPermission")
-    public LatLng getCurrentLocation(Activity a){
+    /*private Activity activity = null;
+    private LatLng lastLocation = null;
+
+    @SuppressLint("MissingPermission")
+    public LatLng getCurrLocation(final Activity a){
         FusedLocationProviderClient mFusedLocationClient;
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
+
+        activity = a;
 
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(a, new OnSuccessListener<Location>() {
@@ -26,15 +31,17 @@ public class Utils {
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location == null) {
-                            Toast.makeText(a, "No last location, setting location to SAT", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "No last location, setting location to SAT", Toast.LENGTH_SHORT).show();
                         } else {
                             lastLocation =  new LatLng(location.getLatitude(), location.getLongitude());
                         }
                     }
                 });
 
-    }
-    */
+        return lastLocation;
+    }*/
+
+
 
     @SuppressLint("MissingPermission")
     public static Location getCurrLocation(Activity a){

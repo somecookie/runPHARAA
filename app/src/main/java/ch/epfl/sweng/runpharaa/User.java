@@ -121,6 +121,14 @@ public final class User {
         return picture;
     }
 
+    public ArrayList<Track> getCreatedTracks(){
+        return list_of_created_tracks;
+    }
+
+    public ArrayList<Track> getFavoriteTracks(){
+        return list_of_pref;
+    }
+
     public static void set(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId){
         instance = new User(name, preferredRadius, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }

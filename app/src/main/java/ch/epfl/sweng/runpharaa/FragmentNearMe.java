@@ -110,9 +110,6 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
             Toast.makeText(getContext(), "Position :" + User.get().getLocation().toString(), Toast.LENGTH_LONG).show();
             for (Track t : User.get().tracksNearMe())
                 listCardItem.add(t.getCardItem());
-        } else {
-            Toast.makeText(getContext(), "USER NULL", Toast.LENGTH_LONG).show();
-
         }
 
         Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
