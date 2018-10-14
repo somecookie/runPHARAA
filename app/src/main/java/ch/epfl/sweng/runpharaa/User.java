@@ -9,26 +9,29 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public final class User {
     private int preferredRadius = 2000;
     private final String name;
     //TODO: put default picture
     private final File picture;
-    private final ArrayList<Track> list_of_created_tracks;
-    private final ArrayList<Track> list_of_pref;
+
+    //Of type String because we only need the key reference of the track in the database
+    private List<String> createdTracksKeys;
+    private List<String> favoritesTracksKeys;
     private LatLng location;
     private final boolean admin;
     private final int uId;
 
     public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name, int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId) {
+    public User(String name, int preferredRadius, File picture, List<String> createdTracksKeys, List<String> favoritesTracksKeys, LatLng location, Boolean admin, int uId) {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
-        this.list_of_created_tracks = list_of_created_tracks;
-        this.list_of_pref = list_of_pref;
+        this.createdTracksKeys = createdTracksKeys;
+        this.favoritesTracksKeys = favoritesTracksKeys;
         this.location = location;
         this.admin = admin;
         this.uId = uId;
@@ -73,6 +76,14 @@ public final class User {
         });
 
         return nm;
+    }
+
+    public List<String> getFavoritesTracksKeys() {
+        return favoritesTracksKeys;
+    }
+
+    public List<String> getCreatedTracksKeys() {
+        return createdTracksKeys;
     }
 
     /**

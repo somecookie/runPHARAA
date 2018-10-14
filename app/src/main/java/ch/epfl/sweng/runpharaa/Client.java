@@ -1,11 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,10 +12,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Client {
 
@@ -31,6 +25,8 @@ public class Client {
 
 
     public List<Track> tracksNearMe = new ArrayList<>();
+    public List<Track> favouritesTracks = new ArrayList<>();
+    public List<Track> createdTracks = new ArrayList<>();
 
 
     public Client()
@@ -94,12 +90,7 @@ public class Client {
         mDataBaseRef.child(TRACKS_PATH).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //for (DataSnapshot s : dataSnapshot.getChildren()) {
-                //    Track track = s.getValue(Track.class);
-                //    Log.d("Database Read location", track.getLocation());
-                //}
-                initTracksNearMe(dataSnapshot);
-
+                initTracks(dataSnapshot);
             }
 
             @Override
@@ -113,7 +104,7 @@ public class Client {
      * Track a {@link Track} and add it to the database
      * @param track
      */
-    private void writeNewTrack(Track track) {
+    public void writeNewTrack(Track track) {
         //Generate a new key in the database
         String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
         //TODO maybe use less we can get the key with getKey()
@@ -122,18 +113,40 @@ public class Client {
         mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track);
     }
 
-    private void initTracksNearMe(DataSnapshot dataSnapshot){
-        List<String> trackToRetrieveKeys = new ArrayList<>();
+    public void updateTrack(Track track){
+        //TODO check if it work
+        mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
+    }
+
+    private void initTracks(DataSnapshot dataSnapshot){
+        for(DataSnapshot c : dataSnapshot.getChildren()){
+            initTracksNearMe(c);
+            initFavouritesTracks(c);
+            initCreatedTracks(c);
+        }
+    }
+
+    private void initTracksNearMe(DataSnapshot c){
         CustLatLng userLocation = new CustLatLng(User.FAKE_USER.getLocation().latitude, User.FAKE_USER.getLocation().longitude);
         int userPreferredRadius = User.FAKE_USER.getPreferredRadius();
-        for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(distance(c.child("startingPoint").getValue(CustLatLng.class), userLocation) <= userPreferredRadius){
-                Track t = c.getValue(Track.class);
-                tracksNearMe.add(t);
+        if(distance(c.child("startingPoint").getValue(CustLatLng.class), userLocation) <= userPreferredRadius){
+            tracksNearMe.add(c.getValue(Track.class));
+        }
+    }
+
+    private void initCreatedTracks(DataSnapshot c){
+        if(User.FAKE_USER.getCreatedTracksKeys() != null){
+            if(User.FAKE_USER.getCreatedTracksKeys().contains(c.getKey())){
+                createdTracks.add(c.getValue(Track.class));
             }
         }
-        for (Track t : tracksNearMe){
-            Log.d("Track Near Me", t.getLocation());
+    }
+
+    private void initFavouritesTracks(DataSnapshot c){
+        if(User.FAKE_USER.getFavoritesTracksKeys() != null){
+            if(User.FAKE_USER.getFavoritesTracksKeys().contains(c.getKey())){
+                favouritesTracks.add(c.getValue(Track.class));
+            }
         }
     }
 
@@ -161,16 +174,4 @@ public class Client {
 
         return R*c;
     }
-
-    /*
-    private void initTracksList(DataSnapshot dataSnapshot) {
-        //iterate on all tracks in the database, get values and add tracks to the tracks array
-        for (DataSnapshot ds : dataSnapshot.getChildren()){
-            String location  = ds.child("Track").getValue(Track.class).getLocation();
-            LatLng[] latLngs = ds.child("Track").getValue(Track.class).getPath();
-            tracks.add(new Track(location, latLngs));
-        }
-    }
-    */
-
 }
