@@ -14,7 +14,9 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp">
 
     </LinearLayout>
 
@@ -35,7 +37,7 @@
         android:layout_marginRight="118dp"
         android:src="@drawable/unknown_person"
         app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp" />
+        app:civ_border_width="0dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +46,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="145dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp">
 
         <TextView
             android:id="@+id/user_name"
