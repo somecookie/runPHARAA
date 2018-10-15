@@ -19,10 +19,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.w3c.dom.Text;
-
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
-
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
@@ -58,7 +54,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        FAKE_USER.setLocation(new LatLng(currentLatitude, currentLongitude));
+        if(User.instance != null){
+            User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
+        }
 
         setMarkers();
     }
@@ -74,15 +72,15 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         //add a circle around the current location
         mMap.addCircle(new CircleOptions()
-                .center(FAKE_USER.getLocation())
-                .radius(FAKE_USER.getPreferredRadius())
+                .center(User.instance.getLocation())
+                .radius(User.instance.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
         //follow the user
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for (Track tr : FAKE_USER.tracksNearMe()) {
+        for (Track tr : User.instance.tracksNearMe()) {
             Marker m = mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));
