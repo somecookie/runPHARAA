@@ -28,7 +28,7 @@ import ch.epfl.sweng.runpharaa.R;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN = 1;
 
     //Shared instance of the FirebaseAuth
     private FirebaseAuth mAuth;
@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void launchApp(){
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(launchIntent);
+        finish();
     }
 
 
