@@ -48,6 +48,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
 
 
+    //private static final int RC_SIGN_IN = 1;
+
+
     //Shared instance of the FirebaseAuth
     private FirebaseAuth mAuth;
 
@@ -167,6 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void launchApp() {
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(launchIntent);
+        finish();
     }
 
 
@@ -192,7 +196,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
