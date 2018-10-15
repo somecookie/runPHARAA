@@ -226,7 +226,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         l = Utils.getCurrLocation(this);
-        lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
+        if(l != null){
+            lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
+        }
 
         return false;
     }
