@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class User {
     private int preferredRadius = 2000;
@@ -20,6 +22,7 @@ public final class User {
     private LatLng location;
     private final boolean admin;
     private final int uId;
+    private Set<Integer> idTracksLiked;
 
     public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
@@ -32,6 +35,7 @@ public final class User {
         this.location = location;
         this.admin = admin;
         this.uId = uId;
+        this.idTracksLiked = new HashSet<>();
     }
 
     public User(String name, LatLng location, int preferredRadius) {
@@ -73,6 +77,33 @@ public final class User {
         });
 
         return nm;
+    }
+
+    /**
+     * Check if the user already liked a particular track
+     * @param trackId the track's id
+     * @return true if the user already liked the track
+     */
+    public boolean alreadyLiked(int trackId) {
+        return idTracksLiked.contains(trackId);
+    }
+
+    /**
+     * Add a track id in the set of liked tracks if it is not already there
+     * @param trackId the track's id
+     */
+    public void like(int trackId) {
+        if (!alreadyLiked(trackId)) {
+            idTracksLiked.add(trackId);
+        }
+    }
+
+    /**
+     * Remove a track id from the set of liked tracks if it is present
+     * @param trackId the track's id
+     */
+    public void unlike(int trackId) {
+        idTracksLiked.remove(trackId);
     }
 
     /**

@@ -106,4 +106,25 @@ public class TrackTest {
         assertEquals(0, t.getLikes());
         assertEquals(0, t.getFavourites());
     }
+
+    @Test
+    public void likeAndFavourite() {
+        Track t = new Track(0, R.drawable.centre_sportif,"TestLocation", new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)},
+                0, 0, 0, 0);
+
+        t.addLike();
+        t.addFavourite();
+        assertEquals(1, t.getLikes());
+        assertEquals(1, t.getFavourites());
+
+        t.removeLike();
+        t.removeFavourite();
+        assertEquals(0, t.getLikes());
+        assertEquals(0, t.getFavourites());
+
+        t.removeLike();
+        t.removeFavourite();
+        assertEquals(0, t.getLikes());
+        assertEquals(0, t.getFavourites());
+    }
 }
