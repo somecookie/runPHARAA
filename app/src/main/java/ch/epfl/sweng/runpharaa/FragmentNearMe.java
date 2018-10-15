@@ -91,7 +91,9 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public void loadData() {
 
         Location l = Utils.getCurrLocation(getActivity());
-        User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
+        if (l != null && User.instance != null){
+            User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
+        }
 
         // Create a fresh recyclerView and listCardItem
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);

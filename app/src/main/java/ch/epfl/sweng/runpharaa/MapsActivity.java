@@ -54,7 +54,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
+        if(User.instance != null){
+            User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
+        }
 
         setMarkers();
     }
