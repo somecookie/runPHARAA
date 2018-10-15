@@ -1,7 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.support.annotation.NonNull;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
