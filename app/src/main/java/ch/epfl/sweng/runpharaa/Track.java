@@ -10,26 +10,26 @@ import java.util.Set;
 public class Track
 {
     //Track identifiers
-    private final int tid;
-    private final int creator_id; //TODO: Make a map from creator_if -> name?
-    private final int image;
-    private final CardItem cardItem;
+    private int tid;
+    private int creator_id; //TODO: Make a map from creator_if -> name?
+    private int image;
+    private CardItem cardItem;
 
     //Track specifics
-    private final String location;
-    private final LatLng[] path;
-    private final LatLng startingPoint;
-    private final double track_length;        //meters
-    private final double average_time_length; //minutes
+    private String location;
+    private LatLng[] path;
+    private LatLng startingPoint;
+    private double track_length;        //meters
+    private double average_time_length; //minutes
     //private final String difficulty;  //TODO: Build a range for each difficulty based on height difference: easy = < 1m? Or create this based on the difficulty users report for same track?
-    private final double height_diff;
-    private final Set<Tag> tags;
+    private double height_diff;
+    private Set<Tag> tags;
 
     //Reviews
-    private final int likes;
-    private final int favourites;
-    private final Reactions reactions;
-    private final ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
+    private int likes;
+    private int favourites;
+    private Reactions reactions;
+    private ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
 
     //TODO: Make more constructors
     public Track(int tid, int creator_id, int image, String location, LatLng[] path, double track_length, double average_time_length,
@@ -134,7 +134,23 @@ public class Track
 
     public int getLikes() { return likes; }
 
+    public void addLike() { likes++; }
+
+    public void removeLike() {
+        if (likes > 0) {
+            likes--;
+        }
+    }
+
     public int getFavourites() { return favourites; }
+
+    public void addFavourite() { favourites++; }
+
+    public void removeFavourite() {
+        if (favourites > 0) {
+            favourites--;
+        }
+    }
 
     public Reactions getReactions() { return reactions; }
 

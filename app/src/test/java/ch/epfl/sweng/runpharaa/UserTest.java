@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserTest {
 
@@ -54,5 +56,21 @@ public class UserTest {
         for(int i = 0; i < all.size(); i++){
             assertEquals(all.get(i).getLocation(), FAKE_USER.tracksNearMe().get(i).getLocation());
         }
+    }
+
+    @Test
+    public void likedTracks() {
+        User FAKE_USER = new User("test1", new LatLng(46.518510, 6.563199), 2000);
+
+        ArrayList<Track> all = new ArrayList<>();
+        all.add(new Track(0,"Innovation Parc -> BC",R.drawable.innovation_park,new LatLng[]{new LatLng(46.517563, 6.562350), new LatLng(46.518475, 6.561960)}));
+        all.add(new Track(1,"Rolex -> Swisstech",R.drawable.rolex, new LatLng[]{new LatLng(46.518447, 6.568238), new LatLng(46.523206, 6.564945)}));
+
+        FAKE_USER.like(0);
+        assertTrue(FAKE_USER.alreadyLiked(0));
+        assertFalse(FAKE_USER.alreadyLiked(1));
+
+        FAKE_USER.unlike(0);
+        assertFalse(FAKE_USER.alreadyLiked(0));
     }
 }
