@@ -11,19 +11,19 @@ public class CardItemTest {
 
         c.setBackground(3);
         c.setName("PHARAA");
-        c.setParentTrackID(0);
+        c.setParentTrackID("0");
 
         Assert.assertEquals(3, c.getBackground());
         Assert.assertEquals("PHARAA", c.getName());
-        Assert.assertEquals(0, c.getParentTrackID());
+        Assert.assertEquals("0", c.getParentTrackID());
     }
 
     @Test
     public void contructorAndGetter(){
-        CardItem c = new CardItem(3, "PHARAA", 0);
+        CardItem c = new CardItem(3, "PHARAA", "0");
 
         Assert.assertEquals(3, c.getBackground());
         Assert.assertEquals("PHARAA", c.getName());
-        Assert.assertEquals(0, c.getParentTrackID());
+        Assert.assertEquals("0", c.getParentTrackID());
     }
 }
