@@ -1,14 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.media.Image;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-public class Track
-{
+public class Track {
     //Track identifiers
     private final int tid;
     private final int creator_id; //TODO: Make a map from creator_if -> name?
@@ -33,13 +30,12 @@ public class Track
 
     //TODO: Make more constructors
     public Track(int tid, int creator_id, int image, String location, LatLng[] path, double track_length, double average_time_length,
-                 double height_diff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews)
-    {
-        if(path == null){
+                 double height_diff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews) {
+        if (path == null) {
             throw new NullPointerException("The path must me defined.");
-        }else if(path.length < 2){
-            throw  new IllegalArgumentException("The path must contain at least 2 points (start and end).");
-        }else{
+        } else if (path.length < 2) {
+            throw new IllegalArgumentException("The path must contain at least 2 points (start and end).");
+        } else {
             this.path = path;
             this.startingPoint = path[0];
             this.cardItem = new CardItem(image, location, tid);
@@ -60,24 +56,24 @@ public class Track
     }
 
     //Testing purposes
-    public Track(LatLng[] path){
-        this(0,0,0,"Test", path,0,0,0,null,0,0,null,null);
+    public Track(LatLng[] path) {
+        this(0, 0, 0, "Test", path, 0, 0, 0, null, 0, 0, null, null);
     }
 
-    public Track(String name, LatLng[] path){
-        this(0,0,0, name, path,0,0,0, null, 0,0,null,null);
+    public Track(String name, LatLng[] path) {
+        this(0, 0, 0, name, path, 0, 0, 0, null, 0, 0, null, null);
     }
 
-    public Track(int tid, String name, int image, LatLng[] path){
-        this(0,0, image, name, path,0,0,0,null,0,0,null,null);
+    public Track(int tid, String name, int image, LatLng[] path) {
+        this(0, 0, image, name, path, 0, 0, 0, null, 0, 0, null, null);
     }
 
-    public Track(int tid, int image, String name, LatLng[] path, double track_length, int average_time, int likes, int favourites){
-        this(tid,0, image, name, path, track_length, average_time,0,null, likes, favourites, null, null);
+    public Track(int tid, int image, String name, LatLng[] path, double track_length, int average_time, int likes, int favourites) {
+        this(tid, 0, image, name, path, track_length, average_time, 0, null, likes, favourites, null, null);
     }
 
     //TODO: either delete this or do it again when the database is on
-    public static ArrayList<Track> allTracks(){
+    public static ArrayList<Track> allTracks() {
         LatLng coord0 = new LatLng(46.518577, 6.563165); //inm
         LatLng coord1 = new LatLng(46.522735, 6.579772); //Banane
         LatLng coord2 = new LatLng(46.519380, 6.580669); //centre sportif
@@ -98,7 +94,7 @@ public class Track
         all.add(new Track(2, R.drawable.rolex, "Rolex -> Swisstech", new LatLng[]{coord5, coord6}, 850, 8, 4, 2));
         all.add(new Track(3, R.drawable.rolex, "Sat -> INM", new LatLng[]{coord7, coord0}, 450, 5, 6, 7));
         all.add(new Track(4, R.drawable.ouchy, "Ouchy -> Gare", new LatLng[]{coord8, coord9}, 1300, 20, 10, 12));
-        all.add(new Track(5, R.drawable.saint_francois, "SF -> Cath -> Flon", new LatLng[]{coord10, coord11, coord12}, 0, 0, 0,0));
+        all.add(new Track(5, R.drawable.saint_francois, "SF -> Cath -> Flon", new LatLng[]{coord10, coord11, coord12}, 0, 0, 0, 0));
 
         return all;
 
@@ -116,59 +112,90 @@ public class Track
         return location;
     }
 
-    public int getUid() { return tid; }
+    public int getUid() {
+        return tid;
+    }
 
-    public LatLng[] getPath() { return path; }
+    public LatLng[] getPath() {
+        return path;
+    }
 
-    public int getCreator_id() { return creator_id; }
+    public int getCreator_id() {
+        return creator_id;
+    }
 
-    public int getImage() { return image; }
+    public int getImage() {
+        return image;
+    }
 
-    public double getTrack_length() { return track_length; }
+    public double getTrack_length() {
+        return track_length;
+    }
 
-    public double getAverage_time_length() { return average_time_length; }
+    public double getAverage_time_length() {
+        return average_time_length;
+    }
 
-    public double getHeight_diff() { return height_diff; }
+    public double getHeight_diff() {
+        return height_diff;
+    }
 
-    public Set<Tag> getTags() { return tags; }
+    public Set<Tag> getTags() {
+        return tags;
+    }
 
-    public int getLikes() { return likes; }
+    public int getLikes() {
+        return likes;
+    }
 
-    public int getFavourites() { return favourites; }
+    public int getFavourites() {
+        return favourites;
+    }
 
-    public Reactions getReactions() { return reactions; }
+    public Reactions getReactions() {
+        return reactions;
+    }
 
-    public ArrayList<Review> getReviews() { return reviews; }
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
 
     /**
      * Compute the distance in meters between a track (its starting point) and a given coordinate.
      * See formula at: http://www.movable-type.co.uk/scripts/latlong.html
      * Set p1 as this and p2 as other
+     *
      * @param other
      * @return the distance between a point and the track (this)
      */
-    public double distance(LatLng other){
+    public double distance(LatLng other) {
         int R = 6378137; //Earth's mean radius in meter
 
         //angular differences in radians
         double dLat = Math.toRadians(other.latitude - this.startingPoint.latitude);
-        double dLong = Math.toRadians(other.longitude-this.startingPoint.longitude);
+        double dLong = Math.toRadians(other.longitude - this.startingPoint.longitude);
 
         //this' and other's latitudes in radians
         double lat1 = Math.toRadians(this.startingPoint.latitude);
         double lat2 = Math.toRadians(other.latitude);
 
         //compute some factor a
-        double a1 = Math.sin(dLat/2)*Math.sin(dLat/2);
-        double a2 = Math.cos(lat1)*Math.cos(lat2);
-        double a3 = Math.sin(dLong/2)*Math.sin(dLong/2);
+        double a1 = Math.sin(dLat / 2) * Math.sin(dLat / 2);
+        double a2 = Math.cos(lat1) * Math.cos(lat2);
+        double a3 = Math.sin(dLong / 2) * Math.sin(dLong / 2);
 
-        double a = a1 + a2*a3;
+        double a = a1 + a2 * a3;
 
         //compute some factor c
-        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return R*c;
+        return R * c;
+    }
+
+    // TODO: check if all attributes are the same or only the id ?
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Track) && (this.tid == ((Track) obj).tid);
     }
 
     /*
