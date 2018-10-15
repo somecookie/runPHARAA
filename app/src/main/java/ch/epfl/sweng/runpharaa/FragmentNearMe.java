@@ -91,7 +91,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public void loadData() {
 
         Location l = Utils.getCurrLocation(getActivity());
-        User.get().setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
+        User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
 
         // Create a fresh recyclerView and listCardItem
         RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -106,8 +106,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         };
 
         // Add cards to the cardList
-        if(User.get() != null) {
-            for (Track t : User.get().tracksNearMe())
+        if(User.instance != null) {
+            for (Track t : User.instance.tracksNearMe())
                 listCardItem.add(t.getCardItem());
         }
 

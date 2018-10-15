@@ -54,7 +54,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        User.get().setLocation(new LatLng(currentLatitude, currentLongitude));
+        User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
 
         setMarkers();
     }
@@ -70,15 +70,15 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         //add a circle around the current location
         mMap.addCircle(new CircleOptions()
-                .center(User.get().getLocation())
-                .radius(User.get().getPreferredRadius())
+                .center(User.instance.getLocation())
+                .radius(User.instance.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
         //follow the user
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(User.get().getLocation()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for (Track tr : User.get().tracksNearMe()) {
+        for (Track tr : User.instance.tracksNearMe()) {
             Marker m = mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));

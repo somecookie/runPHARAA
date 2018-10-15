@@ -25,7 +25,7 @@ public final class User {
     private final boolean admin;
     private final String uId;
 
-    private static User instance;
+    public static User instance;
 
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
@@ -107,14 +107,6 @@ public final class User {
      */
     public void setLocation(LatLng newLocation) {
         this.location = newLocation;
-    }
-
-    public static User get(){
-        if(User.instance == null){
-            //GET CURRENT USER
-        }
-
-        return instance;
     }
 
     public Uri getPicture(){
