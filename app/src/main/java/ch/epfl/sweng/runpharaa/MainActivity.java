@@ -41,13 +41,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        client = new Client();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
+        client = new Client(this);
 
         requestPermissions();
 
