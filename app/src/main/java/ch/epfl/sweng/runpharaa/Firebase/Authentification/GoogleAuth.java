@@ -2,7 +2,7 @@ package ch.epfl.sweng.runpharaa.Firebase.Authentification;
 
 public abstract class GoogleAuth {
 
-    private static boolean isTest = true;
+    private static boolean isTest = false;
 
     private static final GoogleAuthInterface instance = initInstance();
 

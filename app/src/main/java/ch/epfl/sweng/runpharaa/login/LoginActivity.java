@@ -30,6 +30,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.GoogleAuth;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.User;
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     //private static final int RC_SIGN_IN = 1;
     //Needed public to mock access
+    private GoogleAuthInterface mGoogleAuth;
     public static GoogleSignInClient mGoogleSignInClient;
     //Shared instance of the FirebaseAuth
     private FirebaseAuth mAuth;
@@ -71,10 +74,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .requestEmail()
                 .build();
 
+        mGoogleAuth = GoogleAuth.getInstance();
+
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuth.getInstance();
+
 
     }
 
@@ -150,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Prompts the user to select a Google account to sign in with
      */
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = mGoogleAuth.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
