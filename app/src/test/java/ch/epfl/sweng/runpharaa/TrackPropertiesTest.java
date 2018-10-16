@@ -5,25 +5,32 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 public class TrackPropertiesTest {
 
     TrackProperties tp;
+    Set<TrackType> types;
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void init(){
-        tp = new TrackProperties(5.0, 200, 20, 5, TrackType.FOREST);
+
+         types = new HashSet<>();
+        types.add(TrackType.BEACH);
+        tp = new TrackProperties(5.0, 200, 20, 5, types);
     }
 
     @Test
     public void newIllegalTrackProperties(){
         exception.expect(IllegalArgumentException.class);
-        new TrackProperties(-50, 200, 20, 5, TrackType.BEACH);
+        new TrackProperties(-50, 200, 20, 5, types);
     }
 
     @Test

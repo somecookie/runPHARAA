@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/properties_of_the_track"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        />
+
+    <SeekBar
+        android:layout_marginTop="20dp"
+        android:id="@+id/difficulty_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:max="5"
+        android:progress="3"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/diff_text"
+        android:text="@string/difficulty_is"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        />
+
+    <EditText
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/time_needed"
+        android:inputType="numberDecimal"
+        android:padding="20dp" />
+
+    <!--<RadioGroup
+        android:padding="20dp"
+        android:id="@+id/types"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="2">
+
+            <RadioButton
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/city" />
+
+            <RadioButton
+                android:id="@+id/forest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forest" />
+
+            <RadioButton
+                android:id="@+id/mountain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mountain" />
+
+            <RadioButton
+                android:id="@+id/beach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/beach" />
+
+            <RadioButton
+                android:id="@+id/seaside"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/seaside" />
+
+            <RadioButton
+                android:id="@+id/countryside"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/countryside" />
+        </GridLayout>
+
+    </RadioGroup>-->
+
+</LinearLayout>
