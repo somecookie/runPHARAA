@@ -1,11 +1,9 @@
 package ch.epfl.sweng.runpharaa.login;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,11 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -37,9 +32,9 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.Track;
 import ch.epfl.sweng.runpharaa.User;
 import ch.epfl.sweng.runpharaa.location.Utils;
+import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,15 +44,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     //private static final int RC_SIGN_IN = 1;
-
-
-    //Shared instance of the FirebaseAuth
-    private FirebaseAuth mAuth;
-
-
     //Needed public to mock access
     public static GoogleSignInClient mGoogleSignInClient;
-
+    //Shared instance of the FirebaseAuth
+    private FirebaseAuth mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
     private Location l;
 
@@ -148,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation , false, currentUser.getUid());
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation, false, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
@@ -204,10 +194,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case GPS_PERMISSIONS_REQUEST_CODE: {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions();
                 }
-                
+
             }
         }
     }
@@ -228,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         l = Utils.getCurrLocation(this);
-        if(l != null){
+        if (l != null) {
             lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
         }
 

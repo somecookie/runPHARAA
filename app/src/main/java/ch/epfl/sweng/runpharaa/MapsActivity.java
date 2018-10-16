@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +17,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
@@ -55,7 +56,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        if(User.instance != null){
+        if (User.instance != null) {
             User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
         }
 
@@ -84,8 +85,8 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         for (Track tr : User.instance.tracksNearMe()) {
             Marker m = mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
-                    .title(tr.getLocation()));
-            m.setTag(tr.getUid());
+                    .title(tr.getName()));
+            m.setTag(tr.getTID());
         }
 
     }
@@ -93,7 +94,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent i = new Intent(this, TrackPropertiesActivity.class);
-        i.putExtra("TrackID", (int)marker.getTag());
+        i.putExtra("TrackID", (int) marker.getTag());
         startActivity(i);
     }
 
@@ -115,7 +116,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         @Override
         public View getInfoContents(Marker marker) {
-            View view = ((Activity)context).getLayoutInflater()
+            View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_info_window, null);
 
             TextView title = view.findViewById(R.id.marker_window_title);
@@ -129,15 +130,18 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
             // Get the correct track by it's id
             Track track = null;
-            for(Track tr : Track.allTracks())
-                if(tr.getUid() == (int)marker.getTag())
+            for (Track tr : Track.allTracks)
+                if (tr.getTID() == (int) marker.getTag())
                     track = tr;
 
             // Get other info from the track (should never be null be we check just in case)
-            if(track != null) {
-                lenText.setText(track.getTrack_length() + " m");
-                diffText.setText(track.getHeight_diff() + " m");
-                likeText.setText(track.getLikes() + "");
+            if (track != null) {
+
+                TrackProperties tp = track.getProperties();
+
+                lenText.setText(tp.getLength() + " m");
+                diffText.setText(tp.getHeightDifference() + " m");
+                likeText.setText(tp.getLikes() + "");
             }
             return view;
         }

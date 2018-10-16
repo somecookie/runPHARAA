@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
@@ -55,7 +57,7 @@ public class FavoritesFragmentTest {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         SystemClock.sleep(5_000);
-        onView(withId(R.id.cardListId)).perform(click());
+        onView(withId(R.id.cardItemId)).perform(click());
         intended(hasComponent(TrackPropertiesActivity.class.getName()));
     }
 

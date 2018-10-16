@@ -6,12 +6,13 @@ import android.os.Build;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+
+import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public final class User {
     private int preferredRadius = 2000;
@@ -60,7 +61,7 @@ public final class User {
     @TargetApi(Build.VERSION_CODES.N)
     public ArrayList<Track> tracksNearMe() {
         ArrayList<Track> nm = new ArrayList<>();
-        ArrayList<Track> allTracks = Track.allTracks(); //Todo muste be changed when the database is done
+        ArrayList<Track> allTracks = Track.allTracks; //Todo muste be changed when the database is done
 
         //filter the tracks that start too far from the location
 
@@ -190,4 +191,7 @@ public final class User {
         instance = new User(name, preferredRadius, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
+    public String getID() {
+        return uId;
+    }
 }

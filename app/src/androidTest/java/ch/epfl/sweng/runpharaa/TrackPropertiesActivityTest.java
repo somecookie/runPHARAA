@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -42,12 +44,12 @@ public class TrackPropertiesActivityTest {
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
         Intent intent = new Intent(targetContext, TrackPropertiesActivity.class);
-        Track t1 = Track.allTracks().get(1);
-        intent.putExtra("TrackID", 1);
+        Track t1 = Track.allTracks.get(0);
+        intent.putExtra("TrackID", 0);
         mActivityRule.launchActivity(intent);
-        withId(R.id.trackTitleID).matches(withText(t1.getLocation()));
-        withId(R.id.trackLengthID).matches(withText("Length: " + Double.toString(t1.getTrack_length()) + "m"));
-        withId(R.id.trackLikesID).matches(withText("Likes: " + t1.getLikes()));
+        withId(R.id.trackTitleID).matches(withText(t1.getName()));
+        withId(R.id.trackLengthID).matches(withText("Length: " + Double.toString(t1.getProperties().getLength()) + "m"));
+        withId(R.id.trackLikesID).matches(withText("Likes: " + t1.getProperties().getLikes()));
     }
 
 

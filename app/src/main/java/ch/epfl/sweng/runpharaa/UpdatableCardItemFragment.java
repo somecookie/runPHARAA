@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
     List<CardItem> listCardItem;
+    TextView emptyMessage;
     FragmentNearMe.OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -33,6 +35,8 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
+
+        emptyMessage = v.findViewById(R.id.emptyMessage);
 
         // Setup for refresh on swipe
         swipeLayout = v.findViewById(R.id.refreshNearMe);
@@ -86,6 +90,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
             public void onItemClick(CardItem item) {
                 Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
                 intent.putExtra("TrackID", item.getParentTrackID());
+                Log.i("hiii", ""+ item.getParentTrackID());
                 startActivity(intent);
             }
         };
@@ -96,6 +101,8 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
      */
     protected abstract void loadListWithData();
 
+    protected abstract void setEmptyMessage();
+
     private void initAdapterAndLinkAll() {
         CardItemAdapter adapter = new CardItemAdapter(getActivity(), listCardItem, listener);
         recyclerView.setAdapter(adapter);
@@ -105,6 +112,8 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     protected void loadData() {
         initList();
         loadListWithData();
+        if(listCardItem.isEmpty())
+            setEmptyMessage();
         initAdapterAndLinkAll();
     }
 
@@ -131,7 +140,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         @Override
         public void onBindViewHolder(@NonNull CardItemAdapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground());
+            viewHolder.background_img.setImageBitmap(listCardItem.get(position).getBackground());
             viewHolder.name.setText(listCardItem.get(position).getName());
             viewHolder.bind(listCardItem.get(position), listener);
         }

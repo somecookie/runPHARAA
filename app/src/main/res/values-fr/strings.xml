@@ -9,5 +9,13 @@
     <string name="welcome">Bonjour</string>
     <string name="signOut">Se déconnecter</string>
     <string name="loggedOut">Déconnecté(e)</string>
+    <string name="no_tracks">Oops! Il n\'y a pas de parcours dans les parages</string>
+    <string name="no_follow">Essaie de suivre quelqu\'un!</string>
+    <string name="no_favorite">Ajoute un parcours en favoris!</string>
+    <string name="add_photo">Photo</string>
+    <string name="set_properties">Propriétés</string>
+    <string name="create_track">Créer!</string>
+    <string name="create_message">Nouveau parcours créé avec succès</string>
+    <string name="properties_not_set">Les propriétés doivent être configurées</string>
 
 </resources>
