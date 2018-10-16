@@ -54,60 +54,73 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         // Check if the user already liked this track and toggle the button accordingly
         toggleLike.setChecked(User.instance.alreadyLiked(trackID));
 
-        toggleFavorite.setOnCheckedChangeListener(getListener(track, trackID, User.instance.alreadyLiked(trackID), true));
+        toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    updateLikes(track, trackID);
+                } else {
+                    updateLikes(track, trackID);
+                }
+            }
+        });
 
         // Check if the track already in favorites and toggle the button accordingly
         toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
 
-        toggleFavorite.setOnCheckedChangeListener(getListener(track, trackID, User.instance.alreadyInFavorites(trackID), false));
+        toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    updateNbFavorites(track, trackID);
+                } else {
+                    updateNbFavorites(track, trackID);
+                }
+            }
+        });
         /*
         TextView Tags = findViewById(R.id.trackTagsID);
         Tags.setText();
         */
     }
 
-    private CompoundButton.OnCheckedChangeListener getListener(Track t, int tID, boolean cond, boolean l) {
-        final boolean condition = cond;
-        final Track track = t;
-        final int trackID = tID;
-        final boolean like = l;
-        final String s = like ? "Likes: " + track.getLikes() : "Favorites: " + track.getFavourites();
-        return new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked && !condition) {
-                    if(like) {
-                        track.addLike();
-                        User.instance.like(trackID);
-                    } else {
-                        track.addFavourite();
-                        User.instance.addToFavorites(trackID);
-                    }
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
-                            trackFavouriteUpdated.setText(s);
-                        }
-                    });
-                } else if (!isChecked && condition) {
-                    if(like) {
-                        track.removeLike();
-                        User.instance.unlike(trackID);
-                    } else {
-                        track.removeFavourite();
-                        User.instance.removeFromFavorites(trackID);
-                    }
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
-                            trackFavouriteUpdated.setText(s);
-                        }
-                    });
-
-                }
+    private void updateLikes(Track track1, int trackID) {
+        final Track track = track1;
+        if (User.instance.alreadyLiked(trackID)) {
+            track.removeLike();
+            User.instance.unlike(trackID);
+        } else {
+            track.addLike();
+            User.instance.like(trackID);
+        }
+        runOnUiThread(new Runnable() {
+            public void run() {
+                TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
+                trackLikesUpdated.setText("Likes: " + track.getLikes());
             }
-        };
+        });
+
     }
+
+    private void updateNbFavorites(Track track1, int trackID) {
+        final Track track = track1;
+        if (User.instance.alreadyInFavorites(trackID)) {
+            track.removeFavourite();
+            User.instance.removeFromFavorites(trackID);
+        } else {
+            track.addFavourite();
+            User.instance.addToFavorites(trackID);
+        }
+        runOnUiThread(new Runnable() {
+            public void run() {
+                TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
+                trackFavoritesUpdated.setText("Favorites: " + track.getFavourites());
+            }
+        });
+
+    }
+
+
 
     private Track getTrackByID(ArrayList<Track> tracks, int trackID) {
         for (Track t : tracks) {
