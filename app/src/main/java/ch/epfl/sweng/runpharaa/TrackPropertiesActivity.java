@@ -10,8 +10,6 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
-
 public class TrackPropertiesActivity extends AppCompatActivity {
 
     //TODO: Check if ScrollView is working!
@@ -20,8 +18,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
+
         final int trackID = intent.getIntExtra("TrackID", 0);
-        final Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID);
+        final Track track = getTrackByID(User.instance.tracksNearMe(), trackID);
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
         trackBackground.setImageResource(track.getImage());
@@ -53,7 +52,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
 
         // Check if the user already liked this track and toggle the button accordingly
-        if (FAKE_USER.alreadyLiked(trackID)) {
+        if (User.instance.alreadyLiked(trackID)) {
             toggleLike.setChecked(true);
         } else {
             toggleLike.setChecked(false);
@@ -63,9 +62,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    if (!FAKE_USER.alreadyLiked(trackID)) {
+                    if (!User.instance.alreadyLiked(trackID)) {
                         track.addLike();
-                        FAKE_USER.like(trackID);
+                        User.instance.like(trackID);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
@@ -74,9 +73,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                         });
                     }
                 } else {
-                    if (FAKE_USER.alreadyLiked(trackID)) {
+                    if (User.instance.alreadyLiked(trackID)) {
                         track.removeLike();
-                        FAKE_USER.unlike(trackID);
+                        User.instance.unlike(trackID);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 TextView trackLikesUpdated = findViewById(R.id.trackLikesID);

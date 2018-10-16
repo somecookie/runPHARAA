@@ -1,7 +1,14 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,12 +16,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
-
-public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
+public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
 
@@ -37,6 +43,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(this);
+        InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
+        mMap.setInfoWindowAdapter(customInfoWindow);
     }
 
     @Override
@@ -45,7 +54,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
-        FAKE_USER.setLocation(new LatLng(currentLatitude, currentLongitude));
+        if(User.instance != null){
+            User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
+        }
 
         setMarkers();
     }
@@ -61,19 +72,73 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         //add a circle around the current location
         mMap.addCircle(new CircleOptions()
-                .center(FAKE_USER.getLocation())
-                .radius(FAKE_USER.getPreferredRadius())
+                .center(User.instance.getLocation())
+                .radius(User.instance.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
         //follow the user
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for (Track tr : FAKE_USER.tracksNearMe()) {
-            mMap.addMarker(new MarkerOptions()
+        for (Track tr : User.instance.tracksNearMe()) {
+            Marker m = mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));
+            m.setTag(tr.getUid());
         }
 
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Intent i = new Intent(this, TrackPropertiesActivity.class);
+        i.putExtra("TrackID", (int)marker.getTag());
+        startActivity(i);
+    }
+
+    /**
+     * Private class that applies the customized info window layout
+     */
+    private class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
+
+        private Context context;
+
+        InfoWindowGoogleMap(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            View view = ((Activity)context).getLayoutInflater()
+                    .inflate(R.layout.marker_info_window, null);
+
+            TextView title = view.findViewById(R.id.marker_window_title);
+
+            TextView lenText = view.findViewById(R.id.marker_window_text_len);
+            TextView diffText = view.findViewById(R.id.marker_window_text_diff);
+            TextView likeText = view.findViewById(R.id.marker_window_text_like);
+
+            // Set title
+            title.setText(marker.getTitle());
+
+            // Get the correct track by it's id
+            Track track = null;
+            for(Track tr : Track.allTracks())
+                if(tr.getUid() == (int)marker.getTag())
+                    track = tr;
+
+            // Get other info from the track (should never be null be we check just in case)
+            if(track != null) {
+                lenText.setText(track.getTrack_length() + " m");
+                diffText.setText(track.getHeight_diff() + " m");
+                likeText.setText(track.getLikes() + "");
+            }
+            return view;
+        }
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/classic_margin">
+
+    <TextView
+        android:id="@+id/marker_window_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/classic_margin"
+        android:textSize="@dimen/large_text" />
+
+    <TextView
+        android:id="@+id/marker_window_text_len"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_length"
+        android:drawablePadding="@dimen/classic_margin"
+        android:drawableStart="@drawable/ic_length"
+        android:textSize="@dimen/normal_text" />
+
+    <TextView
+        android:id="@+id/marker_window_text_diff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_altitude"
+        android:drawablePadding="@dimen/classic_margin"
+        android:drawableStart="@drawable/ic_altitude"
+        android:textSize="@dimen/normal_text" />
+
+    <TextView
+        android:id="@+id/marker_window_text_like"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_favorite"
+        android:drawablePadding="@dimen/classic_margin"
+        android:drawableStart="@drawable/ic_favorite"
+        android:textSize="@dimen/normal_text" />
+
+
+</LinearLayout>

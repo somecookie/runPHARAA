@@ -24,6 +24,7 @@ import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static java.lang.Thread.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -45,7 +46,11 @@ public class MainActivityTest {
     @Test
     public void testOpenMaps(){
         onView(withId(R.id.mapIcon)).perform(click());
-
         //TODO: check that correct activity has been launched
+    }
+
+    @Test
+    public void testOpenSettings(){
+        onView(withId(R.id.settingsIcon)).perform(click());
     }
 }

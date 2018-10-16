@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.sweng.runpharaa">
 
     <!--
@@ -39,7 +40,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.runpharaa.MainActivity" />
         </activity>
-        <activity android:name=".CreateTrackActivity" />
+        <activity android:name=".CreateTrackActivity"
+            android:exported="true"
+            />
         <activity android:name=".CreateTrackActivity2" />
 
         <service android:name=".GpsService" />
@@ -49,6 +52,8 @@
             android:required="false" />
 
         <activity android:name=".TrackPropertiesActivity"></activity>
+
+        <activity android:name=".Users.Profile.UsersProfileActivity"></activity>
 
         <activity
             android:name=".login.LoginActivity"
