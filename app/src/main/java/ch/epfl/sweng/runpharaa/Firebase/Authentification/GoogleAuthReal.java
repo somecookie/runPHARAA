@@ -10,6 +10,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class GoogleAuthReal implements GoogleAuthInterface {
+
+    public final GoogleAuthReal GoogleAuth = new GoogleAuthReal();
+
     @Override
     public GoogleSignInClient getClient(Activity activity, GoogleSignInOptions googleSignInOptions) {
         return getClient(activity, googleSignInOptions);
