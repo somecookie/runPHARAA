@@ -1,24 +1,24 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 
-public class FragmentFavourites extends Fragment {
-    View v;
-    public FragmentFavourites(){
+import ch.epfl.sweng.runpharaa.tracks.Track;
 
+public final class FragmentFavourites extends UpdatableCardItemFragment {
+
+    @Override
+    protected void loadListWithData() {
+        // Add cards to the cardList
+        for (Integer i : User.instance.getFavorites())
+            for (Track t : Track.allTracks)
+                if (t.getTID() == i)
+                    listCardItem.add(t.getCardItem());
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.favourites_fragment, container, false);
-
-        return v;
+    protected void setEmptyMessage() {
+        emptyMessage.setText(R.string.no_favorite);
+        emptyMessage.setVisibility(View.VISIBLE);
     }
 }

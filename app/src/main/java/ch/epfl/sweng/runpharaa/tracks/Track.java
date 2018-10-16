@@ -1,6 +1,9 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -8,12 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.epfl.sweng.runpharaa.CardItem;
+import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.utils.Required;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class Track
 {
     //Track identifiers
-    private static int COUNTER_ID;
+    private static int COUNTER_ID = 0;
     private int TID;
     private final String uid;
     private final Bitmap image;
@@ -31,9 +36,10 @@ public class Track
         Required.nonNull(uid, "User ID must be non-null");
         Required.nonNull(image, "Image must be non-null");
         Required.nonNull(path, "Path must be non-null");
-        Required.nonNull(properties, "Properties R.drawable.centre_sportifmust be non null");
+        Required.nonNull(properties, "Properties must be non null");
 
-        TID = ++COUNTER_ID;
+        this.TID = COUNTER_ID++;
+        Log.i("hiii", "tid on create: "+ TID + " " + name);
 
         this.uid = uid;
         this.image = image;
@@ -45,13 +51,15 @@ public class Track
         startingPoint = path[0];
         this.properties = properties;
 
-        this.cardItem = null;
+        this.cardItem = new CardItem(image, name, TID);
 
 
     }
 
     //TODO: either delete this or do it again when the database is on
-    public static ArrayList<Track> allTracks(){
+    public static ArrayList<Track> allTracks;
+
+    static{
 
         LatLng coord0 = new LatLng(46.518577, 6.563165); //inm
         LatLng coord1 = new LatLng(46.522735, 6.579772); //Banane
@@ -67,9 +75,14 @@ public class Track
         LatLng coord11 = new LatLng(46.522638, 6.634971); //Cathédrale
         LatLng coord12 = new LatLng(46.521412, 6.627383); //Flon
 
-        ArrayList<Track> all = new ArrayList<>();
+        Bitmap b = Util.createImage(200,100, R.color.colorPrimary);
+        TrackProperties p = new TrackProperties(100,10,1,1, TrackType.FOREST);
+        Track t = new Track("0", b, "Cours forest !", new LatLng[]{coord0, coord1, coord2}, p);
 
-        return all;
+        ArrayList<Track> all = new ArrayList<>();
+        all.add(t);
+
+        allTracks = all;
 
     }
 
