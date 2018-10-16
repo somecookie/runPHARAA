@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 
 public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
 
@@ -19,17 +21,14 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Launches the Gps service to get location updates
-        Intent i = new Intent(getApplicationContext(), GpsService.class);
-        startService(i);
-
+        startGeoLocalisation();
         initReceiver();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        startGeoLocalisation();
         initReceiver();
     }
 
@@ -64,9 +63,29 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
     /**
      * Update the user location when receiving a new location and update the markers
      */
+    protected void startGeoLocalisation() {
+        if(!isServiceRunning(GpsService.class)) {
+            Intent i = new Intent(getApplicationContext(), GpsService.class);
+            startService(i);
+        }
+    }
+
+    /**
+     * Update the user location when receiving a new location and update the markers
+     */
     protected void stopGeoLocalisation() {
         Intent i = new Intent(getApplicationContext(), GpsService.class);
         stopService(i);
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

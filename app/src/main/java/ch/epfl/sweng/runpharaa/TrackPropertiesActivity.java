@@ -20,7 +20,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         final int trackID = intent.getIntExtra("TrackID", 0);
-        final Track track = getTrackByID(User.instance.tracksNearMe(), trackID);
+        final Track track = getTrackByID(Track.allTracks(), trackID);
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
         trackBackground.setImageResource(track.getImage());
