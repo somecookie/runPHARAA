@@ -88,7 +88,6 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public void loadData() {
 
         Location l = Utils.getCurrLocation(getActivity());
-        Required.nonNull(User.instance);
         if (l != null) {
             User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
         }

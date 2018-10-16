@@ -31,7 +31,7 @@ public class Track
         Required.nonNull(uid, "User ID must be non-null");
         Required.nonNull(image, "Image must be non-null");
         Required.nonNull(path, "Path must be non-null");
-        Required.nonNull(properties, "Properties must be non null");
+        Required.nonNull(properties, "Properties R.drawable.centre_sportifmust be non null");
 
         TID = ++COUNTER_ID;
 
