@@ -45,12 +45,13 @@ public class CreateTrackActivityTest {
         InstrumentationRegistry
                 .getInstrumentation()
                 .getUiAutomation()
-                .executeShellCommand(String.format("appops set %s android:mock_location allow", mActivityRule.getActivity().getPackageName()));
+                .executeShellCommand(String.format("appops set %s android:mock_location allow", "ch.epfl.sweng.runpharaa"));
+                //.executeShellCommand(String.format("appops set %s android:mock_location allow", mActivityRule.getActivity().getPackageName()));
     }
 
     @Test
     public void createTrackWorksWithTwoFakePoints() {
-        grantPermissions();
+        System.out.print(mActivityRule.getActivity().getPackageName());
         locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Let map load
         sleep(2000);
