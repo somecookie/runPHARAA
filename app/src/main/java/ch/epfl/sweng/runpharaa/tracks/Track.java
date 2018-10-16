@@ -9,6 +9,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CardItem;
 import ch.epfl.sweng.runpharaa.R;
@@ -76,7 +78,9 @@ public class Track
         LatLng coord12 = new LatLng(46.521412, 6.627383); //Flon
 
         Bitmap b = Util.createImage(200,100, R.color.colorPrimary);
-        TrackProperties p = new TrackProperties(100,10,1,1, TrackType.FOREST);
+        Set<TrackType> types = new HashSet<>();
+        types.add(TrackType.FOREST);
+        TrackProperties p = new TrackProperties(100,10,1,1, types);
         Track t = new Track("0", b, "Cours forest !", new LatLng[]{coord0, coord1, coord2}, p);
 
         ArrayList<Track> all = new ArrayList<>();
