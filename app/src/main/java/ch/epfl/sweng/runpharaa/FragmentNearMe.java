@@ -23,6 +23,7 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.location.Utils;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.utils.Required;
 
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -87,7 +88,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public void loadData() {
 
         Location l = Utils.getCurrLocation(getActivity());
-        if (l != null && User.instance != null) {
+        Required.nonNull(User.instance);
+        if (l != null) {
             User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
         }
 
