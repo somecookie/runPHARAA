@@ -67,6 +67,9 @@ dependencies {
     //dependencies for round images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    //dependency to mock google maps
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
