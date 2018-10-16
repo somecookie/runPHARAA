@@ -6,13 +6,11 @@ import android.os.Build;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.NoSuchElementException;
-
-import ch.epfl.sweng.runpharaa.login.LoginActivity;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
@@ -25,8 +23,10 @@ public final class User {
     private final ArrayList<Track> list_of_pref;
     private LatLng location;
     private final boolean admin;
-    private final String uId;
 
+    private Set<Integer> idTracksLiked;
+    private Set<Integer> favorites;
+    private final String uId;
     public static User instance;
 
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
@@ -40,6 +40,8 @@ public final class User {
         this.location = location;
         this.admin = admin;
         this.uId = uId;
+        this.idTracksLiked = new HashSet<>();
+        this.favorites = new HashSet<>();
     }
 
     public User(String name, LatLng location, int preferredRadius) {
@@ -59,10 +61,13 @@ public final class User {
     @TargetApi(Build.VERSION_CODES.N)
     public ArrayList<Track> tracksNearMe() {
         ArrayList<Track> nm = new ArrayList<>();
-        ArrayList<Track> allTracks = Track.allTracks(); //Todo muste be changed when the database is done
+        ArrayList<Track> allTracks = Track.allTracks; //Todo muste be changed when the database is done
 
         //filter the tracks that start too far from the location
+
+
         for (Track tr : allTracks) {
+            System.out.println("------------------------------------- preferedradius ---------- :" + tr.distance(location));
             if (tr.distance(location) <= preferredRadius) {
                 nm.add(tr);
             }
@@ -81,6 +86,65 @@ public final class User {
         });
 
         return nm;
+    }
+
+    /**
+     * Check if the user already liked a particular track
+     * @param trackId the track's id
+     * @return true if the user already liked the track
+     */
+    public boolean alreadyLiked(int trackId) {
+        return idTracksLiked.contains(trackId);
+    }
+
+    /**
+     * Add a track id in the set of liked tracks if it is not already there
+     * @param trackId the track's id
+     */
+    public void like(int trackId) {
+        if (!alreadyLiked(trackId)) {
+            idTracksLiked.add(trackId);
+        }
+    }
+
+    /**
+     * Check if the track is already in user's favorites
+     * @param trackId the track's id
+     * @return true if the track is in the favorites
+     */
+    public void unlike(int trackId) {
+        idTracksLiked.remove(trackId);
+    }
+
+    public Set<Integer> getFavorites() {
+        return favorites;
+    }
+
+    /**
+     *
+     * @param trackId
+     * @return
+     */
+    public boolean alreadyInFavorites(int trackId) {
+        return favorites.contains(trackId);
+    }
+
+    /**
+     * Add a track id in the set of favorite tracks if it is not already there
+     * @param trackId the track's id
+     */
+    public void addToFavorites(int trackId) {
+        if (!alreadyInFavorites(trackId)) {
+            favorites.add(trackId);
+        }
+    }
+
+    /**
+     * Remove a track id from the set of favorite tracks if it is present
+     * @param trackId the track's id
+     */
+    public void removeFromFavorites(int trackId) {
+        favorites.remove(trackId);
     }
 
     /**

@@ -140,7 +140,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             requestPermissions();
-            lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
+            if(l != null) {
+                lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
+            }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
             User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation, false, currentUser.getUid());
             launchApp();

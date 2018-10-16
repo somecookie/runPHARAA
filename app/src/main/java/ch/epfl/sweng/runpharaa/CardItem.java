@@ -1,8 +1,10 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.graphics.Bitmap;
+
 public class CardItem {
 
-    private int background;
+    private Bitmap background;
     private String name;
     private int parentTrackID;
 
@@ -10,13 +12,13 @@ public class CardItem {
 
     }
 
-    public CardItem(int background, String name, int parentTrackID) {
+    public CardItem(Bitmap background, String name, int parentTrackID) {
         this.background = background;
         this.name = name;
         this.parentTrackID = parentTrackID;
     }
 
-    public int getBackground() {
+    public Bitmap getBackground() {
         return background;
     }
 
@@ -28,7 +30,7 @@ public class CardItem {
         return parentTrackID;
     }
 
-    public void setBackground(int background) {
+    public void setBackground(Bitmap background) {
         this.background = background;
     }
 

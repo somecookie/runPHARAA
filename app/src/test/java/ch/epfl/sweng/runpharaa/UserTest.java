@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserTest {
 
@@ -52,5 +54,16 @@ public class UserTest {
         for(int i = 0; i < all.size(); i++){
             assertEquals(all.get(i).getName(), FAKE_USER.tracksNearMe().get(i).getName());
         }
+    }
+
+    @Test
+    public void likedTracks() {
+        User FAKE_USER = new User("test1", new LatLng(46.518510, 6.563199), 2000);
+
+        FAKE_USER.like(0);
+        assertTrue(FAKE_USER.alreadyLiked(0));
+
+        FAKE_USER.unlike(0);
+        assertFalse(FAKE_USER.alreadyLiked(0));
     }
 }
