@@ -132,8 +132,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == IMAGE_GALLERY_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == IMAGE_GALLERY_REQUEST) {
                 //get the address of the image on the SD card
                 Uri imageUri = data.getData();
 
@@ -155,7 +154,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                     Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
-            }
         }
     }
 
