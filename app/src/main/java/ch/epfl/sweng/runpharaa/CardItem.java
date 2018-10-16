@@ -1,5 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.graphics.Bitmap;
+
 public class CardItem {
 
     private int background;

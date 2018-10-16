@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        client = new Client();
+        client = new Client(this);
 
         requestPermissions();
 

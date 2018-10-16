@@ -1,8 +1,20 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,13 +22,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Client {
 
     public final static String TRACKS_PATH = "tracks";
+    public final static String TRACK_IMAGE_PATH = "TrackImages";
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDataBaseRef;
@@ -29,7 +45,7 @@ public class Client {
     public List<Track> createdTracks = new ArrayList<>();
 
 
-    public Client()
+    public Client(Context context)
     {
 
 
@@ -38,6 +54,9 @@ public class Client {
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageRef = mFirebaseStorage.getReference();
 
+
+
+        /*
         CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
         CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
@@ -52,13 +71,13 @@ public class Client {
         CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
         CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
 
-        //writeNewTrack(new Track(R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
-        //writeNewTrack(new Track(R.drawable.innovation_park, "Innovation Parc -> BC", Arrays.asList(coord4, coord3), 300, 2, 1, 1));
-        //writeNewTrack(new Track(R.drawable.rolex, "Rolex -> Swisstech",Arrays.asList(coord5, coord6), 850, 8, 4, 2));
-        //writeNewTrack(new Track(R.drawable.rolex, "Sat -> INM", Arrays.asList(coord7, coord0), 450, 5, 6, 7));
-        //writeNewTrack(new Track(R.drawable.ouchy, "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
-        //writeNewTrack(new Track(R.drawable.saint_francois, "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
-
+        writeNewTrack(new Track(BitmapFactory.decodeResource(context.getResources(), R.drawable.centre_sportif), "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
+        writeNewTrack(new Track(BitmapFactory.decodeResource(context.getResources(), R.drawable.innovation_park), "Innovation Parc -> BC", Arrays.asList(coord4, coord3), 300, 2, 1, 1));
+        writeNewTrack(new Track(BitmapFactory.decodeResource(context.getResources(), R.drawable.rolex), "Rolex -> Swisstech",Arrays.asList(coord5, coord6), 850, 8, 4, 2));
+        writeNewTrack(new Track(BitmapFactory.decodeResource(context.getResources(), R.drawable.rolex), "Sat -> INM", Arrays.asList(coord7, coord0), 450, 5, 6, 7));
+        writeNewTrack(new Track(BitmapFactory.decodeResource(context.getResources(), R.drawable.ouchy), "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
+        writeNewTrack(new Track(BitmapFactory.decodeResource(context.getResources(), R.drawable.saint_francois), "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
+        */
 
         /*If there is other thing that Track object on the data base then use addChildEventListener on Tracks
         /*mDataBaseRef.addValueEventListener(new ValueEventListener() {
@@ -104,13 +123,50 @@ public class Client {
      * Track a {@link Track} and add it to the database
      * @param track
      */
-    public void writeNewTrack(Track track) {
+    public void writeNewTrack(final Track track) {
         //Generate a new key in the database
-        String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
-        //TODO maybe use less we can get the key with getKey()
-        track.setTrackUid(key);
-        //Put track in database
-        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track);
+        final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
+
+        //Upload image
+        Bitmap bitmap = track.getImageBitMap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Storage", "Failed to upload image to storage :" + e.getMessage());
+            }
+        });
+        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                    mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Storage", "Failed to download image url :"+ e.getMessage());
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if(task.isSuccessful()){
+                                track.setImageStorageUri(task.getResult().toString());
+                                track.setTrackUid(key);
+                                mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("Database", "Failed to upload new track :" + e.getMessage());
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public void updateTrack(Track track){
@@ -150,7 +206,7 @@ public class Client {
         }
     }
 
-    //TODO Put in util class
+    //TODO Put in CustLatLng class
     public double distance(CustLatLng startingPoint, CustLatLng userLocation){
         int R = 6378137; //Earth's mean radius in meter
 

@@ -1,9 +1,10 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.graphics.Bitmap;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,9 +19,13 @@ public class Track
     private String creatorUid; //TODO: Make a map from creator_if -> name?
     @Exclude
     private int image;//TODO for database download into local file
-    private String imageStoragePath;
+    private String imageStorageUri;
     @Exclude
     private CardItem cardItem;
+
+
+    @Exclude
+    private Bitmap imageBitMap;
 
     //Track specifics
     private String location;
@@ -44,8 +49,8 @@ public class Track
     private ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
 
     //TODO: Make more constructors
-    public Track(String trackUid, String creatorUid, int image, String imageStoragePath, String location, List<CustLatLng> path, double trackLength, double averageTimeLength,
-                 double heightDiff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews)
+    public Track(String trackUid, String creatorUid, int image, String imageStorageUri, String location, List<CustLatLng> path, double trackLength, double averageTimeLength,
+                 double heightDiff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews, Bitmap imageBitMap)
     {
         if(path == null){
             throw new NullPointerException("The path must me defined.");
@@ -60,7 +65,7 @@ public class Track
         this.trackUid = trackUid;
         this.creatorUid = creatorUid;
         this.image = image;
-        this.imageStoragePath = imageStoragePath;
+        this.imageStorageUri = imageStorageUri;
         this.location = location;
         this.trackLength = trackLength;
         this.averageTimeLength = averageTimeLength;
@@ -70,31 +75,32 @@ public class Track
         this.favourites = favourites;
         this.reactions = reactions;
         this.reviews = reviews;
+        this.imageBitMap = imageBitMap;
     }
 
     //Testing purposes
     public Track(List<CustLatLng> path){
-        this("0","0",0,"","Test", path,0,0,0,null,0,0,null,null);
+        this("0","0",0,"","Test", path,0,0,0,null,0,0,null,null, null);
     }
 
     public Track(String name, List<CustLatLng> path){
-        this("0","0",0,"", name, path,0,0,0, null, 0,0,null,null);
+        this("0","0",0,"", name, path,0,0,0, null, 0,0,null,null,null);
     }
 
     public Track(String trackUid, String name, int image, List<CustLatLng> path){
-        this(trackUid,"0", image,"", name, path,0,0,0,null,0,0,null,null);
+        this(trackUid,"0", image,"", name, path,0,0,0,null,0,0,null,null,null);
     }
 
     public Track(String trackUid, int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
-        this(trackUid,"0", image,"", name, path, track_length, average_time,0,null, likes, favourites, null, null);
+        this(trackUid,"0", image,"", name, path, track_length, average_time,0,null, likes, favourites, null, null,null);
     }
 
     public Track(String name){
-        this("0","0",0, name,"", Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),0,0,0, null, 0,0,null,null);
+        this("0","0",0, name,"", Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),0,0,0, null, 0,0,null,null,null);
     }
 
-    public Track(int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
-        this("0","0", image,"", name, path, track_length, average_time,0,null, likes, favourites, null, null);
+    public Track(Bitmap imageBitMap, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
+        this("0","0", 0,"", name, path, track_length, average_time,0,null, likes, favourites, null, null, imageBitMap);
     }
 
     public Track() {} // Default constructor required for calls to DataSnapshot.getValue(Track.class): Firebase Database
@@ -128,6 +134,11 @@ public class Track
     }
 
     @Exclude
+    public Bitmap getImageBitMap() {
+        return imageBitMap;
+    }
+
+    @Exclude
     public CardItem getCardItem() {
         return this.cardItem;
     }
@@ -151,6 +162,10 @@ public class Track
     @Exclude
     public int getImage() { return image; }
 
+    public String getImageStorageUri() {
+        return imageStorageUri;
+    }
+
     public double getTrackLength() { return trackLength; }
 
     public double getAverageTimeLength() { return averageTimeLength; }
@@ -161,6 +176,10 @@ public class Track
     public Set<Tag> getTags() { return tags; }
 
     public int getLikes() { return likes; }
+
+    public void setImageStorageUri(String imageStorageUri) {
+        this.imageStorageUri = imageStorageUri;
+    }
 
     public int getFavourites() { return favourites; }
 
