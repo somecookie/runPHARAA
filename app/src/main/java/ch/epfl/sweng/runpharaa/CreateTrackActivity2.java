@@ -83,7 +83,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                     Toast.makeText(getBaseContext(),  getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
                 }else {
                     // TODO: add track to created tracks + get user id + carditem?
-                    Track track = new Track("fakeUser", trackPhoto, nameText.getText().toString(), points, trackProperties, null);
+                    Track track = new Track("fakeUser", trackPhoto, nameText.getText().toString(), points, trackProperties);
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.create_message), Toast.LENGTH_LONG).show();
                     finish();
                 }

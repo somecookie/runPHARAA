@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.epfl.sweng.runpharaa.CardItem;
+import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class Track
 {
@@ -25,7 +26,13 @@ public class Track
 
     private final TrackProperties properties;
 
-    public Track(String uid, Bitmap image, String name, LatLng[] path, TrackProperties properties, CardItem cardItem){
+    public Track(String uid, Bitmap image, String name, LatLng[] path, TrackProperties properties){
+
+        Required.nonNull(uid, "User ID must be non-null");
+        Required.nonNull(image, "Image must be non-null");
+        Required.nonNull(path, "Path must be non-null");
+        Required.nonNull(properties, "Properties must be non null");
+
         TID = ++COUNTER_ID;
 
         this.uid = uid;
@@ -38,7 +45,7 @@ public class Track
         startingPoint = path[0];
         this.properties = properties;
 
-        this.cardItem = cardItem;
+        this.cardItem = null;
 
 
     }
