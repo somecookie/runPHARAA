@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.Manifest;
+import android.os.SystemClock;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -8,6 +9,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,6 +37,11 @@ public class FavoritesFragmentTest {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION);
 
+    @Before
+    public void init() {
+        Intents.init();
+    }
+
     @BeforeClass
     public static void initUser() {
         User.instance = new User("FakeUser", 2000, null, new ArrayList<Track>(), new ArrayList<Track>(), new LatLng(21.23, 12.112), false, "aa");
@@ -44,11 +52,15 @@ public class FavoritesFragmentTest {
 
     @Test
     public void testFavoritesAppears() {
-        Intents.init();
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft()).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(click());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        SystemClock.sleep(5_000);
+        onView(withId(R.id.cardListId)).perform(click());
         intended(hasComponent(TrackPropertiesActivity.class.getName()));
-        Intents.release();
     }
 
+    @After
+    public void clean() {
+        Intents.release();
+    }
 }
