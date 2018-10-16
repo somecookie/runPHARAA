@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.annotation.TargetApi;
+import android.net.Uri;
 import android.os.Build;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -16,18 +17,20 @@ public final class User {
     private int preferredRadius = 2000;
     private final String name;
     //TODO: put default picture
-    private final File picture;
+    private final Uri picture;
     private final ArrayList<Track> list_of_created_tracks;
     private final ArrayList<Track> list_of_pref;
     private LatLng location;
     private final boolean admin;
-    private final int uId;
+
     private Set<Integer> idTracksLiked;
     private Set<Integer> favorites;
+    private final String uId;
+    public static User instance;
 
-    public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
+    //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name, int preferredRadius, File picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, int uId) {
+    public User(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId) {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
@@ -42,7 +45,7 @@ public final class User {
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, null, null, location, false, 0);
+        this(name, preferredRadius, null, null, null, location, false, "");
     }
 
     public int getPreferredRadius() {
@@ -60,7 +63,10 @@ public final class User {
         ArrayList<Track> allTracks = Track.allTracks(); //Todo muste be changed when the database is done
 
         //filter the tracks that start too far from the location
+
+
         for (Track tr : allTracks) {
+            System.out.println("------------------------------------- preferedradius ---------- :" + tr.distance(location));
             if (tr.distance(location) <= preferredRadius) {
                 nm.add(tr);
             }
@@ -166,6 +172,22 @@ public final class User {
      */
     public void setLocation(LatLng newLocation) {
         this.location = newLocation;
+    }
+
+    public Uri getPicture(){
+        return picture;
+    }
+
+    public ArrayList<Track> getCreatedTracks(){
+        return list_of_created_tracks;
+    }
+
+    public ArrayList<Track> getFavoriteTracks(){
+        return list_of_pref;
+    }
+
+    public static void set(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId){
+        instance = new User(name, preferredRadius, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
 }
