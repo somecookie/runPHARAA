@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -66,7 +68,7 @@ public class TrackTest {
 
         //Test done in function of the location, maybe override equals in tracks to test
         for(int i = 0; i < all.size(); i++){
-            assertEquals(all.get(i).getLocation(), Track.allTracks().get(i).getLocation());
+            assertEquals(all.get(i).getName(), Track.allTracks().get(i).getName());
         }
     }
 
@@ -81,7 +83,7 @@ public class TrackTest {
     public void getLocationTest(){
         Track t = new Track(0,"TestLocation",R.drawable.centre_sportif ,new LatLng[]{new LatLng(46.522735, 6.579772),  new LatLng(46.519380, 6.580669)});
 
-        assertEquals("TestLocation", t.getLocation());
+        assertEquals("TestLocation", t.getName());
     }
 
     @Test
@@ -99,7 +101,7 @@ public class TrackTest {
                             0, 0, 0, 0);
 
         assertEquals(0, t.getCreator_id());
-        assertEquals("TestLocation", t.getLocation());
+        assertEquals("TestLocation", t.getName());
         assertEquals(R.drawable.centre_sportif, t.getImage());
         assertEquals(0, t.getTrack_length(), 0);
         assertEquals(0, t.getAverage_time_length(), 0);

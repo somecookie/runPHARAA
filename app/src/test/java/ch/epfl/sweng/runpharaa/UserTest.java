@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 import static org.junit.Assert.assertEquals;
 
 public class UserTest {
@@ -52,7 +54,7 @@ public class UserTest {
 
         //Test done in function of the location, maybe override equals in tracks to test
         for(int i = 0; i < all.size(); i++){
-            assertEquals(all.get(i).getLocation(), FAKE_USER.tracksNearMe().get(i).getLocation());
+            assertEquals(all.get(i).getName(), FAKE_USER.tracksNearMe().get(i).getName());
         }
     }
 }

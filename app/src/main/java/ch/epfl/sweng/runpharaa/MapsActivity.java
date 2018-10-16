@@ -11,6 +11,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
 
@@ -72,7 +74,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         for (Track tr : FAKE_USER.tracksNearMe()) {
             mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
-                    .title(tr.getLocation()));
+                    .title(tr.getName()));
         }
 
     }

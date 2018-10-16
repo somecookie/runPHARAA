@@ -31,6 +31,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Properties;
+
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -42,6 +47,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private TextView totalDistanceText, totalAltitudeText;
     private EditText nameText;
     private Button addPhotoFromGallery;
+    private Button createButton;
+    private Button propButton;
     private ImageView trackImage;
 
     private double minAltitude = Double.POSITIVE_INFINITY;
@@ -50,9 +57,11 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private LatLng[] points;
     private Bitmap trackPhoto;
 
+    private boolean propertiesSet = false;
+    private TrackProperties trackProperties;
 
     private double totalDistance, totalAltitudeChange;
-    private Button createButton;
+
 
 
     @Override
@@ -66,11 +75,18 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Create track
-                Track t = new Track(nameText.getText().toString(), points);
-                // TODO: add track to created tracks
-                Toast.makeText(getApplicationContext(), "New track was successfully created !", Toast.LENGTH_LONG).show();
-                finish();
+                if(trackPhoto == null){
+                    trackPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
+                }else if(!propertiesSet){
+                    Toast.makeText(getBaseContext(),  getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
+                }else {
+                    // TODO: add track to created tracks + get user id + carditem?
+                    Track track = new Track("fakeUser", trackPhoto, nameText.getText().toString(), points, trackProperties, null);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.create_message), Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
         });
 
@@ -92,6 +108,16 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
                 //invoke the activity and get something back
                 startActivityForResult(photoPickIntent, IMAGE_GALLERY_REQUEST);
+            }
+        });
+
+        propButton = findViewById(R.id.set_properties);
+        propButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO handle the set-up of the properties
+                trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, 20, 4, TrackType.FOREST);
+                propertiesSet = true;
             }
         });
 

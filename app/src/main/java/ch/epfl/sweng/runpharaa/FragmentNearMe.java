@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +18,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.runpharaa.tracks.Track;
 
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
@@ -113,7 +114,6 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         }else{
             v.findViewById(R.id.cardListId).setVisibility(View.GONE);
             v.findViewById(R.id.emptyMessage).setVisibility(View.VISIBLE);
-            Toast.makeText(getContext(), "Empty", Toast.LENGTH_LONG).show();
         }
     }
 

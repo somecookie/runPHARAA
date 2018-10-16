@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 public final class User {
     private int preferredRadius = 2000;
     private final String name;

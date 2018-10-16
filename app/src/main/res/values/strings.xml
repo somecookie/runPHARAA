@@ -17,4 +17,6 @@
     <string name="add_photo">Photo</string>
     <string name="set_properties">Properties</string>
     <string name="create_track">Create!</string>
+    <string name="create_message">New track was successfully created !</string>
+    <string name="properties_not_set">The properties must be set up</string>
 </resources>
