@@ -15,8 +15,27 @@
     <string name="no_follow">Try following someone!</string>
     <string name="no_favorite">Try adding a track to your favorite!</string>
     <string name="add_photo">Photo</string>
-    <string name="set_properties">Properties</string>
+    <string name="set_properties">Prop.</string>
     <string name="create_track">Create!</string>
     <string name="create_message">New track was successfully created !</string>
     <string name="properties_not_set">The properties must be set up</string>
+    <string name="types_not_set">The types must be set up</string>
+    <string name="need_name">A track needs a name!</string>
+    <string name="time_needed">Time needed to complete the track</string>
+    <string name="need_time">"A track needs a duration!"</string>
+    <string name="properties_of_the_track">Properties of the Track</string>
+    <string name="difficulty_is">Difficulty is </string>
+    <string name="types" translatable="false">Types</string>
+    <string name="choose_types">Choose the types of the track</string>
+    <string name="default_time">Default run time was chosen</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="OK">OK</string>
+    <string-array name="track_types">
+        <item>City</item>
+        <item>Forest</item>
+        <item>Mountain</item>
+        <item>Seaside</item>
+        <item>Beach</item>
+        <item>Countryside</item>
+    </string-array>
 </resources>
