@@ -20,9 +20,9 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+import ch.epfl.sweng.runpharaa.Users.Profile.UsersProfileActivity;
 
-    private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
+public class MainActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestPermissions();
 
         tabLayout = findViewById(R.id.tabLayoutId);
         viewPager = findViewById(R.id.viewPagerId);
@@ -86,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
                 return true;
             case R.id.profileIcon:
-                //Intent profileIntent = new Intent(getBaseContext(), ProfileActivity.class);
-                //startActivity(profileIntent);
+                Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);
+                startActivity(profileIntent);
                 return true;
             case R.id.mapIcon:
                 Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
@@ -96,33 +95,5 @@ public class MainActivity extends AppCompatActivity {
             default:
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case GPS_PERMISSIONS_REQUEST_CODE: {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED)
-                    requestPermissions();
-            }
-        }
-    }
-
-    /**
-     * Verifies if we need to ask for the GPS permissions
-     *
-     * @return true if we need to request permissions, false otherwise
-     */
-    private boolean requestPermissions() {
-        if (Build.VERSION.SDK_INT > 23 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
-            return true;
-        }
-        return false;
     }
 }

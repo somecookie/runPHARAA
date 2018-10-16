@@ -7,11 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
 
@@ -22,7 +19,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
         int trackID = intent.getIntExtra("TrackID", 0);
-        Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID);
+        Track track = getTrackByID(User.instance.tracksNearMe(), trackID);
 
         TrackProperties tp = track.getProperties();
 

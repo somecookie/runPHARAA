@@ -8,6 +8,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +32,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class GpsServiceTest {
 
+    @Before
+    public void initUser(){
+        User.instance = new User("FakeUser", 2000, null, new ArrayList<Track>(), new ArrayList<Track>(), new LatLng(21.23, 12.112), false, "aa");
+    }
+
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -43,6 +50,7 @@ public class GpsServiceTest {
     public void doesNotLaunchGpsServiceInitially() {
         assertTrue(!isMyServiceRunning(GpsService.class));
     }
+
 
     @Test
     public void correctlyLaunchesServiceOnMapView() {

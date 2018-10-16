@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,25 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.location.Utils;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
     SwipeRefreshLayout swipeLayout;
 
-    public FragmentNearMe(){
+    public FragmentNearMe() {
 
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(CardItem item);
     }
 
     @Nullable
@@ -87,8 +85,14 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      * This function is called when the fragment is created and each time the list is refreshed.
      */
     public void loadData() {
+
+        Location l = Utils.getCurrLocation(getActivity());
+        if (l != null && User.instance != null) {
+            User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
+        }
+
         // Create a fresh recyclerView and listCardItem
-        if(!FAKE_USER.tracksNearMe().isEmpty()) {
+        if (!User.instance.tracksNearMe().isEmpty()) {
             v.findViewById(R.id.emptyMessage).setVisibility(View.GONE);
             RecyclerView recyclerView = v.findViewById(R.id.cardListId);
 
@@ -105,16 +109,21 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
             };
 
             // Add cards to the cardList
-            for (Track t : FAKE_USER.tracksNearMe())
+            for (Track t :User.instance.tracksNearMe())
                 listCardItem.add(t.getCardItem());
 
             Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }else{
+        } else {
             v.findViewById(R.id.cardListId).setVisibility(View.GONE);
             v.findViewById(R.id.emptyMessage).setVisibility(View.VISIBLE);
         }
+
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(CardItem item);
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
@@ -155,7 +164,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             ImageView background_img;
             TextView name;
-            
+
             public viewHolder(@NonNull View itemView) {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
@@ -164,7 +173,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             public void bind(final CardItem item, final OnItemClickListener listener) {
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         listener.onItemClick(item);
                     }
                 });

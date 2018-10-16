@@ -1,3 +1,10 @@
 <resources>
+    <!-- Margins and paddings -->
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="classic_margin">16dp</dimen>
+    <dimen name="small_margin">10dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="normal_text">16sp</dimen>
+    <dimen name="large_text">20sp</dimen>
 </resources>
