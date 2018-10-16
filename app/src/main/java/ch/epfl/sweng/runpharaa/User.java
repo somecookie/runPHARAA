@@ -23,6 +23,7 @@ public final class User {
     private final boolean admin;
     private final int uId;
     private Set<Integer> idTracksLiked;
+    private Set<Integer> favorites;
 
     public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
@@ -36,6 +37,7 @@ public final class User {
         this.admin = admin;
         this.uId = uId;
         this.idTracksLiked = new HashSet<>();
+        this.favorites = new HashSet<>();
     }
 
     public User(String name, LatLng location, int preferredRadius) {
@@ -99,11 +101,43 @@ public final class User {
     }
 
     /**
-     * Remove a track id from the set of liked tracks if it is present
+     * Check if the track is already in user's favorites
      * @param trackId the track's id
+     * @return true if the track is in the favorites
      */
     public void unlike(int trackId) {
         idTracksLiked.remove(trackId);
+    }
+
+    public Set<Integer> getFavorites() {
+        return favorites;
+    }
+
+    /**
+     *
+     * @param trackId
+     * @return
+     */
+    public boolean alreadyInFavorites(int trackId) {
+        return favorites.contains(trackId);
+    }
+
+    /**
+     * Add a track id in the set of favorite tracks if it is not already there
+     * @param trackId the track's id
+     */
+    public void addToFavorites(int trackId) {
+        if (!alreadyInFavorites(trackId)) {
+            favorites.add(trackId);
+        }
+    }
+
+    /**
+     * Remove a track id from the set of favorite tracks if it is present
+     * @param trackId the track's id
+     */
+    public void removeFromFavorites(int trackId) {
+        favorites.remove(trackId);
     }
 
     /**

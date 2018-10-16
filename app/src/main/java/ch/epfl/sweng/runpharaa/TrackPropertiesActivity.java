@@ -1,8 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,11 +53,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
 
         // Check if the user already liked this track and toggle the button accordingly
-        if (FAKE_USER.alreadyLiked(trackID)) {
-            toggleLike.setChecked(true);
-        } else {
-            toggleLike.setChecked(false);
-        }
+        toggleLike.setChecked(FAKE_USER.alreadyLiked(trackID));
 
         toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -88,25 +84,35 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             }
         });
 
+        // Check if the track already in favorites and toggle the button accordingly
+        toggleFavorite.setChecked(FAKE_USER.alreadyInFavorites(trackID));
+
         toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            track.addFavourite();
-                            TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
-                            trackFavouriteUpdated.setText("Favourites: " + track.getFavourites());
-                        }
-                    });
+                    if (!FAKE_USER.alreadyInFavorites(trackID)) {
+                        track.addFavourite();
+                        FAKE_USER.addToFavorites(trackID);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+
+                                TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
+                                trackFavouriteUpdated.setText("Favourites: " + track.getFavourites());
+                            }
+                        });
+                    }
                 } else {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            track.removeFavourite();
-                            TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
-                            trackFavouriteUpdated.setText("Favourites: " + track.getFavourites());
-                        }
-                    });
+                    if (FAKE_USER.alreadyInFavorites(trackID)) {
+                        track.removeFavourite();
+                        FAKE_USER.removeFromFavorites(trackID);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
+                                trackFavouriteUpdated.setText("Favourites: " + track.getFavourites());
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -117,7 +123,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
     }
 
     private Track getTrackByID(ArrayList<Track> tracks, int trackID) {
-        for (Track t: tracks) {
+        for (Track t : tracks) {
             if (t.getUid() == trackID) {
                 return t;
             }
