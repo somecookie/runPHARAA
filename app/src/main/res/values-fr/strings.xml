@@ -27,5 +27,13 @@
     <string name="default_time">Temps de course choisi par défaut</string>
     <string name="dismiss">Annuler</string>
     <string name="OK">OK</string>
+    <string-array name="track_types">
+        <item>Ville</item>
+        <item>Forêt</item>
+        <item>Montagne</item>
+        <item>Bord du lac</item>
+        <item>Plage</item>
+        <item>Campagne</item>
+    </string-array>
 
 </resources>
