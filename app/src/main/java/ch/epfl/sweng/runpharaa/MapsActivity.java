@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -129,7 +130,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
             // Get the correct track by it's id
             Track track = null;
-            for (Track tr : Track.allTracks())
+            for (Track tr : Track.allTracks)
                 if (tr.getTID() == (int) marker.getTag())
                     track = tr;
 

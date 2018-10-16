@@ -365,7 +365,9 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             for (LatLng point : points)
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.65);
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));
             // Add markers (start = green, finish = red)

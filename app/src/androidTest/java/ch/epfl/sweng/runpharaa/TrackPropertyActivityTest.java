@@ -11,15 +11,14 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class TrackPropertyActivityTest {
+
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<TrackPropertiesActivity> mActivityRule =
+            new ActivityTestRule<>(TrackPropertiesActivity.class);
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
@@ -27,19 +26,13 @@ public class MainActivityTest {
             Manifest.permission.ACCESS_COARSE_LOCATION);
 
     @Test
-    public void testChangeFragment() {
-        onView(withId(R.id.tabLayoutId)).perform(swipeDown());
-        onView(withId(R.id.tabLayoutId)).perform(swipeLeft()).perform(swipeLeft());
+    public void testLike() {
+        onView(withId(R.id.buttonLikeID)).perform(click());
     }
 
     @Test
-    public void testOpenMaps() {
-        onView(withId(R.id.mapIcon)).perform(click());
-        //TODO: check that correct activity has been launched
+    public void testFavourite() {
+        onView(withId(R.id.buttonFavoriteID)).perform(click());
     }
 
-    @Test
-    public void testOpenSettings() {
-        onView(withId(R.id.settingsIcon)).perform(click());
-    }
 }

@@ -40,9 +40,11 @@ public class TrackProperties {
 
 
     public void addLike(){likes++;}
+    public void removeLike(){likes--;}
     public int getLikes(){return likes;}
 
     public void addFavorite(){favorites++;}
+    public void removeFavorite(){favorites--;}
     public int getFavorites(){return favorites;}
 
     public Set<TrackType> getType(){return trackType;}
