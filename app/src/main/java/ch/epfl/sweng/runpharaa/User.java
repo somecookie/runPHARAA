@@ -14,6 +14,8 @@ import java.util.NoSuchElementException;
 
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 public final class User {
     private int preferredRadius = 2000;
     private final String name;
@@ -125,4 +127,7 @@ public final class User {
         instance = new User(name, preferredRadius, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
     }
 
+    public String getID() {
+        return uId;
+    }
 }

@@ -11,12 +11,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -24,17 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.location.Utils;
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.utils.Required;
+
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
     SwipeRefreshLayout swipeLayout;
 
-    public FragmentNearMe(){
+    public FragmentNearMe() {
 
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(CardItem item);
     }
 
     @Nullable
@@ -91,31 +88,43 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public void loadData() {
 
         Location l = Utils.getCurrLocation(getActivity());
-        if (l != null && User.instance != null){
+        if (l != null) {
             User.instance.setLocation(new LatLng(l.getLatitude(), l.getLongitude()));
         }
 
         // Create a fresh recyclerView and listCardItem
-        RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-        List<CardItem> listCardItem = new ArrayList<>();
-        OnItemClickListener listener = new OnItemClickListener() {
-            @Override
-            public void onItemClick(CardItem item) {
-                Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                intent.putExtra("TrackID", item.getParentTrackID());
-                startActivity(intent);
-            }
-        };
+        if (!User.instance.tracksNearMe().isEmpty()) {
+            v.findViewById(R.id.emptyMessage).setVisibility(View.GONE);
+            RecyclerView recyclerView = v.findViewById(R.id.cardListId);
 
-        // Add cards to the cardList
-        if(User.instance != null) {
-            for (Track t : User.instance.tracksNearMe())
+            v.setVisibility(View.VISIBLE);
+
+            List<CardItem> listCardItem = new ArrayList<>();
+            OnItemClickListener listener = new OnItemClickListener() {
+                @Override
+                public void onItemClick(CardItem item) {
+                    Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                    intent.putExtra("TrackID", item.getParentTrackID());
+                    startActivity(intent);
+                }
+            };
+
+            // Add cards to the cardList
+            for (Track t :User.instance.tracksNearMe())
                 listCardItem.add(t.getCardItem());
+
+            Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            v.findViewById(R.id.cardListId).setVisibility(View.GONE);
+            v.findViewById(R.id.emptyMessage).setVisibility(View.VISIBLE);
         }
 
-        Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(CardItem item);
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
@@ -156,7 +165,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             ImageView background_img;
             TextView name;
-            
+
             public viewHolder(@NonNull View itemView) {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
@@ -165,7 +174,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             public void bind(final CardItem item, final OnItemClickListener listener) {
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         listener.onItemClick(item);
                     }
                 });

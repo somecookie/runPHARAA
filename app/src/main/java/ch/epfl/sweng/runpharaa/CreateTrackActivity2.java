@@ -1,13 +1,19 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,21 +27,40 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Properties;
+
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
+    public static final int IMAGE_GALLERY_REQUEST = 20;
+
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;
     private EditText nameText;
+    private Button addPhotoFromGallery;
+    private Button createButton;
+    private Button propButton;
+    private ImageView trackImage;
+
     private double minAltitude = Double.POSITIVE_INFINITY;
     private double maxAltitude = Double.NEGATIVE_INFINITY;
     private Location[] locations;
     private LatLng[] points;
-    private double totalDistance = 0.0, totalAltitudeChange = 0.0;
-    private Button createButton;
+    private Bitmap trackPhoto;
+
+    private boolean propertiesSet = false;
+    private TrackProperties trackProperties;
+
+    private double totalDistance, totalAltitudeChange;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,17 +73,88 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Create track
-                Track t = new Track(nameText.getText().toString(), points);
-                // TODO: add track to created tracks
-                Toast.makeText(getApplicationContext(), "New track was successfully created !", Toast.LENGTH_LONG).show();
-                finish();
+                if(trackPhoto == null){
+                    trackPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
+                }else if(!propertiesSet){
+                    Toast.makeText(getBaseContext(),  getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
+                }else {
+                    // TODO: add track to created tracks + get user id + carditem?
+                    Track track = new Track(User.instance.getID(), trackPhoto, nameText.getText().toString(), points, trackProperties);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.create_message), Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
         });
+
+        //Open Gallery view when we click on the button
+        addPhotoFromGallery = findViewById(R.id.add_photo_from_gallery);
+        addPhotoFromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //invoke the image gallery
+                Intent photoPickIntent = new Intent(Intent.ACTION_PICK);
+                File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                String pictureDirectoryPath = pictureDirectory.getPath();
+
+                //get URI representation
+                Uri data = Uri.parse(pictureDirectoryPath);
+
+                //set the data and type (all images types)
+                photoPickIntent.setDataAndType(data, "image/*");
+
+                //invoke the activity and get something back
+                startActivityForResult(photoPickIntent, IMAGE_GALLERY_REQUEST);
+            }
+        });
+
+        propButton = findViewById(R.id.set_properties);
+        propButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO handle the set-up of the properties
+                trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, 20, 4, TrackType.FOREST);
+                propertiesSet = true;
+            }
+        });
+
+        trackImage = findViewById(R.id.track_photo);
+
+
         // Get map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == IMAGE_GALLERY_REQUEST) {
+                //get the address of the image on the SD card
+                Uri imageUri = data.getData();
+
+                //stream to read the image data
+                InputStream inputStream;
+
+                try {
+                    inputStream = getContentResolver().openInputStream(imageUri);
+
+                    //get a bitmap from the stream
+                    trackPhoto = BitmapFactory.decodeStream(inputStream);
+
+                    //Add a preview of the photo
+                    trackImage.setVisibility(View.VISIBLE);
+                    trackImage.setImageBitmap(trackPhoto);
+
+
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+        }
     }
 
     /**
@@ -79,6 +175,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             totalAltitudeText.setText(String.format("Total altitude difference: %.2f m", totalAltitudeChange));
         }
     }
+
 
     /**
      * Computes the total distance and total altitude difference of the track
