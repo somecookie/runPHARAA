@@ -22,12 +22,6 @@
     <string name="need_time">Veuillez remplir le temps de parcours!</string>
     <string name="properties_of_the_track">Propriétés du Parcours</string>
     <string name="difficulty_is">"La difficulté est de "</string>
-    <string name="city">Ville</string>
-    <string name="forest">Forêt</string>
-    <string name="mountain">Montagne</string>
-    <string name="beach">Plage</string>
-    <string name="seaside">Bord du lac</string>
-    <string name="countryside">Campagne</string>
     <string name="choose_types">Choisir les types du parcour</string>
     <string name="types_not_set">Les types doivent être configurés</string>
     <string name="default_time">Temps de course choisi par défaut</string>
