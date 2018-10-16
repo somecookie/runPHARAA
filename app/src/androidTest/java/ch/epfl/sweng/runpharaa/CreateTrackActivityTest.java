@@ -15,6 +15,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.android.gms.common.internal.Constants;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,7 @@ public class CreateTrackActivityTest {
 
     @Test
     public void createTrackWorksWithTwoFakePoints() {
+        grantPermissions();
         locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Let map load
         sleep(2000);
