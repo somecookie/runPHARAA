@@ -61,7 +61,10 @@ public final class User {
         ArrayList<Track> allTracks = Track.allTracks(); //Todo muste be changed when the database is done
 
         //filter the tracks that start too far from the location
+
+
         for (Track tr : allTracks) {
+            System.out.println("------------------------------------- preferedradius ---------- :" + tr.distance(location));
             if (tr.distance(location) <= preferredRadius) {
                 nm.add(tr);
             }
