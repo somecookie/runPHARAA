@@ -54,70 +54,59 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         // Check if the user already liked this track and toggle the button accordingly
         toggleLike.setChecked(User.instance.alreadyLiked(trackID));
 
-        toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    if (!User.instance.alreadyLiked(trackID)) {
-                        track.addLike();
-                        User.instance.like(trackID);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-                                trackLikesUpdated.setText("Likes: " + track.getLikes());
-                            }
-                        });
-                    }
-                } else {
-                    if (User.instance.alreadyLiked(trackID)) {
-                        track.removeLike();
-                        User.instance.unlike(trackID);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-                                trackLikesUpdated.setText("Likes: " + track.getLikes());
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        toggleFavorite.setOnCheckedChangeListener(getListener(track, trackID, User.instance.alreadyLiked(trackID), true));
 
         // Check if the track already in favorites and toggle the button accordingly
         toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
 
-        toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    if (!User.instance.alreadyInFavorites(trackID)) {
-                        track.addFavourite();
-                        User.instance.addToFavorites(trackID);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
-                                trackFavouriteUpdated.setText("Favourites: " + track.getFavourites());
-                            }
-                        });
-                    }
-                } else {
-                    if (User.instance.alreadyInFavorites(trackID)) {
-                        track.removeFavourite();
-                        User.instance.removeFromFavorites(trackID);
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
-                                trackFavouriteUpdated.setText("Favourites: " + track.getFavourites());
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        toggleFavorite.setOnCheckedChangeListener(getListener(track, trackID, User.instance.alreadyInFavorites(trackID), false));
         /*
         TextView Tags = findViewById(R.id.trackTagsID);
         Tags.setText();
         */
+    }
+
+    private CompoundButton.OnCheckedChangeListener getListener(Track t, int tID, boolean cond, boolean l) {
+        final boolean condition = cond;
+        final Track track = t;
+        final int trackID = tID;
+        final boolean like = l;
+        final String s = like ? "Likes: " + track.getLikes() : "Favorites: " + track.getFavourites();
+        return new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !condition) {
+                    if(like) {
+                        track.addLike();
+                        User.instance.like(trackID);
+                    } else {
+                        track.addFavourite();
+                        User.instance.addToFavorites(trackID);
+                    }
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
+                            trackFavouriteUpdated.setText(s);
+                        }
+                    });
+                } else if (!isChecked && condition) {
+                    if(like) {
+                        track.removeLike();
+                        User.instance.unlike(trackID);
+                    } else {
+                        track.removeFavourite();
+                        User.instance.removeFromFavorites(trackID);
+                    }
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            TextView trackFavouriteUpdated = findViewById(R.id.trackFavouritesID);
+                            trackFavouriteUpdated.setText(s);
+                        }
+                    });
+
+                }
+            }
+        };
     }
 
     private Track getTrackByID(ArrayList<Track> tracks, int trackID) {
