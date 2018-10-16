@@ -69,7 +69,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap.moveCamera(CameraUpdateFactory.newLatLng(FAKE_USER.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for (Track tr : FAKE_USER.tracksNearMe()) {
+        for (Track tr : FAKE_USER.getTracksNearMe()/*tracksNearMe*/) { //TODO ERASE
             mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint())
                     .title(tr.getLocation()));

@@ -35,13 +35,19 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
 
 
+    public static User main;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        client = new Client();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        client = new Client();
+
 
         requestPermissions();
 

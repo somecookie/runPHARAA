@@ -1,19 +1,29 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
+
+import java.io.InputStream;
+
 public class CardItem {
 
     private int background;
     private String name;
     private String parentTrackID;
+    private String imageURL;
 
     public CardItem() {
 
     }
 
-    public CardItem(int background, String name, String parentTrackID) {
+    public CardItem(int background, String name, String parentTrackID, String imageURL) {
         this.background = background;
         this.name = name;
         this.parentTrackID = parentTrackID;
+        this.imageURL = imageURL;
     }
 
     public int getBackground() {
@@ -28,6 +38,8 @@ public class CardItem {
         return parentTrackID;
     }
 
+    public String getImageURL() { return this.imageURL; }
+
     public void setBackground(int background) {
         this.background = background;
     }
@@ -39,4 +51,6 @@ public class CardItem {
     public void setParentTrackID(String parentTrackID) {
         this.parentTrackID = parentTrackID;
     }
+
+    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
 }

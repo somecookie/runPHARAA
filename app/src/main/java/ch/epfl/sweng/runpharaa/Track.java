@@ -1,7 +1,10 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.net.Uri;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.storage.StorageReference;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -22,12 +25,14 @@ public class Track
     @Exclude
     private CardItem cardItem;
 
+    private Uri imageURL; //TODO ERASE
+
     //Track specifics
     private String location;
     private List<CustLatLng> path;
     private CustLatLng startingPoint;
     private double trackLength;        //meters
-    private double averageTimeLength; //minutes
+    private double averageTimeLength;  //minutes
     //private final String difficulty;  //TODO: Build a range for each difficulty based on height difference: easy = < 1m? Or create this based on the difficulty users report for same track?
     private double heightDiff;
     @Exclude
@@ -54,7 +59,7 @@ public class Track
         }else{
             this.path = path;
             this.startingPoint = path.get(0);
-            this.cardItem = new CardItem(image, location, trackUid);
+            this.cardItem = new CardItem(image, location, trackUid, /*imageStoragePath*/"https://firebasestorage.googleapis.com/v0/b/runpharaa.appspot.com/o/TrackImages%2Fcentre_sportif.jpg?alt=media&token=488e4962-1201-4ce7-8389-4292a52847e4");
         }
 
         this.trackUid = trackUid;
@@ -90,7 +95,7 @@ public class Track
     }
 
     public Track(String name){
-        this("0","0",0, name,"", Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),0,0,0, null, 0,0,null,null);
+        this("0","0",0, "",name, Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),0,0,0, null, 0,0,null,null);
     }
 
     public Track(int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
@@ -98,6 +103,11 @@ public class Track
     }
 
     public Track() {} // Default constructor required for calls to DataSnapshot.getValue(Track.class): Firebase Database
+
+    public void setImageURL(Uri imageURL) { this.imageURL = imageURL; } //TODO ERASE
+
+    public Uri getImageURL() { return this.imageURL; } //TODO ERASE
+
 
     //TODO: either delete this or do it again when the database is on
     public static ArrayList<Track> allTracks(){
@@ -123,6 +133,7 @@ public class Track
         all.add(new Track("4", R.drawable.ouchy, "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
         all.add(new Track("5", R.drawable.saint_francois, "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
 
+        //all.add(new Track("Test", );
         return all;
 
     }

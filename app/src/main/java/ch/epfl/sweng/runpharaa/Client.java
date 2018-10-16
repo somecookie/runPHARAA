@@ -24,8 +24,7 @@ public class Client {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDataBaseRef;
     private FirebaseStorage mFirebaseStorage;
-    private StorageReference mStorageRef;
-
+    private static StorageReference mStorageRef;
 
     public ArrayList<Track> tracks;
 

@@ -19,7 +19,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
         String trackID = intent.getStringExtra("TrackID");
-        Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID);
+        Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID); //TODO ERASE
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
         trackBackground.setImageResource(track.getImage());
