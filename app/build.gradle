@@ -121,7 +121,7 @@ tasks.whenTaskAdded { task ->
                         def device = it.split()[0]
                         println "Granting test permissions on device ${device}\n"
                         "${adb} shell appops set ${variant.applicationId} 58 allow".execute()
-                    }
+                    } 
                 }
             }
         }
