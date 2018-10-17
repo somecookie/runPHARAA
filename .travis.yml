@@ -25,8 +25,8 @@ before_script:
   - ./cc-test-reporter before-build
    
 script:
-  - ./gradlew build connectedCheck jacocoTestReport
   - ./gradlew installMyAppDebug connectedMyAppDebugAndroidTest
+  - ./gradlew build connectedCheck jacocoTestReport
 
 after_script:
   # Report test coverage to Code Climate
