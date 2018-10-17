@@ -111,21 +111,4 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     ])
 }
 
-def adb = android.getAdbExe().toString()
-tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('install')) {
-        task.doLast {
-            android.applicationVariants.all { variant ->
-                "${adb} devices".execute().text.eachLine {
-                    if (it.endsWith("device")) {
-                        def device = it.split()[0]
-                        println "Granting test permissions on device ${device}\n"
-                        "${adb} shell appops set ${variant.applicationId} 58 allow".execute()
-                    } 
-                }
-            }
-        }
-    }
-}
-
 apply plugin: 'com.google.gms.google-services'
