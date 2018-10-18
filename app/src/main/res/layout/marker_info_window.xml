@@ -34,9 +34,9 @@
         android:id="@+id/marker_window_text_like"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_favorite"
+        android:drawableLeft="@drawable/ic_like"
         android:drawablePadding="@dimen/classic_margin"
-        android:drawableStart="@drawable/ic_favorite"
+        android:drawableStart="@drawable/ic_like"
         android:textSize="@dimen/normal_text" />
 
 

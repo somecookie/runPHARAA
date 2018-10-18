@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
@@ -34,7 +35,7 @@ public class GpsServiceTest {
 
     @BeforeClass
     public static void initUser(){
-        User.instance = new User("FakeUser", 2000, null, new ArrayList<Track>(), new ArrayList<Track>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
     }
 
     @Rule
@@ -54,7 +55,7 @@ public class GpsServiceTest {
 
     @Test
     public void correctlyLaunchesServiceOnMapView() {
-        User.instance = new User("FakeUser", 2000, null, new ArrayList<Track>(), new ArrayList<Track>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
         System.out.println(User.instance == null);
         turnsGpsServiceOnAndOff(R.id.mapIcon);
     }
