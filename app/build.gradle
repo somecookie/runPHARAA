@@ -67,6 +67,9 @@ dependencies {
     //dependencies for round images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    //dependency to mock google maps
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
@@ -83,6 +86,23 @@ configurations.all {
         }
 
 
+    }
+}
+
+def adb = android.getAdbExe().toString()
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('install')) {
+        task.doLast {
+            android.applicationVariants.all { variant ->
+                "${adb} devices".execute().text.eachLine {
+                    if (it.endsWith("device")) {
+                        def device = it.split()[0]
+                        println "Granting test permissions on device ${device}\n"
+                        "${adb} shell appops set ${variant.applicationId} 58 allow".execute()
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -107,5 +127,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
+
 
 apply plugin: 'com.google.gms.google-services'

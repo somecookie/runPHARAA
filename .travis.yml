@@ -13,19 +13,25 @@ android:
 notifications:
   email: false
 
+# For some reason Travis can't accept the license for 27 automatically...
+before_install:
+- yes | sdkmanager "platforms;android-27"
+
 before_script:
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+  - emulator -avd test -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
   - adb shell input keyevent 82
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-   
+
 script:
-  - ./gradlew build connectedCheck jacocoTestReport
+  - ./gradlew build installDebug
+  - adb shell appops set ch.epfl.sweng.runpharaa 58 allow
+  - ./gradlew connectedCheck jacocoTestReport
 
 after_script:
   # Report test coverage to Code Climate
