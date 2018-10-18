@@ -13,6 +13,7 @@ android:
 notifications:
   email: false
 
+# For some reason Travis can't accept the license for 27 automatically...
 before_install:
 - yes | sdkmanager "platforms;android-27"
 
