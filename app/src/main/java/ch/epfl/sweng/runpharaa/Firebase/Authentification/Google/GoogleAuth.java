@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification;
+package ch.epfl.sweng.runpharaa.Firebase.Authentification.Google;
 
 public abstract class GoogleAuth {
 
