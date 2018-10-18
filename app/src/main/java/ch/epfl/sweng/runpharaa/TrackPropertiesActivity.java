@@ -35,13 +35,14 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         trackTitle.setText(track.getName());
 
         TextView trackCreator = findViewById(R.id.trackCreatorID);
-        trackCreator.setText(/*track.getCreator_id()*/"Creator: Test User");
+        //TODO: make method like getNameFromID(uid)
+        trackCreator.setText("By "+track.getUid());
 
         TextView trackDuration = findViewById(R.id.trackDurationID);
         trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
 
         TextView trackLength = findViewById(R.id.trackLengthID);
-        trackLength.setText("Length: " + Double.toString(tp.getLength()) + "m");
+        trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");
 
         /*
         TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
@@ -49,10 +50,10 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         */
 
         TextView trackLikes = findViewById(R.id.trackLikesID);
-        trackLikes.setText("Likes: " + tp.getLikes());
+        trackLikes.setText(""+tp.getLikes());
 
         TextView trackFavourites = findViewById(R.id.trackFavouritesID);
-        trackFavourites.setText("Favourites: " + tp.getFavorites());
+        trackFavourites.setText(""+tp.getFavorites());
 
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
@@ -102,7 +103,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-                trackLikesUpdated.setText("Likes: " + track.getProperties().getLikes());
+                trackLikesUpdated.setText(""+track.getProperties().getLikes());
             }
         });
 
@@ -120,7 +121,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
-                trackFavoritesUpdated.setText("Favorites: " + track.getProperties().getFavorites());
+                trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
             }
         });
 

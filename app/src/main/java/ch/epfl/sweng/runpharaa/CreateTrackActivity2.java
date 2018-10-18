@@ -219,9 +219,13 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                                 if (isChecked) types.add(TrackType.BEACH);
                                 else types.remove(TrackType.BEACH);
                                 break;
-                            case "Country":
+                            case "Countryside":
                                 if (isChecked) types.add(TrackType.COUNTRYSIDE);
                                 else types.remove(TrackType.COUNTRYSIDE);
+                                break;
+                            case "Seaside":
+                                if (isChecked) types.add(TrackType.SEASIDE);
+                                else types.remove(TrackType.SEASIDE);
                                 break;
                         }
                     }
