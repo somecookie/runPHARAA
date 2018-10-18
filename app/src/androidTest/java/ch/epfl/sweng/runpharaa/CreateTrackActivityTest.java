@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -23,10 +24,12 @@ import org.junit.runner.RunWith;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -67,9 +70,15 @@ public class CreateTrackActivityTest {
         setMock(46.522735, 6.579772, 1);
         sleep(500);
         onView(withId(R.id.start_create_button)).perform(click());
-        //onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
-        //onView(withId(R.id.create_text_name)).perform(typeText("Random name")).perform(closeSoftKeyboard());
-        //onView(withId(R.id.create_track_button)).perform(click());
+        onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
+        onView(withId(R.id.create_text_name)).perform(typeText("Random name")).perform(closeSoftKeyboard());
+        onView(withId(R.id.set_properties)).perform(click());
+        onView(withId(R.id.time)).perform(typeText("10.00")).perform(closeSoftKeyboard());
+        sleep(1000);
+        onView(withId(R.id.types)).perform(click());
+        onView(withId(R.id.cardListId)).perform(click());
+        pressBack();
+        onView(withId(R.id.create_track_button)).perform(click());
 
         } catch (SecurityException e) {
             e.printStackTrace();
