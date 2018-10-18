@@ -24,13 +24,14 @@ before_script:
   - android-wait-for-emulator
   # Set up Code Climate test reporter
   - adb shell input keyevent 82
-  - adb shell appops set ch.epfl.sweng.runpharaa 58 allow
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
 script:
-  - ./gradlew build installDebug connectedCheck jacocoTestReport
+  - ./gradlew build installDebug
+  - adb shell appops set ch.epfl.sweng.runpharaa 58 allow
+  - ./gradlew connectedCheck jacocoTestReport
 
 after_script:
   # Report test coverage to Code Climate
