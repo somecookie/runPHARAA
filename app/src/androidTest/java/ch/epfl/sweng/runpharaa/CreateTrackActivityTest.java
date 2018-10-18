@@ -40,14 +40,14 @@ public class CreateTrackActivityTest {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION);
 
-    @Before
+    /*@Before
     public void grantPermissions() {
         InstrumentationRegistry
                 .getInstrumentation()
                 .getUiAutomation()
                 .executeShellCommand(String.format("appops set %s android:mock_location allow", "ch.epfl.sweng.runpharaa"));
                 //.executeShellCommand(String.format("appops set %s android:mock_location allow", mActivityRule.getActivity().getPackageName()));
-    }
+    }*/
 
     @Test
     public void createTrackWorksWithTwoFakePoints() {
