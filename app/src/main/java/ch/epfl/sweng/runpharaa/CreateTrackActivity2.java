@@ -1,5 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +34,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Properties;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -46,50 +50,70 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;
     private EditText nameText;
-    private Button addPhotoFromGallery;
-    private Button createButton;
-    private Button propButton;
     private ImageView trackImage;
+
+    private EditText mTime;
+    private SeekBar mSeekBar;
+    private TextView mDiffText;
 
     private double minAltitude = Double.POSITIVE_INFINITY;
     private double maxAltitude = Double.NEGATIVE_INFINITY;
     private Location[] locations;
     private LatLng[] points;
     private Bitmap trackPhoto;
+    private int difficulty = 3;
+    private double time;
 
     private boolean propertiesSet = false;
+    private boolean typesSet = false;
     private TrackProperties trackProperties;
 
     private double totalDistance, totalAltitudeChange;
+
+    private String[] listTypes;
+    private boolean[] checkedTypes;
+    private Set<TrackType> types = new HashSet<>();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_track_2);
+
+        listTypes = getResources().getStringArray(R.array.track_types);
+        checkedTypes = new boolean[listTypes.length];
+
         totalDistanceText = findViewById(R.id.create_text_total_distance);
         totalAltitudeText = findViewById(R.id.create_text_total_altitude);
         nameText = findViewById(R.id.create_text_name);
-        createButton = findViewById(R.id.create_track_button);
+        Button createButton = findViewById(R.id.create_track_button);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // Create track
-                if(trackPhoto == null){
+                if (trackPhoto == null) {
                     trackPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
-                }else if(!propertiesSet){
-                    Toast.makeText(getBaseContext(),  getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
-                }else {
-                    // TODO: add track to created tracks + get user id + carditem?
+                }
+
+                if (!propertiesSet) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
+                } else if (!typesSet) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_LONG).show();
+                } else if (nameText.getText().toString().isEmpty()) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_LONG).show();
+                } else {
+                    // TODO: add track to created tracks
+                    trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
                     Track track = new Track(User.instance.getID(), trackPhoto, nameText.getText().toString(), points, trackProperties);
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.create_message), Toast.LENGTH_LONG).show();
+                    Track.allTracks.add(track);
                     finish();
                 }
             }
         });
 
         //Open Gallery view when we click on the button
-        addPhotoFromGallery = findViewById(R.id.add_photo_from_gallery);
+        Button addPhotoFromGallery = findViewById(R.id.add_photo_from_gallery);
         addPhotoFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,13 +133,127 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             }
         });
 
-        propButton = findViewById(R.id.set_properties);
+        Button propButton = findViewById(R.id.set_properties);
         propButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO handle the set-up of the properties
-                trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, 20, 4, TrackType.FOREST);
-                propertiesSet = true;
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
+                final View mView = getLayoutInflater().inflate(R.layout.dialog_properties, null);
+
+                mTime = mView.findViewById(R.id.time);
+
+                mDiffText = mView.findViewById(R.id.diff_text);
+                mDiffText.setText(getResources().getString(R.string.difficulty_is) + difficulty);
+
+                mSeekBar = mView.findViewById(R.id.difficulty_bar);
+                mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        difficulty = progress;
+                        mDiffText.setText(getResources().getString(R.string.difficulty_is) + difficulty);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
+
+                mBuilder.setCancelable(false);
+
+                mBuilder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!mTime.getText().toString().isEmpty()) {
+                            time = Double.parseDouble(mTime.getText().toString());
+                        } else {
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.default_time), Toast.LENGTH_LONG).show();
+                            time = totalDistance / 133;
+                        }
+                        propertiesSet = true;
+                    }
+                });
+
+                mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        difficulty = 3;
+                        dialog.dismiss();
+                    }
+                });
+
+
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
+            }
+        });
+
+        Button typeButton = findViewById(R.id.types);
+        typeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
+                mBuilder.setTitle(getResources().getString(R.string.choose_types));
+                mBuilder.setMultiChoiceItems(listTypes, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        switch (listTypes[which]) {
+                            case "City":
+                                if (isChecked) types.add(TrackType.CITY);
+                                else types.remove(TrackType.CITY);
+                                break;
+                            case "Forest":
+                                if (isChecked) types.add(TrackType.FOREST);
+                                else types.remove(TrackType.FOREST);
+                                break;
+                            case "Mountain":
+                                if (isChecked) types.add(TrackType.SEASIDE);
+                                else types.remove(TrackType.SEASIDE);
+                                break;
+                            case "Beach":
+                                if (isChecked) types.add(TrackType.BEACH);
+                                else types.remove(TrackType.BEACH);
+                                break;
+                            case "Countryside":
+                                if (isChecked) types.add(TrackType.COUNTRYSIDE);
+                                else types.remove(TrackType.COUNTRYSIDE);
+                                break;
+                            case "Seaside":
+                                if (isChecked) types.add(TrackType.SEASIDE);
+                                else types.remove(TrackType.SEASIDE);
+                                break;
+                        }
+                    }
+                });
+
+                mBuilder.setCancelable(false);
+
+                mBuilder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!types.isEmpty()) {
+                            typesSet = true;
+                        }
+                    }
+                });
+
+                mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        types.clear();
+                        for (int i = 0; i < checkedTypes.length; i++) {
+                            checkedTypes[i] = false;
+                        }
+                        dialog.dismiss();
+                    }
+                });
+
+                mBuilder.create().show();
             }
         });
 
@@ -128,32 +266,33 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         mapFragment.getMapAsync(this);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == IMAGE_GALLERY_REQUEST) {
-                //get the address of the image on the SD card
-                Uri imageUri = data.getData();
+            //get the address of the image on the SD card
+            Uri imageUri = data.getData();
 
-                //stream to read the image data
-                InputStream inputStream;
+            //stream to read the image data
+            InputStream inputStream;
 
-                try {
-                    inputStream = getContentResolver().openInputStream(imageUri);
+            try {
+                inputStream = getContentResolver().openInputStream(imageUri);
 
-                    //get a bitmap from the stream
-                    trackPhoto = BitmapFactory.decodeStream(inputStream);
+                //get a bitmap from the stream
+                trackPhoto = BitmapFactory.decodeStream(inputStream);
 
-                    //Add a preview of the photo
-                    trackImage.setVisibility(View.VISIBLE);
-                    trackImage.setImageBitmap(trackPhoto);
+                //Add a preview of the photo
+                trackImage.setVisibility(View.VISIBLE);
+                trackImage.setImageBitmap(trackPhoto);
 
 
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+            } catch (FileNotFoundException e) {
+                Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         }
     }
 

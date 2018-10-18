@@ -13,9 +13,27 @@
     <string name="no_follow">Essaie de suivre quelqu\'un!</string>
     <string name="no_favorite">Ajoute un parcours en favoris!</string>
     <string name="add_photo">Photo</string>
-    <string name="set_properties">Propriétés</string>
+    <string name="set_properties">Prop</string>
     <string name="create_track">Créer!</string>
     <string name="create_message">Nouveau parcours créé avec succès</string>
     <string name="properties_not_set">Les propriétés doivent être configurées</string>
+    <string name="need_name">Veuillez remplir le nom!</string>
+    <string name="time_needed">Temps pour terminer le parcours</string>
+    <string name="need_time">Veuillez remplir le temps de parcours!</string>
+    <string name="properties_of_the_track">Propriétés du Parcours</string>
+    <string name="difficulty_is">"La difficulté est de "</string>
+    <string name="choose_types">Choisir les types du parcour</string>
+    <string name="types_not_set">Les types doivent être configurés</string>
+    <string name="default_time">Temps de course choisi par défaut</string>
+    <string name="dismiss">Annuler</string>
+    <string name="OK">OK</string>
+    <string-array name="track_types">
+        <item>Ville</item>
+        <item>Forêt</item>
+        <item>Montagne</item>
+        <item>Bord du lac</item>
+        <item>Plage</item>
+        <item>Campagne</item>
+    </string-array>
 
 </resources>

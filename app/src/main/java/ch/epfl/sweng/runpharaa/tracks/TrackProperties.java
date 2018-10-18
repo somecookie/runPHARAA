@@ -1,5 +1,7 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
+import java.util.Set;
+
 public class TrackProperties {
 
     private double length;
@@ -8,10 +10,10 @@ public class TrackProperties {
     private AvgDifficulty avgDiff;
     private int likes = 0;
     private int favorites = 0;
-    private TrackType trackType;
+    private Set<TrackType> trackType;
 
 
-    public TrackProperties(double length, double heightDiff, double time, int difficulty, TrackType trackType){
+    public TrackProperties(double length, double heightDiff, double time, int difficulty, Set<TrackType> trackType){
 
         if(length < 0) throw new IllegalArgumentException("The length of the track must be positive");
 
@@ -45,7 +47,7 @@ public class TrackProperties {
     public void removeFavorite(){favorites--;}
     public int getFavorites(){return favorites;}
 
-    public TrackType getType(){return trackType;}
+    public Set<TrackType> getType(){return trackType;}
 
     public double getLength() {
         return length;

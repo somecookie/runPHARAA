@@ -3,6 +3,7 @@ package ch.epfl.sweng.runpharaa;
 import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -19,8 +20,7 @@ public final class User {
     private final String name;
     //TODO: put default picture
     private final Uri picture;
-    private final ArrayList<Track> list_of_created_tracks;
-    private final ArrayList<Track> list_of_pref;
+    private final Set<Integer> createdTracks;
     private LatLng location;
     private final boolean admin;
 
@@ -31,22 +31,21 @@ public final class User {
 
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId) {
+    public User(String name, int preferredRadius, Uri picture, Set<Integer> createdTracks, Set<Integer> favorites, LatLng location, Boolean admin, String uId) {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
-        this.list_of_created_tracks = list_of_created_tracks;
-        this.list_of_pref = list_of_pref;
+        this.createdTracks = createdTracks;
         this.location = location;
         this.admin = admin;
         this.uId = uId;
         this.idTracksLiked = new HashSet<>();
-        this.favorites = new HashSet<>();
+        this.favorites = favorites;
     }
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, null, null, location, false, "");
+        this(name, preferredRadius, null, new HashSet<Integer>(), new HashSet<Integer>(), location, false, name);
     }
 
     public int getPreferredRadius() {
@@ -67,7 +66,6 @@ public final class User {
 
 
         for (Track tr : allTracks) {
-            System.out.println("------------------------------------- preferedradius ---------- :" + tr.distance(location));
             if (tr.distance(location) <= preferredRadius) {
                 nm.add(tr);
             }
@@ -79,9 +77,7 @@ public final class User {
             public int compare(Track o1, Track o2) {
                 double d1 = o1.distance(location);
                 double d2 = o2.distance(location);
-                if (d1 < d2) return -1;
-                else if (d1 == d2) return 0;
-                else return 1;
+                return Double.compare(d1, d2);
             }
         });
 
@@ -126,6 +122,7 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(int trackId) {
+        Log.i("hahaha", ""+favorites.contains(trackId));
         return favorites.contains(trackId);
     }
 
@@ -136,7 +133,12 @@ public final class User {
     public void addToFavorites(int trackId) {
         if (!alreadyInFavorites(trackId)) {
             favorites.add(trackId);
+            Log.i("hahaha", "Adding track: " + trackId);
         }
+    }
+
+    public void addToCreatedTracks(int trackId) {
+        createdTracks.add(trackId);
     }
 
     /**
@@ -179,16 +181,16 @@ public final class User {
         return picture;
     }
 
-    public ArrayList<Track> getCreatedTracks(){
-        return list_of_created_tracks;
+    public Set<Integer> getCreatedTracks(){
+        return createdTracks;
     }
 
-    public ArrayList<Track> getFavoriteTracks(){
-        return list_of_pref;
+    public Set<Integer> getFavoriteTracks(){
+        return favorites;
     }
 
-    public static void set(String name, int preferredRadius, Uri picture, ArrayList<Track> list_of_created_tracks, ArrayList<Track> list_of_pref, LatLng location, Boolean admin, String uId){
-        instance = new User(name, preferredRadius, picture, list_of_created_tracks, list_of_pref, location, admin, uId);
+    public static void set(String name, int preferredRadius, Uri picture, Set<Integer> createdTracks, Set<Integer> favorites, LatLng location, Boolean admin, String uId){
+        instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, admin, uId);
     }
 
     public String getID() {

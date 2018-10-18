@@ -27,6 +27,27 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     private boolean creating;
     private GoogleMap googleMap;
     private Button createButton;
+    /**
+     * The listener used for the main button
+     */
+    private View.OnClickListener buttonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!creating) {
+                creating = true;
+                createButton.setText("STOP");
+                handleNewLocation();
+            } else {
+                if (points.size() < 2) {
+                    Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
+                } else {
+                    creating = false;
+                    createButton.setText("PROCESSING");
+                    launchSecondPart();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,27 +101,4 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         startActivity(i);
         finish();
     }
-
-    /**
-     * The listener used for the main button
-     */
-    private View.OnClickListener buttonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!creating) {
-                creating = true;
-                createButton.setText("STOP");
-                handleNewLocation();
-            } else {
-                if (points.size() < 2) {
-                    Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
-                } else {
-                    creating = false;
-                    stopGeoLocalisation();
-                    createButton.setText("PROCESSING");
-                    launchSecondPart();
-                }
-            }
-        }
-    };
 }
