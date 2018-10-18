@@ -13,6 +13,9 @@ android:
 notifications:
   email: false
 
+before_install:
+- yes | sdkmanager "platforms;android-27"
+
 before_script:
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
@@ -23,10 +26,9 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-   
+
 script:
-  - ./gradlew installMyAppDebug connectedMyAppDebugAndroidTest
-  - ./gradlew build connectedCheck jacocoTestReport
+  - ./gradlew build installDebug connectedCheck jacocoTestReport
 
 after_script:
   # Report test coverage to Code Climate
