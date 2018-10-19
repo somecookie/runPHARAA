@@ -12,11 +12,11 @@ android:
     - android-28
     # The SDK version used by the system image
     - android-22
-    - android-24 # sdk version for play services
+    #- android-24 # sdk version for play services
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository # for design library
-    - addon-google_apis-google-24 # google play services
+    - addon-google_apis-google-19 # google play services
     # - sys-img-armeabi-v7a-google_apis-22
     - sys-img-armeabi-v7a-google_apis-22
 
