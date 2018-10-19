@@ -28,6 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 public class DatabaseManagement {
 
     public final static String TRACKS_PATH = "tracks";
@@ -49,7 +51,7 @@ public class DatabaseManagement {
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
         //Upload image
-        Bitmap bitmap = track.getImageBitMap();
+        Bitmap bitmap = track.getImage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Track
+public class OldTrack
 {
     //Track identifiers
     private String trackUid;
@@ -31,8 +31,6 @@ public class Track
     private double averageTimeLength;  //minutes
     //private final String difficulty;  //TODO: Build a range for each difficulty based on height difference: easy = < 1m? Or create this based on the difficulty users report for same track?
     private double heightDiff;
-    @Exclude
-    private Set<Tag> tags;
 
     //Reviews
     @Exclude
@@ -45,8 +43,8 @@ public class Track
     private ArrayList<Review> reviews; //TODO: Implement this once we have a notion of a User.
 
     //TODO: Make more constructors
-    public Track(String trackUid, String creatorUid, int image, String imageStorageUri, String location, List<CustLatLng> path, double trackLength, double averageTimeLength,
-                 double heightDiff, Set<Tag> tags, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews, Bitmap imageBitMap)
+    public OldTrack(String trackUid, String creatorUid, int image, String imageStorageUri, String location, List<CustLatLng> path, double trackLength, double averageTimeLength,
+                 double heightDiff, int likes, int favourites, Reactions reactions, ArrayList<Review> reviews, Bitmap imageBitMap)
     {
         if(path == null){
             throw new NullPointerException("The path must me defined.");
@@ -64,7 +62,6 @@ public class Track
         this.trackLength = trackLength;
         this.averageTimeLength = averageTimeLength;
         this.heightDiff = heightDiff;
-        this.tags = tags;
         this.likes = likes;
         this.favourites = favourites;
         this.reactions = reactions;
@@ -73,34 +70,36 @@ public class Track
     }
 
     //Testing purposes
-    public Track(List<CustLatLng> path){
+    /*
+    public OldTrack(List<CustLatLng> path){
         this("0","0",0,"","Test", path,0,0,0,null,0,0,null,null, null);
     }
 
-    public Track(String name, List<CustLatLng> path){
+    public OldTrack(String name, List<CustLatLng> path){
         this("0","0",0,"", name, path,0,0,0, null, 0,0,null,null,null);
     }
 
-    public Track(String trackUid, String name, int image, List<CustLatLng> path){
+    public OldTrack(String trackUid, String name, int image, List<CustLatLng> path){
         this(trackUid,"0", image,"", name, path,0,0,0,null,0,0,null,null,null);
     }
 
-    public Track(String trackUid, int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
+    public OldTrack(String trackUid, int image, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
         this(trackUid,"0", image,"", name, path, track_length, average_time,0,null, likes, favourites, null, null,null);
     }
 
-    public Track(String name){
+    public OldTrack(String name){
         this("0","0",0, name,"", Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),0,0,0, null, 0,0,null,null,null);
     }
 
-    public Track(Bitmap imageBitMap, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
+    public OldTrack(Bitmap imageBitMap, String name, List<CustLatLng> path, double track_length, int average_time, int likes, int favourites){
         this("0","0", 0,"", name, path, track_length, average_time,0,null, likes, favourites, null, null, imageBitMap);
     }
 
-    public Track() {} // Default constructor required for calls to DataSnapshot.getValue(Track.class): Firebase Database
+
+    public OldTrack() {} // Default constructor required for calls to DataSnapshot.getValue(Track.class): Firebase Database
 
     //TODO: either delete this or do it again when the database is on
-    public static ArrayList<Track> allTracks(){
+    public static ArrayList<OldTrack> allTracks(){
         CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
         CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
@@ -115,13 +114,13 @@ public class Track
         CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
         CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
 
-        ArrayList<Track> all = new ArrayList<>();
-        all.add(new Track("0", R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
-        all.add(new Track("1", R.drawable.innovation_park, "Innovation Parc -> BC", Arrays.asList(coord4, coord3), 300, 2, 1, 1));
-        all.add(new Track("2", R.drawable.rolex, "Rolex -> Swisstech",Arrays.asList(coord5, coord6), 850, 8, 4, 2));
-        all.add(new Track("3", R.drawable.rolex, "Sat -> INM", Arrays.asList(coord7, coord0), 450, 5, 6, 7));
-        all.add(new Track("4", R.drawable.ouchy, "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
-        all.add(new Track("5", R.drawable.saint_francois, "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
+        ArrayList<OldTrack> all = new ArrayList<>();
+        all.add(new OldTrack("0", R.drawable.centre_sportif, "Banane -> Centre Sportif", Arrays.asList(coord1, coord2), 350, 10, 3, 4));
+        all.add(new OldTrack("1", R.drawable.innovation_park, "Innovation Parc -> BC", Arrays.asList(coord4, coord3), 300, 2, 1, 1));
+        all.add(new OldTrack("2", R.drawable.rolex, "Rolex -> Swisstech",Arrays.asList(coord5, coord6), 850, 8, 4, 2));
+        all.add(new OldTrack("3", R.drawable.rolex, "Sat -> INM", Arrays.asList(coord7, coord0), 450, 5, 6, 7));
+        all.add(new OldTrack("4", R.drawable.ouchy, "Ouchy -> Gare", Arrays.asList(coord8, coord9), 1300, 20, 10, 12));
+        all.add(new OldTrack("5", R.drawable.saint_francois, "SF -> Cath -> Flon", Arrays.asList(coord10, coord11, coord12), 0, 0, 0,0));
 
         //all.add(new Track("Test", );
         return all;
@@ -152,9 +151,6 @@ public class Track
     public double getAverageTimeLength() { return averageTimeLength; }
 
     public double getHeightDiff() { return heightDiff; }
-
-    @Exclude
-    public Set<Tag> getTags() { return tags; }
 
     public int getLikes() { return likes; }
 

@@ -44,7 +44,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
         TextView trackCreator = findViewById(R.id.trackCreatorID);
         //TODO: make method like getNameFromID(uid)
-        trackCreator.setText("By "+track.getUid());
+        trackCreator.setText("By "+track.getTrackUid());
 
         TextView trackDuration = findViewById(R.id.trackDurationID);
         trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
@@ -99,7 +99,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         */
     }
 
-    private void updateLikes(Track track1, int trackID) {
+    private void updateLikes(Track track1, String trackID) {
         final Track track = track1;
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
@@ -117,7 +117,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
     }
 
-    private void updateNbFavorites(Track track1, int trackID) {
+    private void updateNbFavorites(Track track1, String trackID) {
         final Track track = track1;
         if (User.instance.alreadyInFavorites(trackID)) {
             track.getProperties().removeFavorite();

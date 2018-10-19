@@ -82,6 +82,10 @@ public class CustLatLng {
         return R*c;
     }
 
+    public LatLng ToLatLng(){
+        return new LatLng(latitude, longitude);
+    }
+
     //TODO java doc
     public static CustLatLng LatLngToCustLatLng(LatLng p){
         return new CustLatLng(p.latitude, p.longitude);

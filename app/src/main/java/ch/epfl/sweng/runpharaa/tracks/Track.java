@@ -105,9 +105,29 @@ public class Track {
         return trackUid;
     }
 
+    public void setTrackUid(String trackUid) {
+        this.trackUid = trackUid;
+    }
+
+    public String getCreatorUid() {
+        return creatorUid;
+    }
+
+    public List<CustLatLng> getPath() {
+        return path;
+    }
+
     public Bitmap getImage() {
         return image;
     }
 
     //public int getTID() { return TID; }
+
+    public String getImageStorageUri() {
+        return imageStorageUri;
+    }
+
+    public void setImageStorageUri(String imageStorageUri) {
+        this.imageStorageUri = imageStorageUri;
+    }
 }
