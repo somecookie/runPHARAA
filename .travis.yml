@@ -18,6 +18,9 @@ android:
     - addon-google_apis-google-19 # google play services
     - sys-img-armeabi-v7a-google_apis-22
 
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=8
 
 notifications:
   email: false
