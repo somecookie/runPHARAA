@@ -11,12 +11,12 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-21
+    - android-22
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository # for design library
-    - addon-google_apis-google-21 # google play services
-    - sys-img-armeabi-v7a-google_apis-google-21
+    - addon-google_apis-google-19 # google play services
+    - sys-img-armeabi-v7a-google_apis-22
 
 
 notifications:
@@ -29,7 +29,7 @@ before_install:
 
 before_script:
   # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
+  - echo no | android create avd --force -n test -t android-22 --abi google_apis/armeabi-v7a
   - emulator -avd test -no-audio -no-window -no-skin &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
