@@ -11,17 +11,17 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-22
+    # - android-22
     - android-19
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository # for design library
     - addon-google_apis-google-19 # google play services
-    - sys-img-armeabi-v7a-google_apis-22
+    - sys-img-armeabi-v7a-google_apis-19
 
-env:
-  global:
-    - ADB_INSTALL_TIMEOUT=20
+#env:
+#  global:
+#    - ADB_INSTALL_TIMEOUT=20
 
 notifications:
   email: false
@@ -33,7 +33,7 @@ before_install:
 
 before_script:
   # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t android-22 --abi google_apis/armeabi-v7a
+  - echo no | android create avd --force -n test -t android-19 --abi google_apis/armeabi-v7a
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
@@ -43,7 +43,6 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - ./gradlew build installDebug
   - ./gradlew connectedCheck jacocoTestReport
 
 after_script:
