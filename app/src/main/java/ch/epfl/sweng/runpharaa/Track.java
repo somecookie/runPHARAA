@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +55,6 @@ public class Track
         }else{
             this.path = path;
             this.startingPoint = path.get(0);
-            this.cardItem = new CardItem(image, location, trackUid, /*imageStoragePath*/"https://firebasestorage.googleapis.com/v0/b/runpharaa.appspot.com/o/TrackImages%2Fcentre_sportif.jpg?alt=media&token=488e4962-1201-4ce7-8389-4292a52847e4");
         }
 
         this.trackUid = trackUid;
@@ -127,26 +125,17 @@ public class Track
 
         //all.add(new Track("Test", );
         return all;
-
     }
 
     @Exclude
-    public Bitmap getImageBitMap() {
-        return imageBitMap;
-    }
+    public Bitmap getImageBitMap() { return imageBitMap; }
 
     @Exclude
-    public CardItem getCardItem() {
-        return this.cardItem;
-    }
+    public CardItem getCardItem() { return this.cardItem; }
 
-    public LatLng getStartingPoint() {
-        return new LatLng(startingPoint.getLatitude(), startingPoint.getLongitude());
-    }
+    public LatLng getStartingPoint() { return new LatLng(startingPoint.getLatitude(), startingPoint.getLongitude()); }
 
-    public String getLocation() {
-        return location;
-    }
+    public String getLocation() { return location; }
 
     public String getTrackUid() { return trackUid; }
 
@@ -156,9 +145,7 @@ public class Track
 
     public String getCreatorUid() { return creatorUid; }
 
-    public String getImageStorageUri() {
-        return imageStorageUri;
-    }
+    public String getImageStorageUri() { return imageStorageUri; }
 
     public double getTrackLength() { return trackLength; }
 
@@ -180,6 +167,9 @@ public class Track
 
     @Exclude
     public ArrayList<Review> getReviews() { return reviews; }
+
+
+    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
 
     /**
      * Compute the distance in meters between a track (its starting point) and a given coordinate.

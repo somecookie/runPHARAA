@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,21 +14,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
@@ -97,29 +93,38 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      */
     public void loadData() {
         // Create a fresh recyclerView and listCardItem
-        RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-        List<CardItem> listCardItem = new ArrayList<>();
-        OnItemClickListener listener = new OnItemClickListener() {
+
+        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
-            public void onItemClick(CardItem item) {
-                Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                intent.putExtra("TrackID", item.getParentTrackID());
-                startActivity(intent);
+            public void onSuccess(DataSnapshot data) {
+                RecyclerView recyclerView = v.findViewById(R.id.cardListId);
+                List<CardItem> listCardItem = new ArrayList<>();
+                OnItemClickListener listener = new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(CardItem item) {
+                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                        intent.putExtra("TrackID", item.getParentTrackID());
+                        startActivity(intent);
+                    }
+                };
+                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                for (Track t : tracks) {
+                    t.setCardItem(new CardItem(t.getLocation(), t.getTrackUid(), t.getImageStorageUri()));
+                    listCardItem.add(t.getCardItem());
+                }
+                Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
-        };
 
-        // Add cards to the cardList
-        for (Track t : FAKE_USER.tracksNearMe()) {
-            listCardItem.add(t.getCardItem());
-        }
-
-        Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+                //DO SOME THING WHEN GET DATA FAILED HERE
+            }
+        });
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
-
         Context context;
         List<CardItem> listCardItem;
         OnItemClickListener listener;

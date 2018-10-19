@@ -1,11 +1,18 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static ch.epfl.sweng.runpharaa.User.FAKE_USER;
@@ -19,10 +26,12 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
         String trackID = intent.getStringExtra("TrackID");
-        Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID); //TODO ERASE
+        Track track = getTrackByID(FAKE_USER.tracksNearMe(), trackID);
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-        trackBackground.setImageResource(track.getImage());
+        //trackBackground.setImageResource(track.getImage());
+        new DownloadImageTask((ImageView) trackBackground)
+                .execute(track.getImageStorageUri());
 
         TextView trackTitle = findViewById(R.id.trackTitleID);
         trackTitle.setText(track.getLocation());
@@ -62,5 +71,44 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+
+            Bitmap decoded = null;
+
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+
+                //TODO Might erase.
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
+                decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return /*mIcon11*/decoded;
+        }
+
+        /**
+         ** Set the ImageView to the bitmap result
+         * @param result
+         */
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

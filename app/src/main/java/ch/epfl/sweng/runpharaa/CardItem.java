@@ -1,8 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
 public class CardItem {
-
-    private int background;
     private String name;
     private String parentTrackID;
     private String imageURL;
@@ -11,15 +9,10 @@ public class CardItem {
 
     }
 
-    public CardItem(int background, String name, String parentTrackID, String imageURL) {
-        this.background = background;
+    public CardItem(String name, String parentTrackID, String imageURL) {
         this.name = name;
         this.parentTrackID = parentTrackID;
         this.imageURL = imageURL;
-    }
-
-    public int getBackground() {
-        return background;
     }
 
     public String getName() {
@@ -31,10 +24,6 @@ public class CardItem {
     }
 
     public String getImageURL() { return this.imageURL; }
-
-    public void setBackground(int background) {
-        this.background = background;
-    }
 
     public void setName(String name) {
         this.name = name;

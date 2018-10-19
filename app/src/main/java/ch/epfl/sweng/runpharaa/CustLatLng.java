@@ -47,4 +47,34 @@ public class CustLatLng {
     public Double getLongitude() {
         return longitude;
     }
+
+    /**
+     * Given the starting point of a Track and the User's location, computes the distance between the two
+     * @param startingPoint
+     * @param userLocation
+     * @return
+     */
+    public static double distance(CustLatLng startingPoint, CustLatLng userLocation){
+        int R = 6378137; //Earth's mean radius in meter
+
+        //angular differences in radians
+        double dLat = Math.toRadians(userLocation.getLatitude() - startingPoint.getLatitude());
+        double dLong = Math.toRadians(userLocation.getLongitude() - startingPoint.getLongitude());
+
+        //this' and other's latitudes in radians
+        double lat1 = Math.toRadians(startingPoint.getLatitude());
+        double lat2 = Math.toRadians(userLocation.getLatitude());
+
+        //compute some factor a
+        double a1 = Math.sin(dLat/2)*Math.sin(dLat/2);
+        double a2 = Math.cos(lat1)*Math.cos(lat2);
+        double a3 = Math.sin(dLong/2)*Math.sin(dLong/2);
+
+        double a = a1 + a2*a3;
+
+        //compute some factor c
+        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R*c;
+    }
 }
