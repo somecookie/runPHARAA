@@ -25,7 +25,7 @@ public final class User {
     //Of type String because we only need the key reference of the track in the database
     private List<String> createdTracksKeys;
     private List<String> favoritesTracksKeys;
-    private Set<Integer> idTracksLiked; //TODO: CHANGE TO STRING?
+    private List<String> likedTracksKeys;
 
     private LatLng location;
     private final boolean admin;
@@ -40,7 +40,7 @@ public final class User {
         this.picture = picture;
         this.createdTracksKeys = createdTracksKeys;
         this.favoritesTracksKeys = favoritesTracksKeys;
-        this.idTracksLiked = new HashSet<>();
+        this.likedTracksKeys = new ArrayList<>();
         this.location = location;
         this.admin = admin;
         this.uId = uId;
@@ -48,7 +48,7 @@ public final class User {
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, new HashSet<String>(), new HashSet<String>(), location, false, name);
+        this(name, preferredRadius, null, new ArrayList<String>(), new ArrayList<String>(), location, false, name);
     }
 
     public int getPreferredRadius() {
@@ -67,7 +67,7 @@ public final class User {
 
         //filter the tracks that start too far from the location
         for (Track tr : allTracks) {
-            if (tr.distance(location) <= preferredRadius) {
+            if (tr.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location)) <= preferredRadius) {
                 nm.add(tr);
             }
         }
@@ -76,8 +76,8 @@ public final class User {
         Collections.sort(nm, new Comparator<Track>() {
             @Override
             public int compare(Track o1, Track o2) {
-                double d1 = o1.distance(location);
-                double d2 = o2.distance(location);
+                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
+                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
                 return Double.compare(d1, d2);
             }
         });
@@ -97,17 +97,17 @@ public final class User {
      * @param trackId the track's id
      * @return true if the user already liked the track
      */
-    public boolean alreadyLiked(int trackId) {
-        return idTracksLiked.contains(trackId);
+    public boolean alreadyLiked(String trackId) {
+        return likedTracksKeys.contains(trackId);
     }
 
     /**
      * Add a track id in the set of liked tracks if it is not already there
      * @param trackId the track's id
      */
-    public void like(int trackId) {
+    public void like(String trackId) {
         if (!alreadyLiked(trackId)) {
-            idTracksLiked.add(trackId);
+            likedTracksKeys.add(trackId);
         }
     }
 
@@ -116,45 +116,42 @@ public final class User {
      * @param trackId the track's id
      * @return true if the track is in the favorites
      */
-    public void unlike(int trackId) {
-        idTracksLiked.remove(trackId);
+    public void unlike(String trackId) {
+        likedTracksKeys.remove(trackId);
     }
 
-    public Set<String> getFavorites() {
-        return favorites;
-    }
 
     /**
      *
      * @param trackId
      * @return
      */
-    public boolean alreadyInFavorites(int trackId) {
-        Log.i("hahaha", ""+favorites.contains(trackId));
-        return favorites.contains(trackId);
+    public boolean alreadyInFavorites(String trackId) {
+        Log.i("hahaha", ""+favoritesTracksKeys.contains(trackId));
+        return favoritesTracksKeys.contains(trackId);
     }
 
     /**
      * Add a track id in the set of favorite tracks if it is not already there
      * @param trackId the track's id
      */
-    public void addToFavorites(int trackId) {
+    public void addToFavorites(String trackId) {
         if (!alreadyInFavorites(trackId)) {
-            favorites.add(trackId);
+            favoritesTracksKeys.add(trackId);
             Log.i("hahaha", "Adding track: " + trackId);
         }
     }
 
-    public void addToCreatedTracks(int trackId) {
-        createdTracks.add(trackId);
+    public void addToCreatedTracks(String trackId) {
+        createdTracksKeys.add(trackId);
     }
 
     /**
      * Remove a track id from the set of favorite tracks if it is present
      * @param trackId the track's id
      */
-    public void removeFromFavorites(int trackId) {
-        favorites.remove(trackId);
+    public void removeFromFavorites(String trackId) {
+        createdTracksKeys.remove(trackId);
     }
 
     /**
@@ -196,7 +193,7 @@ public final class User {
         return favoritesTracksKeys;
     }
 
-    public static void set(String name, int preferredRadius, Uri picture, Set<String> createdTracks, Set<String> favorites, LatLng location, Boolean admin, String uId){
+    public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, Boolean admin, String uId){
         instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, admin, uId);
     }
 
