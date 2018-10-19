@@ -45,5 +45,4 @@ public class MapsTest {
         SystemClock.sleep(5_000);
         onView(withId(R.id.maps_test_text)).check(matches(withText("ready")));
     }
-
 }
