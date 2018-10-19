@@ -12,7 +12,7 @@ public final class FragmentFavourites extends UpdatableCardItemFragment {
         // Add cards to the cardList
         for (Integer i : User.instance.getFavorites())
             for (Track t : Track.allTracks)
-                if (t.getTID() == i)
+                if (t.getTrackUid() == i)
                     listCardItem.add(t.getCardItem());
     }
 

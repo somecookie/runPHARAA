@@ -48,7 +48,7 @@ public final class User {
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, new HashSet<Integer>(), new HashSet<Integer>(), location, false, name);
+        this(name, preferredRadius, null, new HashSet<String>(), new HashSet<String>(), location, false, name);
     }
 
     public int getPreferredRadius() {
@@ -120,7 +120,7 @@ public final class User {
         idTracksLiked.remove(trackId);
     }
 
-    public Set<Integer> getFavorites() {
+    public Set<String> getFavorites() {
         return favorites;
     }
 
@@ -188,15 +188,15 @@ public final class User {
         return picture;
     }
 
-    public Set<Integer> getCreatedTracks(){
-        return createdTracks;
+    public List<String> getCreatedTracks(){
+        return createdTracksKeys;
     }
 
-    public Set<Integer> getFavoriteTracks(){
-        return favorites;
+    public List<String> getFavoriteTracks(){
+        return favoritesTracksKeys;
     }
 
-    public static void set(String name, int preferredRadius, Uri picture, Set<Integer> createdTracks, Set<Integer> favorites, LatLng location, Boolean admin, String uId){
+    public static void set(String name, int preferredRadius, Uri picture, Set<String> createdTracks, Set<String> favorites, LatLng location, Boolean admin, String uId){
         instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, admin, uId);
     }
 
