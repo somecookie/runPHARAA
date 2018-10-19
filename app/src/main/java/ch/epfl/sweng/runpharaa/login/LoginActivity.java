@@ -24,15 +24,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.GoogleAuth;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.GoogleAuthInterface;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.User;
@@ -51,8 +52,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleAuthInterface mGoogleAuth;
     public static GoogleSignInClient mGoogleSignInClient;
     //Shared instance of the FirebaseAuth
-    private FirebaseAuth mAuth;
-    private LatLng lastLocation = new LatLng(46.520566, 6.567820); // Sat
+    private FirebaseAuthInterface mAuth;
+    private LatLng lastLocation = new LatLng(46.520566, 6.567820);
     private Location l;
 
 

@@ -42,14 +42,14 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
-        Toast.makeText(getApplicationContext(), "Starting GPS Service", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Starting GPS Service", Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "Ending GPS Service", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Ending GPS Service", Toast.LENGTH_SHORT).show();
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();

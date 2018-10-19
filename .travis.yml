@@ -18,7 +18,6 @@ android:
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-22
 
-
 notifications:
   email: false
 
@@ -28,6 +27,7 @@ before_install:
 
 before_script:
   # Emulator Management: Create, Start and Wait
+
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-window &
   - android-wait-for-emulator

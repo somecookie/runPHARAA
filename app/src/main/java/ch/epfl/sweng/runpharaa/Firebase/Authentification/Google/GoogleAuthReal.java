@@ -1,11 +1,8 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification;
-
-import ch.epfl.sweng.runpharaa.login.LoginActivity;
+package ch.epfl.sweng.runpharaa.Firebase.Authentification.Google;
 
 import android.app.Activity;
 import android.content.Intent;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
