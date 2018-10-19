@@ -8,6 +8,7 @@ import android.location.LocationProvider;
 import android.os.Build;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.support.test.espresso.PerformException;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -18,11 +19,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SeekBar;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.HashSet;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onData;
@@ -38,6 +44,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -54,12 +61,12 @@ public class CreateTrackActivityTest {
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION);
-    /*
+
     @BeforeClass
-    public static void initUser(){
+    public static void initUser() {
         User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
     }
-
+    /*
     @Before
     public void grantPermissions() {
         InstrumentationRegistry
@@ -92,7 +99,6 @@ public class CreateTrackActivityTest {
             e.printStackTrace();
         }
     }
-
 
 
     private LocationManager locMgr;
@@ -135,10 +141,12 @@ public class CreateTrackActivityTest {
                 SeekBar seekBar = (SeekBar) view;
                 seekBar.setProgress(progress);
             }
+
             @Override
             public String getDescription() {
                 return "Set a progress on a SeekBar";
             }
+
             @Override
             public Matcher<View> getConstraints() {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
@@ -153,56 +161,55 @@ public class CreateTrackActivityTest {
     public void createTrackWorksWithTwoFakePoints() {
         int value = setMockLocationSettings();//toggle ALLOW_MOCK_LOCATION on
         try {
-        System.out.print(mActivityRule.getActivity().getPackageName());
-        locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
-        // Let map load
-        sleep(2000);
-        setMock(46.518577, 6.563165, 1);
-        sleep(500);
-        onView(withId(R.id.start_create_button)).perform(click());
-        sleep(500);
-        setMock(46.522735, 6.579772, 1);
-        sleep(500);
-        onView(withId(R.id.start_create_button)).perform(click());
-        onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
-        onView(withId(R.id.create_text_name)).perform(typeText("Random name")).perform(closeSoftKeyboard());
-        onView(withId(R.id.set_properties)).perform(click());
-        onView(withId(R.id.time)).perform(typeText("10.00"))
-                .perform(pressKey(KeyEvent.KEYCODE_ENTER))
-                .perform(closeSoftKeyboard());
-        onView(withText("OK"))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
-                .perform(click());
-        sleep(1000);
-        onView(withId(R.id.types)).perform(click());
-        onData(is(instanceOf(String.class))).inAdapterView(allOf(withClassName(equalTo("com.android.internal.app.AlertController$RecycleListView")), isDisplayed()))
-                .atPosition(0)
-                .perform(click());
-        onView(withText("OK"))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
-                .perform(click());
-        onView(withId(R.id.create_track_button)).perform(click());
+            System.out.print(mActivityRule.getActivity().getPackageName());
+            locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
+            // Let map load
+            sleep(5_000);
+            setMock(46.518577, 6.563165, 1);
+            sleep(500);
+            onView(withId(R.id.start_create_button)).perform(click());
+            sleep(500);
+            setMock(46.522735, 6.579772, 1);
+            sleep(500);
+            onView(withId(R.id.start_create_button)).perform(click());
+            onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
+            onView(withId(R.id.create_text_name)).perform(typeText("Random name")).perform(closeSoftKeyboard());
+            onView(withId(R.id.set_properties)).perform(click());
+            onView(withId(R.id.time)).perform(typeText("10.00"))
+                    .perform(pressKey(KeyEvent.KEYCODE_ENTER))
+                    .perform(closeSoftKeyboard());
+            onView(withText("OK"))
+                    .inRoot(isDialog())
+                    .check(matches(isDisplayed()))
+                    .perform(click());
+            sleep(1000);
+            onView(withId(R.id.types)).perform(click());
+            onData(is(instanceOf(String.class))).inAdapterView(allOf(withClassName(equalTo("com.android.internal.app.AlertController$RecycleListView")), isDisplayed()))
+                    .atPosition(0)
+                    .perform(click());
+            onView(withText("OK"))
+                    .inRoot(isDialog())
+                    .check(matches(isDisplayed()))
+                    .perform(click());
+            onView(withId(R.id.create_track_button)).perform(click());
 
         } catch (SecurityException e) {
             e.printStackTrace();
+            fail("Permission not granted");
         } finally {
             restoreMockLocationSettings(value);//toggle ALLOW_MOCK_LOCATION off
         }
     }
 
 
-
-
     @Test
-    public void needAtLeastTwoPointsToCreateTracks(){
+    public void needAtLeastTwoPointsToCreateTracks() {
         int value = setMockLocationSettings();//toggle ALLOW_MOCK_LOCATION on
         try {
             System.out.print(mActivityRule.getActivity().getPackageName());
             locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
             // Let map load
-            sleep(2000);
+            sleep(5_000);
             //Setting location to the Burj Kahlifa
             setMock(25.197401, 55.274377, 1);
             sleep(500);
@@ -214,6 +221,7 @@ public class CreateTrackActivityTest {
                     .check(matches(isDisplayed()));
         } catch (SecurityException e) {
             e.printStackTrace();
+            fail("Permission not granted");
         } finally {
             restoreMockLocationSettings(value);//toggle ALLOW_MOCK_LOCATION off
         }
@@ -221,13 +229,13 @@ public class CreateTrackActivityTest {
 
 
     @Test
-    public void tryCreatingTrackWithoutSettingProperties(){
+    public void tryCreatingTrackWithoutSettingProperties() {
         int value = setMockLocationSettings();//toggle ALLOW_MOCK_LOCATION on
         try {
             System.out.print(mActivityRule.getActivity().getPackageName());
             locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
             // Let map load
-            sleep(2000);
+            sleep(5_000);
             //Setting location to Buckingham Palace
             setMock(51.501478, -0.141702, 1);
             sleep(500);
@@ -237,6 +245,7 @@ public class CreateTrackActivityTest {
             setMock(51.499248, -0.136834, 1);
             sleep(500);
             onView(withId(R.id.start_create_button)).perform(click());
+            sleep(2000);
             onView(withId(R.id.create_text_name)).perform(typeText("From Buckingham palace to local pub")).perform(closeSoftKeyboard());
             //We need to wait long enough for the "Ending GPS signal toast to disappear"
             sleep(2000);
@@ -246,6 +255,7 @@ public class CreateTrackActivityTest {
                     .check(matches(isDisplayed()));
         } catch (SecurityException e) {
             e.printStackTrace();
+            fail("Permission not granted");
         } finally {
             restoreMockLocationSettings(value);//toggle ALLOW_MOCK_LOCATION off
         }
@@ -253,13 +263,13 @@ public class CreateTrackActivityTest {
 
 
     @Test
-    public void tryCreatingTrackWithoutSettingTypes(){
-    int value = setMockLocationSettings();//toggle ALLOW_MOCK_LOCATION on
+    public void tryCreatingTrackWithoutSettingTypes() {
+        int value = setMockLocationSettings();//toggle ALLOW_MOCK_LOCATION on
         try {
             System.out.print(mActivityRule.getActivity().getPackageName());
             locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
             // Let map load
-            sleep(2000);
+            sleep(5_000);
             //Marina Bay Sands
             setMock(1.283536, 103.860319, 1);
             sleep(500);
@@ -269,9 +279,10 @@ public class CreateTrackActivityTest {
             setMock(1.288845, 103.855491, 1);
             sleep(500);
             onView(withId(R.id.start_create_button)).perform(click());
+            sleep(2000);
             onView(withId(R.id.create_text_name)).perform(typeText("Small walk near Marina Bay")).perform(closeSoftKeyboard());
             onView(withId(R.id.set_properties)).perform(click());
-            sleep(1000);
+            sleep(2000);
             onView(withText("OK"))
                     .inRoot(isDialog())
                     .check(matches(isDisplayed()))
@@ -283,6 +294,7 @@ public class CreateTrackActivityTest {
                     .check(matches(isDisplayed()));
         } catch (SecurityException e) {
             e.printStackTrace();
+            fail("Permission not granted");
         } finally {
             restoreMockLocationSettings(value);//toggle ALLOW_MOCK_LOCATION off
         }
@@ -295,7 +307,7 @@ public class CreateTrackActivityTest {
             System.out.print(mActivityRule.getActivity().getPackageName());
             locMgr = (LocationManager) mActivityRule.getActivity().getSystemService(Context.LOCATION_SERVICE);
             // Let map load
-            sleep(2000);
+            sleep(5_000);
             //Eiffel Tower
             setMock(48.858664, 2.294424, 1);
             sleep(500);
@@ -305,6 +317,7 @@ public class CreateTrackActivityTest {
             setMock(48.863048, 2.287890, 1);
             sleep(500);
             onView(withId(R.id.start_create_button)).perform(click());
+            sleep(2000);
             onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
             onView(withId(R.id.set_properties)).perform(click());
             onView(withClassName(Matchers.equalTo(SeekBar.class.getName()))).perform(setProgress(1));
@@ -333,11 +346,11 @@ public class CreateTrackActivityTest {
                     .check(matches(isDisplayed()));
         } catch (SecurityException e) {
             e.printStackTrace();
+            fail("Permission not granted");
         } finally {
             restoreMockLocationSettings(value);//toggle ALLOW_MOCK_LOCATION off
         }
     }
-
 
 
 }
