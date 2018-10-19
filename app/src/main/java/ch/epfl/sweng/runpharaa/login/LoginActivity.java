@@ -94,8 +94,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // the GoogleSignInAccount will be non-null.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-
-
     }
 
 

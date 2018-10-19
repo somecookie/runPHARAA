@@ -52,8 +52,6 @@ public class Track {
         this.properties = properties;
 
         this.cardItem = new CardItem(image, name, TID);
-
-
     }
 
     //TODO: either delete this or do it again when the database is on
@@ -85,13 +83,11 @@ public class Track {
         all.add(t);
 
         allTracks = all;
-
     }
 
     public TrackProperties getProperties() {
         return properties;
     }
-
 
     /**
      * Compute the distance in meters between a track (its starting point) and a given coordinate.

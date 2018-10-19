@@ -21,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 
-
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
@@ -88,7 +87,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                     .title(tr.getName()));
             m.setTag(tr.getTID());
         }
-
     }
 
     @Override

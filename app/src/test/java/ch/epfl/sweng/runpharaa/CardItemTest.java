@@ -19,19 +19,23 @@ public class CardItemTest {
 
         c.setBackground(bg);
         c.setName("PHARAA");
-        c.setParentTrackID(0);
+        c.setParentTrackID("0");
 
         Assert.assertEquals(bg, c.getBackground());
         Assert.assertEquals("PHARAA", c.getName());
-        Assert.assertEquals(0, c.getParentTrackID());
+        Assert.assertEquals("0", c.getParentTrackID());
     }
 
     @Test
     public void contructorAndGetter(){
+<<<<<<< HEAD
         CardItem c = new CardItem(bg, "PHARAA", 0);
+=======
+        CardItem c = new CardItem(3, "PHARAA", "0");
+>>>>>>> f6fbfe7ad2ece40323507e65ea6d0fcc78fe1471
 
         Assert.assertEquals(bg, c.getBackground());
         Assert.assertEquals("PHARAA", c.getName());
-        Assert.assertEquals(0, c.getParentTrackID());
+        Assert.assertEquals("0", c.getParentTrackID());
     }
 }

@@ -25,7 +25,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     RecyclerView recyclerView;
     List<CardItem> listCardItem;
     TextView emptyMessage;
-    FragmentNearMe.OnItemClickListener listener;
+    FragmentNearMe.OnItemClickListener listener; //TODO: Why FragmentNearMe?
 
     public interface OnItemClickListener {
         void onItemClick(CardItem item);
@@ -141,6 +141,10 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         public void onBindViewHolder(@NonNull CardItemAdapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.background_img.setImageBitmap(listCardItem.get(position).getBackground());
+
+            /*new DownloadImageTask((ImageView) viewHolder.background_img)
+                    .execute(listCardItem.get(position).getImageURL());*/
+
             viewHolder.name.setText(listCardItem.get(position).getName());
             viewHolder.bind(listCardItem.get(position), listener);
         }
@@ -152,7 +156,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
 
         class viewHolder extends RecyclerView.ViewHolder {
             // Buttons, images and texts on the cards will be created here
-
             ImageView background_img;
             TextView name;
 
@@ -169,6 +172,45 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
                         listener.onItemClick(item);
                     }
                 });
+            }
+        }
+
+        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+            ImageView bmImage;
+
+            public DownloadImageTask(ImageView bmImage) {
+                this.bmImage = bmImage;
+            }
+
+
+            protected Bitmap doInBackground(String... urls) {
+                String urldisplay = urls[0];
+                Bitmap mIcon11 = null;
+
+                Bitmap decoded = null;
+
+                try {
+                    InputStream in = new java.net.URL(urldisplay).openStream();
+                    mIcon11 = BitmapFactory.decodeStream(in);
+
+                    //TODO Might erase.
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
+                    decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
+                return /*mIcon11*/decoded;
+            }
+
+            /**
+             ** Set the ImageView to the bitmap result
+             * @param result
+             */
+            protected void onPostExecute(Bitmap result) {
+                bmImage.setImageBitmap(result);
             }
         }
     }

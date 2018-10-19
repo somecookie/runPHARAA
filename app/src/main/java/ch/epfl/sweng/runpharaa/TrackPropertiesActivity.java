@@ -5,10 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.CompoundButton;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -23,13 +29,15 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_properties);
         Intent intent = getIntent();
 
-        final int trackID = intent.getIntExtra("TrackID", 0);
+        final String trackID = intent.getStringExtra("TrackID");
         final Track track = getTrackByID(Track.allTracks, trackID);
 
         TrackProperties tp = track.getProperties();
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
         trackBackground.setImageBitmap(track.getImage());
+        /*new DownloadImageTask((ImageView) trackBackground)
+                .execute(track.getImageStorageUri());*/
 
         TextView trackTitle = findViewById(R.id.trackTitleID);
         trackTitle.setText(track.getName());
@@ -127,13 +135,51 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
     }
 
-
-    private Track getTrackByID(ArrayList<Track> tracks, int trackID) {
+    private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
         for (Track t : tracks) {
-            if (t.getTID() == trackID) {
+            if (t.getTrackUid().equals(trackID)) {
                 return t;
             }
         }
         return null;
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+
+            Bitmap decoded = null;
+
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+
+                //TODO Might erase.
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
+                decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return /*mIcon11*/decoded;
+        }
+
+        /**
+         ** Set the ImageView to the bitmap result
+         * @param result
+         */
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

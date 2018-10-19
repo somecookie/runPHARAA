@@ -34,6 +34,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -73,7 +75,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private String[] listTypes;
     private boolean[] checkedTypes;
     private Set<TrackType> types = new HashSet<>();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -259,13 +260,11 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
         trackImage = findViewById(R.id.track_photo);
 
-
         // Get map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view);
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -287,7 +286,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 //Add a preview of the photo
                 trackImage.setVisibility(View.VISIBLE);
                 trackImage.setImageBitmap(trackPhoto);
-
 
             } catch (FileNotFoundException e) {
                 Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
@@ -314,7 +312,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             totalAltitudeText.setText(String.format("Total altitude difference: %.2f m", totalAltitudeChange));
         }
     }
-
 
     /**
      * Computes the total distance and total altitude difference of the track
