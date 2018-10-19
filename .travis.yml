@@ -20,7 +20,7 @@ android:
 
 env:
   global:
-    - ADB_INSTALL_TIMEOUT=8
+    - ADB_INSTALL_TIMEOUT=20
 
 notifications:
   email: false
@@ -43,7 +43,6 @@ before_script:
 
 script:
   - ./gradlew build installDebug
-  - adb shell appops set ch.epfl.sweng.runpharaa 58 allow
   - ./gradlew connectedCheck jacocoTestReport
 
 after_script:

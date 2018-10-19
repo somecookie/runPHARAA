@@ -1,8 +1,4 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification;
-
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterface;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthMock;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthReal;
+package ch.epfl.sweng.runpharaa.Firebase.Authentification.Google;
 
 public abstract class GoogleAuth {
 

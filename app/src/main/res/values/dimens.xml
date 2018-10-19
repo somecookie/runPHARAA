@@ -6,5 +6,5 @@
 
     <!-- Text sizes -->
     <dimen name="normal_text">16sp</dimen>
-    <dimen name="large_text">20sp</dimen>
+    <dimen name="large_text">24sp</dimen>
 </resources>

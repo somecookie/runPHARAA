@@ -42,7 +42,6 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
                     Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
                 } else {
                     creating = false;
-                    stopGeoLocalisation();
                     createButton.setText("PROCESSING");
                     launchSecondPart();
                 }

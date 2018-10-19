@@ -39,7 +39,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/signInBut"
+                android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button"
+                android:id="@+id/sign_in_button_google"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"

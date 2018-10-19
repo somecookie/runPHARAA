@@ -24,19 +24,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.GoogleAuth;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.GoogleAuthInterface;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
+import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.User;
-import ch.epfl.sweng.runpharaa.location.Utils;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleAuthInterface mGoogleAuth;
     public static GoogleSignInClient mGoogleSignInClient;
     //Shared instance of the FirebaseAuth
-    private FirebaseAuth mAuth;
+    private FirebaseAuthInterface mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
     private Location l;
 
@@ -63,8 +65,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         requestPermissions();
 
         //add listener to the buttons
+        findViewById(R.id.sign_in_button_google).setOnClickListener(this);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.signInBut).setOnClickListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -100,10 +102,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.signInBut:
+            case R.id.sign_in_button:
+                // TODO: setting a fake user for now, change it later
+                User.set("Fake User", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), lastLocation, false, "Fake User");
                 launchApp();
                 break;
-            case R.id.sign_in_button:
+            case R.id.sign_in_button_google:
                 signIn();
                 break;
             default:
@@ -140,17 +144,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             requestPermissions();
-            if(l != null) {
+            if (l != null) {
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation, false, currentUser.getUid());
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new HashSet<Integer>(), new HashSet<Integer>(), lastLocation, false, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
             findViewById(R.id.password).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_in_button_google).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.signInBut).setVisibility(View.VISIBLE);
         }
     }
 
@@ -184,7 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new ArrayList<Track>(), new ArrayList<Track>(), lastLocation, false, user.getUid());
+                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new HashSet<Integer>(), new HashSet<Integer>(), lastLocation, false, user.getUid());
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -223,7 +227,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return true;
         }
 
-        l = Utils.getCurrLocation(this);
+        l = Util.getCurrLocation(this);
         if (l != null) {
             lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
         }
