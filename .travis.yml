@@ -11,12 +11,17 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-22
-    - addon-google_apis-google-27
+    # - android-22
+    - android-19
     - extra-google-google_play_services
     - extra-google-m2repository
-    - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-22
+    - extra-android-m2repository # for design library
+    - addon-google_apis-google-19 # google play services
+    - sys-img-armeabi-v7a-google_apis-19
+
+#env:
+#  global:
+#    - ADB_INSTALL_TIMEOUT=20
 
 notifications:
   email: false
@@ -24,11 +29,11 @@ notifications:
 # For some reason Travis can't accept the license for 27 automatically...
 before_install:
 - yes | sdkmanager "platforms;android-27"
+- chmod +x gradlew
 
 before_script:
   # Emulator Management: Create, Start and Wait
-
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-19 --abi google_apis/armeabi-v7a
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   # Set up Code Climate test reporter
@@ -38,8 +43,6 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - ./gradlew build installDebug
-  - adb shell appops set ch.epfl.sweng.runpharaa 58 allow
   - ./gradlew connectedCheck jacocoTestReport
 
 after_script:

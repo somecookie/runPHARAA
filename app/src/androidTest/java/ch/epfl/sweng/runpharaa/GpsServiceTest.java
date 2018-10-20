@@ -44,8 +44,7 @@ public class GpsServiceTest {
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION);
+            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void doesNotLaunchGpsServiceInitially() {
@@ -55,8 +54,6 @@ public class GpsServiceTest {
 
     @Test
     public void correctlyLaunchesServiceOnMapView() {
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
-        System.out.println(User.instance == null);
         turnsGpsServiceOnAndOff(R.id.mapIcon);
     }
 

@@ -25,11 +25,13 @@ import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
+    private TextView testText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        testText = findViewById(R.id.maps_test_text);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -48,18 +50,11 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap.setOnInfoWindowClickListener(this);
         InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
         mMap.setInfoWindowAdapter(customInfoWindow);
+        testText.setText("ready");
     }
 
     @Override
     protected void handleNewLocation() {
-
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
-
-        if (User.instance != null) {
-            User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
-        }
-
         setMarkers();
     }
 

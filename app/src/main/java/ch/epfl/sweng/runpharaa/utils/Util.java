@@ -33,4 +33,22 @@ public class Util {
 
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
+
+    public static double[] computeDistanceAndElevationChange(Location[] locations) {
+        double maxAltitude = Double.NEGATIVE_INFINITY;
+        double minAltitude = Double.POSITIVE_INFINITY;
+        double[] res = new double[2];
+        for (int i = 0; i < locations.length; ++i) {
+            Location l = locations[i];
+            double a = l.getAltitude();
+            if (a < minAltitude)
+                minAltitude = a;
+            if (a > maxAltitude)
+                maxAltitude = a;
+            if (i != 0)
+                res[0] += l.distanceTo(locations[i - 1]);
+        }
+        res[1] = maxAltitude - minAltitude;
+        return res;
+    }
 }

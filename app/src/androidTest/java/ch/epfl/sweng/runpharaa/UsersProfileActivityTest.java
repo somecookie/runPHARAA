@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
-import ch.epfl.sweng.runpharaa.Users.Profile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -31,8 +31,7 @@ public class UsersProfileActivityTest {
 
     @BeforeClass
     public static void initEmptyUser() {
-        Uri path = Uri.parse("android.resource://ch.epfl.sweng.runpharaa/" + R.drawable.default_photo);
-        User.instance = new User("FakeUser", 2000, path, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
     }
 
     @Test

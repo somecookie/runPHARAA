@@ -40,6 +40,7 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -56,8 +57,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private SeekBar mSeekBar;
     private TextView mDiffText;
 
-    private double minAltitude = Double.POSITIVE_INFINITY;
-    private double maxAltitude = Double.NEGATIVE_INFINITY;
     private Location[] locations;
     private LatLng[] points;
     private Bitmap trackPhoto;
@@ -97,11 +96,11 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 }
 
                 if (!propertiesSet) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_SHORT).show();
                 } else if (!typesSet) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_SHORT).show();
                 } else if (nameText.getText().toString().isEmpty()) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
                 } else {
                     // TODO: add track to created tracks
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
@@ -170,7 +169,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                         if (!mTime.getText().toString().isEmpty()) {
                             time = Double.parseDouble(mTime.getText().toString());
                         } else {
-                            Toast.makeText(getBaseContext(), getResources().getString(R.string.default_time), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.default_time), Toast.LENGTH_SHORT).show();
                             time = totalDistance / 133;
                         }
                         propertiesSet = true;
@@ -288,9 +287,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 trackImage.setVisibility(View.VISIBLE);
                 trackImage.setImageBitmap(trackPhoto);
 
-
             } catch (FileNotFoundException e) {
-                Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -307,40 +305,14 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             a = bundle.getParcelableArray("points");
             points = Arrays.copyOf(a, a.length, LatLng[].class);
 
-            computeValues();
+            double[] values = Util.computeDistanceAndElevationChange(locations);
+            totalDistance = values[0];
+            totalAltitudeChange = values[1];
 
             // Show extracted info
             totalDistanceText.setText(String.format("Total distance: %.2f m", totalDistance));
             totalAltitudeText.setText(String.format("Total altitude difference: %.2f m", totalAltitudeChange));
         }
-    }
-
-
-    /**
-     * Computes the total distance and total altitude difference of the track
-     */
-    private void computeValues() {
-        // TODO: will we store this info somewhere ? What additional info do we want to show ?
-        for (int i = 0; i < locations.length; ++i) {
-            Location l = locations[i];
-            updateMinAndMaxAltitude(l.getAltitude());
-            if (i != 0)
-                totalDistance += l.distanceTo(locations[i - 1]);
-        }
-        // TODO: the altitudes completely off right now, try to fix
-        totalAltitudeChange = maxAltitude - minAltitude;
-    }
-
-    /**
-     * Updates the max and min altitudes according to a new altitude
-     *
-     * @param a the new altitude
-     */
-    private void updateMinAndMaxAltitude(double a) {
-        if (a < minAltitude)
-            minAltitude = a;
-        if (a > maxAltitude)
-            maxAltitude = a;
     }
 
     @Override
