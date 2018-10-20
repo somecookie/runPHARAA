@@ -34,8 +34,6 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-    private LocationSettingsRequest locationSettingsRequest;
-
 
     @Nullable
     @Override
@@ -110,7 +108,7 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult); // why? this. is. retarded. Android.
+                super.onLocationResult(locationResult);
                 Location currentLocation = locationResult.getLastLocation();
                 LatLng location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 User.instance.setLocation(location);
