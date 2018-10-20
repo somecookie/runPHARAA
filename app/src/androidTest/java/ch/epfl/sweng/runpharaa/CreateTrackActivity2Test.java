@@ -162,7 +162,6 @@ public class CreateTrackActivity2Test {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-        sleep(500);
         onView(withText("Default run time was chosen"))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
