@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.firebase.database.Exclude;
@@ -33,6 +34,14 @@ public class Track {
     private CustLatLng startingPoint;
 
     private TrackProperties properties;
+
+    public Track(String name, Bitmap image, List<CustLatLng> path, TrackProperties properties){
+        this.name = name;
+        this.image = image;
+        this.path = path;
+        startingPoint = path.get(0);
+        this.properties = properties;
+    }
 
     public Track(String trackUid, Bitmap image, String name, List<CustLatLng> path, TrackProperties properties) {
 
