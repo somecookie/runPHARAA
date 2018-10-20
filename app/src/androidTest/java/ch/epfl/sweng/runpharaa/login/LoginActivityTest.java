@@ -1,29 +1,26 @@
 package ch.epfl.sweng.runpharaa.login;
 
+import android.Manifest;
 import android.content.Intent;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
+import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.User;
-import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
@@ -31,19 +28,21 @@ public class LoginActivityTest {
 
     @Rule
     public final ActivityTestRule<LoginActivity> mActivityRule =
-            new ActivityTestRule<>(LoginActivity.class, false, false);
+            new ActivityTestRule<>(LoginActivity.class);
 
-    @BeforeClass
-    public static void initUser(){
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
+
+    @Before
+    public void init() {
+        Intents.init();
     }
 
     @Test
-    public void connectWithoutGoogleTest(){
-        Intent i = new Intent();
-        mActivityRule.launchActivity(i);
-        //To update once this is implemented
+    public void connectWithoutGoogleTest() {
         onView(withId(R.id.sign_in_button)).perform(click());
+        intended(hasComponent(MainActivity.class.getName()));
     }
 
     // TODO: THIS TEST PROBABLY CAUSED THE ROOT FOCUSED ERROR
@@ -53,4 +52,9 @@ public class LoginActivityTest {
         mActivityRule.launchActivity(intent);
         onView(withId(R.id.sign_in_button_google)).perform(click());
     }*/
+
+    @After
+    public void clean() {
+        Intents.release();
+    }
 }

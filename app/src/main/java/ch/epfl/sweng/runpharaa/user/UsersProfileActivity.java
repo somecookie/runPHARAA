@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Users.Profile;
+package ch.epfl.sweng.runpharaa.user;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,12 +9,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.User;
@@ -58,7 +53,7 @@ public class UsersProfileActivity extends AppCompatActivity {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap mIcon11 = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);

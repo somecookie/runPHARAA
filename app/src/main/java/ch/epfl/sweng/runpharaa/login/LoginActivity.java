@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -89,13 +90,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStart() {
         super.onStart();
-
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-
-
     }
 
 
@@ -104,7 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.sign_in_button:
                 // TODO: setting a fake user for now, change it later
-                User.set("Fake User", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), lastLocation, false, "Fake User");
+                User.set("Fake User", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), lastLocation, false, "Fake User");
                 launchApp();
                 break;
             case R.id.sign_in_button_google:
@@ -143,7 +141,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            requestPermissions();
             if (l != null) {
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
@@ -204,7 +201,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case GPS_PERMISSIONS_REQUEST_CODE: {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+                Log.i("cunt", grantResults.length+" hh");
+                if (grantResults.length != 1 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions();
                 }
 
@@ -220,10 +218,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private boolean requestPermissions() {
         if (Build.VERSION.SDK_INT > 23 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
             return true;
         }
 

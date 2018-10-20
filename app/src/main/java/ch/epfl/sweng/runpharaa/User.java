@@ -133,7 +133,6 @@ public final class User {
     public void addToFavorites(int trackId) {
         if (!alreadyInFavorites(trackId)) {
             favorites.add(trackId);
-            Log.i("hahaha", "Adding track: " + trackId);
         }
     }
 

@@ -55,14 +55,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
     @Override
     protected void handleNewLocation() {
-
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
-
-        if (User.instance != null) {
-            User.instance.setLocation(new LatLng(currentLatitude, currentLongitude));
-        }
-
         setMarkers();
     }
 
