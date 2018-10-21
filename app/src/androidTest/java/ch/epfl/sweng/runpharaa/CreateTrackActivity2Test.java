@@ -154,11 +154,6 @@ public class CreateTrackActivity2Test {
     }
 
     @Test
-    public void selectAndDeselectAllTypes() {
-
-    }
-
-    @Test
     public void slideBarCorrectlyUpdatesDifficulty() {
         LatLng[] points = {inm, banane};
         Location[] locations = generateLocations(points);
