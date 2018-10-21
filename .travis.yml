@@ -1,4 +1,4 @@
-language: 
+language: android
 # These two lines probably don't change anything
 dist: trusty # choose the type of operating system (Ubuntu 14)
 sudo: required # toggle sudo mode (should be a bit faster)
