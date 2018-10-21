@@ -34,15 +34,12 @@ public class LoginActivityTest {
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @Before
-    public void init() {
-        Intents.init();
-    }
-
     @Test
     public void connectWithoutGoogleTest() {
+        Intents.init();
         onView(withId(R.id.sign_in_button)).perform(click());
         intended(hasComponent(MainActivity.class.getName()));
+        Intents.release();
     }
 
     // TODO: THIS TEST PROBABLY CAUSED THE ROOT FOCUSED ERROR
@@ -52,9 +49,4 @@ public class LoginActivityTest {
         mActivityRule.launchActivity(intent);
         onView(withId(R.id.sign_in_button_google)).perform(click());
     }*/
-
-    @After
-    public void clean() {
-        Intents.release();
-    }
 }

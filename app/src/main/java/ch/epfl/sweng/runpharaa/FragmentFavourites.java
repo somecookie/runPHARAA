@@ -10,7 +10,7 @@ public final class FragmentFavourites extends UpdatableCardItemFragment {
     @Override
     protected void loadListWithData() {
         // Add cards to the cardList
-        for (Integer i : User.instance.getFavorites())
+        for (Integer i : User.instance.getFavoriteTracks())
             for (Track t : Track.allTracks)
                 if (t.getTID() == i)
                     listCardItem.add(t.getCardItem());
