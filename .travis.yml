@@ -19,9 +19,9 @@ android:
     - sys-img-armeabi-v7a-google_apis-22 # image to be used for emulator, make sure it's a apis-google one
 
 # Uncomment if you are getting install timeouts
-#env:
-#  global:
-#    - ADB_INSTALL_TIMEOUT=20
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=20
 
 notifications:
   email: false # disable email notifications
