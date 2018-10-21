@@ -104,7 +104,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 } else {
                     // TODO: add track to created tracks
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(User.instance.getID(), trackPhoto, nameText.getText().toString(), points, trackProperties);
+                    Track track = new Track(User.instance.getID(),User.instance.getName(), trackPhoto, nameText.getText().toString(), points, trackProperties);
                     Track.allTracks.add(track);
                     finish();
                 }

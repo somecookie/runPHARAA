@@ -3,18 +3,20 @@ package ch.epfl.sweng.runpharaa;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
+
 
     //TODO: Check if ScrollView is working!
     @Override
@@ -35,14 +37,22 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         trackTitle.setText(track.getName());
 
         TextView trackCreator = findViewById(R.id.trackCreatorID);
-        //TODO: make method like getNameFromID(uid)
-        trackCreator.setText("By "+track.getUid());
+
+        //trackCreator.setText("By "+track.getCreatorName());
+        trackCreator.setText(String.format(getResources().getString(R.string.by), track.getCreatorName()));
 
         TextView trackDuration = findViewById(R.id.trackDurationID);
-        trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
+        trackDuration.setText(String.format(getResources().getString(R.string.duration), tp.getAvgDuration()));
 
         TextView trackLength = findViewById(R.id.trackLengthID);
-        trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");
+        trackLength.setText(String.format(getResources().getString(R.string.distance), tp.getLength()));
+
+        TextView trackDifficulty = findViewById(R.id.track_difficulty);
+        trackDifficulty.setText(String.format(getResources().getString(R.string.difficulty), tp.getAvgDifficulty()));
+
+        TextView trackTags = findViewById(R.id.trackTagsID);
+        trackTags.setText(createTagString(track));
+
 
         /*
         TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
@@ -90,6 +100,31 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         Tags.setText();
         */
     }
+
+    private String createTagString(Track track) {
+        Set<TrackType> typeSet = track.getProperties().getType();
+        int nbrTypes = typeSet.size();
+        String[] trackType = getResources().getStringArray(R.array.track_types);
+
+        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(start);
+
+        int i = 0;
+
+        for(TrackType tt : typeSet){
+
+            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
+            if(i < nbrTypes - 1) sb.append(", ");
+
+            i++;
+        }
+
+        return sb.toString();
+
+    }
+
 
     private void updateLikes(Track track1, int trackID) {
         final Track track = track1;
