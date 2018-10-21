@@ -85,6 +85,8 @@ configurations.all {
         if (requested.group == 'com.android.support') {
             details.useVersion '26.1.0'
         }
+
+
     }
 }
 
@@ -126,5 +128,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
+
 
 apply plugin: 'com.google.gms.google-services'
