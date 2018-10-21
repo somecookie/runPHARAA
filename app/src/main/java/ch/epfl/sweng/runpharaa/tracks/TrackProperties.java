@@ -2,6 +2,8 @@ package ch.epfl.sweng.runpharaa.tracks;
 
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.utils.Required;
+
 public class TrackProperties {
 
     private double length;
@@ -16,6 +18,12 @@ public class TrackProperties {
     public TrackProperties(double length, double heightDiff, double time, int difficulty, Set<TrackType> trackType){
 
         if(length < 0) throw new IllegalArgumentException("The length of the track must be positive");
+
+        Required.nonNull(trackType, "The set of types must be non-null");
+
+        if(trackType.isEmpty()){
+            throw new IllegalArgumentException("There must be at least one track type");
+        }
 
         this.length = length;
         this.heightDifference = heightDiff;
