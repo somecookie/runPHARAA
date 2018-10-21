@@ -28,6 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
+
 public class DatabaseManagement {
 
     public final static String TRACKS_PATH = "tracks";
@@ -49,7 +51,7 @@ public class DatabaseManagement {
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
         //Upload image
-        Bitmap bitmap = track.getImageBitMap();
+        Bitmap bitmap = track.getImage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -98,9 +100,9 @@ public class DatabaseManagement {
     public static List<Track> initTracksNearMe(DataSnapshot dataSnapshot){
         List<Track> tracksNearMe = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            CustLatLng userLocation = new CustLatLng(User.FAKE_USER.getLocation().latitude, User.FAKE_USER.getLocation().longitude);
-            int userPreferredRadius = User.FAKE_USER.getPreferredRadius();
-            if(CustLatLng.distance(c.child("startingPoint").getValue(CustLatLng.class), userLocation) <= userPreferredRadius){
+            CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
+            int userPreferredRadius = User.instance.getPreferredRadius();
+            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){
                 tracksNearMe.add(c.getValue(Track.class));
                 Log.d("Client : size ", Integer.toString(tracksNearMe.size()));
             }
@@ -111,8 +113,8 @@ public class DatabaseManagement {
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(User.FAKE_USER.getCreatedTracksKeys() != null){
-                if(User.FAKE_USER.getCreatedTracksKeys().contains(c.getKey())){
+            if(User.instance.getCreatedTracksKeys() != null){
+                if(User.instance.getCreatedTracksKeys().contains(c.getKey())){
                     createdTracks.add(c.getValue(Track.class));
                 }
             }
@@ -123,8 +125,8 @@ public class DatabaseManagement {
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
         List<Track> favouriteTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()) {
-            if (User.FAKE_USER.getFavoritesTracksKeys() != null) {
-                if (User.FAKE_USER.getFavoritesTracksKeys().contains(c.getKey())) {
+            if (User.instance.getFavoritesTracksKeys() != null) {
+                if (User.instance.getFavoritesTracksKeys().contains(c.getKey())) {
                     favouriteTracks.add(c.getValue(Track.class));
                 }
             }

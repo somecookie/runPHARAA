@@ -83,9 +83,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         //add a marker for each starting point inside the preferred radius
         for (Track tr : User.instance.tracksNearMe()) {
             Marker m = mMap.addMarker(new MarkerOptions()
-                    .position(tr.getStartingPoint())
+                    .position(tr.getStartingPoint().ToLatLng())
                     .title(tr.getName()));
-            m.setTag(tr.getTID());
+            m.setTag(tr.getTrackUid());
         }
     }
 
@@ -129,7 +129,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             // Get the correct track by it's id
             Track track = null;
             for (Track tr : Track.allTracks)
-                if (tr.getTID() == (int) marker.getTag())
+                if (track.getTrackUid() ==  marker.getTag())
                     track = tr;
 
             // Get other info from the track (should never be null be we check just in case)

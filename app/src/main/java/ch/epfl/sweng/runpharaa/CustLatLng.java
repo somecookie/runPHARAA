@@ -1,5 +1,10 @@
 package ch.epfl.sweng.runpharaa;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Custom class that copy the {@link com.google.android.gms.maps.model.LatLng} class
  * Useful for it's empty constructor need in database exchanges
@@ -46,21 +51,23 @@ public class CustLatLng {
     }
 
     /**
-     * Given the starting point of a Track and the User's location, computes the distance between the two
-     * @param startingPoint
-     * @param userLocation
-     * @return
+     * Compute the distance in meters between a track (its starting point) and a given coordinate.
+     * See formula at: http://www.movable-type.co.uk/scripts/latlong.html
+     * Set p1 as this and p2 as other
+     *
+     * @param otherLocation
+     * @return the distance between a point and the track (this)
      */
-    public static double distance(CustLatLng startingPoint, CustLatLng userLocation){
+    public double distance(CustLatLng otherLocation){
         int R = 6378137; //Earth's mean radius in meter
 
         //angular differences in radians
-        double dLat = Math.toRadians(userLocation.getLatitude() - startingPoint.getLatitude());
-        double dLong = Math.toRadians(userLocation.getLongitude() - startingPoint.getLongitude());
+        double dLat = Math.toRadians(latitude - otherLocation.getLatitude());
+        double dLong = Math.toRadians(longitude - otherLocation.getLongitude());
 
         //this' and other's latitudes in radians
-        double lat1 = Math.toRadians(startingPoint.getLatitude());
-        double lat2 = Math.toRadians(userLocation.getLatitude());
+        double lat1 = Math.toRadians(latitude);
+        double lat2 = Math.toRadians(otherLocation.getLatitude());
 
         //compute some factor a
         double a1 = Math.sin(dLat/2)*Math.sin(dLat/2);
@@ -73,5 +80,23 @@ public class CustLatLng {
         double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
         return R*c;
+    }
+
+    public LatLng ToLatLng(){
+        return new LatLng(latitude, longitude);
+    }
+
+    //TODO java doc
+    public static CustLatLng LatLngToCustLatLng(LatLng p){
+        return new CustLatLng(p.latitude, p.longitude);
+    }
+
+    //TODO java doc
+    public static List<CustLatLng> LatLngToCustLatLng(List<LatLng> l){
+        List<CustLatLng> result = new ArrayList<>();
+        for(LatLng p : l){
+            result.add(LatLngToCustLatLng(p));
+        }
+        return result;
     }
 }
