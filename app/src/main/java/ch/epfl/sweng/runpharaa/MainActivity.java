@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        //Initiate the Firebase Database with these tracks (delete them manually if already there).
         /*
         Log.d("Put Fake Track", "Test");
         CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm

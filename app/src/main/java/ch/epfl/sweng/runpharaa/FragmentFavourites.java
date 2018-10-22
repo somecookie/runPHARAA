@@ -51,35 +51,35 @@ public final class FragmentFavourites extends UpdatableCardItemFragment {
 
 package ch.epfl.sweng.runpharaa;
 
-        import android.content.Context;
-        import android.content.Intent;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.support.annotation.NonNull;
-        import android.support.annotation.Nullable;
-        import android.support.v4.app.Fragment;
-        import android.support.v4.widget.SwipeRefreshLayout;
-        import android.support.v7.widget.LinearLayoutManager;
-        import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.ImageView;
-        import android.widget.TextView;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
-        import java.io.ByteArrayInputStream;
-        import java.io.ByteArrayOutputStream;
-        import java.io.InputStream;
-        import java.util.ArrayList;
-        import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-        import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
@@ -169,7 +169,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-                //DO SOME THING WHEN GET DATA FAILED HERE
+                Log.d("DB Read: ", "Failed to read data from DB.");
             }
         });
     }
@@ -199,7 +199,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
             //viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground()); //TODO ERASE
             viewHolder.name.setText(listCardItem.get(position).getName());
 
-            new DownloadImageTask((ImageView) viewHolder.background_img)
+            new DownloadImageTask(viewHolder.background_img)
                     .execute(listCardItem.get(position).getImageURL());
 
             viewHolder.bind(listCardItem.get(position), listener);

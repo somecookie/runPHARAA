@@ -1,19 +1,12 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +37,7 @@ public class DatabaseManagement {
 
     /**
      * Track a {@link Track} and add it to the database
+     *
      * @param track
      */
     public static void writeNewTrack(final Track track) {
@@ -92,11 +86,23 @@ public class DatabaseManagement {
         });
     }
 
+    /**
+     * Given a track, updates the corresponding entry in the Firebase Database..
+     *
+     * @param track
+     */
     public static void updateTrack(Track track){
         //TODO check if it works
+        //Check if track exists? Return a success or error message?
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
     }
 
+    /**
+     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     *
+     * @param dataSnapshot
+     * @return
+     */
     public static List<Track> initTracksNearMe(DataSnapshot dataSnapshot){
         List<Track> tracksNearMe = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
@@ -110,6 +116,12 @@ public class DatabaseManagement {
         return tracksNearMe;
     }
 
+    /**
+     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     *
+     * @param dataSnapshot
+     * @return
+     */
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
@@ -122,6 +134,12 @@ public class DatabaseManagement {
         return createdTracks;
     }
 
+    /**
+     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     *
+     * @param dataSnapshot
+     * @return
+     */
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
         List<Track> favouriteTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()) {
@@ -134,11 +152,20 @@ public class DatabaseManagement {
         return favouriteTracks;
     }
 
+    /**
+     * Listener interface for the mReadDataOnce method.
+     */
     public interface OnGetDataListener {
-        public void onSuccess(DataSnapshot data);
-        public void onFailed(DatabaseError databaseError);
+        void onSuccess(DataSnapshot data);
+        void onFailed(DatabaseError databaseError);
     }
 
+    /**
+     * Read the data from the Firebase Database. Two methods to override.
+     *
+     * @param child
+     * @param listener
+     */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
         mDataBaseRef.child(child).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

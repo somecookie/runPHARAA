@@ -86,12 +86,22 @@ public class CustLatLng {
         return new LatLng(latitude, longitude);
     }
 
-    //TODO java doc
+    /**
+     * Convert given LatLng to CustLatLng.
+     *
+     * @param p
+     * @return
+     */
     public static CustLatLng LatLngToCustLatLng(LatLng p){
         return new CustLatLng(p.latitude, p.longitude);
     }
 
-    //TODO java doc
+    /**
+     * Convert List<LatLng> to List<CustLatLng>.
+     *
+     * @param l
+     * @return
+     */
     public static List<CustLatLng> LatLngToCustLatLng(List<LatLng> l){
         List<CustLatLng> result = new ArrayList<>();
         for(LatLng p : l){

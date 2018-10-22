@@ -120,7 +120,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-                //DO SOME THING WHEN GET DATA FAILED HERE
+                Log.d("DB Read: ", "Failed to read data from DB.");
             }
         });
     }
@@ -150,7 +150,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
             //viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground()); //TODO ERASE
             viewHolder.name.setText(listCardItem.get(position).getName());
 
-            new DownloadImageTask((ImageView) viewHolder.background_img)
+            new DownloadImageTask(viewHolder.background_img)
                     .execute(listCardItem.get(position).getImageURL());
 
             viewHolder.bind(listCardItem.get(position), listener);

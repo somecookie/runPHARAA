@@ -16,8 +16,7 @@ public class Reactions {
      * @param likes
      * @param dislikes
      */
-    public Reactions(int likes, int dislikes)
-    {
+    public Reactions(int likes, int dislikes) {
         if(likes < 0)
         {
             throw new IllegalArgumentException("likes argument strictly smaller than zero");

@@ -26,7 +26,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.sign_out_button).setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -49,7 +48,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         // Build a GoogleSignInClient with the options specified by gso.
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
 
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {

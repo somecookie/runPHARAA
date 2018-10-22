@@ -35,7 +35,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
         //trackBackground.setImageBitmap(track.getImage()); //TODO: ERASE
-        new DownloadImageTask((ImageView) trackBackground)
+        new DownloadImageTask(trackBackground)
                 .execute(track.getImageStorageUri());
 
         TextView trackTitle = findViewById(R.id.trackTitleID);
@@ -149,7 +149,6 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
-
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];

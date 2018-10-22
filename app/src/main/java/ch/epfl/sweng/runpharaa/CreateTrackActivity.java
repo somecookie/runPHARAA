@@ -27,6 +27,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     private boolean creating;
     private GoogleMap googleMap;
     private Button createButton;
+
     /**
      * The listener used for the main button
      */
