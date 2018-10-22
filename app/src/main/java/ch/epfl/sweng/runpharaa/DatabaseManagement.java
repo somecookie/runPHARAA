@@ -99,6 +99,7 @@ public class DatabaseManagement {
 
     /**
      * Given a DataSnapshot from the Firebase Database and a track key, return the corresponding track.
+     *
      * @param dataSnapshot
      * @param key
      * @return
