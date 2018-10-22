@@ -63,7 +63,7 @@ public final class User {
     @TargetApi(Build.VERSION_CODES.N)
     public ArrayList<Track> tracksNearMe() {
         ArrayList<Track> nm = new ArrayList<>();
-        ArrayList<Track> allTracks = Track.allTracks; //Todo muste be changed when the database is done
+        ArrayList<Track> allTracks = Track.allTracks; //Todo muste be changed when the database is done -> Can actually be deleted?
 
         //filter the tracks that start too far from the location
         for (Track tr : allTracks) {
@@ -119,7 +119,6 @@ public final class User {
     public void unlike(String trackId) {
         likedTracksKeys.remove(trackId);
     }
-
 
     /**
      *

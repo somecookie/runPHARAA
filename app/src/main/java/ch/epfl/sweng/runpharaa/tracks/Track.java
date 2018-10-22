@@ -63,6 +63,9 @@ public class Track {
         //this.cardItem = new CardItem(image, name, TID);
     }
 
+    //For Firebase
+    public Track() { }
+
     //TODO: either delete this or do it again when the database is on
     public static ArrayList<Track> allTracks;
 
@@ -98,6 +101,7 @@ public class Track {
         return properties;
     }
 
+    @Exclude
     public CardItem getCardItem() {
         return cardItem;
     }
@@ -118,6 +122,7 @@ public class Track {
         this.trackUid = trackUid;
     }
 
+    @Exclude
     public String getCreatorUid() {
         return creatorUid;
     }
@@ -126,17 +131,14 @@ public class Track {
         return path;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
+    @Exclude
+    public Bitmap getImage() { return image; }
 
-    //public int getTID() { return TID; }
+    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
 
     public String getImageStorageUri() {
         return imageStorageUri;
     }
 
-    public void setImageStorageUri(String imageStorageUri) {
-        this.imageStorageUri = imageStorageUri;
-    }
+    public void setImageStorageUri(String imageStorageUri) { this.imageStorageUri = imageStorageUri; }
 }

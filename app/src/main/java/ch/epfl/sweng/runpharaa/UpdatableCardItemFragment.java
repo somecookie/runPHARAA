@@ -72,7 +72,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     @Override
     public void onRefresh() {
         loadData();
-
         // Stop refreshing once it is done
         swipeLayout.setRefreshing(false);
     }
@@ -116,11 +115,11 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     }
 
     protected void loadData() {
-        initList();
+        //initList();
         loadListWithData();
-        if(listCardItem.isEmpty())
-            setEmptyMessage();
-        initAdapterAndLinkAll();
+        /*if(listCardItem.isEmpty())
+            setEmptyMessage();*/
+        //initAdapterAndLinkAll();
     }
 
     private class CardItemAdapter extends RecyclerView.Adapter<CardItemAdapter.viewHolder> {
@@ -188,7 +187,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
                 this.bmImage = bmImage;
             }
 
-
             protected Bitmap doInBackground(String... urls) {
                 String urldisplay = urls[0];
                 Bitmap mIcon11 = null;
@@ -199,7 +197,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
                     InputStream in = new java.net.URL(urldisplay).openStream();
                     mIcon11 = BitmapFactory.decodeStream(in);
 
-                    //TODO Might erase.
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
                     decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
@@ -208,7 +205,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }
-                return /*mIcon11*/decoded;
+                return decoded;
             }
 
             /**

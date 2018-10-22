@@ -21,7 +21,6 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
-
     //TODO: Check if ScrollView is working!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +34,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         TrackProperties tp = track.getProperties();
 
         ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-        trackBackground.setImageBitmap(track.getImage());
-        /*new DownloadImageTask((ImageView) trackBackground)
-                .execute(track.getImageStorageUri());*/
+        //trackBackground.setImageBitmap(track.getImage()); //TODO: ERASE
+        new DownloadImageTask((ImageView) trackBackground)
+                .execute(track.getImageStorageUri());
 
         TextView trackTitle = findViewById(R.id.trackTitleID);
         trackTitle.setText(track.getName());
@@ -162,7 +161,6 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
 
-                //TODO Might erase.
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
                 decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
@@ -171,7 +169,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            return /*mIcon11*/decoded;
+            return decoded;
         }
 
         /**

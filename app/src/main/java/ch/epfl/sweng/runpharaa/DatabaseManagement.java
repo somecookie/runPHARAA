@@ -93,7 +93,7 @@ public class DatabaseManagement {
     }
 
     public static void updateTrack(Track track){
-        //TODO check if it work
+        //TODO check if it works
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
     }
 
@@ -102,10 +102,10 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
-            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){
+            //if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
                 tracksNearMe.add(c.getValue(Track.class));
-                Log.d("Client : size ", Integer.toString(tracksNearMe.size()));
-            }
+                //Log.d("DB READ: ", Integer.toString(tracksNearMe.size()));
+            //}
         }
         return tracksNearMe;
     }

@@ -164,7 +164,6 @@ public class OldTrack
     @Exclude
     public ArrayList<Review> getReviews() { return reviews; }
 
-
     public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
 
     /**

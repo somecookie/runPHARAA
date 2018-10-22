@@ -15,9 +15,8 @@ public class TrackProperties {
     @Exclude
     private Set<TrackType> trackType;
 
-    public TrackProperties(){
-        //For Firebase
-    }
+    //For Firebase
+    public TrackProperties(){ }
 
     public TrackProperties(double length, double heightDiff, double time, int difficulty, Set<TrackType> trackType){
 

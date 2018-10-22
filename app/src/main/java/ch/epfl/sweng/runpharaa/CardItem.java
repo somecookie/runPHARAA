@@ -10,8 +10,8 @@ public class CardItem {
 
     public CardItem() { }
 
-    public CardItem(Bitmap background, String name, String parentTrackID, String imageURL) {
-        this.background = background;
+    public CardItem(/*Bitmap background,*/ String name, String parentTrackID, String imageURL) {
+        //this.background = background;
         this.name = name;
         this.parentTrackID = parentTrackID;
         this.imageURL = imageURL;
