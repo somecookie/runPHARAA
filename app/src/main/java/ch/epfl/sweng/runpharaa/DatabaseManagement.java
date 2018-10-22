@@ -98,6 +98,16 @@ public class DatabaseManagement {
     }
 
     /**
+     * Given a DataSnapshot from the Firebase Database and a track key, return the corresponding track.
+     * @param dataSnapshot
+     * @param key
+     * @return
+     */
+    public static Track initTrack(DataSnapshot dataSnapshot, String key){
+       return dataSnapshot.child(key).getValue(Track.class);
+    }
+
+    /**
      * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
      *
      * @param dataSnapshot
