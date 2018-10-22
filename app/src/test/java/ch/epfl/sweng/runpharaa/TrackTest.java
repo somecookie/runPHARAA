@@ -31,7 +31,8 @@ public class TrackTest {
 
     @Before
     public void init() {
-        b = Util.createImage(200, 100, R.color.colorPrimary);
+        Bitmap bitmap = Bitmap.createBitmap(200, 100, Bitmap.Config.ARGB_8888);
+        //b = Util.createImage(200, 100, R.color.colorPrimary);
         types = new HashSet<>();
         types.add(TrackType.FOREST);
         p = new TrackProperties(100, 10, 1, 1, types);

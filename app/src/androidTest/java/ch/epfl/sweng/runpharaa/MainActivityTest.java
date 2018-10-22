@@ -1,8 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
-import android.content.Intent;
-import android.os.SystemClock;
+import android.net.Uri;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -10,6 +8,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
+import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
@@ -37,37 +38,42 @@ public class MainActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
+    }
+
+    @Before
+    public void initIntents() {
+        Intents.init();
+    }
+
+    @After
+    public void releaseIntents() {
+        Intents.release();
     }
 
     @Test
     public void testChangeFragment() {
         onView(withId(R.id.viewPagerId)).perform(swipeDown());
-        SystemClock.sleep(1000);
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft()).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(3000);
     }
 
     @Test
     public void testOpenMaps() {
-        Intents.init();
         onView(withId(R.id.mapIcon)).perform(click());
         intended(hasComponent(MapsActivity.class.getName()));
-        Intents.release();
     }
 
     @Test
     public void testOpenSettings() {
-        Intents.init();
         onView(withId(R.id.settingsIcon)).perform(click());
         intended(hasComponent(SettingsActivity.class.getName()));
-        Intents.release();
     }
 
     @Test
     public void testOpenCreateTrackActivity() {
-        Intents.init();
         onView(withId(R.id.fab)).perform(click());
         intended(hasComponent(CreateTrackActivity.class.getName()));
-        Intents.release();
     }
 }
