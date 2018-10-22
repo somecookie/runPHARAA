@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,6 +26,10 @@ public class CreateTrackActivityTest {
     public static void initUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
     }
+
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void staysOnCreateTrackActivity(){
