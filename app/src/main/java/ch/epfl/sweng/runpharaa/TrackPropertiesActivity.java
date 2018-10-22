@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -26,76 +29,87 @@ public class TrackPropertiesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
-        final String trackID = intent.getStringExtra("TrackID");
-        final Track track = getTrackByID(Track.allTracks, trackID); //TODO: use Firebase DB method to get one specific track.
-
-        TrackProperties tp = track.getProperties();
-
-        ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-        //trackBackground.setImageBitmap(track.getImage()); //TODO: ERASE
-        new DownloadImageTask(trackBackground)
-                .execute(track.getImageStorageUri());
-
-        TextView trackTitle = findViewById(R.id.trackTitleID);
-        trackTitle.setText(track.getName());
-
-        TextView trackCreator = findViewById(R.id.trackCreatorID);
-        //TODO: make method like getNameFromID(uid)
-        trackCreator.setText("By "+track.getTrackUid());
-
-        TextView trackDuration = findViewById(R.id.trackDurationID);
-        trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
-
-        TextView trackLength = findViewById(R.id.trackLengthID);
-        trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");
-
-        /*
-        TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-        trackHeightDifference.setText("Height Difference: " + Double.toString(track.getHeight_diff())); //TODO: Figure out height difference.
-        */
-
-        TextView trackLikes = findViewById(R.id.trackLikesID);
-        trackLikes.setText(""+tp.getLikes());
-
-        TextView trackFavourites = findViewById(R.id.trackFavouritesID);
-        trackFavourites.setText(""+tp.getFavorites());
-
-        ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
-        ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
-
-        // Check if the user already liked this track and toggle the button accordingly
-        toggleLike.setChecked(User.instance.alreadyLiked(trackID));
-
-        toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    updateLikes(track, trackID);
-                } else {
-                    updateLikes(track, trackID);
-                }
+            public void onSuccess(DataSnapshot data) {
+                final String trackID = intent.getStringExtra("TrackID");
+                final Track track = DatabaseManagement.initTrack(data, trackID);
+
+                TrackProperties tp = track.getProperties();
+
+                ImageView trackBackground = findViewById(R.id.trackBackgroundID);
+                //trackBackground.setImageBitmap(track.getImage()); //TODO: ERASE
+                new DownloadImageTask(trackBackground)
+                        .execute(track.getImageStorageUri());
+
+                TextView trackTitle = findViewById(R.id.trackTitleID);
+                trackTitle.setText(track.getName());
+
+                TextView trackCreator = findViewById(R.id.trackCreatorID);
+                //TODO: make method like getNameFromID(uid)
+                trackCreator.setText("By "+track.getTrackUid());
+
+                TextView trackDuration = findViewById(R.id.trackDurationID);
+                trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
+
+                TextView trackLength = findViewById(R.id.trackLengthID);
+                trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");
+
+                /*
+                TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
+                trackHeightDifference.setText("Height Difference: " + Double.toString(track.getHeight_diff())); //TODO: Figure out height difference.
+                */
+
+                TextView trackLikes = findViewById(R.id.trackLikesID);
+                trackLikes.setText(""+tp.getLikes());
+
+                TextView trackFavourites = findViewById(R.id.trackFavouritesID);
+                trackFavourites.setText(""+tp.getFavorites());
+
+                ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
+                ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
+
+                // Check if the user already liked this track and toggle the button accordingly
+                toggleLike.setChecked(User.instance.alreadyLiked(trackID));
+
+                toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                        if (isChecked) {
+                            updateLikes(track, trackID);
+                        } else {
+                            updateLikes(track, trackID);
+                        }
+                    }
+                });
+
+                // Check if the track already in favorites and toggle the button accordingly
+                toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
+
+                toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                        if (isChecked) {
+                            updateNbFavorites(track, trackID);
+                        } else {
+                            updateNbFavorites(track, trackID);
+                        }
+                    }
+                });
+
+                /*
+                TextView Tags = findViewById(R.id.trackTagsID);
+                Tags.setText();
+                */
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+                Log.d("DB Read: ", "Failed to read data from DB.");
             }
         });
-
-        // Check if the track already in favorites and toggle the button accordingly
-        toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
-
-        toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    updateNbFavorites(track, trackID);
-                } else {
-                    updateNbFavorites(track, trackID);
-                }
-            }
-        });
-        /*
-        TextView Tags = findViewById(R.id.trackTagsID);
-        Tags.setText();
-        */
     }
 
     private void updateLikes(Track track1, String trackID) {
