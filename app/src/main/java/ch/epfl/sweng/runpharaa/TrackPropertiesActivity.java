@@ -29,7 +29,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         final String trackID = intent.getStringExtra("TrackID");
-        final Track track = getTrackByID(Track.allTracks, trackID);
+        final Track track = getTrackByID(Track.allTracks, trackID); //TODO: use Firebase DB method to get one specific track.
 
         TrackProperties tp = track.getProperties();
 

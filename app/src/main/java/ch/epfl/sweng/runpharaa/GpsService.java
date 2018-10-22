@@ -45,7 +45,6 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         Toast.makeText(getApplicationContext(), "Starting GPS Service", Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();

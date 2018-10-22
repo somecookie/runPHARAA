@@ -55,7 +55,6 @@ public class UsersProfileActivity extends AppCompatActivity {
             this.bmImage = bmImage;
         }
 
-
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;

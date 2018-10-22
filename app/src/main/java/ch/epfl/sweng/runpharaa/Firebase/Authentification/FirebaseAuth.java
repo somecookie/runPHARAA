@@ -6,7 +6,6 @@ public abstract class FirebaseAuth {
 
     private static final FirebaseAuthInterface instance = initInstance();
 
-
     public static FirebaseAuthInterface getInstance(){
         return instance;
     }

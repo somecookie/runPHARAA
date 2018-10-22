@@ -28,8 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
@@ -38,7 +36,6 @@ import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterf
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.User;
-import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,7 +43,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
-
 
     //private static final int RC_SIGN_IN = 1;
     //Needed public to mock access
@@ -56,7 +52,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuthInterface mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
     private Location l;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +78,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuth.getInstance();
-
-
     }
 
     @Override
@@ -174,7 +167,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         finish();
     }
 
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -233,5 +225,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         return false;
     }
-
 }

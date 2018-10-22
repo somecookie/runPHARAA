@@ -59,8 +59,6 @@ public class Track {
 
         startingPoint = path.get(0);
         this.properties = properties;
-
-        //this.cardItem = new CardItem(image, name, TID);
     }
 
     //For Firebase

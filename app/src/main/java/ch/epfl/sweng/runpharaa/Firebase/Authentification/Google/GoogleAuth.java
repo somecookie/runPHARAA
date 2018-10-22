@@ -6,7 +6,6 @@ public abstract class GoogleAuth {
 
     private static final GoogleAuthInterface instance = initInstance();
 
-
     public static GoogleAuthInterface getInstance(){
         return instance;
     }
