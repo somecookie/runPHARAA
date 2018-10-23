@@ -34,7 +34,7 @@ public class Track {
     public Track(String uid, String creatorName, Bitmap image, String name, LatLng[] path, TrackProperties properties) {
 
         Required.nonNull(uid, "User ID must be non-null");
-        Required.nonNull(image, "Image must be non-null");
+        //Required.nonNull(image, "Image must be non-null");
         Required.nonNull(path, "Path must be non-null");
         Required.nonNull(properties, "Properties must be non null");
         Required.nonNull(creatorName, "Name of the creator of track must be non-null");
