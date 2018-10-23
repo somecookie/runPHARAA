@@ -30,6 +30,10 @@
     <string name="default_time">Default run time was chosen</string>
     <string name="dismiss">Dismiss</string>
     <string name="OK">OK</string>
+    <string name="by">by %s</string>
+    <string name="duration">Duration: %.2f minutes</string>
+    <string name="distance">Distance: %.2f meters</string>
+    <string name="difficulty">Difficulty: %.2f</string>
     <string-array name="track_types">
         <item>City</item>
         <item>Forest</item>

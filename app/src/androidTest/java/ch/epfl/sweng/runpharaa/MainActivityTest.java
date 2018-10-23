@@ -17,6 +17,9 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
+
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -63,6 +66,13 @@ public class MainActivityTest {
     public void testOpenMaps() {
         onView(withId(R.id.mapIcon)).perform(click());
         intended(hasComponent(MapsActivity.class.getName()));
+
+    }
+
+    @Test
+    public void testOpenProfile() {
+        onView(withId(R.id.profileIcon)).perform(click());
+        intended(hasComponent(UsersProfileActivity.class.getName()));
     }
 
     @Test

@@ -69,7 +69,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
     private double totalDistance, totalAltitudeChange;
 
-    private String[] listTypes;
+    private String[] listTypesStr;
     private boolean[] checkedTypes;
     private Set<TrackType> types = new HashSet<>();
 
@@ -79,8 +79,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_track_2);
 
-        listTypes = getResources().getStringArray(R.array.track_types);
-        checkedTypes = new boolean[listTypes.length];
+        listTypesStr = getResources().getStringArray(R.array.track_types);
+        checkedTypes = new boolean[listTypesStr.length];
 
         totalDistanceText = findViewById(R.id.create_text_total_distance);
         totalAltitudeText = findViewById(R.id.create_text_total_altitude);
@@ -104,7 +104,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 } else {
                     // TODO: add track to created tracks
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(User.instance.getID(), trackPhoto, nameText.getText().toString(), points, trackProperties);
+                    Track track = new Track(User.instance.getID(),User.instance.getName(), trackPhoto, nameText.getText().toString(), points, trackProperties);
                     Track.allTracks.add(track);
                     finish();
                 }
@@ -198,35 +198,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             public void onClick(View v) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
                 mBuilder.setTitle(getResources().getString(R.string.choose_types));
-                mBuilder.setMultiChoiceItems(listTypes, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
+                mBuilder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        switch (listTypes[which]) {
-                            case "City":
-                                if (isChecked) types.add(TrackType.CITY);
-                                else types.remove(TrackType.CITY);
-                                break;
-                            case "Forest":
-                                if (isChecked) types.add(TrackType.FOREST);
-                                else types.remove(TrackType.FOREST);
-                                break;
-                            case "Mountain":
-                                if (isChecked) types.add(TrackType.SEASIDE);
-                                else types.remove(TrackType.SEASIDE);
-                                break;
-                            case "Beach":
-                                if (isChecked) types.add(TrackType.BEACH);
-                                else types.remove(TrackType.BEACH);
-                                break;
-                            case "Countryside":
-                                if (isChecked) types.add(TrackType.COUNTRYSIDE);
-                                else types.remove(TrackType.COUNTRYSIDE);
-                                break;
-                            case "Seaside":
-                                if (isChecked) types.add(TrackType.SEASIDE);
-                                else types.remove(TrackType.SEASIDE);
-                                break;
-                        }
+                        checkedTypes[which] = isChecked;
                     }
                 });
 
@@ -235,6 +210,13 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 mBuilder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        types.clear();
+
+                        for(int i = 0; i < checkedTypes.length; i++){
+                            if(checkedTypes[i]) types.add(TrackType.values()[i]);
+                        }
+
                         if (!types.isEmpty()) {
                             typesSet = true;
                         }

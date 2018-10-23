@@ -12,12 +12,10 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -35,7 +33,6 @@ public class TrackPropertiesActivityTest {
     @Rule
     public ActivityTestRule<TrackPropertiesActivity> mActivityRule =
             new ActivityTestRule<>(TrackPropertiesActivity.class, true, false);
-
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
@@ -55,11 +52,22 @@ public class TrackPropertiesActivityTest {
     }
 
     @Test
+    public void testLike() {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.buttonLikeID)).perform(click());
+    }
+
+    @Test
+    public void testFavourite() {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.buttonFavoriteID)).perform(click());
+    }
+
     public void pressingLikeUpdatesValue() {
         int likesBefore = Track.allTracks.get(0).getProperties().getLikes();
         launchWithTrackId(0);
         onView(withId(R.id.buttonLikeID)).perform(click());
-        withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore+1));
+        withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore));
@@ -70,7 +78,7 @@ public class TrackPropertiesActivityTest {
         int favsBefore = Track.allTracks.get(0).getProperties().getFavorites();
         launchWithTrackId(0);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
-        withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore+1));
+        withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore));
@@ -93,3 +101,6 @@ public class TrackPropertiesActivityTest {
     }
 
 }
+
+
+

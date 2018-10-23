@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+
 import android.Manifest;
 import android.net.Uri;
 import android.support.test.espresso.intent.Intents;
@@ -33,14 +34,14 @@ public class SettingsActivityTest {
     public final ActivityTestRule<SettingsActivity> mActivityRule =
             new ActivityTestRule<>(SettingsActivity.class);
 
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
+
     @BeforeClass
     public static void initUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(46.520566, 6.567820), false, "aa");
     }
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Before
     public void initIntents() {
@@ -56,6 +57,11 @@ public class SettingsActivityTest {
     public void logoutButtonLeadsToSignIn() {
         onView(withId(R.id.sign_out_button)).perform(click());
         intended(hasComponent(LoginActivity.class.getName()));
+    }
+
+    @Test
+    public void testLogOut() {
+        onView(withId(R.id.sign_out_button)).perform(click());
     }
 
 }

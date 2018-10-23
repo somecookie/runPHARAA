@@ -18,6 +18,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 public class Track {
     //Track identifiers
     private static int COUNTER_ID = 0;
+    private final String creatorName;
     private int TID;
     private final String uid;
     private final Bitmap image;
@@ -30,12 +31,13 @@ public class Track {
 
     private final TrackProperties properties;
 
-    public Track(String uid, Bitmap image, String name, LatLng[] path, TrackProperties properties) {
+    public Track(String uid, String creatorName, Bitmap image, String name, LatLng[] path, TrackProperties properties) {
 
         Required.nonNull(uid, "User ID must be non-null");
         Required.nonNull(image, "Image must be non-null");
         Required.nonNull(path, "Path must be non-null");
         Required.nonNull(properties, "Properties must be non null");
+        Required.nonNull(creatorName, "Name of the creator of track must be non-null");
 
         this.TID = COUNTER_ID++;
         Log.i("hiii", "tid on create: " + TID + " " + name);
@@ -43,6 +45,7 @@ public class Track {
         this.uid = uid;
         this.image = image;
         this.name = name;
+        this.creatorName = creatorName;
 
         if (path.length < 2)
             throw new IllegalArgumentException("A path must have at least 2 points");
@@ -79,7 +82,7 @@ public class Track {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track t = new Track("Bob", b, "Cours forest !", new LatLng[]{coord0, coord1, coord2}, p);
+        Track t = new Track("r74794", "Bob", b, "Cours forest !", new LatLng[]{coord0, coord1, coord2}, p);
 
         ArrayList<Track> all = new ArrayList<>();
         all.add(t);
@@ -147,5 +150,9 @@ public class Track {
 
     public int getTID() {
         return TID;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
     }
 }

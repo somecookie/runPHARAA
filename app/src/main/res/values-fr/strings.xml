@@ -35,5 +35,9 @@
         <item>Plage</item>
         <item>Campagne</item>
     </string-array>
+    <string name="by">par %s</string>
+    <string name="duration">Durée: %.2f minutes</string>
+    <string name="distance">Distance: %.2f mètres</string>
+    <string name="difficulty">Difficulté: %.2f</string>
 
 </resources>

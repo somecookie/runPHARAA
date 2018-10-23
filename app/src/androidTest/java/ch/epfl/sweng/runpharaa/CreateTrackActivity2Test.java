@@ -216,6 +216,8 @@ public class CreateTrackActivity2Test {
         for(int i = 0; i < TrackType.values().length; ++i) {
             onData(is(instanceOf(String.class))).inAdapterView(allOf(withClassName(equalTo("com.android.internal.app.AlertController$RecycleListView")), isDisplayed()))
                     .atPosition(i)
+                    .perform(click())
+                    .perform(click())
                     .perform(click());
         }
         sleep(WAIT_TIME);
