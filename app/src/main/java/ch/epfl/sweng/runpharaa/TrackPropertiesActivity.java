@@ -123,6 +123,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             track.getProperties().addLike();
             User.instance.like(trackID);
         }
+        DatabaseManagement.updateTrack(track);
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
@@ -141,6 +142,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }
+        DatabaseManagement.updateTrack(track);
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
