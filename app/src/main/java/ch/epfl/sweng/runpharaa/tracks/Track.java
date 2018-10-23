@@ -116,10 +116,6 @@ public class Track {
         return trackUid;
     }
 
-    public void setTrackUid(String trackUid) {
-        this.trackUid = trackUid;
-    }
-
     @Exclude
     public String getCreatorUid() {
         return creatorUid;
@@ -132,11 +128,15 @@ public class Track {
     @Exclude
     public Bitmap getImage() { return image; }
 
-    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
-
     public String getImageStorageUri() {
         return imageStorageUri;
     }
 
     public void setImageStorageUri(String imageStorageUri) { this.imageStorageUri = imageStorageUri; }
+
+    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
+
+    public void setTrackUid(String trackUid) {
+        this.trackUid = trackUid;
+    }
 }

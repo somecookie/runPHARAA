@@ -48,14 +48,13 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 trackTitle.setText(track.getName());
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
-                //TODO: make method like getNameFromID(uid)
-                trackCreator.setText("By "+track.getTrackUid());
+                //TODO: make method like getNameFromID(uid) -> once the Users are in DB
+                trackCreator.setText("By Test User" /*+ track.getCreatorUid()*/);
 
-                //TODO: Uncomment once it is included in the DB.
-                /*
+                //TODO: Add real duration once it is included in the DB.
                 TextView trackDuration = findViewById(R.id.trackDurationID);
-                trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
-                */
+                trackDuration.setText("Duration: " /*+ tp.getAvgDuration()*/ + "5 minutes");
+
 
                 TextView trackLength = findViewById(R.id.trackLengthID);
                 trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");

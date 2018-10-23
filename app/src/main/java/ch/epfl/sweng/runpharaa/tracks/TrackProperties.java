@@ -5,7 +5,6 @@ import com.google.firebase.database.Exclude;
 import java.util.Set;
 
 public class TrackProperties {
-
     private double length;
     private double heightDifference;
     private AvgDuration avgDur;
@@ -45,14 +44,13 @@ public class TrackProperties {
         avgDur.add(dur);
     }
 
+    public void addLike(){ likes++; }
+    public void removeLike(){ likes--; }
+    public int getLikes(){ return likes; }
 
-    public void addLike(){likes++;}
-    public void removeLike(){likes--;}
-    public int getLikes(){return likes;}
-
-    public void addFavorite(){favorites++;}
-    public void removeFavorite(){favorites--;}
-    public int getFavorites(){return favorites;}
+    public void addFavorite(){ favorites++; }
+    public void removeFavorite(){ favorites--; }
+    public int getFavorites(){ return favorites; }
 
     @Exclude //TODO exclude for now but make f(string) -> TrackType for database (@Hugo for more explications)
     public Set<TrackType> getType(){return trackType;}

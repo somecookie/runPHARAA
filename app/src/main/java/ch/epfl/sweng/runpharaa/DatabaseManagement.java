@@ -45,6 +45,7 @@ public class DatabaseManagement {
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
         //Upload image
+        //TODO: Compress image before upload to DB.
         Bitmap bitmap = track.getImage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -119,10 +120,9 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
-            //if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
+            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
                 tracksNearMe.add(c.getValue(Track.class));
-                //Log.d("DB READ: ", Integer.toString(tracksNearMe.size()));
-            //}
+            }
         }
         return tracksNearMe;
     }

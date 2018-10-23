@@ -3,7 +3,7 @@ package ch.epfl.sweng.runpharaa;
 import android.graphics.Bitmap;
 
 public class CardItem {
-    private Bitmap background;
+    private Bitmap background; //TODO: Keep for Image caching
     private String name;
     private String parentTrackID;
     private String imageURL;

@@ -69,13 +69,18 @@ public class MainActivity extends AppCompatActivity {
         CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
         CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
 
-        TrackProperties p = new TrackProperties(100, 10, 1, 1, null);
-        DatabaseManagement.writeNewTrack(new Track("Banane -> Centre Sportif", BitmapFactory.decodeResource(getResources(), R.drawable.centre_sportif) , Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)), p));
-        DatabaseManagement.writeNewTrack(new Track("Innovation Parc -> BC",BitmapFactory.decodeResource(getResources(), R.drawable.innovation_park),Arrays.asList(new CustLatLng(46.517563, 6.562350), new CustLatLng(46.518475, 6.561960)), p));
-        DatabaseManagement.writeNewTrack(new Track("Rolex -> Swisstech",BitmapFactory.decodeResource(getResources(),R.drawable.rolex), Arrays.asList(new CustLatLng(46.518447, 6.568238), new CustLatLng(46.523206, 6.564945)), p));
-        DatabaseManagement.writeNewTrack(new Track("Sat -> INM",BitmapFactory.decodeResource(getResources(),R.drawable.rolex), Arrays.asList(new CustLatLng(46.520566, 6.567820), new CustLatLng(46.518577, 6.563165)), p));
-        DatabaseManagement.writeNewTrack(new Track("Ouchy -> Gare",BitmapFactory.decodeResource(getResources(),R.drawable.ouchy), Arrays.asList(new CustLatLng(46.506279, 6.626111), new CustLatLng(46.517210, 6.630105)), p));
-        DatabaseManagement.writeNewTrack(new Track("SF -> Cath -> Flon",BitmapFactory.decodeResource(getResources(),R.drawable.saint_francois), Arrays.asList(new CustLatLng(46.519531, 6.633149), new CustLatLng(46.522638, 6.634971), new CustLatLng(46.521412, 6.627383)), p));
+        TrackProperties p1 = new TrackProperties(1200, 10, 1, 1, null);
+        TrackProperties p2 = new TrackProperties(500, 3, 1, 1, null);
+        TrackProperties p3 = new TrackProperties(1050, 7, 1, 1, null);
+        TrackProperties p4 = new TrackProperties(900, 9, 1, 1, null);
+        TrackProperties p5 = new TrackProperties(1500, 23, 1, 1, null);
+        TrackProperties p6 = new TrackProperties(2000, 20, 1, 1, null);
+        DatabaseManagement.writeNewTrack(new Track("Banane -> Centre Sportif", BitmapFactory.decodeResource(getResources(), R.drawable.centre_sportif) , Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)), p1));
+        DatabaseManagement.writeNewTrack(new Track("Innovation Parc -> BC",BitmapFactory.decodeResource(getResources(), R.drawable.innovation_park),Arrays.asList(new CustLatLng(46.517563, 6.562350), new CustLatLng(46.518475, 6.561960)), p2));
+        DatabaseManagement.writeNewTrack(new Track("Rolex -> Swisstech",BitmapFactory.decodeResource(getResources(),R.drawable.rolex), Arrays.asList(new CustLatLng(46.518447, 6.568238), new CustLatLng(46.523206, 6.564945)), p3));
+        DatabaseManagement.writeNewTrack(new Track("Sat -> INM",BitmapFactory.decodeResource(getResources(),R.drawable.rolex), Arrays.asList(new CustLatLng(46.520566, 6.567820), new CustLatLng(46.518577, 6.563165)), p4));
+        DatabaseManagement.writeNewTrack(new Track("Ouchy -> Gare",BitmapFactory.decodeResource(getResources(),R.drawable.ouchy), Arrays.asList(new CustLatLng(46.506279, 6.626111), new CustLatLng(46.517210, 6.630105)), p5));
+        DatabaseManagement.writeNewTrack(new Track("SF -> Cath -> Flon",BitmapFactory.decodeResource(getResources(),R.drawable.saint_francois), Arrays.asList(new CustLatLng(46.519531, 6.633149), new CustLatLng(46.522638, 6.634971), new CustLatLng(46.521412, 6.627383)), p6));
         Log.d("Put Fake Track", "Test2");
         */
 

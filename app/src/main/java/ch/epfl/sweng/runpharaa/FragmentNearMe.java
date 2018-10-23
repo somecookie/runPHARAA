@@ -107,7 +107,6 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 OnItemClickListener listener = new OnItemClickListener() {
                     @Override
                     public void onItemClick(CardItem item) {
-                        Log.d("CardItem Click: ", "CardItem is null.");
                         Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
                         intent.putExtra("TrackID", item.getParentTrackID());
                         startActivity(intent);
