@@ -84,6 +84,7 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
     SwipeRefreshLayout swipeLayout;
+    TextView emptyMessage;
 
     public FragmentFavourites() { }
 
@@ -91,10 +92,17 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
         void onItemClick(CardItem item);
     }
 
+    private void setEmptyMessage() {
+        emptyMessage.setText(R.string.no_favorite);
+        emptyMessage.setVisibility(View.VISIBLE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
+
+        emptyMessage = v.findViewById(R.id.emptyMessage);
 
         // Setup for refresh on swipe
         swipeLayout = v.findViewById(R.id.refreshNearMe);
@@ -165,11 +173,15 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
                 Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                if(listCardItem.isEmpty())
+                    setEmptyMessage();
             }
 
             @Override
             public void onFailed(DatabaseError databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentFavourites.");
+                setEmptyMessage();
             }
         });
     }

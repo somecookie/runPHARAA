@@ -115,11 +115,11 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     }
 
     protected void loadData() {
-        //initList();
+        initList();
         loadListWithData();
-        /*if(listCardItem.isEmpty())
-            setEmptyMessage();*/
-        //initAdapterAndLinkAll();
+        if(listCardItem.isEmpty())
+            setEmptyMessage();
+        initAdapterAndLinkAll();
     }
 
     private class CardItemAdapter extends RecyclerView.Adapter<CardItemAdapter.viewHolder> {
