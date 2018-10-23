@@ -16,6 +16,18 @@ android {
         versionName "1.0"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
+
+    // This enables long timeouts required on slow environments, e.g. Travis
+    adbOptions {
+        timeOutInMs 10 * 60 * 1000  // 10 minutes
+        installOptions "-d","-t"
+    }
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+    }
+
     buildTypes {
         release {
             minifyEnabled false

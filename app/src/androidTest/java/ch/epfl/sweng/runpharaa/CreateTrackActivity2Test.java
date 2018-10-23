@@ -13,6 +13,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SeekBar;
@@ -21,6 +22,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,6 +38,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressKey;
@@ -89,10 +94,10 @@ public class CreateTrackActivity2Test {
     public void correctValuesDisplayedForInmBananeCs() {
         LatLng[] points = {inm, banane, cs};
         Location[] locations = generateLocations(points);
-        double totalDistance = Util.computeDistanceAndElevationChange(locations)[0];
+        double[] skrr = Util.computeDistanceAndElevationChange(locations);
         launchWithExtras(locations, points);
-        onView(withId(R.id.create_text_total_altitude)).check(matches(withText("Total altitude difference: 0.00 m")));
-        onView(withId(R.id.create_text_total_distance)).check(matches(withText(String.format("Total distance: %.2f m", totalDistance))));
+        onView(withId(R.id.create_text_total_altitude)).check(matches(withText(String.format("Total altitude difference: %.2f m", skrr[1]))));
+        onView(withId(R.id.create_text_total_distance)).check(matches(withText(String.format("Total distance: %.2f m", skrr[0]))));
     }
 
     @Test
@@ -148,8 +153,7 @@ public class CreateTrackActivity2Test {
                 .check(matches(isDisplayed()));
     }
 
-
-    /*@Test
+    @Test
     public void slideBarCorrectlyUpdatesDifficulty() {
         LatLng[] points = {inm, banane};
         Location[] locations = generateLocations(points);
@@ -171,7 +175,7 @@ public class CreateTrackActivity2Test {
         onView(withText("A track needs a name!"))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
-    }*/
+    }
 
     @Test
     public void creatingTrackWithoutSettingNameFails() {
