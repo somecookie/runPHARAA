@@ -40,7 +40,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 TrackProperties tp = track.getProperties();
 
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-                //trackBackground.setImageBitmap(track.getImage()); //TODO: ERASE
+                //trackBackground.setImageBitmap(track.getImage()); //TODO: For caching?
                 new DownloadImageTask(trackBackground)
                         .execute(track.getImageStorageUri());
 
@@ -109,7 +109,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-                Log.d("DB Read: ", "Failed to read data from DB.");
+                Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });
     }

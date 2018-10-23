@@ -99,7 +99,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
-                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                List<Track> tracks = DatabaseManagement.initTracksNearMe(data); //TODO: Maybe sort them by nearest?
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
@@ -119,7 +119,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-                Log.d("DB Read: ", "Failed to read data from DB.");
+                Log.d("DB Read: ", "Failed to read data from DB in FragmentNearMe.");
             }
         });
     }
@@ -196,10 +196,13 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
                 try {
                     InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 8;
+                    mIcon11 = BitmapFactory.decodeStream(in, null, options);
 
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
+
                     decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
                 } catch (Exception e) {

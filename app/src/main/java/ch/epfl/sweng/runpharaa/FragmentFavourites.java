@@ -169,7 +169,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-                Log.d("DB Read: ", "Failed to read data from DB.");
+                Log.d("DB Read: ", "Failed to read data from DB in FragmentFavourites.");
             }
         });
     }

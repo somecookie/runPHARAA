@@ -19,6 +19,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -45,10 +47,10 @@ public class DatabaseManagement {
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
         //Upload image
-        //TODO: Compress image before upload to DB.
+        //TODO: Resize image before upload to DB.
         Bitmap bitmap = track.getImage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
@@ -142,6 +144,14 @@ public class DatabaseManagement {
                 }
             }
         }
+        Collections.sort(createdTracks, new Comparator<Track>() {
+            @Override
+            public int compare(Track o1, Track o2) {
+                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+                return Double.compare(d1, d2);
+            }
+        });
         return createdTracks;
     }
 
