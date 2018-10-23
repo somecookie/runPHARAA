@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
+
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
@@ -65,6 +66,7 @@ public class MainActivityTest {
     public void testOpenMaps() {
         onView(withId(R.id.mapIcon)).perform(click());
         intended(hasComponent(MapsActivity.class.getName()));
+
     }
 
     @Test

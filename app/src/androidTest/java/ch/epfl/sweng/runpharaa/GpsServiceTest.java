@@ -20,6 +20,7 @@ import java.util.HashSet;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
+import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -51,7 +52,6 @@ public class GpsServiceTest {
         assertTrue(!isMyServiceRunning(GpsService.class));
     }
 
-
     @Test
     public void correctlyLaunchesServiceOnMapView() {
         turnsGpsServiceOnAndOff(R.id.mapIcon);
@@ -64,8 +64,10 @@ public class GpsServiceTest {
 
     private void turnsGpsServiceOnAndOff(int id) {
         onView(withId(id)).perform(click());
+        sleep(500);
         assertTrue(isMyServiceRunning(GpsService.class));
         pressBack();
+        sleep(500);
         assertTrue(!isMyServiceRunning(GpsService.class));
     }
 

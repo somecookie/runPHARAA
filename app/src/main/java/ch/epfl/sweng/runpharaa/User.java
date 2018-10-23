@@ -112,10 +112,6 @@ public final class User {
         idTracksLiked.remove(trackId);
     }
 
-    public Set<Integer> getFavorites() {
-        return favorites;
-    }
-
     /**
      *
      * @param trackId

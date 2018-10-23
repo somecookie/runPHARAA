@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,15 +30,15 @@ public class UsersProfileActivityTest {
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =
             new ActivityTestRule<>(UsersProfileActivity.class, true, false);
 
-    @BeforeClass
-    public static void initEmptyUser() {
+    @Before
+    public void initEmptyUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
     }
 
     @Test
     public void correctlyDisplaysName() {
         mActivityRule.launchActivity(new Intent());
-        onView(withId(R.id.user_name)).check(matches(withText("FakeUser")));
+        onView(withId(R.id.user_name)).check(matches(withText(User.instance.getName())));
     }
 
     @Test

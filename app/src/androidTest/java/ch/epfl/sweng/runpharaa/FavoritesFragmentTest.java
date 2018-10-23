@@ -53,8 +53,7 @@ public class FavoritesFragmentTest {
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION);
+            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Before
     public void init() {
