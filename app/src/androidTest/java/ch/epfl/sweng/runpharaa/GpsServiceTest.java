@@ -20,6 +20,7 @@ import java.util.HashSet;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
+import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -44,19 +45,15 @@ public class GpsServiceTest {
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION);
+            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void doesNotLaunchGpsServiceInitially() {
         assertTrue(!isMyServiceRunning(GpsService.class));
     }
 
-
     @Test
     public void correctlyLaunchesServiceOnMapView() {
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
-        System.out.println(User.instance == null);
         turnsGpsServiceOnAndOff(R.id.mapIcon);
     }
 
@@ -67,8 +64,10 @@ public class GpsServiceTest {
 
     private void turnsGpsServiceOnAndOff(int id) {
         onView(withId(id)).perform(click());
+        sleep(500);
         assertTrue(isMyServiceRunning(GpsService.class));
         pressBack();
+        sleep(500);
         assertTrue(!isMyServiceRunning(GpsService.class));
     }
 

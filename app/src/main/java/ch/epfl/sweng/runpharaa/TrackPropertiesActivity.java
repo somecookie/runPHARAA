@@ -19,9 +19,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
     //TODO: Check if ScrollView is working!
@@ -102,8 +104,8 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 });
 
                 /*
-                TextView Tags = findViewById(R.id.trackTagsID);
-                Tags.setText();
+                TextView trackTags = findViewById(R.id.trackTagsID);
+                trackTags.setText(createTagString(track));
                 */
             }
 
@@ -112,6 +114,30 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });
+    }
+
+    private String createTagString(Track track) {
+        Set<TrackType> typeSet = track.getProperties().getType();
+        int nbrTypes = typeSet.size();
+        String[] trackType = getResources().getStringArray(R.array.track_types);
+
+        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(start);
+
+        int i = 0;
+
+        for(TrackType tt : typeSet){
+
+            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
+            if(i < nbrTypes - 1) sb.append(", ");
+
+            i++;
+        }
+
+        return sb.toString();
+
     }
 
     private void updateLikes(Track track1, String trackID) {

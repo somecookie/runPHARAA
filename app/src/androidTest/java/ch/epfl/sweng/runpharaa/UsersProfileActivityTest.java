@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.junit.runner.RunWith;
 
 import java.util.HashSet;
 
-import ch.epfl.sweng.runpharaa.Users.Profile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -29,16 +30,15 @@ public class UsersProfileActivityTest {
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =
             new ActivityTestRule<>(UsersProfileActivity.class, true, false);
 
-    @BeforeClass
-    public static void initEmptyUser() {
-        Uri path = Uri.parse("android.resource://ch.epfl.sweng.runpharaa/" + R.drawable.default_photo);
-        User.instance = new User("FakeUser", 2000, path, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
+    @Before
+    public void initEmptyUser() {
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
     }
 
     @Test
     public void correctlyDisplaysName() {
         mActivityRule.launchActivity(new Intent());
-        onView(withId(R.id.user_name)).check(matches(withText("FakeUser")));
+        onView(withId(R.id.user_name)).check(matches(withText(User.instance.getName())));
     }
 
     @Test

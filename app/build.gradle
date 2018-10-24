@@ -16,6 +16,18 @@ android {
         versionName "1.0"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
+
+    // This enables long timeouts required on slow environments, e.g. Travis
+    adbOptions {
+        timeOutInMs 10 * 60 * 1000  // 10 minutes
+        installOptions "-d","-t"
+    }
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -77,6 +89,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:3.0.2"
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
 }
 
 configurations.all {
@@ -89,7 +102,7 @@ configurations.all {
 
     }
 }
-
+/*
 def adb = android.getAdbExe().toString()
 tasks.whenTaskAdded { task ->
     if (task.name.startsWith('install')) {
@@ -106,6 +119,7 @@ tasks.whenTaskAdded { task ->
         }
     }
 }
+*/
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true

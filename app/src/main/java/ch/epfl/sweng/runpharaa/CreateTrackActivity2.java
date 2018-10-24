@@ -40,6 +40,7 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -56,8 +57,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private SeekBar mSeekBar;
     private TextView mDiffText;
 
-    private double minAltitude = Double.POSITIVE_INFINITY;
-    private double maxAltitude = Double.NEGATIVE_INFINITY;
     private Location[] locations;
     private LatLng[] points;
     private Bitmap trackPhoto;
@@ -70,7 +69,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
     private double totalDistance, totalAltitudeChange;
 
-    private String[] listTypes;
+    private String[] listTypesStr;
     private boolean[] checkedTypes;
     private Set<TrackType> types = new HashSet<>();
 
@@ -79,8 +78,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_track_2);
 
-        listTypes = getResources().getStringArray(R.array.track_types);
-        checkedTypes = new boolean[listTypes.length];
+        listTypesStr = getResources().getStringArray(R.array.track_types);
+        checkedTypes = new boolean[listTypesStr.length];
 
         totalDistanceText = findViewById(R.id.create_text_total_distance);
         totalAltitudeText = findViewById(R.id.create_text_total_altitude);
@@ -96,17 +95,16 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 }
 
                 if (!propertiesSet) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_SHORT).show();
                 } else if (!typesSet) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_SHORT).show();
                 } else if (nameText.getText().toString().isEmpty()) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
                 } else {
                     // TODO: add track to created tracks
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(nameText.getText().toString(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                    Track track = new Track(nameText.getText().toString(), User.instance.getID(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
                     DatabaseManagement.writeNewTrack(track);
-                    //Track.allTracks.add(track);
                     finish();
                 }
             }
@@ -170,7 +168,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                         if (!mTime.getText().toString().isEmpty()) {
                             time = Double.parseDouble(mTime.getText().toString());
                         } else {
-                            Toast.makeText(getBaseContext(), getResources().getString(R.string.default_time), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.default_time), Toast.LENGTH_SHORT).show();
                             time = totalDistance / 133;
                         }
                         propertiesSet = true;
@@ -199,35 +197,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             public void onClick(View v) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
                 mBuilder.setTitle(getResources().getString(R.string.choose_types));
-                mBuilder.setMultiChoiceItems(listTypes, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
+                mBuilder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        switch (listTypes[which]) {
-                            case "City":
-                                if (isChecked) types.add(TrackType.CITY);
-                                else types.remove(TrackType.CITY);
-                                break;
-                            case "Forest":
-                                if (isChecked) types.add(TrackType.FOREST);
-                                else types.remove(TrackType.FOREST);
-                                break;
-                            case "Mountain":
-                                if (isChecked) types.add(TrackType.SEASIDE);
-                                else types.remove(TrackType.SEASIDE);
-                                break;
-                            case "Beach":
-                                if (isChecked) types.add(TrackType.BEACH);
-                                else types.remove(TrackType.BEACH);
-                                break;
-                            case "Countryside":
-                                if (isChecked) types.add(TrackType.COUNTRYSIDE);
-                                else types.remove(TrackType.COUNTRYSIDE);
-                                break;
-                            case "Seaside":
-                                if (isChecked) types.add(TrackType.SEASIDE);
-                                else types.remove(TrackType.SEASIDE);
-                                break;
-                        }
+                        checkedTypes[which] = isChecked;
                     }
                 });
 
@@ -236,6 +209,13 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 mBuilder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        types.clear();
+
+                        for(int i = 0; i < checkedTypes.length; i++){
+                            if(checkedTypes[i]) types.add(TrackType.values()[i]);
+                        }
+
                         if (!types.isEmpty()) {
                             typesSet = true;
                         }
@@ -287,7 +267,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 trackImage.setImageBitmap(trackPhoto);
 
             } catch (FileNotFoundException e) {
-                Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Unable to open image", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -304,39 +284,14 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             a = bundle.getParcelableArray("points");
             points = Arrays.copyOf(a, a.length, LatLng[].class);
 
-            computeValues();
+            double[] values = Util.computeDistanceAndElevationChange(locations);
+            totalDistance = values[0];
+            totalAltitudeChange = values[1];
 
             // Show extracted info
             totalDistanceText.setText(String.format("Total distance: %.2f m", totalDistance));
             totalAltitudeText.setText(String.format("Total altitude difference: %.2f m", totalAltitudeChange));
         }
-    }
-
-    /**
-     * Computes the total distance and total altitude difference of the track
-     */
-    private void computeValues() {
-        // TODO: will we store this info somewhere ? What additional info do we want to show ?
-        for (int i = 0; i < locations.length; ++i) {
-            Location l = locations[i];
-            updateMinAndMaxAltitude(l.getAltitude());
-            if (i != 0)
-                totalDistance += l.distanceTo(locations[i - 1]);
-        }
-        // TODO: the altitudes completely off right now, try to fix
-        totalAltitudeChange = maxAltitude - minAltitude;
-    }
-
-    /**
-     * Updates the max and min altitudes according to a new altitude
-     *
-     * @param a the new altitude
-     */
-    private void updateMinAndMaxAltitude(double a) {
-        if (a < minAltitude)
-            minAltitude = a;
-        if (a > maxAltitude)
-            maxAltitude = a;
     }
 
     @Override
@@ -367,7 +322,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.65);
+            int height = (int)(getResources().getDisplayMetrics().heightPixels*0.35); // map height is 0.35% of screen
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));

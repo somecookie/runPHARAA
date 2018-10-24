@@ -9,7 +9,6 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"
 		     tools:ignore="MockLocation,ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -59,9 +58,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".TrackPropertiesActivity"></activity>
+        <activity android:name=".TrackPropertiesActivity" />
 
-        <activity android:name=".Users.Profile.UsersProfileActivity"></activity>
+        <activity android:name=".user.UsersProfileActivity" />
 
         <activity
             android:name=".login.LoginActivity"
@@ -72,7 +71,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
     </application>
 
 </manifest>

@@ -113,6 +113,7 @@ public final class User {
 
     /**
      * Check if the track is already in user's favorites
+     *
      * @param trackId the track's id
      * @return true if the track is in the favorites
      */
@@ -121,17 +122,19 @@ public final class User {
     }
 
     /**
+     *Check if Track is already in favourites.
      *
      * @param trackId
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("hahaha", ""+favoritesTracksKeys.contains(trackId));
+        Log.i("hahaha", "" + favoritesTracksKeys.contains(trackId));
         return favoritesTracksKeys.contains(trackId);
     }
 
     /**
-     * Add a track id in the set of favorite tracks if it is not already there
+     * Add a Track id in the set of favourite tracks if it is not already there.
+     *
      * @param trackId the track's id
      */
     public void addToFavorites(String trackId) {
@@ -141,12 +144,18 @@ public final class User {
         }
     }
 
+    /**
+     * Add a Track id in the set of created tracks.
+     *
+     * @param trackId
+     */
     public void addToCreatedTracks(String trackId) {
         createdTracksKeys.add(trackId);
     }
 
     /**
-     * Remove a track id from the set of favorite tracks if it is present
+     * Remove a track id from the set of favorite tracks if it is present.
+     *
      * @param trackId the track's id
      */
     public void removeFromFavorites(String trackId) {
@@ -158,45 +167,32 @@ public final class User {
      *
      * @return location
      */
-    public LatLng getLocation() {
-        return location;
-    }
+    public LatLng getLocation() { return location; }
 
     /**
      * Return the name of the user
      *
      * @return name
      */
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    /**
-     * Update the user's location
-     *
-     * @param newLocation
-     */
-    public void setLocation(LatLng newLocation) {
-        this.location = newLocation;
-    }
+    public String getID() { return uId; }
 
-    public Uri getPicture(){
-        return picture;
-    }
+    public Uri getPicture(){ return picture; }
 
-    public List<String> getCreatedTracks(){
-        return createdTracksKeys;
-    }
+    public List<String> getCreatedTracks(){ return createdTracksKeys; }
 
-    public List<String> getFavoriteTracks(){
-        return favoritesTracksKeys;
-    }
+    public List<String> getFavoriteTracks(){ return favoritesTracksKeys; }
 
     public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, Boolean admin, String uId){
         instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, admin, uId);
     }
 
-    public String getID() {
-        return uId;
-    }
+    /**
+     * Update the user's location.
+     *
+     * @param newLocation
+     */
+    public void setLocation(LatLng newLocation) { this.location = newLocation; }
+
 }
