@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -20,7 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
@@ -79,11 +77,10 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         //add a marker for each starting point inside the preferred radius
         for (Track tr : User.instance.tracksNearMe()) {
             Marker m = mMap.addMarker(new MarkerOptions()
-                    .position(tr.getStartingPoint())
+                    .position(tr.getStartingPoint().ToLatLng())
                     .title(tr.getName()));
-            m.setTag(tr.getTID());
+            m.setTag(tr.getTrackUid());
         }
-
     }
 
     @Override
@@ -126,7 +123,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             // Get the correct track by it's id
             Track track = null;
             for (Track tr : Track.allTracks)
-                if (tr.getTID() == (int) marker.getTag())
+                if (track.getTrackUid() ==  marker.getTag())
                     track = tr;
 
             // Get other info from the track (should never be null be we check just in case)

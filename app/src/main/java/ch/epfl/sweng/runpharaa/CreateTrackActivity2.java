@@ -73,7 +73,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private boolean[] checkedTypes;
     private Set<TrackType> types = new HashSet<>();
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,8 +103,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 } else {
                     // TODO: add track to created tracks
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(User.instance.getID(),User.instance.getName(), trackPhoto, nameText.getText().toString(), points, trackProperties);
-                    Track.allTracks.add(track);
+                    Track track = new Track(nameText.getText().toString(), User.instance.getID(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                    DatabaseManagement.writeNewTrack(track);
                     finish();
                 }
             }
@@ -240,13 +239,11 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
         trackImage = findViewById(R.id.track_photo);
 
-
         // Get map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view);
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

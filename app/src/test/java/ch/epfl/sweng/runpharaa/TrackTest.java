@@ -1,9 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import org.junit.Test;
 
-import com.google.android.gms.maps.model.LatLng;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.graphics.Bitmap;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,9 +26,9 @@ public class TrackTest {
     private Bitmap b;
     private Set<TrackType> types;
     private TrackProperties p;
-    private LatLng coord0;
-    private LatLng coord1;
-    private LatLng[] path;
+    private CustLatLng coord0;
+    private CustLatLng coord1;
+    private List<CustLatLng> path;
     private Track legalTestTrack;
 
     @Before
@@ -35,22 +37,24 @@ public class TrackTest {
         types = new HashSet<>();
         types.add(TrackType.FOREST);
         p = new TrackProperties(100, 10, 1, 1, types);
+        path = new ArrayList<>();
 
-        coord0 = new LatLng(46.518577, 6.563165);
-        coord1 = new LatLng(46.522735, 6.579772);
+        coord0 = new CustLatLng(46.518577, 6.563165);
+        coord1 = new CustLatLng(46.522735, 6.579772);
+        path.add(coord0);
+        path.add(coord1);
 
-        path = new LatLng[]{coord0, coord1};
-
-        legalTestTrack = new Track("7864", "Bob", b, "test", path , p);
+        legalTestTrack = new Track("7864", "0", b, "test", path , p);
     }
 
     @Test
     public void PathWithLessThan2PointsThrowsException() {
 
-        LatLng[] path = {coord0};
+        List<CustLatLng> path = new ArrayList<>();
+        path.add(coord0);
 
         exception.expect(IllegalArgumentException.class);
-        new Track("8498", "Bob", b, "test", path, p);
+        new Track("8498", "0", b, "test", path, p);
 
     }
 

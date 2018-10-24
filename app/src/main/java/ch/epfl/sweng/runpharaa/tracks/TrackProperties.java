@@ -1,19 +1,23 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class TrackProperties {
-
     private double length;
     private double heightDifference;
     private AvgDuration avgDur;
     private AvgDifficulty avgDiff;
     private int likes = 0;
     private int favorites = 0;
+    @Exclude
     private Set<TrackType> trackType;
 
+    //For Firebase
+    public TrackProperties(){ }
 
     public TrackProperties(double length, double heightDiff, double time, int difficulty, Set<TrackType> trackType){
 
@@ -32,6 +36,7 @@ public class TrackProperties {
         this.trackType = trackType;
     }
 
+    @Exclude //TODO think about how to put it in databse
     public double getAvgDifficulty(){
         return avgDiff.getAverage();
     }
@@ -39,6 +44,7 @@ public class TrackProperties {
         avgDiff.add(diff);
     }
 
+    @Exclude //TODO think about how to put it in databse
     public double getAvgDuration(){
         return avgDur.getAverage();
     }
@@ -46,15 +52,15 @@ public class TrackProperties {
         avgDur.add(dur);
     }
 
+    public void addLike(){ likes++; }
+    public void removeLike(){ likes--; }
+    public int getLikes(){ return likes; }
 
-    public void addLike(){likes++;}
-    public void removeLike(){likes--;}
-    public int getLikes(){return likes;}
+    public void addFavorite(){ favorites++; }
+    public void removeFavorite(){ favorites--; }
+    public int getFavorites(){ return favorites; }
 
-    public void addFavorite(){favorites++;}
-    public void removeFavorite(){favorites--;}
-    public int getFavorites(){return favorites;}
-
+    @Exclude //TODO exclude for now but make f(string) -> TrackType for database (@Hugo for more explications)
     public Set<TrackType> getType(){return trackType;}
 
     public double getLength() {
@@ -65,12 +71,32 @@ public class TrackProperties {
         return heightDifference;
     }
 
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public void setHeightDifference(double heightDifference) {
+        this.heightDifference = heightDifference;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void setFavorites(int favorites) {
+        this.favorites = favorites;
+    }
+
     /**
      * Class that represents the average difficulty of a track in a range from 0 to 5
      */
     private class AvgDifficulty {
         private int total;
         private int nbr;
+
+        public AvgDifficulty(){
+            //For database
+        }
 
         public AvgDifficulty(int firstDiff){
             if(firstDiff < 0 || firstDiff > 5) throw new IllegalArgumentException("AvgDifficulty must be in the range [0,5]");
