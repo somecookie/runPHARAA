@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.R;
@@ -35,7 +36,7 @@ public class LoginActivityTest {
 
     @BeforeClass
     public static void initUser(){
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance = new User("FakeUser", 2000, null, new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), false, "aa");
     }
 
     @Test
