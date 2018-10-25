@@ -2,33 +2,66 @@ package ch.epfl.sweng.runpharaa;
 
 
 import android.Manifest;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
-import android.support.test.espresso.intent.Intents;
+import android.os.SystemClock;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.support.test.espresso.DataInteraction;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.junit.After;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
-import ch.epfl.sweng.runpharaa.login.LoginActivity;
+import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.User;
 
+import static android.os.SystemClock.sleep;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
+import static android.support.test.espresso.matcher.PreferenceMatchers.withTitle;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsActivityTest {
+
+    Resources r;
 
     @Rule
     public final ActivityTestRule<SettingsActivity> mActivityRule =
@@ -40,28 +73,116 @@ public class SettingsActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(46.520566, 6.567820), false, "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(46.520566, 6.567820), false, "aa");
     }
 
     @Before
-    public void initIntents() {
-        Intents.init();
-    }
-
-    @After
-    public void releaseIntents() {
-        Intents.release();
+    public void init() {
+        resetSharedPreferences();
+        r = mActivityRule.getActivity().getResources();
     }
 
     @Test
-    public void logoutButtonLeadsToSignIn() {
-        onView(withId(R.id.sign_out_button)).perform(click());
-        intended(hasComponent(LoginActivity.class.getName()));
+    public void correctlyUpdatesPrefRadius() {
+        writeTextToPreference(r.getString(R.string.pref_default_radius), "100", 1);
+        assertTrue(User.instance.getPreferredRadius() == 100);
     }
 
     @Test
-    public void testLogOut() {
-        onView(withId(R.id.sign_out_button)).perform(click());
+    public void correctlyUpdatesMinTimeInterval() {
+        writeTextToPreference(r.getString(R.string.pref_default_min_time_interval), "2000", 4);
     }
 
+    @Test
+    public void correctlyUpdatesTimeInterval() {
+        writeTextToPreference(r.getString(R.string.pref_default_time_interval), "6000", 3);
+    }
+
+    @Test
+    public void correctlyUpdatesDistanceInterval() {
+        writeTextToPreference(r.getString(R.string.pref_default_min_distance_interval), "10", 5);
+    }
+
+    @Test
+    public void correctlyResetsAllValues() {
+        // TODO: click on reset button
+    }
+
+    // TODO: make this work, currently selecting 2 different views ??
+    private void typeNewValueInPreference(int titleId, String key, String value) {
+        onData(allOf(is(instanceOf(Preference.class)), withTitle(titleId), withKey(key)))
+                .onChildView(withClassName(is(EditText.class.getName())))
+                .perform(click()).perform(typeText(value)).perform(ViewActions.closeSoftKeyboard());
+        onView(withText("OK"))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+    }
+
+    public void writeTextToPreference(String oldVal, String newVal, int pos){
+        DataInteraction linearLayout = onData(anything())
+                .inAdapterView(allOf(withId(android.R.id.list),
+                        childAtPosition(
+                                withId(android.R.id.list_container),
+                                0)))
+                .atPosition(pos);
+        linearLayout.perform(click());
+        sleep(500);
+        ViewInteraction editText = onView(
+                allOf(withId(android.R.id.edit), withText(oldVal),
+                        childAtPosition(
+                                allOf(withClassName(is("android.widget.LinearLayout")),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.ScrollView")),
+                                                0)),
+                                1)));
+        editText.perform(scrollTo(), replaceText(newVal));
+        sleep(500);
+        ViewInteraction editText2 = onView(
+                allOf(withText(newVal),
+                        childAtPosition(
+                                allOf(withClassName(is("android.widget.LinearLayout")),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.ScrollView")),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        editText2.perform(closeSoftKeyboard());
+        sleep(500);
+        ViewInteraction appCompatButton = onView(
+                allOf(withText("OK"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                3)));
+        appCompatButton.perform(scrollTo(), click());
+    }
+
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
+    private void resetSharedPreferences() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity().getBaseContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+    }
 }

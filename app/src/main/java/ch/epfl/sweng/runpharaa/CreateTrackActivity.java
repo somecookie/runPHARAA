@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.utils.Util;
+
 public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
     private PolylineOptions lines;
@@ -28,6 +30,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     private boolean creating;
     private GoogleMap googleMap;
     private Button createButton;
+    private Location location;
 
     /**
      * The listener used for the main button
@@ -71,10 +74,13 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         this.googleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+
+        handleNewLocation();
     }
 
     @Override
     protected void handleNewLocation() {
+        location = GpsService.getCurrentLocation();
         // Move camera
         LatLng current;
         try {

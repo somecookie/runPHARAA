@@ -13,21 +13,18 @@ import android.support.v4.app.FragmentActivity;
 public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
 
     protected BroadcastReceiver receiver;
-    protected Location location;
 
     protected abstract void handleNewLocation();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startGeoLocalisation();
         initReceiver();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startGeoLocalisation();
         initReceiver();
     }
 
@@ -35,7 +32,6 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (isFinishing()) {
-            stopGeoLocalisation();
             if (receiver != null)
                 unregisterReceiver(receiver);
         }
@@ -49,42 +45,12 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
             receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    // Receive new location
-                    location = (Location) intent.getExtras().get("new_location");
-                    if (location != null)
-                        handleNewLocation();
+                    // Receive new location message
+                    handleNewLocation();
                 }
             };
         }
         registerReceiver(receiver, new IntentFilter("location_update"));
-    }
-
-    /**
-     * Update the user location when receiving a new location and update the markers
-     */
-    protected void startGeoLocalisation() {
-        if(!isServiceRunning(GpsService.class)) {
-            Intent i = new Intent(getApplicationContext(), GpsService.class);
-            startService(i);
-        }
-    }
-
-    /**
-     * Update the user location when receiving a new location and update the markers
-     */
-    protected void stopGeoLocalisation() {
-        Intent i = new Intent(getApplicationContext(), GpsService.class);
-        stopService(i);
-    }
-
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

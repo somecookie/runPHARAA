@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.user;
 
 import android.annotation.TargetApi;
 import android.net.Uri;
@@ -10,9 +10,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import java.util.List;
 
@@ -194,5 +193,9 @@ public final class User {
      * @param newLocation
      */
     public void setLocation(LatLng newLocation) { this.location = newLocation; }
+
+    public void setPreferredRadius(int newRadius) {
+        this.preferredRadius = newRadius;
+    }
 
 }
