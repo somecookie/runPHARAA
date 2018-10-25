@@ -5,8 +5,6 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.SystemClock;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.test.espresso.DataInteraction;
@@ -15,6 +13,7 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -84,28 +83,46 @@ public class SettingsActivityTest {
 
     @Test
     public void correctlyUpdatesPrefRadius() {
-        writeTextToPreference(r.getString(R.string.pref_default_radius), "100", 1);
+        writeTextToPreference("100", 1);
         assertTrue(User.instance.getPreferredRadius() == 100);
     }
 
     @Test
     public void correctlyUpdatesMinTimeInterval() {
-        writeTextToPreference(r.getString(R.string.pref_default_min_time_interval), "2000", 4);
+        writeTextToPreference("2000", 4);
     }
 
     @Test
     public void correctlyUpdatesTimeInterval() {
-        writeTextToPreference(r.getString(R.string.pref_default_time_interval), "6000", 3);
+        writeTextToPreference("6000", 3);
     }
 
     @Test
     public void correctlyUpdatesDistanceInterval() {
-        writeTextToPreference(r.getString(R.string.pref_default_min_distance_interval), "10", 5);
+        writeTextToPreference("10", 5);
     }
 
     @Test
     public void correctlyResetsAllValues() {
-        // TODO: click on reset button
+        selectItemAtPos(7).perform(click());
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity().getBaseContext());
+        checkDefaultValueCorresponds(sp, R.string.pref_key_radius, R.string.pref_default_radius);
+        checkDefaultValueCorresponds(sp, R.string.pref_key_min_distance_interval, R.string.pref_default_min_distance_interval);
+        checkDefaultValueCorresponds(sp, R.string.pref_key_min_time_interval, R.string.pref_default_min_time_interval);
+        checkDefaultValueCorresponds(sp, R.string.pref_key_time_interval, R.string.pref_default_time_interval);
+    }
+
+    private void checkDefaultValueCorresponds(SharedPreferences sp, int keyId, int defaultId) {
+        assertTrue(sp.getString(r.getString(keyId), "").equals(r.getString(defaultId)));
+    }
+
+    private DataInteraction selectItemAtPos(int pos) {
+        return onData(anything())
+                .inAdapterView(allOf(withId(android.R.id.list),
+                        childAtPosition(
+                                withId(android.R.id.list_container),
+                                0)))
+                .atPosition(pos);
     }
 
     // TODO: make this work, currently selecting 2 different views ??
@@ -117,20 +134,13 @@ public class SettingsActivityTest {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-
     }
 
-    public void writeTextToPreference(String oldVal, String newVal, int pos){
-        DataInteraction linearLayout = onData(anything())
-                .inAdapterView(allOf(withId(android.R.id.list),
-                        childAtPosition(
-                                withId(android.R.id.list_container),
-                                0)))
-                .atPosition(pos);
-        linearLayout.perform(click());
+    public void writeTextToPreference(String newVal, int pos) {
+        selectItemAtPos(pos).perform(click());
         sleep(500);
         ViewInteraction editText = onView(
-                allOf(withId(android.R.id.edit), withText(oldVal),
+                allOf(withId(android.R.id.edit),
                         childAtPosition(
                                 allOf(withClassName(is("android.widget.LinearLayout")),
                                         childAtPosition(

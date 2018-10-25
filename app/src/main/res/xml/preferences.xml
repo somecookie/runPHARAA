@@ -4,36 +4,36 @@
     <PreferenceCategory android:title="@string/pref_section_near_me">
 
         <EditTextPreference
-            android:key="@string/pref_key_radius"
-            android:title="@string/pref_title_radius"
-            android:numeric="integer"
             android:defaultValue="@string/pref_default_radius"
-            android:selectAllOnFocus="true" />
+            android:key="@string/pref_key_radius"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_radius" />
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_section_location">
 
         <EditTextPreference
-            android:key="@string/pref_key_time_interval"
-            android:title="@string/pref_title_time_interval"
-            android:numeric="integer"
             android:defaultValue="@string/pref_default_time_interval"
-            android:selectAllOnFocus="true" />
+            android:key="@string/pref_key_time_interval"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_time_interval" />
 
         <EditTextPreference
-            android:key="@string/pref_key_min_time_interval"
-            android:title="@string/pref_title_min_time_interval"
-            android:numeric="integer"
             android:defaultValue="@string/pref_default_min_time_interval"
-            android:selectAllOnFocus="true" />
+            android:key="@string/pref_key_min_time_interval"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_min_time_interval" />
 
         <EditTextPreference
-            android:key="@string/pref_key_min_distance_interval"
-            android:title="@string/pref_title_min_distance_interval"
-            android:numeric="integer"
             android:defaultValue="@string/pref_default_min_distance_interval"
-            android:selectAllOnFocus="true" />
+            android:key="@string/pref_key_min_distance_interval"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_min_distance_interval" />
 
     </PreferenceCategory>
 
@@ -47,8 +47,12 @@
 
     </PreferenceCategory> -->
 
-    <Preference
-        android:title="@string/pref_title_reset_prefs"
-        android:key="@string/pref_key_reset_prefs" />
+    <PreferenceCategory android:title="@string/pref_section_other">
+
+        <Preference
+            android:key="@string/pref_key_reset_prefs"
+            android:title="@string/pref_title_reset_prefs" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

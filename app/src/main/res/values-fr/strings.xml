@@ -48,13 +48,13 @@
     <string name="pref_title_radius">Rayon</string>
 
     <!-- Location -->
-    <string name="pref_section_location">Localisation</string>
+    <string name="pref_section_location">Mises à jour localisation</string>
 
-    <string name="pref_title_min_time_interval">Intervale de temps minimal</string>
+    <string name="pref_title_min_time_interval">Intervale minimal</string>
 
-    <string name="pref_title_time_interval">Intervale de temps</string>
+    <string name="pref_title_time_interval">Intervale classique</string>
 
-    <string name="pref_title_min_distance_interval">Intervale de distance minimal</string>
+    <string name="pref_title_min_distance_interval">Différence de déplacement minimale</string>
 
     <!-- Tracks -->
     <string name="pref_section_track">Course</string>
@@ -62,6 +62,8 @@
     <string name="pref_title_track_types">Types de course</string>
 
     <!-- Reset -->
+    <string name="pref_section_other">Autre</string>
+
     <string name="pref_title_reset_prefs">Paramètres par défaut</string>
 
 </resources>

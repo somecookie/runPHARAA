@@ -68,7 +68,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String stringValue = newValue.toString();
             if (preference instanceof EditTextPreference) {
-                Resources r = preference.getContext().getResources();
                 switch (preference.getKey()) {
                     case "pref_radius": {
                         User.instance.setPreferredRadius(Integer.parseInt(stringValue));
@@ -101,8 +100,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+                Resources r = preference.getContext().getResources();
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
+                editor.putString(r.getString(R.string.pref_key_radius), r.getString(R.string.pref_default_radius));
+                editor.putString(r.getString(R.string.pref_key_min_time_interval), r.getString(R.string.pref_default_min_time_interval));
+                editor.putString(r.getString(R.string.pref_key_time_interval), r.getString(R.string.pref_default_time_interval));
+                editor.putString(r.getString(R.string.pref_key_min_distance_interval), r.getString(R.string.pref_default_min_distance_interval));
                 editor.commit();
                 Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
                 return true;

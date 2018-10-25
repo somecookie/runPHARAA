@@ -54,17 +54,17 @@
         <string name="pref_default_radius" translatable="false">2000</string>
 
     <!-- Location -->
-    <string name="pref_section_location">Location</string>
+    <string name="pref_section_location">Location updates</string>
 
-        <string name="pref_title_min_time_interval">Minimum time interval</string>
+        <string name="pref_title_min_time_interval">Minimum refresh interval</string>
         <string name="pref_key_min_time_interval" translatable="false">min_time_interval</string>
         <string name="pref_default_min_time_interval" translatable="false">1000</string>
 
-        <string name="pref_title_time_interval">Time interval</string>
+        <string name="pref_title_time_interval">Refresh interval</string>
         <string name="pref_key_time_interval" translatable="false">time_interval</string>
         <string name="pref_default_time_interval" translatable="false">5000</string>
 
-        <string name="pref_title_min_distance_interval">Minimum distance interval</string>
+        <string name="pref_title_min_distance_interval">Minimum displacement</string>
         <string name="pref_key_min_distance_interval" translatable="false">min_distance_interval</string>
         <string name="pref_default_min_distance_interval" translatable="false">5</string>
 
@@ -76,8 +76,10 @@
         <array name="pref_default_track_types" />
 
     <!-- Reset -->
-    <string name="pref_title_reset_prefs">Reset preferences</string>
-    <string name="pref_key_reset_prefs" translatable="false">reset_prefs</string>
+    <string name="pref_section_other">Other</string>
+
+        <string name="pref_title_reset_prefs">Reset preferences</string>
+        <string name="pref_key_reset_prefs" translatable="false">reset_prefs</string>
 
 
 </resources>
