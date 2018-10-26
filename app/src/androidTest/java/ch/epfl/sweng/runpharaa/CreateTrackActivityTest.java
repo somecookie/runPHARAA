@@ -47,13 +47,13 @@ public class CreateTrackActivityTest {
 
     @Test
     public void staysOnCreateTrackActivity() throws TimeoutException {
-        Context targetContext = InstrumentationRegistry.getInstrumentation()
-                .getTargetContext();
-        Intent i = new Intent(targetContext,
-                GpsService.class);
+        Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Intent i = new Intent(targetContext, GpsService.class);
         mServiceRule.startService(i);
+        sleep(1000);
         Intent intent = new Intent(targetContext, CreateTrackActivity.class);
         mActivityRule.launchActivity(intent);
+        sleep(1000);
         onView(withId(R.id.start_create_button)).perform(click());
     }
 

@@ -60,11 +60,10 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
                 .build();
         initLocationRequest();
         mGoogleApiClient.connect();
-
         return START_STICKY;
     }
 
-    @Override
+    /*@Override
     public void onCreate() {
         mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addConnectionCallbacks(this)
@@ -73,7 +72,7 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
                 .build();
         mGoogleApiClient.connect();
         //Toast.makeText(getApplicationContext(), "Starting GPS Service", Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
     @Override
     public void onDestroy() {
@@ -148,7 +147,6 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
     public static void setTimeInterval(int newTimeInterval) {
         if(locationRequest != null) {
             locationRequest.setInterval(newTimeInterval);
-            Log.i("gpsservice", "changed time interval to:"+newTimeInterval);
         }
     }
 
@@ -165,7 +163,6 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
     }
 
     public static Location getCurrentLocation() {
-        Log.i("gpsservice", "loc: "+ currentLocation.toString());
         return currentLocation;
     }
 }
