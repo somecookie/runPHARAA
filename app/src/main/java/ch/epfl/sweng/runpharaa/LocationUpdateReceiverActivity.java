@@ -45,7 +45,6 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
             receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    // Receive new location message
                     handleNewLocation();
                 }
             };

@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,8 +19,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.runpharaa.utils.Util;
-
 public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
     private PolylineOptions lines;
@@ -30,7 +27,6 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     private boolean creating;
     private GoogleMap googleMap;
     private Button createButton;
-    private Location location;
 
     /**
      * The listener used for the main button
@@ -80,15 +76,11 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
 
     @Override
     protected void handleNewLocation() {
-        location = GpsService.getCurrentLocation();
+        // Get new location
+        Location location = GpsService.getCurrentLocation();
+        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+
         // Move camera
-        LatLng current;
-        try {
-            current = new LatLng(location.getLatitude(), location.getLongitude());
-        }catch (NullPointerException e){
-            Log.e("ERROR", "location was null");
-            current = new LatLng(0,0);
-        }
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
         if (creating) {
             // Store new location

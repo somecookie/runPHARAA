@@ -80,6 +80,7 @@
 
         <string name="pref_title_reset_prefs">Reset preferences</string>
         <string name="pref_key_reset_prefs" translatable="false">reset_prefs</string>
+    <string name="broadcast_location_update">location_update</string>
 
 
 </resources>

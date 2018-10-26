@@ -3,10 +3,12 @@ package ch.epfl.sweng.runpharaa;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -25,11 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class GpsService extends Service implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
-
-    private final static long TIME_INTERVAL = 5000;
-    private final static long MIN_TIME_INTERVAL = 1000;
-    private final static float MIN_DISTANCE = 5;
+        GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -94,26 +92,37 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         Log.i("GPS_SERVICE", "Location services connection failed with code " + connectionResult.getErrorCode());
     }
 
-    @Override
+    /*@Override
     public void onLocationChanged(Location location) {
         Toast.makeText(this, "onLocationChanged", Toast.LENGTH_SHORT).show();
         sendNewLocation(location);
-    }
+    }*/
 
-    private void sendNewLocation(Location location) {
+    private void updateAndSendNewLocation(Location location) {
         // Broadcast the new location to other activities
-        Intent i = new Intent("location_update");
-        i.putExtra("new_location", location);
-        sendBroadcast(i);
+        //Intent i = new Intent("location_update");
+        //i.putExtra("new_location", location);
+        currentLocation = location;
+        User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+        sendBroadcast(new Intent("location_update"));
     }
 
     private void initLocationRequest() {
+        // Get pref values or default ones
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String timeIntervalString = sp.getString(getString(R.string.pref_key_time_interval), getString(R.string.pref_default_time_interval));
+        String minTimeIntervalString = sp.getString(getString(R.string.pref_key_min_time_interval), getString(R.string.pref_default_min_time_interval));
+        String minDistanceString = sp.getString(getString(R.string.pref_key_min_distance_interval), getString(R.string.pref_default_min_distance_interval));
+        // Extract the values
+        long timeInterval = Long.parseLong(timeIntervalString);
+        long minTimeInterval = Long.parseLong(minTimeIntervalString);
+        float minDistance = Float.parseFloat(minDistanceString);
         // Create the LocationRequest object
         locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(TIME_INTERVAL)
-                .setFastestInterval(MIN_TIME_INTERVAL)
-                .setSmallestDisplacement(MIN_DISTANCE);
+                .setInterval(timeInterval)
+                .setFastestInterval(minTimeInterval)
+                .setSmallestDisplacement(minDistance);
     }
 
     private void initLocationCallBack() {
@@ -121,11 +130,7 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                currentLocation = locationResult.getLastLocation();
-                Toast.makeText(getBaseContext(), "insideCallback", Toast.LENGTH_SHORT).show();
-                LatLng location = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                User.instance.setLocation(location);
-                sendNewLocation(currentLocation);
+                updateAndSendNewLocation(locationResult.getLastLocation());
             }
         };
     }
