@@ -80,13 +80,12 @@ dependencies {
 
     //dependencies for mockito
     implementation 'org.mockito:mockito-core:2.7.15'
-    implementation 'org.mockito:mockito-android:2.7.15'
 
     //dependencies for round images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //dependency to mock google maps
-    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    //implementation 'com.google.maps.android:android-maps-utils:0.5+'
 
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:support-vector-drawable:28.0.0'
