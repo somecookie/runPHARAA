@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
@@ -29,16 +30,25 @@ import ch.epfl.sweng.runpharaa.user.User;
 public class GpsService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    private IBinder iBinder = new LocalBinder();
+
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback locationCallback;
     private static LocationRequest locationRequest;
     private static Location currentLocation;
 
+    // Needed for launching service during tests
+    public class LocalBinder extends Binder {
+        public GpsService getService() {
+            return GpsService.this;
+        }
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return iBinder;
     }
 
     @Override
