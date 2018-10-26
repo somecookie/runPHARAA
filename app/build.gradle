@@ -37,6 +37,7 @@ android {
 
         debug {
             testCoverageEnabled true
+
         }
     }
     productFlavors {
@@ -49,6 +50,9 @@ android {
 //For mockito
 repositories {
     jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
 }
 
 dependencies {
@@ -75,9 +79,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     //dependencies for mockito
-    //testImplementation "org.mockito:mockito-core:+"
-    //testImplementation "org.mockito:mockito-inline:+"
-    //androidTestImplementation "org.mockito:mockito-android:+"
+    implementation 'org.mockito:mockito-core:2.7.15'
+    implementation 'org.mockito:mockito-android:2.7.15'
 
     //dependencies for round images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
