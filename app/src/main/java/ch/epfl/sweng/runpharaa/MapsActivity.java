@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -75,13 +76,14 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                     .position(tr.getStartingPoint().ToLatLng())
                     .title(tr.getName()));
             m.setTag(tr.getTrackUid());
+            Log.i("markerz4life", "Adding marker with tag: "+m.getTag());
         }
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent i = new Intent(this, TrackPropertiesActivity.class);
-        i.putExtra("TrackID", (int) marker.getTag());
+        i.putExtra("TrackID", (String)marker.getTag());
         startActivity(i);
     }
 
@@ -118,7 +120,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             // Get the correct track by it's id
             Track track = null;
             for (Track tr : Track.allTracks)
-                if (track.getTrackUid() ==  marker.getTag())
+                if (tr.getTrackUid() ==  marker.getTag())
                     track = tr;
 
             // Get other info from the track (should never be null be we check just in case)

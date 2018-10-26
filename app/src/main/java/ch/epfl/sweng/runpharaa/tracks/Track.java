@@ -99,7 +99,7 @@ public class Track {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track t = new Track("Bob", "0", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track t = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
 
         ArrayList<Track> all = new ArrayList<>();
         all.add(t);
