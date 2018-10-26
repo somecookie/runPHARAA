@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -75,7 +76,13 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     @Override
     protected void handleNewLocation() {
         // Move camera
-        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng current;
+        try {
+            current = new LatLng(location.getLatitude(), location.getLongitude());
+        }catch (NullPointerException e){
+            Log.e("ERROR", "location was null");
+            current = new LatLng(0,0);
+        }
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
         if (creating) {
             // Store new location

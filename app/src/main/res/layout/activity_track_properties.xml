@@ -115,15 +115,25 @@
                 android:text="Track Length" />
 
             <TextView
+                android:id="@+id/track_difficulty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                android:text="Difficulty"/>
+
+            <TextView
+                android:id="@+id/trackTagsID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                android:text="Tags"/>
+
+            <TextView
                 android:id="@+id/trackHeightDiffID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/small_margin" />
 
-            <TextView
-                android:id="@+id/trackTagsID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </LinearLayout>
