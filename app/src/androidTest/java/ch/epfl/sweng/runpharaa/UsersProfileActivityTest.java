@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import ch.epfl.sweng.runpharaa.Users.Profile.UsersProfileActivity;
@@ -32,7 +33,7 @@ public class UsersProfileActivityTest {
     @BeforeClass
     public static void initEmptyUser() {
         Uri path = Uri.parse("android.resource://ch.epfl.sweng.runpharaa/" + R.drawable.default_photo);
-        User.instance = new User("FakeUser", 2000, path, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
+        User.instance = new User("FakeUser", 2000, null, new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), false, "aa");
     }
 
     @Test
@@ -43,7 +44,7 @@ public class UsersProfileActivityTest {
 
     @Test
     public void correctlyDisplaysNumberOfCreatedTracks() {
-        User.instance.addToCreatedTracks(0);
+        User.instance.addToCreatedTracks("0");
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbTracks)).check(matches(withText("1")));
@@ -51,8 +52,8 @@ public class UsersProfileActivityTest {
 
     @Test
     public void correctlyDisplaysNumberOfFavorites() {
-        User.instance.addToFavorites(0);
-        User.instance.addToFavorites(1);
+        User.instance.addToFavorites("0");
+        User.instance.addToFavorites("1");
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbFav)).check(matches(withText("2")));
@@ -60,8 +61,8 @@ public class UsersProfileActivityTest {
 
     @Test
     public void handlesSameFavoriteAddedTwice() {
-        User.instance.addToFavorites(0);
-        User.instance.addToFavorites(0);
+        User.instance.addToFavorites("0");
+        User.instance.addToFavorites("0");
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbFav)).check(matches(withText("1")));

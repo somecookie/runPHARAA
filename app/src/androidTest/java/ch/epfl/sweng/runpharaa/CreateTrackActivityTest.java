@@ -32,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static android.os.SystemClock.sleep;
@@ -71,7 +72,7 @@ public class CreateTrackActivityTest {
 
     @BeforeClass
     public static void initUser(){
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance = new User("FakeUser", 2000, null, new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), false, "aa");
     }
 
     @Before

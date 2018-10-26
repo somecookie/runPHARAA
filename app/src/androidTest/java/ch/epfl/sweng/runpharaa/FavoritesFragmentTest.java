@@ -47,9 +47,9 @@ public class FavoritesFragmentTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, null, new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "aa");
-        User.instance.addToFavorites(0);
-        User.instance.addToFavorites(1);
+        User.instance = new User("FakeUser", 2000, null, new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance.addToFavorites("0");
+        User.instance.addToFavorites("1");
     }
 
 
