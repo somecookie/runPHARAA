@@ -25,6 +25,8 @@ public class Database {
 
     private boolean isTest = true;
     private boolean shouldFail = true;
+    private boolean isCancelled = false;
+
 
     private String s_tracks = "tracks";
     private String s_key = "key";
@@ -58,7 +60,7 @@ public class Database {
     private Task<Void> setValueTrack;
 
     @Mock
-    private DatabaseManagement.OnGetDataListener getDataListener;
+    private ValueEventListener valueEventListener;
 
     @Mock
     private DataSnapshot snapOnDataChange;
@@ -81,6 +83,7 @@ public class Database {
             instanciateDBRef();
             instanciatedrTracks();
             instanciatedrKeys();
+            instanciateRead();
             return firebaseDatabaseMock;
         } else {
             return FirebaseDatabase.getInstance();
@@ -119,6 +122,35 @@ public class Database {
                 return setValueTrack;
             }
         });
+    }
+
+    private void instanciateRead(){
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataError);
+                } else {
+                    l.onDataChange(snapOnDataChange);
+                }
+                return l;
+            }
+        }).when(drTracks).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataError);
+                } else {
+                    l.onDataChange(snapOnDataChange);
+                }
+                return l;
+            }
+        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
 }
