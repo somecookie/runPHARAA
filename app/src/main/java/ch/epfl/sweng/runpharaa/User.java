@@ -140,7 +140,7 @@ public final class User {
     public void addToFavorites(String trackId) {
         if (!alreadyInFavorites(trackId)) {
             favoritesTracksKeys.add(trackId);
-            Log.i("hahaha", "Adding track: " + trackId);
+            Log.i("Favorites", "Adding track: " + trackId);
         }
     }
 
