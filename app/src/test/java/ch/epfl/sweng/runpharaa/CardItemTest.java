@@ -13,7 +13,7 @@ public class CardItemTest {
     private static Bitmap bg = Util.createImage(200, 100, Color.BLACK);
 
     @Test
-    public void contructorAndSetter(){
+    public void constructorAndSetter(){
 
         CardItem c = new CardItem();
 
@@ -27,12 +27,9 @@ public class CardItemTest {
     }
 
     @Test
-    public void contructorAndGetter(){
-<<<<<<< HEAD
-        CardItem c = new CardItem(bg, "PHARAA", 0);
-=======
-        CardItem c = new CardItem(3, "PHARAA", "0");
->>>>>>> f6fbfe7ad2ece40323507e65ea6d0fcc78fe1471
+    public void constructorAndGetter(){
+
+        CardItem c = new CardItem("PHARAA", "0", "https://firebasestorage.googleapis.com/v0/b/runpharaa.appspot.com/o/TrackImages%2F-LPV-XYcU6_y2KtaC5nC?alt=media&token=ce6a654d-10b9-486f-97c7-1473c5bedd19");
 
         Assert.assertEquals(bg, c.getBackground());
         Assert.assertEquals("PHARAA", c.getName());

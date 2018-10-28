@@ -97,7 +97,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.sign_in_button:
                 // TODO: setting a fake user for now, change it later
                 User.set("Fake User", 2000, null, new ArrayList<String>(), new ArrayList<String>(), lastLocation, false, "Fake User");
-
                 launchApp();
                 break;
             case R.id.sign_in_button_google:
@@ -199,7 +198,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (grantResults.length != 1 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions();
                 }
-
             }
         }
     }

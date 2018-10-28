@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -105,7 +107,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
                     Track track = new Track(nameText.getText().toString(), User.instance.getID(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
                     DatabaseManagement.writeNewTrack(track);
-                    //Track.allTracks.add(track);
                     finish();
                 }
             }
@@ -259,9 +260,14 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
             try {
                 inputStream = getContentResolver().openInputStream(imageUri);
-
-                //get a bitmap from the stream
-                trackPhoto = BitmapFactory.decodeStream(inputStream);
+                //Resize and compress image
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                final int REQUIRED_SIZE = 100;
+                Bitmap trackPhotoTemp = BitmapFactory.decodeStream(inputStream, null, options);
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                trackPhotoTemp.compress(Bitmap.CompressFormat.PNG, 75, out);
+                trackPhoto = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
                 //Add a preview of the photo
                 trackImage.setVisibility(View.VISIBLE);
