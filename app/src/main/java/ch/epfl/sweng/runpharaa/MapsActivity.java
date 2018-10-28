@@ -14,7 +14,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +23,7 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.user.User;
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
@@ -54,17 +54,12 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
         mMap.setInfoWindowAdapter(customInfoWindow);
         testText.setText("ready");
+
+        handleNewLocation();
     }
 
     @Override
     protected void handleNewLocation() {
-        setMarkers();
-    }
-
-    /**
-     * Clear the actual map from all its markers and set the new ones
-     */
-    private void setMarkers() {
         mMap.clear();
 
         int transparentBlue = 0x2f0000ff;
@@ -161,7 +156,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                     Log.d("DB Read: ", "Failed to read data from DB in InfoWindowGoogleMap.");
                 }
             });
-
             return view;
         }
     }

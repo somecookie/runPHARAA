@@ -1,8 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
@@ -15,8 +12,8 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.user.User;
 
-import static ch.epfl.sweng.runpharaa.tracks.TrackType.FOREST;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
