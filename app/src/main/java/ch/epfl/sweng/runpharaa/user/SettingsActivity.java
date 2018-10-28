@@ -102,11 +102,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
                 Resources r = preference.getContext().getResources();
                 SharedPreferences.Editor editor = preferences.edit();
+                // Reset shared preferences
                 editor.putString(r.getString(R.string.pref_key_radius), r.getString(R.string.pref_default_radius));
                 editor.putString(r.getString(R.string.pref_key_min_time_interval), r.getString(R.string.pref_default_min_time_interval));
                 editor.putString(r.getString(R.string.pref_key_time_interval), r.getString(R.string.pref_default_time_interval));
                 editor.putString(r.getString(R.string.pref_key_min_distance_interval), r.getString(R.string.pref_default_min_distance_interval));
                 editor.commit();
+                // Reset values in user and gps service
+                User.instance.setPreferredRadius(Integer.parseInt(r.getString(R.string.pref_default_radius)));
+                GpsService.setMinTimeInterval(Integer.parseInt(r.getString(R.string.pref_default_min_time_interval)));
+                GpsService.setTimeInterval(Integer.parseInt(r.getString(R.string.pref_default_time_interval)));
+                GpsService.setMinDistanceInterval(Integer.parseInt(r.getString(R.string.pref_default_min_distance_interval)));
                 Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
                 return true;
             }
