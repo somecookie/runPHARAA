@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -101,7 +102,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-
+                Log.d("DB Read: ", "Failed to read data from DB in MapsActivity.");
             }
         });
     }
