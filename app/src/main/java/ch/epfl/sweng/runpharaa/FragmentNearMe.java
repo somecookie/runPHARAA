@@ -207,9 +207,11 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
                 try {
                     InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 4;
+                    mIcon11 = BitmapFactory.decodeStream(in, null, options);
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    mIcon11.compress(Bitmap.CompressFormat.PNG, 75, out);
+                    mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
 
                     decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
