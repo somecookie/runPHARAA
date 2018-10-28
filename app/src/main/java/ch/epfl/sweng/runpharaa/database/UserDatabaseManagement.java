@@ -9,7 +9,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 
 public class UserDatabaseManagement extends DatabaseManagement {
     private final static String USERS_PATH = "users";
-    private final static String FAVORITE = "favoritesTracks";
+    private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";
     private final static String CREATE = "createdTracks";
 
@@ -25,7 +25,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
     }
 
     public static void updateFavoriteTracks(final User user){
-        mDataBaseRef.child(USERS_PATH).child(user.getID()).child(FAVORITE).setValue(user.getFirebaseAdapter().getFavoritesTracks()).addOnFailureListener(new OnFailureListener() {
+        mDataBaseRef.child(USERS_PATH).child(user.getID()).child(FAVORITE).setValue(user.getFirebaseAdapter().getFavoriteTracks()).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e("Database", "Failed to upload the favorite tracks: "+ e.getMessage());

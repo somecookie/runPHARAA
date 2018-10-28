@@ -37,7 +37,7 @@ public final class FragmentFavourites extends UpdatableCardItemFragment {
     protected void loadListWithData() {
         // Add cards to the cardList
 <<<<<<< HEAD
-        for (String i : User.instance.getFavoritesTracksKeys())
+        for (String i : User.instance.getFavoriteTracksKeys())
 =======
         for (Integer i : User.instance.getFavoriteTracks())
 >>>>>>> deab85ad6799c8bea37345886644f73bce31806c

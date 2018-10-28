@@ -4,11 +4,14 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
+/**
+ * Adapter between the User class and the Firebase database
+ */
 public class FirebaseUserAdapter {
 
     private String uId;
     private List<String> createdTracks;
-    private List<String> favoritesTracks;
+    private List<String> favoriteTracks;
     private List<String> likedTracks;
 
     public FirebaseUserAdapter(){}
@@ -17,7 +20,7 @@ public class FirebaseUserAdapter {
         Required.nonNull(user,"User we want to send to the database must be non-null");
         uId = user.getID();
         createdTracks = user.getCreatedTracksKeys();
-        favoritesTracks = user.getFavoriteTracks();
+        favoriteTracks = user.getFavoriteTracks();
         likedTracks = user.getLikedTracksKeys();
 
     }
@@ -30,8 +33,8 @@ public class FirebaseUserAdapter {
         return createdTracks;
     }
 
-    public List<String> getFavoritesTracks() {
-        return favoritesTracks;
+    public List<String> getFavoriteTracks() {
+        return favoriteTracks;
     }
 
     public List<String> getLikedTracks() {

@@ -184,8 +184,8 @@ public class DatabaseManagement {
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
         List<Track> favouriteTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()) {
-            if (User.instance.getFavoritesTracksKeys() != null) {
-                if (User.instance.getFavoritesTracksKeys().contains(c.getKey())) {
+            if (User.instance.getFavoriteTracksKeys() != null) {
+                if (User.instance.getFavoriteTracksKeys().contains(c.getKey())) {
                     favouriteTracks.add(c.getValue(Track.class));
                 }
             }

@@ -25,7 +25,7 @@ public final class User {
     //Of type String because we only need the key reference of the track in the database
     private String uId;
     private List<String> createdTracksKeys;
-    private List<String> favoritesTracksKeys;
+    private List<String> favoriteTracksKeys;
     private List<String> likedTracksKeys;
 
     private LatLng location;
@@ -39,7 +39,7 @@ public final class User {
         this.name = name;
         this.picture = picture;
         this.createdTracksKeys = createdTracksKeys;
-        this.favoritesTracksKeys = favoritesTracksKeys;
+        this.favoriteTracksKeys = favoritesTracksKeys;
         this.likedTracksKeys = new ArrayList<>();
         this.location = location;
         this.uId = uId;
@@ -89,8 +89,8 @@ public final class User {
         instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, uId);
     }
 
-    public List<String> getFavoritesTracksKeys() {
-        return favoritesTracksKeys;
+    public List<String> getFavoriteTracksKeys() {
+        return favoriteTracksKeys;
     }
 
     public List<String> getCreatedTracksKeys() {
@@ -135,8 +135,8 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("hahaha", "" + favoritesTracksKeys.contains(trackId));
-        return favoritesTracksKeys.contains(trackId);
+        Log.i("hahaha", "" + favoriteTracksKeys.contains(trackId));
+        return favoriteTracksKeys.contains(trackId);
     }
 
     /**
@@ -146,7 +146,7 @@ public final class User {
      */
     public void addToFavorites(String trackId) {
         if (!alreadyInFavorites(trackId)) {
-            favoritesTracksKeys.add(trackId);
+            favoriteTracksKeys.add(trackId);
             Log.i("hahaha", "Adding track: " + trackId);
         }
     }
@@ -189,7 +189,7 @@ public final class User {
 
     public List<String> getCreatedTracks(){ return createdTracksKeys; }
 
-    public List<String> getFavoriteTracks(){ return favoritesTracksKeys; }
+    public List<String> getFavoriteTracks(){ return favoriteTracksKeys; }
 
 
     /**
