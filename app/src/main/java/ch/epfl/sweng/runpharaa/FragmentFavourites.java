@@ -212,7 +212,6 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
         @Override
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            //viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground()); //TODO ERASE
             viewHolder.name.setText(listCardItem.get(position).getName());
 
             new DownloadImageTask(viewHolder.background_img)
