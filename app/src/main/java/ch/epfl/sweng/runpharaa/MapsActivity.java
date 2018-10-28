@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.user.User;

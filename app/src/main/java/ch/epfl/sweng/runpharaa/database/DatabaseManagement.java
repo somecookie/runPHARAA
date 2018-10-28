@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -30,7 +32,7 @@ public class DatabaseManagement {
 
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
-    public final static String USERS_PATH = "users";
+
 
 
     public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -40,16 +42,7 @@ public class DatabaseManagement {
 
     public DatabaseManagement() { }
 
-    public static void writeNewUser(final User user){
-        mDataBaseRef.child(USERS_PATH).child(user.getID()).setValue(user).addOnFailureListener(
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Storage", "Failed to upload new user: "+e.getMessage());
-                    }
-                }
-        );
-    }
+
 
     /**
      * Track a {@link Track} and add it to the database
@@ -92,6 +85,12 @@ public class DatabaseManagement {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e("Database", "Failed to upload new track :" + e.getMessage());
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        User.instance.addToCreatedTracks(key);
+                                        UserDatabaseManagement.updateCreatedTracks(User.instance);
                                     }
                                 });
                             }

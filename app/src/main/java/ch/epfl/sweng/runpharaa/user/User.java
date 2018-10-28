@@ -5,10 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
-import com.bumptech.glide.annotation.Excludes;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,14 +15,11 @@ import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import java.util.List;
 
-@IgnoreExtraProperties
 public final class User {
-    @Exclude
+
     private int preferredRadius = 2000;
-    @Exclude
     private  String name;
     //TODO: put default picture
-    @Exclude
     private Uri picture;
 
     //Of type String because we only need the key reference of the track in the database
@@ -34,15 +28,11 @@ public final class User {
     private List<String> favoritesTracksKeys;
     private List<String> likedTracksKeys;
 
-    @Exclude
     private LatLng location;
 
 
-    @Exclude
     public static User instance;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
-
-    public User(){}
 
     public User(String name, int preferredRadius, Uri picture, List<String> createdTracksKeys, List<String> favoritesTracksKeys, LatLng location, String uId) {
         this.preferredRadius = preferredRadius;
@@ -59,6 +49,8 @@ public final class User {
         //TODO must be changed later when the user's login and the database are on
         this(name, preferredRadius, null, new ArrayList<String>(), new ArrayList<String>(), location, name);
     }
+
+    public FirebaseUserAdapter getFirebaseAdapter(){return new FirebaseUserAdapter(this);}
 
     public int getPreferredRadius() {
         return preferredRadius;
@@ -93,6 +85,10 @@ public final class User {
         return nm;
     }
 
+    public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, String uId){
+        instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, uId);
+    }
+
     public List<String> getFavoritesTracksKeys() {
         return favoritesTracksKeys;
     }
@@ -100,6 +96,8 @@ public final class User {
     public List<String> getCreatedTracksKeys() {
         return createdTracksKeys;
     }
+
+    public List<String> getLikedTracksKeys(){return likedTracksKeys;}
 
     /**
      * Check if the user already liked a particular track
@@ -193,9 +191,6 @@ public final class User {
 
     public List<String> getFavoriteTracks(){ return favoritesTracksKeys; }
 
-    public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, String uId){
-        instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, uId);
-    }
 
     /**
      * Update the user's location.

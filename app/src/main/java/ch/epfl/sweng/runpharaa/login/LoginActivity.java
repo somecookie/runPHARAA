@@ -29,13 +29,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.runpharaa.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
@@ -179,7 +180,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, user.getUid());
-                            DatabaseManagement.writeNewUser(User.instance);
+                            UserDatabaseManagement.writeNewUser(User.instance);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

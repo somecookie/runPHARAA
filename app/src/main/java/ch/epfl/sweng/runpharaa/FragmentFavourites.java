@@ -83,6 +83,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
