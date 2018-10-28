@@ -16,6 +16,10 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import java.util.List;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -75,12 +79,31 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
+        /*
         for (Track tr : User.instance.tracksNearMe()) {
             Marker m = mMap.addMarker(new MarkerOptions()
                     .position(tr.getStartingPoint().ToLatLng())
                     .title(tr.getName()));
             m.setTag(tr.getTrackUid());
         }
+        */
+        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                for (Track t : tracks) {
+                    Marker m = mMap.addMarker(new MarkerOptions()
+                            .position(t.getStartingPoint().ToLatLng())
+                            .title(t.getName()));
+                    m.setTag(t.getTrackUid());
+                }
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
