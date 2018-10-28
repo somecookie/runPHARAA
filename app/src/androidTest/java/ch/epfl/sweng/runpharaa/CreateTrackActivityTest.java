@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import java.util.HashSet;
 
+import ch.epfl.sweng.runpharaa.user.User;
+
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

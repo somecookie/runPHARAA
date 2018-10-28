@@ -24,11 +24,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.user.User;
 
 public class DatabaseManagement {
 
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
+    public final static String USERS_PATH = "users";
+
 
     public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
@@ -36,6 +39,17 @@ public class DatabaseManagement {
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
     public DatabaseManagement() { }
+
+    public static void writeNewUser(final User user){
+        mDataBaseRef.child(USERS_PATH).child(user.getID()).setValue(user).addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Storage", "Failed to upload new user: "+e.getMessage());
+                    }
+                }
+        );
+    }
 
     /**
      * Track a {@link Track} and add it to the database

@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import java.util.HashSet;
 
 
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;

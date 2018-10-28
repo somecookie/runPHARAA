@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,13 +29,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.User;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.sign_in_button:
                 // TODO: setting a fake user for now, change it later
-                User.set("Fake User", 2000, null, new ArrayList<String>(), new ArrayList<String>(), lastLocation, false, "Fake User");
+                //User.set("Fake User", 2000, null, new ArrayList<String>(), new ArrayList<String>(), lastLocation, false, "Fake User");
                 launchApp();
                 break;
             case R.id.sign_in_button_google:
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, false, currentUser.getUid());
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
@@ -178,7 +178,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, false, user.getUid());
+                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, user.getUid());
+                            DatabaseManagement.writeNewUser(User.instance);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -194,7 +195,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case GPS_PERMISSIONS_REQUEST_CODE: {
-                Log.i("cunt", grantResults.length+" hh");
                 if (grantResults.length != 1 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions();
                 }

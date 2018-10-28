@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.support.test.rule.ActivityTestRule;
@@ -9,16 +8,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
-import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getContext;

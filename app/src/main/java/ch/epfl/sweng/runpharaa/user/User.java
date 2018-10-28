@@ -1,40 +1,50 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.user;
 
 import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import com.bumptech.glide.annotation.Excludes;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import java.util.List;
 
+@IgnoreExtraProperties
 public final class User {
+    @Exclude
     private int preferredRadius = 2000;
-    private final String name;
+    @Exclude
+    private  String name;
     //TODO: put default picture
-    private final Uri picture;
+    @Exclude
+    private Uri picture;
 
     //Of type String because we only need the key reference of the track in the database
+    private String uId;
     private List<String> createdTracksKeys;
     private List<String> favoritesTracksKeys;
     private List<String> likedTracksKeys;
 
+    @Exclude
     private LatLng location;
-    private final boolean admin;
-    private final String uId;
 
+
+    @Exclude
     public static User instance;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name, int preferredRadius, Uri picture, List<String> createdTracksKeys, List<String> favoritesTracksKeys, LatLng location, Boolean admin, String uId) {
+    public User(){}
+
+    public User(String name, int preferredRadius, Uri picture, List<String> createdTracksKeys, List<String> favoritesTracksKeys, LatLng location, String uId) {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
@@ -42,13 +52,12 @@ public final class User {
         this.favoritesTracksKeys = favoritesTracksKeys;
         this.likedTracksKeys = new ArrayList<>();
         this.location = location;
-        this.admin = admin;
         this.uId = uId;
     }
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, new ArrayList<String>(), new ArrayList<String>(), location, false, name);
+        this(name, preferredRadius, null, new ArrayList<String>(), new ArrayList<String>(), location, name);
     }
 
     public int getPreferredRadius() {
@@ -184,8 +193,8 @@ public final class User {
 
     public List<String> getFavoriteTracks(){ return favoritesTracksKeys; }
 
-    public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, Boolean admin, String uId){
-        instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, admin, uId);
+    public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, String uId){
+        instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, uId);
     }
 
     /**

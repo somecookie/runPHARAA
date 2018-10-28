@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.io.InputStream;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.User;
 
 public class UsersProfileActivity extends AppCompatActivity {
 

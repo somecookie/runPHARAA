@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import java.util.HashSet;
 
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
+import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
