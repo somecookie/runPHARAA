@@ -38,7 +38,6 @@ public class Track {
 
     public Track(String name, String creatorUid, Bitmap image, List<CustLatLng> path, TrackProperties properties){
 
-        Required.nonNull(trackUid, "User ID must be non-null.");
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
         //Required.nonNull(image, "Image must be non-null.");
         Required.nonNull(path, "Path must be non-null.");
@@ -54,7 +53,7 @@ public class Track {
 
     public Track(String trackUid, String creatorUid, Bitmap image, String name, List<CustLatLng> path, TrackProperties properties) {
 
-        Required.nonNull(trackUid, "User ID must be non-null.");
+        Required.nonNull(trackUid, "Track ID must be non-null.");
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
         //Required.nonNull(image, "Image must be non-null.");
         Required.nonNull(path, "Path must be non-null.");

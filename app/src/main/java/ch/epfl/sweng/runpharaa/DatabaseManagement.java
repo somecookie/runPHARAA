@@ -126,6 +126,14 @@ public class DatabaseManagement {
                 tracksNearMe.add(c.getValue(Track.class));
             }
         }
+        Collections.sort(tracksNearMe, new Comparator<Track>() {
+            @Override
+            public int compare(Track o1, Track o2) {
+                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+                return Double.compare(d1, d2);
+            }
+        });
         return tracksNearMe;
     }
 
