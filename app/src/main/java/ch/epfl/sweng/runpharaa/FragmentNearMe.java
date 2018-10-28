@@ -107,7 +107,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
-                List<Track> tracks = DatabaseManagement.initTracksNearMe(data); //TODO: Maybe sort them by nearest?
+                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
@@ -158,7 +158,6 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         @Override
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            //viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground()); //TODO ERASE
             viewHolder.name.setText(listCardItem.get(position).getName());
 
             new DownloadImageTask(viewHolder.background_img)
@@ -209,11 +208,10 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 try {
                     InputStream in = new java.net.URL(urldisplay).openStream();
                     BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 8;
+                    options.inSampleSize = 4;
                     mIcon11 = BitmapFactory.decodeStream(in, null, options);
-
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
+                    mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
 
                     decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 

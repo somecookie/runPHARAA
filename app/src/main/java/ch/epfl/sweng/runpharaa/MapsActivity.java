@@ -16,6 +16,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import java.util.List;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -71,19 +75,29 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         //add a marker for each starting point inside the preferred radius
-        for (Track tr : User.instance.tracksNearMe()) {
-            Marker m = mMap.addMarker(new MarkerOptions()
-                    .position(tr.getStartingPoint().ToLatLng())
-                    .title(tr.getName()));
-            m.setTag(tr.getTrackUid());
-            Log.i("markerz4life", "Adding marker with tag: "+m.getTag());
-        }
+        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                for (Track t : tracks) {
+                    Marker m = mMap.addMarker(new MarkerOptions()
+                            .position(t.getStartingPoint().ToLatLng())
+                            .title(t.getName()));
+                    m.setTag(t.getTrackUid());
+                }
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+                Log.d("DB Read: ", "Failed to read data from DB in MapsActivity.");
+            }
+        });
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent i = new Intent(this, TrackPropertiesActivity.class);
-        i.putExtra("TrackID", (String)marker.getTag());
+        i.putExtra("TrackID", (String) marker.getTag());
         startActivity(i);
     }
 
@@ -104,34 +118,44 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         }
 
         @Override
-        public View getInfoContents(Marker marker) {
+        public View getInfoContents(final Marker marker) {
             View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_info_window, null);
 
             TextView title = view.findViewById(R.id.marker_window_title);
 
-            TextView lenText = view.findViewById(R.id.marker_window_text_len);
-            TextView diffText = view.findViewById(R.id.marker_window_text_diff);
-            TextView likeText = view.findViewById(R.id.marker_window_text_like);
+            final TextView lenText = view.findViewById(R.id.marker_window_text_len);
+            final TextView diffText = view.findViewById(R.id.marker_window_text_diff);
+            final TextView likeText = view.findViewById(R.id.marker_window_text_like);
 
             // Set title
             title.setText(marker.getTitle());
 
-            // Get the correct track by it's id
-            Track track = null;
-            for (Track tr : Track.allTracks)
-                if (tr.getTrackUid() ==  marker.getTag())
-                    track = tr;
+            DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+                @Override
+                public void onSuccess(DataSnapshot data) {
+                    // Get the correct track by it's id
+                    List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                    Track track = null;
+                    for (Track t : tracks) {
+                        if (t.getTrackUid() == marker.getTag())
+                            track = t;
+                    }
 
-            // Get other info from the track (should never be null be we check just in case)
-            if (track != null) {
+                    // Get other info from the track (should never be null be we check just in case)
+                    if (track != null) {
+                        TrackProperties tp = track.getProperties();
+                        lenText.setText(tp.getLength() + " m");
+                        diffText.setText(tp.getHeightDifference() + " m");
+                        likeText.setText(tp.getLikes() + "");
+                    }
+                }
 
-                TrackProperties tp = track.getProperties();
-
-                lenText.setText(tp.getLength() + " m");
-                diffText.setText(tp.getHeightDifference() + " m");
-                likeText.setText(tp.getLikes() + "");
-            }
+                @Override
+                public void onFailed(DatabaseError databaseError) {
+                    Log.d("DB Read: ", "Failed to read data from DB in InfoWindowGoogleMap.");
+                }
+            });
             return view;
         }
     }

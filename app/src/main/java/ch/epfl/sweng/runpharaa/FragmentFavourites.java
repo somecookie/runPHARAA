@@ -212,7 +212,6 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
         @Override
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            //viewHolder.background_img.setImageResource(listCardItem.get(position).getBackground()); //TODO ERASE
             viewHolder.name.setText(listCardItem.get(position).getName());
 
             new DownloadImageTask(viewHolder.background_img)
@@ -263,10 +262,12 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
 
                 try {
                     InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 4;
+                    mIcon11 = BitmapFactory.decodeStream(in, null, options);
 
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    mIcon11.compress(Bitmap.CompressFormat.PNG, 20, out);
+                    mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
                     decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
                 } catch (Exception e) {
