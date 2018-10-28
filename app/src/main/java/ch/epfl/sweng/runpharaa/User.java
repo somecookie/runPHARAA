@@ -128,7 +128,7 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("hahaha", "" + favoritesTracksKeys.contains(trackId));
+        Log.i("Favourites", "already in favotites" + favoritesTracksKeys.contains(trackId));
         return favoritesTracksKeys.contains(trackId);
     }
 
@@ -140,7 +140,7 @@ public final class User {
     public void addToFavorites(String trackId) {
         if (!alreadyInFavorites(trackId)) {
             favoritesTracksKeys.add(trackId);
-            Log.i("hahaha", "Adding track: " + trackId);
+            Log.i("Favorites", "Adding track: " + trackId);
         }
     }
 
@@ -159,7 +159,7 @@ public final class User {
      * @param trackId the track's id
      */
     public void removeFromFavorites(String trackId) {
-        createdTracksKeys.remove(trackId);
+        favoritesTracksKeys.remove(trackId);
     }
 
     /**
