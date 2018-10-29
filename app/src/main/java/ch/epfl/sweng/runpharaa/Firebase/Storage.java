@@ -16,12 +16,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 public class Storage {
-    private Boolean isTest = false;
-    private Boolean shouldFail = false;
-    private Boolean shouldNotComplete = false;
+    private static Boolean isTest = true;
+    private static Boolean shouldFail = false;
+    private static Boolean shouldNotComplete = false;
     private final static String key = "key";
     private final static String s_trackImage = "TrackImages";
 
@@ -46,7 +47,11 @@ public class Storage {
     @Mock
     private Task<Uri> addTrackToStorageTask;
 
-    private FirebaseStorage getInstance(){
+    public static FirebaseStorage getInstance(){
+        return (isTest)? new Storage().instanciateMock() : FirebaseStorage.getInstance();
+    }
+
+    private FirebaseStorage instanciateMock(){
         if(isTest){
             MockitoAnnotations.initMocks(this);
             instanciateStorage();

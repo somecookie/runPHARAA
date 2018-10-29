@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa.Firebase;
 
 
 import android.graphics.Bitmap;
+import android.provider.ContactsContract;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -34,16 +35,16 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private boolean isTest = true;
-    private boolean shouldFail = true;
-    private boolean isCancelled = false;
+    private static boolean isTest = true;
+    private static boolean shouldFail = true;
+    private static boolean isCancelled = false;
 
 
-    private String s_tracks = "tracks";
-    private String s_key = "key";
+    private static String s_tracks = "tracks";
+    private static String s_key = "key";
 
     //Should create a track for this?
-    private String trackUID = "id";
+    private static String trackUID = "id";
 
     private Track t = new Track();
 
@@ -92,7 +93,12 @@ public class Database {
 
     }
 
-    public FirebaseDatabase getInstance(){
+
+    public static FirebaseDatabase getInstance(){
+        return (isTest)? new Database().instanciateMock() : FirebaseDatabase.getInstance();
+    }
+
+    private FirebaseDatabase instanciateMock(){
         if(isTest){
             MockitoAnnotations.initMocks(this);
             createTrack();
@@ -162,6 +168,7 @@ public class Database {
             }
         }).when(drTracks).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
+        //when(drTracks.addListenerForSingleValueEvent(any(ValueEventListener.class))).thenCallRealMethod();
 
         doAnswer(new Answer<ValueEventListener>() {
             @Override

@@ -100,8 +100,9 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      */
     public void loadData() {
         // Create a fresh recyclerView and listCardItem
+        String s = DatabaseManagement.TRACKS_PATH;
 
-        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+        DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -133,7 +134,9 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentNearMe.");
                 setEmptyMessage();
             }
-        });
+        };
+
+        DatabaseManagement.mReadDataOnce(s, d);
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
