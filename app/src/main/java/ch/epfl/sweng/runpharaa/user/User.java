@@ -27,9 +27,7 @@ public final class User {
     private List<String> createdTracks;
     private List<String> favoriteTracks;
 
-    public List<String> getLikedTracks() {
-        return likedTracks;
-    }
+
 
     private List<String> likedTracks;
 
@@ -188,6 +186,10 @@ public final class User {
     public List<String> getCreatedTracks(){ return createdTracks; }
 
     public List<String> getFavoriteTracks(){ return favoriteTracks; }
+
+    public List<String> getLikedTracks() {
+        return likedTracks;
+    }
 
 
     /**

@@ -148,6 +148,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
             User.instance.unlike(trackID);
+            UserDatabaseManagement.removeLikedTrack(trackID);
             //TODO: remove the track from the firebase
         } else {
             track.getProperties().addLike();
@@ -168,9 +169,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         final Track track = track1;
         if (User.instance.alreadyInFavorites(trackID)) {
             track.getProperties().removeFavorite();
-            System.out.println("YO I HAVE "+User.instance.getFirebaseAdapter().getFavoriteTracks());
             User.instance.removeFromFavorites(trackID);
-            System.out.println("YO now I HAVE "+User.instance.getFavoriteTracks());
             UserDatabaseManagement.removeFavoriteTrack(trackID);
 
             //TODO: remove the track from the firebase
