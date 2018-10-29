@@ -1,12 +1,8 @@
 package ch.epfl.sweng.runpharaa.database;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-
+import com.google.firebase.database.DatabaseReference;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class UserDatabaseManagement extends DatabaseManagement {
     private final static String USERS = "users";
@@ -14,47 +10,40 @@ public class UserDatabaseManagement extends DatabaseManagement {
     private final static String LIKES = "likedTracks";
     private final static String CREATE = "createdTracks";
 
-    public static void writeNewUser(final User user) {
-        mDataBaseRef.child(USERS).child(user.getID()).setValue(user.getFirebaseAdapter()).addOnFailureListener(
-                e -> Log.e("Storage", "Failed to upload new user: " + e.getMessage())
-        );
+    public static void writeNewUser(final User user, final Callback<User> callback) {
+        DatabaseReference userRef = mDataBaseRef.child(USERS).child(user.getID());
+        userRef.setValue(user.getFirebaseAdapter()).addOnSuccessListener(aVoid -> callback.onSuccess(user)).addOnFailureListener(callback::onError);
     }
 
     public static void updateFavoriteTracks(final User user) {
-        mDataBaseRef.child(USERS).child(user.getID()).child(FAVORITE).setValue(user.getFirebaseAdapter().getFavoriteTracks()).addOnFailureListener(e -> {
-            Log.e("Database", "Failed to upload the favorite tracks: " + e.getMessage());
-         });
+        DatabaseReference favRef = mDataBaseRef.child(USERS).child(user.getID()).child(FAVORITE);
+
+        for (String fav : user.getFavoriteTracks()) {
+            favRef.child(fav).setValue(fav);
+        }
     }
 
     public static void removeFavoriteTrack(final String trackID) {
-        mDataBaseRef.child(USERS).child(User.instance.getID()).child(FAVORITE).setValue(User.instance.getFirebaseAdapter().getFavoriteTracks()).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Database", "Failed to remove a track from the favorite tracks " + e.getMessage());
-            }
-        });
-    }
-    public static void removeLikedTrack(final String trackID) {
-        mDataBaseRef.child(USERS).child(User.instance.getID()).child(LIKES).setValue(User.instance.getFirebaseAdapter().getFavoriteTracks()).addOnFailureListener(e ->{
-            Log.e("Database", "Failed to remove a track from the favorite tracks " + e.getMessage());
-        });
+        DatabaseReference favRef = mDataBaseRef.child(USERS).child(User.instance.getID()).child(FAVORITE).child(trackID);
+        favRef.removeValue().addOnFailureListener(Throwable::printStackTrace);
     }
 
     public static void updateLikedTracks(final User user) {
-        mDataBaseRef.child(USERS).child(user.getID()).child(LIKES).setValue(user.getFirebaseAdapter().getLikedTracks()).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Database", "Failed to upload the favorite tracks: " + e.getMessage());
-            }
-        });
+        DatabaseReference likedRef = mDataBaseRef.child(USERS).child(user.getID()).child(LIKES);
+
+        for (String like : user.getLikedTracks()) {
+            likedRef.child(like).setValue(like);
+        }
     }
 
-    public static void updateCreatedTracks(final User user) {
-        mDataBaseRef.child(USERS).child(user.getID()).child(CREATE).setValue(user.getFirebaseAdapter().getCreatedTracks()).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Database", "Failed to upload the created tracks: " + e.getMessage());
-            }
-        });
+    public static void removeLikedTrack(final String trackID) {
+        DatabaseReference likedRef = mDataBaseRef.child(USERS).child(User.instance.getID()).child(LIKES).child(trackID);
+        likedRef.removeValue().addOnFailureListener(Throwable::printStackTrace);
+    }
+
+
+    public static void updateCreatedTracks(final String trackID) {
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getID()).child(CREATE).child(trackID);
+        createRef.setValue(trackID).addOnFailureListener(Throwable::printStackTrace);
     }
 }

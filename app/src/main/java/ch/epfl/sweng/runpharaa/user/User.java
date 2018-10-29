@@ -13,7 +13,10 @@ import java.util.Comparator;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import java.util.List;
+import ch.epfl.sweng.runpharaa.utils.Required;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public final class User {
 
@@ -24,12 +27,9 @@ public final class User {
 
     //Of type String because we only need the key reference of the track in the database
     private String uId;
-    private List<String> createdTracks;
-    private List<String> favoriteTracks;
-
-
-
-    private List<String> likedTracks;
+    private Set<String> createdTracks;
+    private Set<String> favoriteTracks;
+    private Set<String> likedTracks;
 
     private LatLng location;
 
@@ -37,20 +37,26 @@ public final class User {
     public static User instance;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name, int preferredRadius, Uri picture, List<String> createdTracksKeys, List<String> favoritesTracksKeys, LatLng location, String uId) {
+    public User(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
+        Required.nonNull(name, "The name of an user cannot be null");
+        Required.nonNull(location, "The location of an user cannot be null");
+        Required.nonNull(uId, "The uId of an user cannot be null");
+        Required.nonNull(picture, "The picture of an user cannot be null");
+
+
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
-        this.createdTracks = createdTracksKeys;
-        this.favoriteTracks = favoritesTracksKeys;
-        this.likedTracks = new ArrayList<>();
+        this.createdTracks = new HashSet<>();
+        this.favoriteTracks = new HashSet<>();
+        this.likedTracks = new HashSet<>();
         this.location = location;
         this.uId = uId;
     }
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, new ArrayList<String>(), new ArrayList<String>(), location, name);
+        this(name, preferredRadius, null, location, name);
     }
 
     public FirebaseUserAdapter getFirebaseAdapter(){return new FirebaseUserAdapter(this);}
@@ -88,8 +94,8 @@ public final class User {
         return nm;
     }
 
-    public static void set(String name, int preferredRadius, Uri picture, List<String> createdTracks, List<String> favorites, LatLng location, String uId){
-        instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, uId);
+    public static void set(String name, int preferredRadius, Uri picture, LatLng location, String uId){
+        instance = new User(name, preferredRadius, picture, location, uId);
     }
 
 
@@ -107,9 +113,7 @@ public final class User {
      * @param trackId the track's id
      */
     public void like(String trackId) {
-        if (!alreadyLiked(trackId)) {
-            likedTracks.add(trackId);
-        }
+        likedTracks.add(trackId);
     }
 
     /**
@@ -141,10 +145,7 @@ public final class User {
      * @param trackId the track's id
      */
     public void addToFavorites(String trackId) {
-        if (!alreadyInFavorites(trackId)) {
-            favoriteTracks.add(trackId);
-            Log.i("Favorites", "Adding track: " + trackId);
-        }
+        favoriteTracks.add(trackId);
     }
 
     /**
@@ -183,11 +184,12 @@ public final class User {
 
     public Uri getPicture(){ return picture; }
 
-    public List<String> getCreatedTracks(){ return createdTracks; }
 
-    public List<String> getFavoriteTracks(){ return favoriteTracks; }
+    public Set<String> getCreatedTracks(){ return createdTracks; }
 
-    public List<String> getLikedTracks() {
+    public Set<String> getFavoriteTracks(){ return favoriteTracks; }
+
+    public Set<String> getLikedTracks() {
         return likedTracks;
     }
 

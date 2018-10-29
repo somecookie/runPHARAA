@@ -177,13 +177,12 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }
+
         DatabaseManagement.updateTrack(track);
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
-                trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
-            }
+        runOnUiThread(() -> {
+            TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
+            trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
         });
 
     }

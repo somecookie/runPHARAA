@@ -90,7 +90,7 @@ public class DatabaseManagement {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         User.instance.addToCreatedTracks(key);
-                                        UserDatabaseManagement.updateCreatedTracks(User.instance);
+                                        UserDatabaseManagement.updateCreatedTracks(key);
                                     }
                                 });
                             }

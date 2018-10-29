@@ -2,7 +2,9 @@ package ch.epfl.sweng.runpharaa.user;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
@@ -23,9 +25,9 @@ public class FirebaseUserAdapter {
         Required.nonNull(user,"User we want to send to the database must be non-null");
         this.user= user;
         uId = user.getID();
-        createdTracks = user.getCreatedTracks();
-        favoriteTracks = user.getFavoriteTracks();
-        likedTracks = user.getLikedTracks();
+        createdTracks = new ArrayList <>(user.getCreatedTracks());
+        favoriteTracks = new ArrayList<>(user.getFavoriteTracks());
+        likedTracks = new ArrayList<>(user.getLikedTracks());
 
     }
 
@@ -34,14 +36,17 @@ public class FirebaseUserAdapter {
     }
 
     public List<String> getCreatedTracks() {
+        createdTracks = new ArrayList <>(user.getCreatedTracks());
         return createdTracks;
     }
 
     public List<String> getFavoriteTracks() {
+        favoriteTracks = new ArrayList<>(user.getFavoriteTracks());
         return favoriteTracks;
     }
 
     public List<String> getLikedTracks() {
+        likedTracks = new ArrayList<>(user.getLikedTracks());
         return likedTracks;
     }
 }

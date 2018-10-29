@@ -27,9 +27,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.ArrayList;
-
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
@@ -38,6 +35,7 @@ import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,11 +43,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
-
+    public static GoogleSignInClient mGoogleSignInClient;
     //private static final int RC_SIGN_IN = 1;
     //Needed public to mock access
     private GoogleAuthInterface mGoogleAuth;
-    public static GoogleSignInClient mGoogleSignInClient;
     //Shared instance of the FirebaseAuth
     private FirebaseAuthInterface mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
@@ -140,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, currentUser.getUid());
+            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             launchApp();
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
@@ -172,21 +169,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), new ArrayList<String>(), new ArrayList<String>(), lastLocation, user.getUid());
-                            UserDatabaseManagement.writeNewUser(User.instance);
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), lastLocation, user.getUid());
+                        UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
+                            @Override
+                            public void onSuccess(User value) {
+                                Log.i("Database", user.getUid()+ " successfully added to the database");
+                                updateUI(user);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                // If sign in fails, display a message to the user.
+                                Log.e(TAG, "Impossible to send the user to the database: "+e.getMessage());
+                                Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
