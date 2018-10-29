@@ -64,9 +64,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     @Override
     protected void handleNewLocation() {
 
-        // If an infoWindow is opened, the map is not updated to prevent the window to be closed
-        if (infoWindowOpen())
-            return;
+        final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
 
         mMap.clear();
         markers.clear();
@@ -80,8 +78,10 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                 .radius(User.instance.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
-        // Follow the user
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
+
+        // Follow the user (only if no infoWindow is opened)
+        if (trackUidInfoWindow == null)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         // Add a marker for each starting point inside the preferred radius
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
@@ -93,6 +93,11 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                             .position(t.getStartingPoint().ToLatLng())
                             .title(t.getName()));
                     m.setTag(t.getTrackUid());
+
+                    // If a marker had its infoWindow opened, reopen it
+                    if (trackUidInfoWindow != null && trackUidInfoWindow.equals(t.getTrackUid())) {
+                        m.showInfoWindow();
+                    }
 
                     markers.add(m);
                 }
@@ -113,18 +118,18 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     }
 
     /**
-     * Check if any present marker on the google map has its infoWindow opened
-     * As only one infoWindow can be open, return true as soon as a marker has its infoWindow opened
+     * Check if any present marker on the google map has its infoWindow opened and return the
+     * track ID associated to it
      *
-     * @return true if an infoWindow is open
+     * @return a String, the trackUid associated to the marker
      */
-    private boolean infoWindowOpen() {
+    private String trackUidMarkerWithInfoWindowOpen() {
         for (Marker m : markers) {
-            if (m.isInfoWindowShown()) {
-                return true;
+            if (m.isInfoWindowShown() && m.getTag() != null) {
+                return m.getTag().toString();
             }
         }
-        return false;
+        return null;
     }
 
     /**
