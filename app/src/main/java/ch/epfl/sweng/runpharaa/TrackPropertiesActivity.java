@@ -24,6 +24,7 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.user.User;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
     //TODO: Check if ScrollView is working!

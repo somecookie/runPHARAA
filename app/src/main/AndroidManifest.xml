@@ -9,17 +9,16 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"
-		     tools:ignore="MockLocation,ProtectedPermissions" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission
+        android:name="android.permission.ACCESS_MOCK_LOCATION"
+        tools:ignore="MockLocation,ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
-
         android:hardwareAccelerated="false"
-
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -46,21 +45,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.runpharaa.MainActivity" />
         </activity>
-        <activity android:name=".CreateTrackActivity"
-            android:exported="true"
-            />
+        <activity
+            android:name=".CreateTrackActivity"
+            android:exported="true" />
         <activity android:name=".CreateTrackActivity2" />
 
         <service android:name=".GpsService" />
-		
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
         <activity android:name=".TrackPropertiesActivity" />
-
         <activity android:name=".user.UsersProfileActivity" />
-
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/app_name">
@@ -70,7 +67,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".user.SettingsActivity"/>
     </application>
 
 </manifest>

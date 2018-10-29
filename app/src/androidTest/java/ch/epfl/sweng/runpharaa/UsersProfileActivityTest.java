@@ -2,13 +2,14 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,11 +17,16 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import ch.epfl.sweng.runpharaa.login.LoginActivity;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -66,5 +72,13 @@ public class UsersProfileActivityTest {
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbFav)).check(matches(withText("1")));
+    }
+
+    @Test
+    public void logoutButtonLeadsToSignIn() {
+        Intents.init();
+        onView(withId(R.id.sign_out_button)).perform(click());
+        intended(hasComponent(LoginActivity.class.getName()));
+        Intents.release();
     }
 }

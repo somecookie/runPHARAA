@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getContext;

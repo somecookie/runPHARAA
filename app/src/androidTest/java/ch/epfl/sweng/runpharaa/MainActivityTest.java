@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 
+import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
