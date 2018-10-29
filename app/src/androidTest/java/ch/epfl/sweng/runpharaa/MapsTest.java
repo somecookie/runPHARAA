@@ -32,6 +32,8 @@ import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
+import ch.epfl.sweng.runpharaa.user.User;
+
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -52,7 +54,7 @@ public class MapsTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(46.520566, 6.567820), false, "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(46.520566, 6.567820), "aa");
     }
 
     @Rule

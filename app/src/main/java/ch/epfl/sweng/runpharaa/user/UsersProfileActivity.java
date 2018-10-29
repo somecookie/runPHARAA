@@ -60,38 +60,6 @@ public class UsersProfileActivity extends AppCompatActivity {
                 .execute(actualUser.getPicture().toString());
     }
 
-    /**
-     * Private class to download Uri images and set the ImageView to the image downloaded
-     */
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        /**
-         * Set the ImageView to the bitmap result
-         * @param result
-         */
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
-
     private void signOut() {
 
         FirebaseAuth.getInstance().signOut();
@@ -114,6 +82,39 @@ public class UsersProfileActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+    }
+
+    /**
+     * Private class to download Uri images and set the ImageView to the image downloaded
+     */
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        /**
+         * Set the ImageView to the bitmap result
+         *
+         * @param result
+         */
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 
 }

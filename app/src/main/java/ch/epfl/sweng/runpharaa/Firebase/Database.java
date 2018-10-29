@@ -16,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -84,16 +83,17 @@ public class Database {
     @Mock
     private DataSnapshot snapInit;
 
+
     @Mock
     private DataSnapshot snapInitTrack;
 
 
-    private Database(){
+    private Database() {
 
     }
 
-    public FirebaseDatabase getInstance(){
-        if(isTest){
+    public FirebaseDatabase getInstance() {
+        if (isTest) {
             MockitoAnnotations.initMocks(this);
             createTrack();
             instanciateDB();
@@ -119,13 +119,13 @@ public class Database {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);
     }
 
-    private void instanciateDBRef(){
+    private void instanciateDBRef() {
         when(databaseReferenceMock.child(s_tracks)).thenReturn(drTracks);
         when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
     }
 
 
-    private void instanciatedrTracks(){
+    private void instanciatedrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);
         when(drTracksPush.getKey()).thenReturn(s_key);
 
@@ -134,13 +134,13 @@ public class Database {
 
     }
 
-    private void instanciatedrKeys(){
+    private void instanciatedrKeys() {
         when(drKey.setValue(track)).thenReturn(setValueTrack);
         when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail) {
+                if (shouldFail) {
                     l.onFailure(new IllegalStateException("Could not add track to DB"));
                 }
                 return setValueTrack;
@@ -148,7 +148,7 @@ public class Database {
         });
     }
 
-    private void instanciateRead(){
+    private void instanciateRead() {
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -178,7 +178,7 @@ public class Database {
     }
 
 
-    private void createTrack(){
+    private void createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
@@ -186,7 +186,7 @@ public class Database {
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
         CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0","Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
 
         t = track;
 

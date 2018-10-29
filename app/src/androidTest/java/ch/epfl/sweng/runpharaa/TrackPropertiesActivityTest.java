@@ -50,7 +50,7 @@ public class TrackPropertiesActivityTest {
 
     @Before
     public void initUserAndTracks() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), false, "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), "aa");
     }
 
     @Test
