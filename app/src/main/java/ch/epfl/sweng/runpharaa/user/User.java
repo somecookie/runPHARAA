@@ -24,9 +24,9 @@ public final class User {
 
     //Of type String because we only need the key reference of the track in the database
     private String uId;
-    private List<String> createdTracksKeys;
-    private List<String> favoriteTracksKeys;
-    private List<String> likedTracksKeys;
+    private List<String> createdTracks;
+    private List<String> favoriteTracks;
+    private List<String> likedTracks;
 
     private LatLng location;
 
@@ -38,9 +38,9 @@ public final class User {
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
-        this.createdTracksKeys = createdTracksKeys;
-        this.favoriteTracksKeys = favoritesTracksKeys;
-        this.likedTracksKeys = new ArrayList<>();
+        this.createdTracks = createdTracksKeys;
+        this.favoriteTracks = favoritesTracksKeys;
+        this.likedTracks = new ArrayList<>();
         this.location = location;
         this.uId = uId;
     }
@@ -89,15 +89,6 @@ public final class User {
         instance = new User(name, preferredRadius, picture, createdTracks, favorites, location, uId);
     }
 
-    public List<String> getFavoriteTracksKeys() {
-        return favoriteTracksKeys;
-    }
-
-    public List<String> getCreatedTracksKeys() {
-        return createdTracksKeys;
-    }
-
-    public List<String> getLikedTracksKeys(){return likedTracksKeys;}
 
     /**
      * Check if the user already liked a particular track
@@ -105,7 +96,7 @@ public final class User {
      * @return true if the user already liked the track
      */
     public boolean alreadyLiked(String trackId) {
-        return likedTracksKeys.contains(trackId);
+        return likedTracks.contains(trackId);
     }
 
     /**
@@ -114,7 +105,7 @@ public final class User {
      */
     public void like(String trackId) {
         if (!alreadyLiked(trackId)) {
-            likedTracksKeys.add(trackId);
+            likedTracks.add(trackId);
         }
     }
 
@@ -125,7 +116,7 @@ public final class User {
      * @return true if the track is in the favorites
      */
     public void unlike(String trackId) {
-        likedTracksKeys.remove(trackId);
+        likedTracks.remove(trackId);
     }
 
     /**
@@ -135,8 +126,8 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("hahaha", "" + favoriteTracksKeys.contains(trackId));
-        return favoriteTracksKeys.contains(trackId);
+        Log.i("hahaha", "" + favoriteTracks.contains(trackId));
+        return favoriteTracks.contains(trackId);
     }
 
     /**
@@ -146,7 +137,7 @@ public final class User {
      */
     public void addToFavorites(String trackId) {
         if (!alreadyInFavorites(trackId)) {
-            favoriteTracksKeys.add(trackId);
+            favoriteTracks.add(trackId);
             Log.i("hahaha", "Adding track: " + trackId);
         }
     }
@@ -157,7 +148,7 @@ public final class User {
      * @param trackId
      */
     public void addToCreatedTracks(String trackId) {
-        createdTracksKeys.add(trackId);
+        createdTracks.add(trackId);
     }
 
     /**
@@ -166,7 +157,9 @@ public final class User {
      * @param trackId the track's id
      */
     public void removeFromFavorites(String trackId) {
-        createdTracksKeys.remove(trackId);
+        System.out.println("I want to remove "+trackId+" from "+ createdTracks);
+        createdTracks.remove(trackId);
+        System.out.println("Now I have "+ createdTracks);
     }
 
     /**
@@ -187,9 +180,9 @@ public final class User {
 
     public Uri getPicture(){ return picture; }
 
-    public List<String> getCreatedTracks(){ return createdTracksKeys; }
+    public List<String> getCreatedTracks(){ return createdTracks; }
 
-    public List<String> getFavoriteTracks(){ return favoriteTracksKeys; }
+    public List<String> getFavoriteTracks(){ return favoriteTracks; }
 
 
     /**

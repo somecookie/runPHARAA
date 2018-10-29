@@ -152,9 +152,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         } else {
             track.getProperties().addLike();
             User.instance.like(trackID);
+            UserDatabaseManagement.updateLikedTracks(User.instance);
         }
         DatabaseManagement.updateTrack(track);
-        UserDatabaseManagement.updateLikedTracks(User.instance);
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
@@ -168,7 +168,11 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         final Track track = track1;
         if (User.instance.alreadyInFavorites(trackID)) {
             track.getProperties().removeFavorite();
+            System.out.println("YO I HAVE "+User.instance.getFirebaseAdapter().getFavoriteTracks());
             User.instance.removeFromFavorites(trackID);
+            System.out.println("YO now I HAVE "+User.instance.getFavoriteTracks());
+            UserDatabaseManagement.removeFavoriteTrack(trackID);
+
             //TODO: remove the track from the firebase
         } else {
             track.getProperties().addFavorite();
