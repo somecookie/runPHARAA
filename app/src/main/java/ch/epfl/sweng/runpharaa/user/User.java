@@ -10,44 +10,26 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public final class User {
 
+    public static User instance;
     private int preferredRadius = 2000;
-    private  String name;
+    private String name;
     //TODO: put default picture
     private Uri picture;
-
     //Of type String because we only need the key reference of the track in the database
     private String uId;
-
-    public void setCreatedTracks(Set<String> createdTracks) {
-        this.createdTracks = createdTracks;
-    }
-
-    public void setFavoriteTracks(Set<String> favoriteTracks) {
-        this.favoriteTracks = favoriteTracks;
-    }
-
-    public void setLikedTracks(Set<String> likedTracks) {
-        this.likedTracks = likedTracks;
-    }
-
     private Set<String> createdTracks;
     private Set<String> favoriteTracks;
     private Set<String> likedTracks;
-
     private LatLng location;
-
-
-    public static User instance;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
     public User(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
@@ -72,10 +54,20 @@ public final class User {
         this(name, preferredRadius, null, location, name);
     }
 
-    public FirebaseUserAdapter getFirebaseAdapter(){return new FirebaseUserAdapter(this);}
+    public static void set(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
+        instance = new User(name, preferredRadius, picture, location, uId);
+    }
+
+    public FirebaseUserAdapter getFirebaseAdapter() {
+        return new FirebaseUserAdapter(this);
+    }
 
     public int getPreferredRadius() {
         return preferredRadius;
+    }
+
+    public void setPreferredRadius(int newRadius) {
+        this.preferredRadius = newRadius;
     }
 
     /**
@@ -107,13 +99,9 @@ public final class User {
         return nm;
     }
 
-    public static void set(String name, int preferredRadius, Uri picture, LatLng location, String uId){
-        instance = new User(name, preferredRadius, picture, location, uId);
-    }
-
-
     /**
      * Check if the user already liked a particular track
+     *
      * @param trackId the track's id
      * @return true if the user already liked the track
      */
@@ -123,6 +111,7 @@ public final class User {
 
     /**
      * Add a track id in the set of liked tracks if it is not already there
+     *
      * @param trackId the track's id
      */
     public void like(String trackId) {
@@ -140,16 +129,14 @@ public final class User {
     }
 
     /**
-     *Check if Track is already in favourites.
+     * Check if Track is already in favourites.
      *
      * @param trackId
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-
         Log.i("Favourites", "already in favotites" + favoriteTracks.contains(trackId));
         return favoriteTracks.contains(trackId);
-
     }
 
     /**
@@ -159,6 +146,7 @@ public final class User {
      */
     public void addToFavorites(String trackId) {
         favoriteTracks.add(trackId);
+
     }
 
     /**
@@ -184,38 +172,58 @@ public final class User {
      *
      * @return location
      */
-    public LatLng getLocation() { return location; }
-
-    /**
-     * Return the name of the user
-     *
-     * @return name
-     */
-    public String getName() { return name; }
-
-    public String getID() { return uId; }
-
-    public Uri getPicture(){ return picture; }
-
-
-    public Set<String> getCreatedTracks(){ return createdTracks; }
-
-    public Set<String> getFavoriteTracks(){ return favoriteTracks; }
-
-    public Set<String> getLikedTracks() {
-        return likedTracks;
+    public LatLng getLocation() {
+        return location;
     }
-
 
     /**
      * Update the user's location.
      *
      * @param newLocation
      */
-    public void setLocation(LatLng newLocation) { this.location = newLocation; }
+    public void setLocation(LatLng newLocation) {
+        this.location = newLocation;
+    }
 
-    public void setPreferredRadius(int newRadius) {
-        this.preferredRadius = newRadius;
+    /**
+     * Return the name of the user
+     *
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    public String getID() {
+        return uId;
+    }
+
+    public Uri getPicture() {
+        return picture;
+    }
+
+    public Set<String> getCreatedTracks() {
+        return createdTracks;
+    }
+
+    public void setCreatedTracks(Set<String> createdTracks) {
+        this.createdTracks = createdTracks;
+    }
+
+    public Set<String> getFavoriteTracks() {
+        return favoriteTracks;
+    }
+
+    public void setFavoriteTracks(Set<String> favoriteTracks) {
+        this.favoriteTracks = favoriteTracks;
+    }
+
+    public Set<String> getLikedTracks() {
+        return likedTracks;
+    }
+
+    public void setLikedTracks(Set<String> likedTracks) {
+        this.likedTracks = likedTracks;
     }
 
 }
