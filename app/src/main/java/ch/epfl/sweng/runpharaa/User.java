@@ -128,7 +128,6 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("Favourites", "already in favotites" + favoritesTracksKeys.contains(trackId));
         return favoritesTracksKeys.contains(trackId);
     }
 
@@ -138,6 +137,7 @@ public final class User {
      * @param trackId the track's id
      */
     public void addToFavorites(String trackId) {
+        Log.i("WALLOU", "adding");
         if (!alreadyInFavorites(trackId)) {
             favoritesTracksKeys.add(trackId);
             Log.i("hahaha", "Adding track: " + trackId);

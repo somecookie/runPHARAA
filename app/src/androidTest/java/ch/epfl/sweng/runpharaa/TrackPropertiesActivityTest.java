@@ -3,11 +3,13 @@ package ch.epfl.sweng.runpharaa;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -18,9 +20,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -52,7 +59,7 @@ public class TrackPropertiesActivityTest {
     @Test
     public void correctValuesDisplayedForTrack1() {
         Track t1 = Track.allTracks.get(0);
-        launchWithTrackId(0);
+        launchWithTrackId("0");
         withId(R.id.trackTitleID).matches(withText(t1.getName()));
         withId(R.id.trackLengthID).matches(withText("Length: " + Double.toString(t1.getProperties().getLength()) + "m"));
         withId(R.id.trackLikesID).matches(withText("Likes: " + t1.getProperties().getLikes()));
@@ -72,7 +79,7 @@ public class TrackPropertiesActivityTest {
 
     public void pressingLikeUpdatesValue() {
         int likesBefore = Track.allTracks.get(0).getProperties().getLikes();
-        launchWithTrackId(0);
+        launchWithTrackId("0");
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore + 1));
         sleep(500);
@@ -83,7 +90,7 @@ public class TrackPropertiesActivityTest {
     @Test
     public void addingToFavoritesUpdatesValue() {
         int favsBefore = Track.allTracks.get(0).getProperties().getFavorites();
-        launchWithTrackId(0);
+        launchWithTrackId("0");
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore + 1));
         sleep(500);
@@ -93,13 +100,14 @@ public class TrackPropertiesActivityTest {
 
     @Test
     public void addingToFavoritesUpdatesUser() {
-        launchWithTrackId(0);
+        launchWithTrackId("0");
         onView(withId(R.id.buttonFavoriteID)).perform(click());
-        sleep(500);
-        assertTrue(User.instance.getFavoriteTracks().contains(0));
+        sleep(5000);
+        Log.i("tagIOIOIO", "---------" + User.instance.getFavoriteTracks().size());
+        assertTrue(User.instance.getFavoriteTracks().contains("0"));
     }
 
-    private void launchWithTrackId(int id) {
+    private void launchWithTrackId(String id) {
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
         Intent intent = new Intent(targetContext, TrackPropertiesActivity.class);
