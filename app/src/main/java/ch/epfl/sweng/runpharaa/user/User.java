@@ -127,7 +127,7 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("Favourites", "already in favotites" + favoritesTracksKeys.contains(trackId));
+        Log.i("Favourites", "already in favorites" + favoritesTracksKeys.contains(trackId));
         return favoritesTracksKeys.contains(trackId);
     }
 
