@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_section_near_me">
+
+        <EditTextPreference
+            android:defaultValue="@string/pref_default_radius"
+            android:key="@string/pref_key_radius"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_radius" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_section_location">
+
+        <EditTextPreference
+            android:defaultValue="@string/pref_default_time_interval"
+            android:key="@string/pref_key_time_interval"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_time_interval" />
+
+        <EditTextPreference
+            android:defaultValue="@string/pref_default_min_time_interval"
+            android:key="@string/pref_key_min_time_interval"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_min_time_interval" />
+
+        <EditTextPreference
+            android:defaultValue="@string/pref_default_min_distance_interval"
+            android:key="@string/pref_key_min_distance_interval"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_min_distance_interval" />
+
+    </PreferenceCategory>
+
+    <!--<PreferenceCategory android:title="@string/pref_section_track">
+
+        <MultiSelectListPreference
+            android:key="@string/pref_key_track_types"
+            android:title="@string/pref_title_track_types"
+            android:entries="@array/track_types"
+            android:entryValues="@array/track_types"/>
+
+    </PreferenceCategory> -->
+
+    <PreferenceCategory android:title="@string/pref_section_other">
+
+        <Preference
+            android:key="@string/pref_key_reset_prefs"
+            android:title="@string/pref_title_reset_prefs" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

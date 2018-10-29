@@ -23,9 +23,9 @@ public class FirebaseUserAdapter {
         Required.nonNull(user,"User we want to send to the database must be non-null");
         this.user= user;
         uId = user.getID();
-        createdTracks = user.getCreatedTracksKeys();
+        createdTracks = user.getCreatedTracks();
         favoriteTracks = user.getFavoriteTracks();
-        likedTracks = user.getLikedTracksKeys();
+        likedTracks = user.getLikedTracks();
 
     }
 
@@ -34,17 +34,14 @@ public class FirebaseUserAdapter {
     }
 
     public List<String> getCreatedTracks() {
-        createdTracks = user.getCreatedTracks();
         return createdTracks;
     }
 
     public List<String> getFavoriteTracks() {
-        favoriteTracks = user.getFavoriteTracks();
         return favoriteTracks;
     }
 
     public List<String> getLikedTracks() {
-        likedTracks = user.getLikedTracksKeys();
         return likedTracks;
     }
 }

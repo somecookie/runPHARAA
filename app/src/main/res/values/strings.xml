@@ -42,4 +42,45 @@
         <item>Beach</item>
         <item>Countryside</item>
     </string-array>
+    <string name="title_activity_settings2">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Near me -->
+    <string name="pref_section_near_me">Near me</string>
+
+        <string name="pref_title_radius">Preferred radius</string>
+        <string name="pref_key_radius" translatable="false">pref_radius</string>
+        <string name="pref_default_radius" translatable="false">2000</string>
+
+    <!-- Location -->
+    <string name="pref_section_location">Location updates</string>
+
+        <string name="pref_title_min_time_interval">Minimum refresh interval</string>
+        <string name="pref_key_min_time_interval" translatable="false">min_time_interval</string>
+        <string name="pref_default_min_time_interval" translatable="false">1000</string>
+
+        <string name="pref_title_time_interval">Refresh interval</string>
+        <string name="pref_key_time_interval" translatable="false">time_interval</string>
+        <string name="pref_default_time_interval" translatable="false">5000</string>
+
+        <string name="pref_title_min_distance_interval">Minimum displacement</string>
+        <string name="pref_key_min_distance_interval" translatable="false">min_distance_interval</string>
+        <string name="pref_default_min_distance_interval" translatable="false">5</string>
+
+    <!-- Tracks -->
+    <string name="pref_section_track">Track</string>
+
+        <string name="pref_title_track_types">Track types</string>
+        <string name="pref_key_track_types" translatable="false">track_types</string>
+        <array name="pref_default_track_types" />
+
+    <!-- Reset -->
+    <string name="pref_section_other">Other</string>
+
+        <string name="pref_title_reset_prefs">Reset preferences</string>
+        <string name="pref_key_reset_prefs" translatable="false">reset_prefs</string>
+    <string name="broadcast_location_update">location_update</string>
+
+
 </resources>

@@ -26,7 +26,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -67,7 +67,7 @@ public class CreateTrackActivity2Test {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112),  "FakeUser");
     }
 
     // ------------- COORDS --------------

@@ -26,6 +26,11 @@ public final class User {
     private String uId;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
+
+    public List<String> getLikedTracks() {
+        return likedTracks;
+    }
+
     private List<String> likedTracks;
 
     private LatLng location;
@@ -126,8 +131,10 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("hahaha", "" + favoriteTracks.contains(trackId));
+
+        Log.i("Favourites", "already in favotites" + favoriteTracks.contains(trackId));
         return favoriteTracks.contains(trackId);
+
     }
 
     /**
@@ -138,7 +145,7 @@ public final class User {
     public void addToFavorites(String trackId) {
         if (!alreadyInFavorites(trackId)) {
             favoriteTracks.add(trackId);
-            Log.i("hahaha", "Adding track: " + trackId);
+            Log.i("Favorites", "Adding track: " + trackId);
         }
     }
 
@@ -157,9 +164,7 @@ public final class User {
      * @param trackId the track's id
      */
     public void removeFromFavorites(String trackId) {
-        System.out.println("I want to remove "+trackId+" from "+ createdTracks);
-        createdTracks.remove(trackId);
-        System.out.println("Now I have "+ createdTracks);
+        favoriteTracks.remove(trackId);
     }
 
     /**
@@ -191,5 +196,9 @@ public final class User {
      * @param newLocation
      */
     public void setLocation(LatLng newLocation) { this.location = newLocation; }
+
+    public void setPreferredRadius(int newRadius) {
+        this.preferredRadius = newRadius;
+    }
 
 }

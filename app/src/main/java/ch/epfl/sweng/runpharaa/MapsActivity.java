@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
@@ -30,16 +31,19 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
     private GoogleMap mMap;
     private TextView testText;
+    private List<Marker> markers; // used to check if a windowInfo is opened
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         testText = findViewById(R.id.maps_test_text);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        markers = new ArrayList<>();
     }
 
     /**
@@ -55,32 +59,32 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
         mMap.setInfoWindowAdapter(customInfoWindow);
         testText.setText("ready");
+        handleNewLocation();
     }
 
     @Override
     protected void handleNewLocation() {
-        setMarkers();
-    }
 
-    /**
-     * Clear the actual map from all its markers and set the new ones
-     */
-    private void setMarkers() {
+        final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
+
         mMap.clear();
+        markers.clear();
 
         int transparentBlue = 0x2f0000ff;
         int transBlueBorder = 0x000000ff;
 
-        //add a circle around the current location
+        // Add a circle around the current location
         mMap.addCircle(new CircleOptions()
                 .center(User.instance.getLocation())
                 .radius(User.instance.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
-        //follow the user
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
-        //add a marker for each starting point inside the preferred radius
+        // Follow the user (only if no infoWindow is opened)
+        if (trackUidInfoWindow == null)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
+
+        // Add a marker for each starting point inside the preferred radius
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
@@ -90,6 +94,13 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                             .position(t.getStartingPoint().ToLatLng())
                             .title(t.getName()));
                     m.setTag(t.getTrackUid());
+
+                    // If a marker had its infoWindow opened, reopen it
+                    if (trackUidInfoWindow != null && trackUidInfoWindow.equals(t.getTrackUid())) {
+                        m.showInfoWindow();
+                    }
+
+                    markers.add(m);
                 }
             }
 
@@ -105,6 +116,21 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         Intent i = new Intent(this, TrackPropertiesActivity.class);
         i.putExtra("TrackID", (String) marker.getTag());
         startActivity(i);
+    }
+
+    /**
+     * Check if any present marker on the google map has its infoWindow opened and return the
+     * track ID associated to it
+     *
+     * @return a String, the trackUid associated to the marker
+     */
+    private String trackUidMarkerWithInfoWindowOpen() {
+        for (Marker m : markers) {
+            if (m.isInfoWindowShown() && m.getTag() != null) {
+                return m.getTag().toString();
+            }
+        }
+        return null;
     }
 
     /**
@@ -162,7 +188,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                     Log.d("DB Read: ", "Failed to read data from DB in InfoWindowGoogleMap.");
                 }
             });
-
             return view;
         }
     }

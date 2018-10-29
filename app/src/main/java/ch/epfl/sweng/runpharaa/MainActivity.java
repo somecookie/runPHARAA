@@ -13,8 +13,11 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseUser;
 
+
+import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startGeoLocalisation();
 
         tabLayout = findViewById(R.id.tabLayoutId);
         viewPager = findViewById(R.id.viewPagerId);
@@ -123,5 +128,12 @@ public class MainActivity extends AppCompatActivity {
             default:
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void startGeoLocalisation() {
+        if(!Util.isServiceRunning(GpsService.class, this)) {
+            Intent i = new Intent(getApplicationContext(), GpsService.class);
+            startService(i);
+        }
     }
 }

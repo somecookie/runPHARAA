@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -12,14 +13,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -32,7 +37,7 @@ public class UsersProfileActivityTest {
 
     @Before
     public void initEmptyUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new HashSet<Integer>(), new HashSet<Integer>(), new LatLng(21.23, 12.112), false, "FakeUser");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), "FakeUser");
     }
 
     @Test
@@ -43,7 +48,7 @@ public class UsersProfileActivityTest {
 
     @Test
     public void correctlyDisplaysNumberOfCreatedTracks() {
-        User.instance.addToCreatedTracks(0);
+        User.instance.addToCreatedTracks("0");
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbTracks)).check(matches(withText("1")));
@@ -51,8 +56,8 @@ public class UsersProfileActivityTest {
 
     @Test
     public void correctlyDisplaysNumberOfFavorites() {
-        User.instance.addToFavorites(0);
-        User.instance.addToFavorites(1);
+        User.instance.addToFavorites("0");
+        User.instance.addToFavorites("1");
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbFav)).check(matches(withText("2")));
@@ -60,10 +65,18 @@ public class UsersProfileActivityTest {
 
     @Test
     public void handlesSameFavoriteAddedTwice() {
-        User.instance.addToFavorites(0);
-        User.instance.addToFavorites(0);
+        User.instance.addToFavorites("0");
+        User.instance.addToFavorites("0");
         mActivityRule.launchActivity(new Intent());
         sleep(500);
         onView(withId(R.id.nbFav)).check(matches(withText("1")));
+    }
+
+    @Test
+    public void logoutButtonLeadsToSignIn() {
+        Intents.init();
+        onView(withId(R.id.sign_out_button)).perform(click());
+        intended(hasComponent(LoginActivity.class.getName()));
+        Intents.release();
     }
 }

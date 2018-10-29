@@ -22,7 +22,7 @@ public class UserTest {
 
     @Test
     public void basicConstructorGetAttributesTest() {
-        User FAKE_USER = new User("test1", 30, null, new ArrayList<String>(), new ArrayList<String>(), new LatLng(46.518510, 6.563199), false,  "2000");
+        User FAKE_USER = new User("test1", 30, null, new ArrayList<String>(), new ArrayList<String>(), new LatLng(46.518510, 6.563199),  "2000");
 
         assertEquals(new LatLng(46.518510, 6.563199), FAKE_USER.getLocation());
         assertEquals(30, FAKE_USER.getPreferredRadius());

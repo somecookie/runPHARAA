@@ -158,8 +158,8 @@ public class DatabaseManagement {
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(User.instance.getCreatedTracksKeys() != null){
-                if(User.instance.getCreatedTracksKeys().contains(c.getKey())){
+            if(User.instance.getCreatedTracks() != null){
+                if(User.instance.getCreatedTracks().contains(c.getKey())){
                     createdTracks.add(c.getValue(Track.class));
                 }
             }
@@ -184,8 +184,8 @@ public class DatabaseManagement {
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
         List<Track> favouriteTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()) {
-            if (User.instance.getFavoriteTracksKeys() != null) {
-                if (User.instance.getFavoriteTracksKeys().contains(c.getKey())) {
+            if (User.instance.getFavoriteTracks() != null) {
+                if (User.instance.getFavoriteTracks().contains(c.getKey())) {
                     favouriteTracks.add(c.getValue(Track.class));
                 }
             }
