@@ -27,6 +27,19 @@ public final class User {
 
     //Of type String because we only need the key reference of the track in the database
     private String uId;
+
+    public void setCreatedTracks(Set<String> createdTracks) {
+        this.createdTracks = createdTracks;
+    }
+
+    public void setFavoriteTracks(Set<String> favoriteTracks) {
+        this.favoriteTracks = favoriteTracks;
+    }
+
+    public void setLikedTracks(Set<String> likedTracks) {
+        this.likedTracks = likedTracks;
+    }
+
     private Set<String> createdTracks;
     private Set<String> favoriteTracks;
     private Set<String> likedTracks;

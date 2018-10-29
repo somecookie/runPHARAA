@@ -138,7 +138,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
             User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
-            launchApp();
+            UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
+                @Override
+                public void onSuccess(User value) {
+                    launchApp();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // If sign in fails, display a message to the user.
+                    Log.e(TAG, "Impossible to send the user to the database: "+e.getMessage());
+                    Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } else {
             findViewById(R.id.email).setVisibility(View.VISIBLE);
             findViewById(R.id.password).setVisibility(View.VISIBLE);
@@ -175,20 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), lastLocation, user.getUid());
-                        UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
-                            @Override
-                            public void onSuccess(User value) {
-                                Log.i("Database", user.getUid()+ " successfully added to the database");
-                                updateUI(user);
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                // If sign in fails, display a message to the user.
-                                Log.e(TAG, "Impossible to send the user to the database: "+e.getMessage());
-                                Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
