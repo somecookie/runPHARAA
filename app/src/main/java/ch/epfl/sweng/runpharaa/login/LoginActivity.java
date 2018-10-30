@@ -2,10 +2,12 @@ package ch.epfl.sweng.runpharaa.login;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -137,7 +139,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
+            String prefRadius = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_radius), "");
+            User.set(currentUser.getDisplayName(), Integer.parseInt(prefRadius), currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                 @Override
                 public void onSuccess(User value) {
@@ -187,7 +190,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), lastLocation, user.getUid());
+                        String prefRadius = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_radius), "");
+                        User.set(user.getDisplayName(), Integer.parseInt(prefRadius), user.getPhotoUrl(), lastLocation, user.getUid());
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
