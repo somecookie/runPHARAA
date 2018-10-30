@@ -37,7 +37,6 @@ public class Database {
     private boolean shouldFail = true;
     private boolean isCancelled = false;
 
-
     private String s_tracks = "tracks";
     private String s_key = "key";
 
@@ -87,10 +86,7 @@ public class Database {
     @Mock
     private DataSnapshot snapInitTrack;
 
-
-    private Database() {
-
-    }
+    private Database() { }
 
     public FirebaseDatabase getInstance() {
         if (isTest) {
