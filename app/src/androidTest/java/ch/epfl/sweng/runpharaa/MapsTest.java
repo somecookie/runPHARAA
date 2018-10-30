@@ -54,7 +54,7 @@ public class MapsTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(46.520566, 6.567820), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.520566, 6.567820), "aa");
     }
 
     @Rule

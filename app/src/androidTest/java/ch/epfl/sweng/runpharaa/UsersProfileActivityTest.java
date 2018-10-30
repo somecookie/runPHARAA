@@ -37,7 +37,7 @@ public class UsersProfileActivityTest {
 
     @Before
     public void initEmptyUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new ArrayList<String>(), new ArrayList<String>(), new LatLng(21.23, 12.112), "FakeUser");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
     }
 
     @Test
@@ -75,6 +75,7 @@ public class UsersProfileActivityTest {
     @Test
     public void logoutButtonLeadsToSignIn() {
         Intents.init();
+        mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.sign_out_button)).perform(click());
         intended(hasComponent(LoginActivity.class.getName()));
         Intents.release();
