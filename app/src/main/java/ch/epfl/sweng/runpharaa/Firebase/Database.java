@@ -57,35 +57,38 @@ public class Database {
     @Mock
     private DatabaseReference drTracks;
 
-    /*@Mock
+    @Mock
     private DatabaseReference drTracksPush;
 
     @Mock
     private DatabaseReference drKey;
 
     @Mock
-    private DatabaseReference drTracksUID;*/
+    private DatabaseReference drTracksUID;
 
-   /* @Mock
+    @Mock
     private Task<Void> setValueTrack;
 
     @Mock
     private ValueEventListener valueEventListener;
-*/
+
     @Mock
     private DataSnapshot snapOnDataChange;
 
     @Mock
     private DatabaseError snapOnDataError;
 
-    /*
+
     @Mock
     private DataSnapshot snapInit;
 
 
     @Mock
     private DataSnapshot snapInitTrack;
-*/
+
+    @Mock
+    private Track track;
+
 
     private Database() {
 
@@ -98,13 +101,13 @@ public class Database {
     private FirebaseDatabase instanciateMock(){
         if(isTest){
             MockitoAnnotations.initMocks(this);
-            //createTrack();
+            createTrack();
             instanciateDB();
             instanciateDBRef();
-            //instanciatedrTracks();
-            //instanciatedrKeys();
+            instanciatedrTracks();
+            instanciatedrKeys();
             instanciateRead();
-            //instanciateSnapshots();
+            instanciateSnapshots();
             return firebaseDatabaseMock;
         } else {
             return FirebaseDatabase.getInstance();
@@ -122,14 +125,14 @@ public class Database {
         //when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
     }
 
-    /*
+
     private void instanciateSnapshots() {
         //TODO: verifier si on a que ca comme cle
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
         when(snapInitTrack.getValue(Track.class)).thenReturn(t);
-    }*/
+    }
 
-    /*
+
     private void instanciatedrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);
         when(drTracksPush.getKey()).thenReturn(s_key);
@@ -151,7 +154,7 @@ public class Database {
                 return setValueTrack;
             }
         });
-    }*/
+    }
 
     private void instanciateRead() {
         doAnswer(new Answer<ValueEventListener>() {
@@ -169,7 +172,7 @@ public class Database {
 
         //when(drTracks.addListenerForSingleValueEvent(any(ValueEventListener.class))).thenCallRealMethod();
 
-        /*doAnswer(new Answer<ValueEventListener>() {
+        doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
                 ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
@@ -180,7 +183,7 @@ public class Database {
                 }
                 return l;
             }
-        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));*/
+        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     private void createTrack() {
