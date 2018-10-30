@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
+import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -39,6 +41,8 @@ public class DatabaseManagement {
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
     public DatabaseManagement() { }
+
+
 
     /**
      * Track a {@link Track} and add it to the database
@@ -81,6 +85,12 @@ public class DatabaseManagement {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e("Database", "Failed to upload new track :" + e.getMessage());
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        User.instance.addToCreatedTracks(key);
+                                        UserDatabaseManagement.updateCreatedTracks(key);
                                     }
                                 });
                             }
@@ -148,8 +158,8 @@ public class DatabaseManagement {
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(User.instance.getCreatedTracksKeys() != null){
-                if(User.instance.getCreatedTracksKeys().contains(c.getKey())){
+            if(User.instance.getCreatedTracks() != null){
+                if(User.instance.getCreatedTracks().contains(c.getKey())){
                     createdTracks.add(c.getValue(Track.class));
                 }
             }
@@ -174,8 +184,8 @@ public class DatabaseManagement {
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
         List<Track> favouriteTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()) {
-            if (User.instance.getFavoritesTracksKeys() != null) {
-                if (User.instance.getFavoritesTracksKeys().contains(c.getKey())) {
+            if (User.instance.getFavoriteTracks() != null) {
+                if (User.instance.getFavoriteTracks().contains(c.getKey())) {
                     favouriteTracks.add(c.getValue(Track.class));
                 }
             }
@@ -198,7 +208,10 @@ public class DatabaseManagement {
      * @param listener
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
-        mDataBaseRef.child(child).addListenerForSingleValueEvent(new ValueEventListener() {
+        Log.i("TESTING", "1");
+        DatabaseReference ref =  mDataBaseRef.child(child);
+        Log.i("TESTING", ref.toString());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listener.onSuccess(dataSnapshot);

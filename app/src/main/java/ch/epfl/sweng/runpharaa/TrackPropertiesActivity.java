@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -146,9 +148,12 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
             User.instance.unlike(trackID);
+            UserDatabaseManagement.removeLikedTrack(trackID);
+            //TODO: remove the track from the firebase
         } else {
             track.getProperties().addLike();
             User.instance.like(trackID);
+            UserDatabaseManagement.updateLikedTracks(User.instance);
         }
         DatabaseManagement.updateTrack(track);
         runOnUiThread(new Runnable() {
@@ -165,16 +170,19 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         if (User.instance.alreadyInFavorites(trackID)) {
             track.getProperties().removeFavorite();
             User.instance.removeFromFavorites(trackID);
+            UserDatabaseManagement.removeFavoriteTrack(trackID);
+
+            //TODO: remove the track from the firebase
         } else {
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }
+
         DatabaseManagement.updateTrack(track);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
-                trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
-            }
+        UserDatabaseManagement.updateFavoriteTracks(User.instance);
+        runOnUiThread(() -> {
+            TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
+            trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
         });
 
     }

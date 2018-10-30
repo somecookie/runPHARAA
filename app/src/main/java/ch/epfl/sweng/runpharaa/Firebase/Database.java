@@ -17,7 +17,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,41 +57,39 @@ public class Database {
     @Mock
     private DatabaseReference drTracks;
 
-    @Mock
+    /*@Mock
     private DatabaseReference drTracksPush;
 
     @Mock
     private DatabaseReference drKey;
 
     @Mock
-    private DatabaseReference drTracksUID;
+    private DatabaseReference drTracksUID;*/
 
-    @Mock
-    private Track track;
-
-    @Mock
+   /* @Mock
     private Task<Void> setValueTrack;
 
     @Mock
     private ValueEventListener valueEventListener;
-
+*/
     @Mock
     private DataSnapshot snapOnDataChange;
 
     @Mock
     private DatabaseError snapOnDataError;
 
+    /*
     @Mock
     private DataSnapshot snapInit;
 
+
     @Mock
     private DataSnapshot snapInitTrack;
+*/
 
-
-    private Database(){
+    private Database() {
 
     }
-
 
     public static FirebaseDatabase getInstance(){
         return (isTest)? new Database().instanciateMock() : FirebaseDatabase.getInstance();
@@ -101,23 +98,17 @@ public class Database {
     private FirebaseDatabase instanciateMock(){
         if(isTest){
             MockitoAnnotations.initMocks(this);
-            createTrack();
+            //createTrack();
             instanciateDB();
             instanciateDBRef();
-            instanciatedrTracks();
-            instanciatedrKeys();
+            //instanciatedrTracks();
+            //instanciatedrKeys();
             instanciateRead();
-            instanciateSnapshots();
+            //instanciateSnapshots();
             return firebaseDatabaseMock;
         } else {
             return FirebaseDatabase.getInstance();
         }
-    }
-
-    private void instanciateSnapshots() {
-        //TODO: verifier si on a que ca comme cle
-        when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
-        when(snapInitTrack.getValue(Track.class)).thenReturn(t);
     }
 
 
@@ -125,13 +116,21 @@ public class Database {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);
     }
 
-    private void instanciateDBRef(){
+
+    private void instanciateDBRef() {
         when(databaseReferenceMock.child(s_tracks)).thenReturn(drTracks);
-        when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
+        //when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
     }
 
+    /*
+    private void instanciateSnapshots() {
+        //TODO: verifier si on a que ca comme cle
+        when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
+        when(snapInitTrack.getValue(Track.class)).thenReturn(t);
+    }*/
 
-    private void instanciatedrTracks(){
+    /*
+    private void instanciatedrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);
         when(drTracksPush.getKey()).thenReturn(s_key);
 
@@ -140,21 +139,21 @@ public class Database {
 
     }
 
-    private void instanciatedrKeys(){
+    private void instanciatedrKeys() {
         when(drKey.setValue(track)).thenReturn(setValueTrack);
         when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail) {
+                if (shouldFail) {
                     l.onFailure(new IllegalStateException("Could not add track to DB"));
                 }
                 return setValueTrack;
             }
         });
-    }
+    }*/
 
-    private void instanciateRead(){
+    private void instanciateRead() {
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -170,7 +169,7 @@ public class Database {
 
         //when(drTracks.addListenerForSingleValueEvent(any(ValueEventListener.class))).thenCallRealMethod();
 
-        doAnswer(new Answer<ValueEventListener>() {
+        /*doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
                 ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
@@ -181,11 +180,10 @@ public class Database {
                 }
                 return l;
             }
-        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));*/
     }
 
-
-    private void createTrack(){
+    private void createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
@@ -193,7 +191,7 @@ public class Database {
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
         CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0","Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
 
         t = track;
 

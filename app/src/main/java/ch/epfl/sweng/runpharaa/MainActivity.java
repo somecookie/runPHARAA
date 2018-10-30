@@ -13,10 +13,11 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseUser;
 
+
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.utils.Util;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class MainActivity extends AppCompatActivity {
 
