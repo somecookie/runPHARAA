@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.Firebase.Database;
+import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -33,11 +35,9 @@ public class DatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-
-
-    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
-    public static FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
+    public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
     public DatabaseManagement() { }
@@ -208,7 +208,10 @@ public class DatabaseManagement {
      * @param listener
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
-        mDataBaseRef.child(child).addListenerForSingleValueEvent(new ValueEventListener() {
+        Log.i("TESTING", "1");
+        DatabaseReference ref =  mDataBaseRef.child(child);
+        Log.i("TESTING", ref.toString());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listener.onSuccess(dataSnapshot);
@@ -219,5 +222,6 @@ public class DatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
+
     }
 }

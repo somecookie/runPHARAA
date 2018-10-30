@@ -82,7 +82,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     //dependencies for mockito
-    implementation 'org.mockito:mockito-core:2.7.15'
+    //implementation 'org.mockito:mockito-core:2.8.9'
+    implementation 'org.mockito:mockito-core:2.12.0'
+    androidTestImplementation 'org.mockito:mockito-android:2.12.0'
 
     //dependencies for round images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
