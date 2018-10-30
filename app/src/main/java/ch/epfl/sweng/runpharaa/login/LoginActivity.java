@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            String prefRadius = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_radius), "");
+            String prefRadius = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_radius), getString(R.string.pref_default_radius));
             User.set(currentUser.getDisplayName(), Integer.parseInt(prefRadius), currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                 @Override
@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        String prefRadius = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_radius), "");
+                        String prefRadius = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_radius), getString(R.string.pref_default_radius));
                         User.set(user.getDisplayName(), Integer.parseInt(prefRadius), user.getPhotoUrl(), lastLocation, user.getUid());
                         updateUI(user);
                     } else {
