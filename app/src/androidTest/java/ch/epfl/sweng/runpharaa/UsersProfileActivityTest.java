@@ -75,6 +75,7 @@ public class UsersProfileActivityTest {
     @Test
     public void logoutButtonLeadsToSignIn() {
         Intents.init();
+        mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.sign_out_button)).perform(click());
         intended(hasComponent(LoginActivity.class.getName()));
         Intents.release();
