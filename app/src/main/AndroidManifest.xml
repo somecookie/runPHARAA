@@ -67,8 +67,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".user.SettingsActivity"/>
+        <activity android:name=".user.SettingsActivity"
+            android:label="@string/settings"/>
     </application>
 
 </manifest>

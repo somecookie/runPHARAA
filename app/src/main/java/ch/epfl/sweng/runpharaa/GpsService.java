@@ -24,7 +24,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
+
+import static ch.epfl.sweng.runpharaa.user.SettingsActivity.getInt;
 
 public class GpsService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -116,18 +119,15 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
     }
 
     private void initLocationRequest() {
+        // Create the LocationRequest object
+        locationRequest = LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         // Get pref values or default ones
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String timeIntervalString = sp.getString(getString(R.string.pref_key_time_interval), getString(R.string.pref_default_time_interval));
-        String minTimeIntervalString = sp.getString(getString(R.string.pref_key_min_time_interval), getString(R.string.pref_default_min_time_interval));
-        String minDistanceString = sp.getString(getString(R.string.pref_key_min_distance_interval), getString(R.string.pref_default_min_distance_interval));
-        // Extract the values
-        long timeInterval = Long.parseLong(timeIntervalString);
-        long minTimeInterval = Long.parseLong(minTimeIntervalString);
-        float minDistance = Float.parseFloat(minDistanceString);
-        // Create the LocationRequest object
-        locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        int timeInterval = getInt(sp, SettingsActivity.PREF_KEY_TIME_INTERVAL, 5000);
+        int minTimeInterval = getInt(sp, SettingsActivity.PREF_KEY_MIN_TIME_INTERVAL, 1000);
+        int minDistance = getInt(sp, SettingsActivity.PREF_KEY_MIN_DISTANCE, 5);
+        // Set the values
+        locationRequest
                 .setInterval(timeInterval)
                 .setFastestInterval(minTimeInterval)
                 .setSmallestDisplacement(minDistance);
@@ -143,18 +143,32 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         };
     }
 
+    // ---------- SETTERS ------------
+
+    /**
+     *
+     * @param newTimeInterval in seconds
+     */
     public static void setTimeInterval(int newTimeInterval) {
         if(locationRequest != null) {
             locationRequest.setInterval(newTimeInterval);
         }
     }
 
+    /**
+     *
+     * @param newMinTimeInterval in seconds
+     */
     public static void setMinTimeInterval(int newMinTimeInterval) {
         if(locationRequest != null) {
-            locationRequest.setFastestInterval(newMinTimeInterval);
+            locationRequest.setFastestInterval(newMinTimeInterval * 1000);
         }
     }
 
+    /**
+     *
+     * @param newMinDistanceInterval in meters
+     */
     public static void setMinDistanceInterval(int newMinDistanceInterval) {
         if(locationRequest != null) {
             locationRequest.setSmallestDisplacement(newMinDistanceInterval);
