@@ -42,8 +42,6 @@ public class DatabaseManagement {
 
     public DatabaseManagement() { }
 
-
-
     /**
      * Track a {@link Track} and add it to the database
      *
@@ -59,44 +57,24 @@ public class DatabaseManagement {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Storage", "Failed to upload image to storage :" + e.getMessage());
-            }
-        });
-        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if(task.isSuccessful()){
-                    mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("Storage", "Failed to download image url :"+ e.getMessage());
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if(task.isSuccessful()){
-                                track.setImageStorageUri(task.getResult().toString());
-                                track.setTrackUid(key);
-                                mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e("Database", "Failed to upload new track :" + e.getMessage());
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        User.instance.addToCreatedTracks(key);
-                                        UserDatabaseManagement.updateCreatedTracks(key);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
+        StorageReference trackImageRef = mStorageRef.child(TRACK_IMAGE_PATH).child(key);
+        UploadTask uploadTask = trackImageRef.putBytes(data);
+        uploadTask.addOnFailureListener(e -> Log.e("Storage", "Failed to upload image to storage : " + e.getMessage()));
+        uploadTask.addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                trackImageRef.getDownloadUrl().addOnFailureListener(e ->
+                        Log.e("Storage", "Failed to download image url : "+ e.getMessage())).addOnCompleteListener(task1 -> {
+                    if(task1.isSuccessful()){
+                        track.setImageStorageUri(task1.getResult().toString());
+                        track.setTrackUid(key);
+                        DatabaseReference trackRef = mDataBaseRef.child(TRACKS_PATH).child(key);
+                        trackRef.setValue(track).addOnFailureListener(e ->
+                                Log.e("Database", "Failed to upload new track : " + e.getMessage())).addOnSuccessListener(aVoid -> {
+                            User.instance.addToCreatedTracks(key);
+                            UserDatabaseManagement.updateCreatedTracks(key);
+                        });
+                    }
+                });
             }
         });
     }
@@ -107,7 +85,6 @@ public class DatabaseManagement {
      * @param track
      */
     public static void updateTrack(Track track){
-        //TODO check if it works
         //Check if track exists? Return a success or error message?
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
     }
@@ -134,17 +111,14 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
-            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
+            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){
                 tracksNearMe.add(c.getValue(Track.class));
             }
         }
-        Collections.sort(tracksNearMe, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                return Double.compare(d1, d2);
-            }
+        Collections.sort(tracksNearMe, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
         });
         return tracksNearMe;
     }
@@ -164,13 +138,10 @@ public class DatabaseManagement {
                 }
             }
         }
-        Collections.sort(createdTracks, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                return Double.compare(d1, d2);
-            }
+        Collections.sort(createdTracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
         });
         return createdTracks;
     }
@@ -190,6 +161,11 @@ public class DatabaseManagement {
                 }
             }
         }
+        Collections.sort(favouriteTracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
+        });
         return favouriteTracks;
     }
 
@@ -208,9 +184,7 @@ public class DatabaseManagement {
      * @param listener
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
-        Log.i("TESTING", "1");
         DatabaseReference ref =  mDataBaseRef.child(child);
-        Log.i("TESTING", ref.toString());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -222,6 +196,5 @@ public class DatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
-
     }
 }
