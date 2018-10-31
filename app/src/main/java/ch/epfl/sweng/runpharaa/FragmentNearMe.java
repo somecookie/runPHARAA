@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -101,15 +101,15 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      */
     public void loadData() {
         // Create a fresh recyclerView and listCardItem
-        String s = DatabaseManagement.TRACKS_PATH;
+        String s = TrackDatabaseManagement.TRACKS_PATH;
 
-        DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.OnGetDataListener d = new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
-                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                List<Track> tracks = TrackDatabaseManagement.initTracksNearMe(data);
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
@@ -137,7 +137,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
             }
         };
 
-        DatabaseManagement.mReadDataOnce(s, d);
+        TrackDatabaseManagement.mReadDataOnce(s, d);
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {

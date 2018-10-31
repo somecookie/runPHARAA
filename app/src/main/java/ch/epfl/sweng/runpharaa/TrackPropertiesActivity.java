@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -36,11 +36,11 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
 
-        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 final String trackID = intent.getStringExtra("TrackID");
-                final Track track = DatabaseManagement.initTrack(data, trackID);
+                final Track track = TrackDatabaseManagement.initTrack(data, trackID);
 
                 TrackProperties tp = track.getProperties();
 
@@ -53,7 +53,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 trackTitle.setText(track.getName());
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
-                //TODO: make method like getNameFromID(uid) -> once the Users are in DB
+                //TODO: add the creatorName attribute back to Track.
                 trackCreator.setText("By Test User" /*+ track.getCreatorUid()*/);
 
                 //TODO: Add real duration once it is included in the DB.
@@ -140,7 +140,6 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         }
 
         return sb.toString();
-
     }
 
     private void updateLikes(Track track1, String trackID) {
@@ -149,20 +148,18 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             track.getProperties().removeLike();
             User.instance.unlike(trackID);
             UserDatabaseManagement.removeLikedTrack(trackID);
-            //TODO: remove the track from the firebase
         } else {
             track.getProperties().addLike();
             User.instance.like(trackID);
             UserDatabaseManagement.updateLikedTracks(User.instance);
         }
-        DatabaseManagement.updateTrack(track);
+        TrackDatabaseManagement.updateTrack(track);
         runOnUiThread(new Runnable() {
             public void run() {
                 TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
                 trackLikesUpdated.setText(""+track.getProperties().getLikes());
             }
         });
-
     }
 
     private void updateNbFavorites(Track track1, String trackID) {
@@ -171,14 +168,12 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             track.getProperties().removeFavorite();
             User.instance.removeFromFavorites(trackID);
             UserDatabaseManagement.removeFavoriteTrack(trackID);
-
-            //TODO: remove the track from the firebase
         } else {
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }
 
-        DatabaseManagement.updateTrack(track);
+        TrackDatabaseManagement.updateTrack(track);
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
         runOnUiThread(() -> {
             TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);

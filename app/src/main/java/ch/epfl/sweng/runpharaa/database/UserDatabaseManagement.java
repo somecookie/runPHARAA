@@ -13,7 +13,7 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
-public class UserDatabaseManagement extends DatabaseManagement {
+public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String USERS = "users";
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";
@@ -34,9 +34,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
 
@@ -91,9 +89,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
                 });
             }
         });
-
     }
-
 
     private static void downloadUserTracks(String UID, String type, Callback<Set<String>> callback) {
 
@@ -105,7 +101,6 @@ public class UserDatabaseManagement extends DatabaseManagement {
                 for(DataSnapshot createdSnapshot: dataSnapshot.getChildren()){
                     createdTracks.add(createdSnapshot.getKey());
                 }
-
                 callback.onSuccess(createdTracks);
             }
 

@@ -22,9 +22,7 @@ public final class User {
     public static User instance;
     private int preferredRadius = 2000;
     private String name;
-    //TODO: put default picture
     private Uri picture;
-    //Of type String because we only need the key reference of the track in the database
     private String uId;
     private Set<String> createdTracks;
     private Set<String> favoriteTracks;
@@ -38,7 +36,6 @@ public final class User {
         Required.nonNull(uId, "The uId of an user cannot be null");
         Required.nonNull(picture, "The picture of an user cannot be null");
 
-
         this.preferredRadius = preferredRadius;
         this.name = name;
         this.picture = picture;
@@ -50,7 +47,6 @@ public final class User {
     }
 
     public User(String name, LatLng location, int preferredRadius) {
-        //TODO must be changed later when the user's login and the database are on
         this(name, preferredRadius, null, location, name);
     }
 
@@ -58,9 +54,7 @@ public final class User {
         instance = new User(name, preferredRadius, picture, location, uId);
     }
 
-    public FirebaseUserAdapter getFirebaseAdapter() {
-        return new FirebaseUserAdapter(this);
-    }
+    public FirebaseUserAdapter getFirebaseAdapter() { return new FirebaseUserAdapter(this); }
 
     public int getPreferredRadius() {
         return preferredRadius;
@@ -68,35 +62,6 @@ public final class User {
 
     public void setPreferredRadius(int newRadius) {
         this.preferredRadius = newRadius;
-    }
-
-    /**
-     * Make an ordered list of all the tracks that are in a RADIUS of 2km.
-     *
-     * @return ordered list of tracks
-     */
-    @TargetApi(Build.VERSION_CODES.N)
-    public ArrayList<Track> tracksNearMe() {
-        ArrayList<Track> nm = new ArrayList<>();
-        ArrayList<Track> allTracks = Track.allTracks; //Todo muste be changed when the database is done -> Can actually be deleted?
-
-        //filter the tracks that start too far from the location
-        for (Track tr : allTracks) {
-            if (tr.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location)) <= preferredRadius) {
-                nm.add(tr);
-            }
-        }
-
-        //order them from the nearest to the furthest
-        Collections.sort(nm, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
-                return Double.compare(d1, d2);
-            }
-        });
-        return nm;
     }
 
     /**
@@ -144,10 +109,7 @@ public final class User {
      *
      * @param trackId the track's id
      */
-    public void addToFavorites(String trackId) {
-        favoriteTracks.add(trackId);
-
-    }
+    public void addToFavorites(String trackId) { favoriteTracks.add(trackId); }
 
     /**
      * Add a Track id in the set of created tracks.
@@ -214,9 +176,7 @@ public final class User {
         return favoriteTracks;
     }
 
-    public void setFavoriteTracks(Set<String> favoriteTracks) {
-        this.favoriteTracks = favoriteTracks;
-    }
+    public void setFavoriteTracks(Set<String> favoriteTracks) { this.favoriteTracks = favoriteTracks; }
 
     public Set<String> getLikedTracks() {
         return likedTracks;

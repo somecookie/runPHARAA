@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -85,10 +85,10 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
 
         // Add a marker for each starting point inside the preferred radius
-        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
-                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                List<Track> tracks = TrackDatabaseManagement.initTracksNearMe(data);
                 for (Track t : tracks) {
                     Marker m = mMap.addMarker(new MarkerOptions()
                             .position(t.getStartingPoint().ToLatLng())
@@ -163,11 +163,11 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             // Set title
             title.setText(marker.getTitle());
 
-            DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+            TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
                 @Override
                 public void onSuccess(DataSnapshot data) {
                     // Get the correct track by it's id
-                    List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                    List<Track> tracks = TrackDatabaseManagement.initTracksNearMe(data);
                     Track track = null;
                     for (Track t : tracks) {
                         if (t.getTrackUid() == marker.getTag())

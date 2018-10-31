@@ -1,9 +1,7 @@
 package ch.epfl.sweng.runpharaa.Firebase;
 
-
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.ContactsContract;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private final static boolean isTest = true;
+    private final static boolean isTest = false;
     private final static boolean shouldFail = true;
     private final static boolean isCancelled = false;
     private final static boolean userExists = false;
@@ -121,17 +119,14 @@ public class Database {
     @Mock
     private DatabaseError snapOnDataErrorUser;
 
-
     @Mock
     private DataSnapshot snapInit;
-
 
     @Mock
     private DataSnapshot snapInitTrack;
 
     @Mock
     private Track track;
-
 
     private Database() { }
 
@@ -156,18 +151,15 @@ public class Database {
         }
     }
 
-
     private void instanciateDB() {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);
     }
-
 
     private void instanciateDBRef() {
         when(databaseReferenceMock.child(s_tracks)).thenReturn(drTracks);
         when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
         when(databaseReferenceMock.child(s_user)).thenReturn(drUser);
     }
-
 
     private void instanciateSnapshots() {
         //TODO: verifier si on a que ca comme cle
@@ -252,7 +244,6 @@ public class Database {
             }
         }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
-
         //TODO: How to make it
         //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
         //when(drUserAnyChildIdFavoritesChild.removeValue())
@@ -260,7 +251,6 @@ public class Database {
         //when(drUserAnyChildLikeChild.removeValue())
 
     }
-
 
     private void instanciatedrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);

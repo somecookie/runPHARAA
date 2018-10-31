@@ -16,11 +16,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 public class Storage {
-    private static Boolean isTest = true;
+    private static Boolean isTest = false;
     private static Boolean shouldFail = false;
     private static Boolean shouldNotComplete = false;
     private final static String key = "key";

@@ -28,7 +28,6 @@ public class FirebaseUserAdapter {
         createdTracks = new ArrayList <>(user.getCreatedTracks());
         favoriteTracks = new ArrayList<>(user.getFavoriteTracks());
         likedTracks = new ArrayList<>(user.getLikedTracks());
-
     }
 
     public String getuId() {
