@@ -6,7 +6,7 @@
         <EditTextPreference
             android:defaultValue="@string/pref_default_radius"
             android:key="@string/pref_key_radius"
-            android:numeric="integer"
+            android:numeric="decimal"
             android:selectAllOnFocus="true"
             android:title="@string/pref_title_radius" />
 

@@ -53,6 +53,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
 
         emptyMessage = v.findViewById(R.id.emptyMessage);
+        emptyMessage.setVisibility(View.GONE);
 
         // Setup for refresh on swipe
         swipeLayout = v.findViewById(R.id.refreshNearMe);
@@ -100,6 +101,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
      * This function is called when the fragment is created and each time the list is refreshed.
      */
     public void loadData() {
+        emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listCardItem
         String s = TrackDatabaseManagement.TRACKS_PATH;
 
@@ -114,13 +116,10 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
                 }
-                OnItemClickListener listener = new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(CardItem item) {
-                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                        intent.putExtra("TrackID", item.getParentTrackID());
-                        startActivity(intent);
-                    }
+                OnItemClickListener listener = item -> {
+                    Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                    intent.putExtra("TrackID", item.getParentTrackID());
+                    startActivity(intent);
                 };
                 Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
                 recyclerView.setAdapter(adapter);

@@ -53,6 +53,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
 
         emptyMessage = v.findViewById(R.id.emptyMessage);
+        emptyMessage.setVisibility(View.GONE);
 
         // Setup for refresh on swipe
         swipeLayout = v.findViewById(R.id.refreshNearMe);
@@ -100,6 +101,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
      * This function is called when the fragment is created and each time the list is refreshed.
      */
     public void loadData() {
+        emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listCardItem
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {

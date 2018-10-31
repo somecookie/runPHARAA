@@ -50,8 +50,8 @@ public final class User {
         this(name, preferredRadius, null, location, name);
     }
 
-    public static void set(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
-        instance = new User(name, preferredRadius, picture, location, uId);
+    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
+        instance = new User(name, (int)(preferredRadius*100), picture, location, uId);
     }
 
     public FirebaseUserAdapter getFirebaseAdapter() { return new FirebaseUserAdapter(this); }
@@ -60,8 +60,12 @@ public final class User {
         return preferredRadius;
     }
 
-    public void setPreferredRadius(int newRadius) {
-        this.preferredRadius = newRadius;
+    /**
+     *
+     * @param newRadius in km
+     */
+    public void setPreferredRadius(float newRadius) {
+        this.preferredRadius = (int)(newRadius*1000);
     }
 
     /**

@@ -2,10 +2,14 @@ package ch.epfl.sweng.runpharaa.login;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +28,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Map;
+
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
@@ -31,6 +37,7 @@ import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterf
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -53,7 +60,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        for(Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())
+            System.out.println(e.getKey() + " " + e.getValue());
         requestPermissions();
 
         //add listener to the buttons
@@ -134,7 +143,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            User.set(currentUser.getDisplayName(), 2000, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
+            float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
+            User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                 @Override
                 public void onSuccess(User value) {
@@ -184,7 +194,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        User.set(user.getDisplayName(), 2000, user.getPhotoUrl(), lastLocation, user.getUid());
+                        float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
+                        User.set(user.getDisplayName(), prefRadius, user.getPhotoUrl(), lastLocation, user.getUid());
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.

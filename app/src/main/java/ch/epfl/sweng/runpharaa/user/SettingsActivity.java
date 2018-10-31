@@ -16,8 +16,11 @@ import ch.epfl.sweng.runpharaa.R;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
-
-    private AppCompatDelegate mDelegate;
+    public static final String PREF_KEY_RADIUS = "pref_radius";
+    public static final String PREF_KEY_TIME_INTERVAL = "time_interval";
+    public static final String PREF_KEY_MIN_TIME_INTERVAL = "min_time_interval";
+    public static final String PREF_KEY_MIN_DISTANCE = "min_distance_interval";
+    public static final String PREF_KEY_RESET_PREFS = "reset_prefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,97 +28,105 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragment {
+    public static class MainPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
-
-            // Bind preferences to show values in description
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_radius)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_time_interval)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_min_time_interval)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_min_distance_interval)));
-
+            // Initialise all values for the first time
+            SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
+            for(String key : sp.getAll().keySet())
+                onSharedPreferenceChanged(sp, key);
             // Add reset preferences "button"
-            findPreference(getString(R.string.pref_key_reset_prefs)).setOnPreferenceClickListener(resetPrefsListener());
+            findPreference(PREF_KEY_RESET_PREFS).setOnPreferenceClickListener(resetPrefsListener());
         }
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         }
-        return super.onOptionsItemSelected(item);
-    }
 
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
 
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            switch(key) {
+                case PREF_KEY_RADIUS: {
+                    Preference p = findPreference(key);
+                    float prefRadius = getFloat(sharedPreferences, key, 2f);
+                    User.instance.setPreferredRadius(prefRadius);
+                    String s = prefRadius + " km";
+                    p.setSummary(s);
+                    break;
+                }
+                case PREF_KEY_MIN_DISTANCE: {
+                    Preference p = findPreference(key);
+                    int minDistance = getInt(sharedPreferences, key, 5);
+                    GpsService.setMinDistanceInterval(minDistance);
+                    String s = minDistance + " m";
+                    p.setSummary(s);
+                    break;
+                }
+                case PREF_KEY_TIME_INTERVAL: {
+                    Preference p = findPreference(key);
+                    int time = getInt(sharedPreferences, key, 5);
+                    GpsService.setTimeInterval(time);
+                    String s = time + " s";
+                    p.setSummary(s);
+                    break;
+                }
+                case PREF_KEY_MIN_TIME_INTERVAL: {
+                    Preference p = findPreference(key);
+                    int minTime = getInt(sharedPreferences, key, 1);
+                    GpsService.setMinTimeInterval(minTime);
+                    String s = minTime + " s";
+                    p.setSummary(s);
+                    break;
+                }
+            }
+        }
     }
 
     /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
+     * Helper function to use instead of sharedPreference.getFloat(key, default) because EditTextPreferences use Strings for values
+     * @param sp the shared preferences
+     * @param key the key of the preference
+     * @param defaultValue the default value
+     * @return the float contained in the preference
      */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String stringValue = newValue.toString();
-            if (preference instanceof EditTextPreference) {
-                switch (preference.getKey()) {
-                    case "pref_radius": {
-                        User.instance.setPreferredRadius(Integer.parseInt(stringValue));
-                        preference.setSummary(stringValue + " m");
-                        break;
-                    }
-                    case "min_distance_interval": {
-                        GpsService.setMinDistanceInterval(Integer.parseInt(stringValue));
-                        preference.setSummary(stringValue + " m");
-                        break;
-                    }
-                    case "min_time_interval": {
-                        GpsService.setMinTimeInterval(Integer.parseInt(stringValue));
-                        preference.setSummary(stringValue + " ms");
-                        break;
-                    }
-                    case "time_interval": {
-                        GpsService.setTimeInterval(Integer.parseInt(stringValue));
-                        preference.setSummary(stringValue + " ms");
-                        break;
-                    }
-                }
-            }
-            return true;
-        }
-    };
+    public static float getFloat(SharedPreferences sp, String key, float defaultValue) {
+        String val = sp.getString(key, defaultValue+"");
+        return Float.parseFloat(val);
+    }
+
+    /**
+     * Helper function to use instead of sharedPreference.getInt(key, default) because EditTextPreferences use Strings for values
+     * @param sp the shared preferences
+     * @param key the key of the preference
+     * @param defaultValue the default value
+     * @return the integer contained in the preference
+     */
+    public static int getInt(SharedPreferences sp, String key, int defaultValue) {
+        String val = sp.getString(key, defaultValue+"");
+        return Integer.parseInt(val);
+    }
 
     private static Preference.OnPreferenceClickListener resetPrefsListener() {
-        return new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-                Resources r = preference.getContext().getResources();
-                SharedPreferences.Editor editor = preferences.edit();
-                // Reset shared preferences
-                editor.putString(r.getString(R.string.pref_key_radius), r.getString(R.string.pref_default_radius));
-                editor.putString(r.getString(R.string.pref_key_min_time_interval), r.getString(R.string.pref_default_min_time_interval));
-                editor.putString(r.getString(R.string.pref_key_time_interval), r.getString(R.string.pref_default_time_interval));
-                editor.putString(r.getString(R.string.pref_key_min_distance_interval), r.getString(R.string.pref_default_min_distance_interval));
-                editor.commit();
-                // Reset values in user and gps service
-                User.instance.setPreferredRadius(Integer.parseInt(r.getString(R.string.pref_default_radius)));
-                GpsService.setMinTimeInterval(Integer.parseInt(r.getString(R.string.pref_default_min_time_interval)));
-                GpsService.setTimeInterval(Integer.parseInt(r.getString(R.string.pref_default_time_interval)));
-                GpsService.setMinDistanceInterval(Integer.parseInt(r.getString(R.string.pref_default_min_distance_interval)));
-                Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
-                return true;
-            }
+        return preference -> {
+            // Clear the preferences
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+            // Reset the default values
+            PreferenceManager.setDefaultValues(preference.getContext(), R.xml.preferences, true);
+            Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
+            return true;
         };
     }
 }
