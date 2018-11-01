@@ -105,6 +105,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         // Create a fresh recyclerView and listCardItem
         String s = DatabaseManagement.TRACKS_PATH;
 
+
         DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
@@ -125,8 +126,10 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                if(listCardItem.isEmpty())
+                if(listCardItem.isEmpty()){
                     setEmptyMessage();
+                }
+
             }
 
             @Override

@@ -44,7 +44,7 @@ public class MainActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
     }
 
     @Before
