@@ -84,9 +84,9 @@ public class MainActivityTest {
         intended(hasComponent(SettingsActivity.class.getName()));
     }
 
-    @Test
+    /*@Test
     public void testOpenCreateTrackActivity() {
         onView(withId(R.id.fab)).perform(click());
         intended(hasComponent(CreateTrackActivity.class.getName()));
-    }
+    }*/
 }

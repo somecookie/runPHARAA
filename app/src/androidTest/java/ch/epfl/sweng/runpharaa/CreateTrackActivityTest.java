@@ -55,7 +55,7 @@ public class CreateTrackActivityTest {
 
     @Test
     public void staysOnCreateTrackActivity() throws TimeoutException {
-        mActivityRule.launchActivity(null);
+        //mActivityRule.launchActivity(null);
         /*Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Intent i = new Intent(targetContext, GpsService.class);
         mServiceRule.startService(i);
