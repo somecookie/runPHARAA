@@ -173,7 +173,6 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
                     }
                 };
                 List<Track> tracks = DatabaseManagement.initFavouritesTracks(data);
-                Log.i("WALLOU", String.valueOf(tracks.size()));
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());

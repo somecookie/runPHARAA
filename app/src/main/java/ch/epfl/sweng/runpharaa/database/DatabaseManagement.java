@@ -179,7 +179,6 @@ public class DatabaseManagement {
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
         List<Track> favouriteTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()) {
-            Log.i("WALLOU", "snapshot :" + c.toString());
             if (User.instance.getFavoriteTracks() != null) {
                 if (User.instance.getFavoriteTracks().contains(c.getKey())) {
                     favouriteTracks.add(c.getValue(Track.class));
@@ -205,7 +204,6 @@ public class DatabaseManagement {
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
         DatabaseReference ref =  mDataBaseRef.child(child);
-        Log.i("TESTING", ref.toString());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
