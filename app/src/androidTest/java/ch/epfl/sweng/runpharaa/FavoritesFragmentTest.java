@@ -1,7 +1,10 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
@@ -87,7 +90,9 @@ public class FavoritesFragmentTest {
 
     @Test
     public void testFavoritesAppears() {
-        mActivityRule.launchActivity(null);
+        LatLng points = new LatLng(46.518577, 6.563165);
+        Location location = generateLocation(points);
+        launchWithExtras(location);
 
         sleep(2000);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
@@ -113,5 +118,24 @@ public class FavoritesFragmentTest {
     @After
     public void clean() {
         Intents.release();
+    }
+
+    private Location generateLocation(LatLng p) {
+        Location l = new Location(LocationManager.GPS_PROVIDER);
+        l.setLatitude(p.latitude);
+        l.setLongitude(p.longitude);
+        l.setAltitude(0);
+        l.setAccuracy(1);
+        l.setTime(System.currentTimeMillis());
+        return l;
+    }
+
+    private void launchWithExtras(Location location) {
+        Context targetContext = InstrumentationRegistry.getInstrumentation()
+                .getTargetContext();
+        Intent intent = new Intent(targetContext, MainActivity.class);
+        intent.putExtra("locations", location);
+        mActivityRule.launchActivity(intent);
+        sleep(5_000);
     }
 }
