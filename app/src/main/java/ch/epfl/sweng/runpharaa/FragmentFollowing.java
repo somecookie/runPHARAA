@@ -57,15 +57,13 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
-        // Load if the fragment is visible
-        if (getUserVisibleHint()) {
-            loadData();
-        }
+        // Load data the first time
+        loadData();
 
         return v;
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -73,7 +71,7 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
         if (isVisibleToUser && isResumed()) {
             onResume();
         }
-    }
+    }*/
 
     @Override
     public void onRefresh() {
@@ -86,11 +84,11 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
     public void onResume() {
         super.onResume();
         // Do nothing if the fragment is not visible
-        if (!getUserVisibleHint()) {
-            return;
-        }
+        //if (!getUserVisibleHint()) {
+        //    return;
+        //}
         // Else load the data
-        loadData();
+        //loadData();
     }
 
     public void loadData() {

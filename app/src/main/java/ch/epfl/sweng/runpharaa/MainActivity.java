@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Link all
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
 
         // Set icons
