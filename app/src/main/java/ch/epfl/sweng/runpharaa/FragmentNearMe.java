@@ -52,6 +52,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
 
+        Log.i("FragmentNearMeLife", "on create view");
+
         emptyMessage = v.findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
 
@@ -61,39 +63,43 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
         // Load if the fragment is visible
-        if (getUserVisibleHint()) {
+        //if (getUserVisibleHint()) {
             loadData();
-        }
+        //}
 
         return v;
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
+        Log.i("FragmentNearMeLife", "set user visible hint");
+
         // If the fragment is visible, reload the data
-        if (isVisibleToUser && isResumed()) {
-            onResume();
-        }
-    }
+        //if (isVisibleToUser && isResumed()) {
+        //    onResume();
+        //}
+    }*/
 
     @Override
     public void onRefresh() {
+        Log.i("FragmentNearMeLife", "on refresh");
         loadData();
         // Stop refreshing once it is done
-        swipeLayout.setRefreshing(false);
+        //swipeLayout.setRefreshing(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.i("FragmentNearMeLife", "on resume");
         // Do nothing if the fragment is not visible
-        if (!getUserVisibleHint()) {
-            return;
-        }
+        //if (!getUserVisibleHint()) {
+        //    return;
+        //}
         // Else load the data
-        loadData();
+        //loadData();
     }
 
     /**
@@ -104,6 +110,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listCardItem
         String s = DatabaseManagement.TRACKS_PATH;
+
+        Log.i("FragmentNearMeLife", "load data");
 
         DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
             @Override
@@ -127,12 +135,15 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
                 if(listCardItem.isEmpty())
                     setEmptyMessage();
+
+                swipeLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailed(DatabaseError databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentNearMe.");
                 setEmptyMessage();
+                swipeLayout.setRefreshing(false);
             }
         };
 
