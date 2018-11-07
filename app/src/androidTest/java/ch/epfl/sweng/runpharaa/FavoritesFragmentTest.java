@@ -81,6 +81,7 @@ public class FavoritesFragmentTest {
     public void testNoFavorites(){
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
+
         mActivityRule.launchActivity(null);
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
@@ -90,9 +91,11 @@ public class FavoritesFragmentTest {
 
     @Test
     public void testFavoritesAppears() {
-        LatLng points = new LatLng(46.518577, 6.563165);
+        /*LatLng points = new LatLng(46.518577, 6.563165);
         Location location = generateLocation(points);
-        launchWithExtras(location);
+        launchWithExtras(location);*/
+
+        mActivityRule.launchActivity(null);
 
         sleep(2000);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
@@ -106,12 +109,13 @@ public class FavoritesFragmentTest {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(2000);
+        onView(allOf(withId(R.id.refreshNearMe), isDisplayed())).perform(swipeDown());
+        sleep(5000);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
-
-        User.instance.removeFromFavorites("0");
+        onView(withId(R.id.buttonFavoriteID)).perform(click());
     }
 
 
@@ -120,6 +124,7 @@ public class FavoritesFragmentTest {
         Intents.release();
     }
 
+    /*
     private Location generateLocation(LatLng p) {
         Location l = new Location(LocationManager.GPS_PROVIDER);
         l.setLatitude(p.latitude);
@@ -137,5 +142,5 @@ public class FavoritesFragmentTest {
         intent.putExtra("locations", location);
         mActivityRule.launchActivity(intent);
         sleep(5_000);
-    }
+    }*/
 }

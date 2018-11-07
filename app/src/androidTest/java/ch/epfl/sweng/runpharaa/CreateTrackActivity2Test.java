@@ -115,7 +115,7 @@ public class CreateTrackActivity2Test {
         sleep(WAIT_TIME);
         selectFirstType(true);
 
-        onView(withId(R.id.create_track_button)).perform(scrollTo(), click());
+        onView(withId(R.id.create_track_button)).perform(click());
     }
 
     @Test
