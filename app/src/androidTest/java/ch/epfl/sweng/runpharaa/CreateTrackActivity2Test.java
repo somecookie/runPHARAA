@@ -15,6 +15,7 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -38,6 +39,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressKey;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -112,7 +114,8 @@ public class CreateTrackActivity2Test {
                 .perform(click());
         sleep(WAIT_TIME);
         selectFirstType(true);
-        onView(withId(R.id.create_track_button)).perform(click());
+
+        onView(withId(R.id.create_track_button)).perform(scrollTo(), click());
     }
 
     @Test

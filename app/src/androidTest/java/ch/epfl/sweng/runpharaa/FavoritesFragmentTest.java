@@ -1,18 +1,24 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +41,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -52,7 +59,7 @@ public class FavoritesFragmentTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, true, false);
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
@@ -63,62 +70,72 @@ public class FavoritesFragmentTest {
         Intents.init();
     }
 
-    @Before
-    public void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+    @BeforeClass
+    public static void initUser() {
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
 
     }
 
-
-    @Test
-    public void testFavoritesAppears() {
-        createTrack();
-        //User.instance.addToFavorites("0");
-        //User.instance.addToFavorites("1");
-        DatabaseManagement.writeNewTrack(t);
-        sleep(5000);
-        onView(withId(R.id.viewPagerId)).perform(swipeUp());
-        sleep(5000);
-        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
-                actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.buttonFavoriteID)).perform(click());
-
-        sleep(5000);
-
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        sleep(5_000);
-        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
-                actionOnItemAtPosition(0, click()));
-        intended(hasComponent(TrackPropertiesActivity.class.getName()));
-    }
 
     @Test
     public void testNoFavorites(){
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(2000);
         onView(allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(targetContext.getResources().getString(R.string.no_favorite))));
     }
 
+    @Test
+    public void testFavoritesAppears() {
+        LatLng points = new LatLng(46.518577, 6.563165);
+        Location location = generateLocation(points);
+        launchWithExtras(location);
+
+        sleep(2000);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonFavoriteID)).perform(click());
+
+        Espresso.pressBack();
+
+        sleep(2000);
+
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(2000);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+
+        User.instance.removeFromFavorites("0");
+    }
+
+
     @After
     public void clean() {
         Intents.release();
     }
 
-    private void createTrack() {
-        Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
-        Set<TrackType> types = new HashSet<>();
-        types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
-        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
-        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
-        TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+    private Location generateLocation(LatLng p) {
+        Location l = new Location(LocationManager.GPS_PROVIDER);
+        l.setLatitude(p.latitude);
+        l.setLongitude(p.longitude);
+        l.setAltitude(0);
+        l.setAccuracy(1);
+        l.setTime(System.currentTimeMillis());
+        return l;
+    }
 
-        t = track;
-
+    private void launchWithExtras(Location location) {
+        Context targetContext = InstrumentationRegistry.getInstrumentation()
+                .getTargetContext();
+        Intent intent = new Intent(targetContext, MainActivity.class);
+        intent.putExtra("locations", location);
+        mActivityRule.launchActivity(intent);
+        sleep(5_000);
     }
 }
