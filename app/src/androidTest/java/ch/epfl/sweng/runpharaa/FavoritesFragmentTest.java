@@ -65,11 +65,6 @@ public class FavoritesFragmentTest {
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             android.Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @Before
-    public void init() {
-        Intents.init();
-    }
-
     @BeforeClass
     public static void initUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
@@ -90,11 +85,7 @@ public class FavoritesFragmentTest {
 
     @Test
     public void testFavoritesAppears() {
-        LatLng points = new LatLng(46.518577, 6.563165);
-        Location location = generateLocation(points);
-        launchWithExtras(location);
-
-        sleep(2000);
+        mActivityRule.launchActivity(null);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonFavoriteID)).perform(click());
@@ -106,36 +97,18 @@ public class FavoritesFragmentTest {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(2000);
+
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                swipeDown());
+
+        sleep(2000);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
 
-        User.instance.removeFromFavorites("0");
+        onView(withId(R.id.buttonFavoriteID)).perform(click());
+
     }
 
-
-    @After
-    public void clean() {
-        Intents.release();
-    }
-
-    private Location generateLocation(LatLng p) {
-        Location l = new Location(LocationManager.GPS_PROVIDER);
-        l.setLatitude(p.latitude);
-        l.setLongitude(p.longitude);
-        l.setAltitude(0);
-        l.setAccuracy(1);
-        l.setTime(System.currentTimeMillis());
-        return l;
-    }
-
-    private void launchWithExtras(Location location) {
-        Context targetContext = InstrumentationRegistry.getInstrumentation()
-                .getTargetContext();
-        Intent intent = new Intent(targetContext, MainActivity.class);
-        intent.putExtra("locations", location);
-        mActivityRule.launchActivity(intent);
-        sleep(5_000);
-    }
 }
