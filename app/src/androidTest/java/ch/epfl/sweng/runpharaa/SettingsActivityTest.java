@@ -81,22 +81,23 @@ public class SettingsActivityTest {
 
     @Test
     public void correctlyUpdatesPrefRadius() {
-        writeTextToPreference("100", 1);
+        writeTextToPreference("1.5", 1);
+        assertTrue(User.instance.getPreferredRadius() == 1500);
     }
 
     @Test
     public void correctlyUpdatesMinTimeInterval() {
-        writeTextToPreference("2000", 4);
+        writeTextToPreference("2", 4);
     }
 
     @Test
     public void correctlyUpdatesTimeInterval() {
-        writeTextToPreference("6000", 3);
+        writeTextToPreference("6", 3);
     }
 
     @Test
     public void correctlyUpdatesDistanceInterval() {
-        writeTextToPreference("10", 5);
+        writeTextToPreference("1", 5);
     }
 
     @Test
