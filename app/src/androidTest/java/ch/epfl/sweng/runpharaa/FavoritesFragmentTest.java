@@ -67,7 +67,7 @@ public class FavoritesFragmentTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
 
     }
 
@@ -86,6 +86,7 @@ public class FavoritesFragmentTest {
     @Test
     public void testFavoritesAppears() {
         mActivityRule.launchActivity(null);
+
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonFavoriteID)).perform(click());
