@@ -51,7 +51,7 @@ public final class User {
 
     public User(String name, LatLng location, int preferredRadius) {
         //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius, null, location, name);
+        this(name, preferredRadius,  Uri.parse(""), location, name);
     }
 
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
