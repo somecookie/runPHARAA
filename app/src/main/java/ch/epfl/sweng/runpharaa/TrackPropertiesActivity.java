@@ -127,6 +127,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));
                 */
+
+                drawTrackOnMap();
             }
 
             @Override
@@ -260,7 +262,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         // Make map static
-        map.getUiSettings().setAllGesturesEnabled(false);
+        //map.getUiSettings().setAllGesturesEnabled(false);
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -270,15 +272,14 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         // Adapt padding to fit markers
         map.setPadding(50, 150, 50, 50);
-        drawTrackOnMap();
     }
 
     /**
      * Draws the full track and markers on the map
      */
     private void drawTrackOnMap() {
-        Log.i("CreateMap : ", "Drawing on map in TrackPropertiesActivity.");
         if (map != null && points != null) {
+            Log.i("Create Map : ", "Drawing on map in TrackPropertiesActivity.");
             // Get correct zoom
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
             for (LatLng point : points)
