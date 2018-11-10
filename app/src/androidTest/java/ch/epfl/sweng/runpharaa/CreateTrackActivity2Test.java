@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,8 +68,8 @@ public class CreateTrackActivity2Test {
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @BeforeClass
-    public static void initUser() {
+    @Before
+    public void initUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112),  "FakeUser");
     }
 
