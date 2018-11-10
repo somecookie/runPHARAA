@@ -48,7 +48,7 @@ public class TrackPropertiesActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000,  Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.instance = new User("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Rule
@@ -60,7 +60,7 @@ public class TrackPropertiesActivityTest {
 
     @Before
     public void initUserAndTracks() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Test
@@ -142,7 +142,7 @@ public class TrackPropertiesActivityTest {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
         CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
