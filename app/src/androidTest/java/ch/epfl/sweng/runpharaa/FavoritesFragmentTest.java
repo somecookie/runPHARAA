@@ -16,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -42,8 +43,7 @@ public class FavoritesFragmentTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
-
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
     }
 
     @Before
@@ -70,7 +70,7 @@ public class FavoritesFragmentTest {
         launchWithExtras(location);*/
 
         mActivityRule.launchActivity(null);
-
+        onView(allOf(withId(R.id.refreshNearMe), isDisplayed())).perform(swipeDown());
         sleep(2000);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 actionOnItemAtPosition(0, click()));

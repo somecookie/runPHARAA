@@ -48,7 +48,7 @@ public class TrackPropertiesActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000,  Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
     }
 
     @Rule
