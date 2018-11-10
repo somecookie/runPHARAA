@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TestFairy.begin(this, "404771920c67776e429dc8548b060d68b58d433b");
+        //TestFairy.begin(this, "404771920c67776e429dc8548b060d68b58d433b");
         setContentView(R.layout.activity_login);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         for(Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())

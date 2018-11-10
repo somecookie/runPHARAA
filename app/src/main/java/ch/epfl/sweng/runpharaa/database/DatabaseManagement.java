@@ -35,7 +35,7 @@ public class DatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();

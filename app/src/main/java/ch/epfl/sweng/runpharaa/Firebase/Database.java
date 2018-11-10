@@ -4,6 +4,7 @@ package ch.epfl.sweng.runpharaa.Firebase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,7 +41,7 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private final static boolean isTest = true;
+    private final static boolean isTest = false;
     private final static boolean shouldFail = false;
     private final static boolean isCancelled = false;
     private final static boolean userExists = false;
@@ -160,11 +161,10 @@ public class Database {
     }
 
     public static FirebaseDatabase getInstance(){
-        return (isTest)? new Database().instanciateMock() : FirebaseDatabase.getInstance();
+        return (isTest) ? new Database().instanciateMock() :  FirebaseDatabase.getInstance();
     }
 
     private FirebaseDatabase instanciateMock(){
-        if(isTest){
             MockitoAnnotations.initMocks(this);
             createTrack();
             instanciateDB();
@@ -175,11 +175,7 @@ public class Database {
             instanciateRead();
             instanciateSnapshots();
             return firebaseDatabaseMock;
-        } else {
-            return FirebaseDatabase.getInstance();
-        }
     }
-
 
     private void instanciateDB() {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);

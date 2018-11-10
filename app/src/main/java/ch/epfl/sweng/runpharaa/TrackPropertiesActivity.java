@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -29,12 +30,14 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
-    //TODO: Check if ScrollView is working!
+    private ImageLoader imageLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
+        imageLoader = new ImageLoader(this, false);
 
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
@@ -45,9 +48,10 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 TrackProperties tp = track.getProperties();
 
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-                //trackBackground.setImageBitmap(track.getImage()); //TODO: For caching?
-                new DownloadImageTask(trackBackground)
-                        .execute(track.getImageStorageUri());
+
+                imageLoader.displayImage(track.getImageStorageUri(), trackBackground); // caching
+                /*new DownloadImageTask(trackBackground)
+                        .execute(track.getImageStorageUri());*/
 
                 TextView trackTitle = findViewById(R.id.trackTitleID);
                 trackTitle.setText(track.getName());

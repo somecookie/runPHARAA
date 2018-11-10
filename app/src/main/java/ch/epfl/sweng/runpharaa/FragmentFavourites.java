@@ -83,6 +83,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
@@ -90,6 +91,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
     View v;
     SwipeRefreshLayout swipeLayout;
     TextView emptyMessage;
+    private ImageLoader imageLoader;
 
     public FragmentFavourites() {
     }
@@ -108,7 +110,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
 
-        Log.i("FragmentNearMeLife", "F: on create view");
+        imageLoader = new ImageLoader(getContext());
 
         emptyMessage = v.findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
@@ -202,8 +204,9 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.name.setText(listCardItem.get(position).getName());
 
-            new DownloadImageTask(viewHolder.background_img)
-                    .execute(listCardItem.get(position).getImageURL());
+            imageLoader.displayImage(listCardItem.get(position).getImageURL(), viewHolder.background_img);
+            /*new DownloadImageTask(viewHolder.background_img)
+                    .execute(listCardItem.get(position).getImageURL());*/
 
             viewHolder.bind(listCardItem.get(position), listener);
         }
