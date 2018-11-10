@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,8 +26,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(user.getID()).exists()){
-                    downloadUser(user.getID());
-                    callback.onSuccess(User.instance);
+                    downloadUser(user.getID(), callback);
                 }else{
                     DatabaseReference userRef = mDataBaseRef.child(USERS).child(user.getID());
                     userRef.setValue(user.getFirebaseAdapter()).addOnSuccessListener(aVoid -> callback.onSuccess(user)).addOnFailureListener(callback::onError);
@@ -70,7 +70,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         createRef.setValue(trackID).addOnFailureListener(Throwable::printStackTrace);
     }
 
-    public static void downloadUser(final String UID){
+    public static void downloadUser(final String UID, final Callback<User> whenFinishedCallback){
         downloadUserTracks(UID, CREATE, new Callback<Set<String>>() {
             @Override
             public void onSuccess(Set<String> createdTracks) {
@@ -83,6 +83,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                                 User.instance.setCreatedTracks(createdTracks);
                                 User.instance.setFavoriteTracks(favoriteTracks);
                                 User.instance.setLikedTracks(likedTracks);
+                                whenFinishedCallback.onSuccess(User.instance);
                             }
                         });
                     }
@@ -99,6 +100,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Set<String> createdTracks = new HashSet<>();
                 for(DataSnapshot createdSnapshot: dataSnapshot.getChildren()){
+                    Log.i("AfricaToto", type+" adding "+ createdSnapshot.getKey());
                     createdTracks.add(createdSnapshot.getKey());
                 }
                 callback.onSuccess(createdTracks);

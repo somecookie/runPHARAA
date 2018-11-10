@@ -51,7 +51,7 @@ public final class User {
     }
 
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
-        instance = new User(name, (int)(preferredRadius*100), picture, location, uId);
+        instance = new User(name, (int)(preferredRadius*1000), picture, location, uId);
     }
 
     public FirebaseUserAdapter getFirebaseAdapter() { return new FirebaseUserAdapter(this); }

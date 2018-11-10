@@ -36,7 +36,8 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
     SwipeRefreshLayout swipeLayout;
     TextView emptyMessage;
 
-    public FragmentFavourites() { }
+    public FragmentFavourites() {
+    }
 
     public interface OnItemClickListener {
         void onItemClick(CardItem item);
@@ -52,6 +53,8 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
 
+        Log.i("FragmentNearMeLife", "F: on create view");
+
         emptyMessage = v.findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
 
@@ -60,22 +63,10 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
-        // Load if the fragment is visible
-        if (getUserVisibleHint()) {
-            loadData();
-        }
+        // Load data initially
+        loadData();
 
         return v;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        // If the fragment is visible, reload the data
-        if (isVisibleToUser && isResumed()) {
-            onResume();
-        }
     }
 
     @Override
@@ -88,12 +79,6 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onResume() {
         super.onResume();
-        // Do nothing if the fragment is not visible
-        if (!getUserVisibleHint()) {
-            return;
-        }
-        // Else load the data
-        loadData();
     }
 
     /**
@@ -126,7 +111,7 @@ public class FragmentFavourites extends Fragment implements SwipeRefreshLayout.O
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                if(listCardItem.isEmpty())
+                if (listCardItem.isEmpty())
                     setEmptyMessage();
             }
 

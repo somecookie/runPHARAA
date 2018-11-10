@@ -123,14 +123,13 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         locationRequest = LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         // Get pref values or default ones
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        int timeInterval = getInt(sp, SettingsActivity.PREF_KEY_TIME_INTERVAL, 5000);
-        int minTimeInterval = getInt(sp, SettingsActivity.PREF_KEY_MIN_TIME_INTERVAL, 1000);
+        int timeInterval = getInt(sp, SettingsActivity.PREF_KEY_TIME_INTERVAL, 5);
+        int minTimeInterval = getInt(sp, SettingsActivity.PREF_KEY_MIN_TIME_INTERVAL, 1);
         int minDistance = getInt(sp, SettingsActivity.PREF_KEY_MIN_DISTANCE, 5);
         // Set the values
-        locationRequest
-                .setInterval(timeInterval)
-                .setFastestInterval(minTimeInterval)
-                .setSmallestDisplacement(minDistance);
+        setTimeInterval(timeInterval);
+        setMinTimeInterval(minTimeInterval);
+        setMinDistanceInterval(minDistance);
     }
 
     private void initLocationCallBack() {
@@ -151,7 +150,7 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
      */
     public static void setTimeInterval(int newTimeInterval) {
         if(locationRequest != null) {
-            locationRequest.setInterval(newTimeInterval);
+            locationRequest.setInterval(newTimeInterval * 1000);
         }
     }
 
