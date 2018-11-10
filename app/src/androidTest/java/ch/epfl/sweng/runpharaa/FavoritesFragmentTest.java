@@ -53,6 +53,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.core.AllOf.allOf;
+import static org.junit.Assert.fail;
 
 public class FavoritesFragmentTest {
     private Track t;
@@ -76,15 +77,32 @@ public class FavoritesFragmentTest {
     public void testNoFavorites(){
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
+        if(targetContext == null){
+            fail("Target context null");
+        }
+
+        if(mActivityRule == null){
+            fail("activity null");
+        }
         mActivityRule.launchActivity(null);
+
+        if(onView(withId(R.id.viewPagerId)) == null){
+            fail("ID null");
+        }
+
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(2000);
+
+        if(onView(allOf(withId(R.id.emptyMessage), isDisplayed())) == null){
+            fail("truc null");
+        }
+
         onView(allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(targetContext.getResources().getString(R.string.no_favorite))));
     }
 
-    /*
 
+    /*
     @Test
     public void testFavoritesAppears() {
         mActivityRule.launchActivity(null);
