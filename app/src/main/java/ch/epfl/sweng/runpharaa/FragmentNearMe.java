@@ -112,7 +112,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         String s = TrackDatabaseManagement.TRACKS_PATH;
 
         Log.i("FragmentNearMeLife", "load data");
-        
+
         TrackDatabaseManagement.OnGetDataListener d = new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {

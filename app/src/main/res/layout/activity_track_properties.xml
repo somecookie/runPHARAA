@@ -134,6 +134,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/small_margin" />
 
+            <fragment
+                android:id="@+id/create_map_view2"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="65"
+                tools:context=".CreateTrackActivity2" />
+
 
         </LinearLayout>
     </LinearLayout>
