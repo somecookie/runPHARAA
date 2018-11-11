@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import com.android.dx.command.Main;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
@@ -20,17 +22,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
+import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Util;
+
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -38,25 +48,28 @@ public class TrackPropertiesActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000,  Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        User.instance = new User("FakeUser", 2000,  Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
     }
 
     @Rule
-    public ActivityTestRule<TrackPropertiesActivity> mActivityRule =
-            new ActivityTestRule<>(TrackPropertiesActivity.class, true, false);
+    public ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class, true, false);
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Before
     public void initUserAndTracks() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
     }
 
     @Test
     public void correctValuesDisplayedForTrack1() {
-        Track t1 = Track.allTracks.get(0);
-        launchWithTrackId("0");
+        Track t1 = createTrack();
+        mActivityRule.launchActivity(null);
+        sleep(2000);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
         withId(R.id.trackTitleID).matches(withText(t1.getName()));
         withId(R.id.trackLengthID).matches(withText("Length: " + Double.toString(t1.getProperties().getLength()) + "m"));
         withId(R.id.trackLikesID).matches(withText("Likes: " + t1.getProperties().getLikes()));
@@ -65,18 +78,27 @@ public class TrackPropertiesActivityTest {
     @Test
     public void testLike() {
         mActivityRule.launchActivity(null);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonLikeID)).perform(click());
+        withId(R.id.trackLikesID).matches(withText("1"));
+
     }
 
     @Test
     public void testFavourite() {
         mActivityRule.launchActivity(null);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonFavoriteID)).perform(click());
+        withId(R.id.trackFavouritesID).matches(withText("1"));
     }
 
     public void pressingLikeUpdatesValue() {
-        int likesBefore = Track.allTracks.get(0).getProperties().getLikes();
-        launchWithTrackId("0");
+        mActivityRule.launchActivity(null);
+        int likesBefore = createTrack().getProperties().getLikes();
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore + 1));
         sleep(500);
@@ -86,8 +108,10 @@ public class TrackPropertiesActivityTest {
 
     @Test
     public void addingToFavoritesUpdatesValue() {
-        int favsBefore = Track.allTracks.get(0).getProperties().getFavorites();
-        launchWithTrackId("0");
+        mActivityRule.launchActivity(null);
+        int favsBefore = createTrack().getProperties().getLikes();
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore + 1));
         sleep(500);
@@ -97,10 +121,12 @@ public class TrackPropertiesActivityTest {
 
     @Test
     public void addingToFavoritesUpdatesUser() {
-        launchWithTrackId("0");
+        mActivityRule.launchActivity(null);
+        sleep(2000);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         sleep(5000);
-        Log.i("tagIOIOIO", "---------" + User.instance.getFavoriteTracks().size());
         assertTrue(User.instance.getFavoriteTracks().contains("0"));
     }
 
@@ -110,6 +136,20 @@ public class TrackPropertiesActivityTest {
         Intent intent = new Intent(targetContext, TrackPropertiesActivity.class);
         intent.putExtra("TrackID", id);
         mActivityRule.launchActivity(intent);
+    }
+
+    private Track createTrack() {
+        Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
+        Set<TrackType> types = new HashSet<>();
+        types.add(TrackType.FOREST);
+        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
+        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
+        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
+        TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
+        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+
+        return track;
+
     }
 
 }

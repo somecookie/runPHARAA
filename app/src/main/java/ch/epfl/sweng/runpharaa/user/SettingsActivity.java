@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import ch.epfl.sweng.runpharaa.GpsService;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -21,6 +22,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_MIN_TIME_INTERVAL = "min_time_interval";
     public static final String PREF_KEY_MIN_DISTANCE = "min_distance_interval";
     public static final String PREF_KEY_RESET_PREFS = "reset_prefs";
+    public static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 onSharedPreferenceChanged(sp, key);
             // Add reset preferences "button"
             findPreference(PREF_KEY_RESET_PREFS).setOnPreferenceClickListener(resetPrefsListener());
+            // Add clear cache "button"
+            findPreference(PREF_KEY_CLEAR_CACHE).setOnPreferenceClickListener(clearCacheListener());
         }
 
         @Override
@@ -126,6 +130,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // Reset the default values
             PreferenceManager.setDefaultValues(preference.getContext(), R.xml.preferences, true);
             Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
+            return true;
+        };
+    }
+
+    private static Preference.OnPreferenceClickListener clearCacheListener() {
+        return preference -> {
+            new ImageLoader(preference.getContext()).clearCache();
+            Toast.makeText(preference.getContext(), "Cache cleared !", Toast.LENGTH_SHORT).show();
             return true;
         };
     }

@@ -29,6 +29,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.testfairy.TestFairy;
 
 import java.util.Map;
 
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TestFairy.begin(this, "404771920c67776e429dc8548b060d68b58d433b");
         setContentView(R.layout.activity_login);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         for(Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())

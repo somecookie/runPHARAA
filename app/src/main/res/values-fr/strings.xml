@@ -66,5 +66,6 @@
 
     <string name="pref_title_reset_prefs">Paramètres par défaut</string>
     <string name="broadcast_location_update">location_update</string>
+    <string name="pref_title_clear_cache">Vider cache</string>
 
 </resources>

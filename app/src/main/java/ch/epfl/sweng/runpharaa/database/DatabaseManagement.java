@@ -35,7 +35,7 @@ public class DatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
@@ -66,37 +66,31 @@ public class DatabaseManagement {
                 Log.e("Storage", "Failed to upload image to storage :" + e.getMessage());
             }
         });
-        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if(task.isSuccessful()){
-                    mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("Storage", "Failed to download image url :"+ e.getMessage());
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if(task.isSuccessful()){
-                                track.setImageStorageUri(task.getResult().toString());
-                                track.setTrackUid(key);
-                                mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e("Database", "Failed to upload new track :" + e.getMessage());
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        User.instance.addToCreatedTracks(key);
-                                        UserDatabaseManagement.updateCreatedTracks(key);
-                                    }
-                                });
+        uploadTask.addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Storage", "Failed to download image url :"+ e.getMessage());
+                    }
+                }).addOnCompleteListener(task1 -> {
+                    if(task1.isSuccessful()){
+                        track.setImageStorageUri(task1.getResult().toString());
+                        track.setTrackUid(key);
+                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Database", "Failed to upload new track :" + e.getMessage());
                             }
-                        }
-                    });
-                }
+                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                User.instance.addToCreatedTracks(key);
+                                UserDatabaseManagement.updateCreatedTracks(key);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -134,6 +128,7 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
+
             if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
                 tracksNearMe.add(c.getValue(Track.class));
             }
@@ -208,9 +203,7 @@ public class DatabaseManagement {
      * @param listener
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
-        Log.i("TESTING", "1");
         DatabaseReference ref =  mDataBaseRef.child(child);
-        Log.i("TESTING", ref.toString());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
