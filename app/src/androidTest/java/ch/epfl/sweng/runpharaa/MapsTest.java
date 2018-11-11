@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -55,17 +56,7 @@ public class MapsTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
-    }
-
-    @Before
-    public void initUsers() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
-    }
-
-    @Before
-    public void initUsers() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.520566, 6.567820), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa", FakeGpsService.TEST);
     }
 
     @Rule
@@ -84,7 +75,6 @@ public class MapsTest {
     public void clickOnMarkerWorks() {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.mapIcon)).perform(click());
-        initUser();
         sleep(5_000);
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
