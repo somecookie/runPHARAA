@@ -1,14 +1,11 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,9 +21,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -49,7 +46,7 @@ public class DatabaseManagement {
      *
      * @param track
      */
-    public static void writeNewTrack(final Track track) {
+    public static void writeNewTrack(final FirebaseTrackAdapter track) {
         //Generate a new key in the database
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
@@ -114,7 +111,7 @@ public class DatabaseManagement {
      * @return
      */
     public static Track initTrack(DataSnapshot dataSnapshot, String key){
-       return dataSnapshot.child(key).getValue(Track.class);
+       return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
 
     /**
@@ -129,8 +126,8 @@ public class DatabaseManagement {
             CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
-                tracksNearMe.add(c.getValue(Track.class));
+            if(c.child("path").child("0").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
+                tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
             }
         }
         Collections.sort(tracksNearMe, new Comparator<Track>() {
@@ -155,7 +152,7 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(User.instance.getCreatedTracks() != null){
                 if(User.instance.getCreatedTracks().contains(c.getKey())){
-                    createdTracks.add(c.getValue(Track.class));
+                    createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }
@@ -178,7 +175,7 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()) {
             if (User.instance.getFavoriteTracks() != null) {
                 if (User.instance.getFavoriteTracks().contains(c.getKey())) {
-                    favouriteTracks.add(c.getValue(Track.class));
+                    favouriteTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }

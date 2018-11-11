@@ -1,8 +1,6 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 
@@ -23,11 +21,7 @@ public class Track {
     private String trackUid;
     private String creatorUid;
     private String imageStorageUri;
-    @Exclude
-    private Bitmap image;
-    @Exclude
     private CardItem cardItem;
-    private static int COUNTER_ID = 0;
 
     //Track specifics
     private String name;
@@ -45,23 +39,20 @@ public class Track {
 
         this.name = name;
         this.creatorUid = creatorUid;
-        this.image = image;
         this.path = path;
         startingPoint = path.get(0);
         this.properties = properties;
     }
 
-    public Track(String trackUid, String creatorUid, Bitmap image, String name, List<CustLatLng> path, TrackProperties properties) {
+    public Track(String trackUid, String creatorUid, String name, List<CustLatLng> path, TrackProperties properties) {
 
         Required.nonNull(trackUid, "Track ID must be non-null.");
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
-        Required.nonNull(image, "Image must be non-null.");
         Required.nonNull(path, "Path must be non-null.");
         Required.nonNull(properties, "Properties must be non null.");
 
         this.trackUid = trackUid;
         this.creatorUid = creatorUid;
-        this.image = image;
         this.name = name;
 
         if (path.size() < 2)
@@ -73,7 +64,29 @@ public class Track {
     }
 
     //For Firebase
-    public Track() { }
+    public Track(FirebaseTrackAdapter trackAdapter) {
+        Required.nonNull(trackAdapter.getTrackUid(), "Track ID must be non-null.");
+        Required.nonNull(trackAdapter.getCreatorId(), "Creator ID must be non-null.");
+        Required.nonNull(trackAdapter.getName(), "Track name must be non-null");
+        Required.nonNull(path, "Path must be non-null.");
+        if (path.size() < 2) throw new IllegalArgumentException("A path must have at least 2 points");
+        Required.nonNull(trackAdapter.getTrackTypes(), "Set of track types must be non null.");
+
+        Set<TrackType> trackTypes = new HashSet<>();
+        for (String t : trackAdapter.getTrackTypes()){
+            trackTypes.add(TrackType.valueOf(t));
+        }
+        properties = new TrackProperties(trackAdapter.getLikes(), trackAdapter.getFavorites(), trackAdapter.getLength(),
+                trackAdapter.getHeightDifference(), trackAdapter.getAvgDurTotal(), trackAdapter.getAvgDurNbr(),
+                trackAdapter.getAvgDiffTotal(), trackAdapter.getAvgDiffNbr(), trackTypes);
+
+        this.trackUid = trackAdapter.getTrackUid();
+        this.creatorUid = trackAdapter.getCreatorId();
+        this.name = trackAdapter.getName();
+        this.path = trackAdapter.getPath();
+        this.startingPoint = path.get(0);
+        this.imageStorageUri = trackAdapter.getImageStorageUri();
+    }
 
     //TODO: either delete this or do it again when the database is on
     public static ArrayList<Track> allTracks;
@@ -98,7 +111,7 @@ public class Track {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track t = new Track("0", "Bobzer", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track t = new Track("0", "Bobzer", "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
 
         ArrayList<Track> all = new ArrayList<>();
         all.add(t);
@@ -121,9 +134,6 @@ public class Track {
     public String getCreatorUid() { return creatorUid; }
 
     public List<CustLatLng> getPath() { return path; }
-
-    @Exclude
-    public Bitmap getImage() { return image; }
 
     public String getImageStorageUri() { return imageStorageUri; }
 
