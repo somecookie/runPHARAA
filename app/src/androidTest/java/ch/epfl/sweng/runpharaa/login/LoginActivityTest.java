@@ -38,7 +38,7 @@ public class LoginActivityTest {
         Intents.release();
     }
 
-    // TODO: THIS TEST PROBABLY CAUSED THE ROOT FOCUSED ERROR
+    // TODO: THIS INM PROBABLY CAUSED THE ROOT FOCUSED ERROR
     /*@Test
     public void connectWithGoogleSuccess(){
         Intent intent = new Intent();

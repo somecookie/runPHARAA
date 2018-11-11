@@ -1,7 +1,8 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.location;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -18,7 +19,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -29,7 +29,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 
 import static ch.epfl.sweng.runpharaa.user.SettingsActivity.getInt;
 
-public class GpsService extends Service implements GoogleApiClient.ConnectionCallbacks,
+public class RealGpsService extends GpsService implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     private IBinder iBinder = new LocalBinder();
@@ -37,13 +37,12 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback locationCallback;
-    private static LocationRequest locationRequest;
-    private static Location currentLocation;
+    private LocationRequest locationRequest;
 
     // Needed for launching service during tests
     public class LocalBinder extends Binder {
-        public GpsService getService() {
-            return GpsService.this;
+        public RealGpsService getService() {
+            return RealGpsService.this;
         }
     }
 
@@ -109,10 +108,8 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
         sendNewLocation(location);
     }*/
 
-    private void updateAndSendNewLocation(Location location) {
-        // Broadcast the new location to other activities
-        //Intent i = new Intent("location_update");
-        //i.putExtra("new_location", location);
+    @Override
+    protected void updateAndSendNewLocation(Location location) {
         currentLocation = location;
         User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
         sendBroadcast(new Intent("location_update"));
@@ -148,7 +145,8 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
      *
      * @param newTimeInterval in seconds
      */
-    public static void setTimeInterval(int newTimeInterval) {
+    @Override
+    public void setTimeInterval(int newTimeInterval) {
         if(locationRequest != null) {
             locationRequest.setInterval(newTimeInterval * 1000);
         }
@@ -158,7 +156,8 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
      *
      * @param newMinTimeInterval in seconds
      */
-    public static void setMinTimeInterval(int newMinTimeInterval) {
+    @Override
+    public void setMinTimeInterval(int newMinTimeInterval) {
         if(locationRequest != null) {
             locationRequest.setFastestInterval(newMinTimeInterval * 1000);
         }
@@ -168,13 +167,20 @@ public class GpsService extends Service implements GoogleApiClient.ConnectionCal
      *
      * @param newMinDistanceInterval in meters
      */
-    public static void setMinDistanceInterval(int newMinDistanceInterval) {
+    @Override
+    public void setMinDistanceInterval(int newMinDistanceInterval) {
         if(locationRequest != null) {
             locationRequest.setSmallestDisplacement(newMinDistanceInterval);
         }
     }
 
-    public static Location getCurrentLocation() {
+    @Override
+    public Location getCurrentLocation() {
         return currentLocation;
+    }
+
+    @Override
+    public void setNewLocation(Context context, Location location) {
+        Log.i("realGpsService", "Can't set new location on the real service...");
     }
 }

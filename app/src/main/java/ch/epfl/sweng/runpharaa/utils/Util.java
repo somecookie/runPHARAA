@@ -11,10 +11,22 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Util {
+
+    public static Location locationFromLatLng(LatLng p) {
+        Location l = new Location(LocationManager.GPS_PROVIDER);
+        l.setLatitude(p.latitude);
+        l.setLongitude(p.longitude);
+        l.setAltitude(0);
+        l.setAccuracy(1);
+        l.setTime(System.currentTimeMillis());
+        return l;
+    }
 
     public static void copyStream(InputStream is, OutputStream os) {
         final int bufferSize = 1024;

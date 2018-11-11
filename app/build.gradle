@@ -49,6 +49,9 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 //For mockito

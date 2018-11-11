@@ -53,7 +53,8 @@
             android:exported="true" />
         <activity android:name=".CreateTrackActivity2" />
 
-        <service android:name=".GpsService" />
+        <service android:name=".location.RealGpsService" />
+        <service android:name=".location.FakeGpsService" />
 
         <uses-library
             android:name="org.apache.http.legacy"

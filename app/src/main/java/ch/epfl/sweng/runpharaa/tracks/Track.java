@@ -26,7 +26,7 @@ public class Track {
     @Exclude
     private Bitmap image;
     @Exclude
-    private  CardItem cardItem;
+    private CardItem cardItem;
     private static int COUNTER_ID = 0;
 
     //Track specifics
@@ -39,7 +39,7 @@ public class Track {
     public Track(String name, String creatorUid, Bitmap image, List<CustLatLng> path, TrackProperties properties){
 
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
-        //Required.nonNull(image, "Image must be non-null.");
+        Required.nonNull(image, "Image must be non-null.");
         Required.nonNull(path, "Path must be non-null.");
         Required.nonNull(properties, "Properties must be non null.");
 
@@ -55,7 +55,7 @@ public class Track {
 
         Required.nonNull(trackUid, "Track ID must be non-null.");
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
-        //Required.nonNull(image, "Image must be non-null.");
+        Required.nonNull(image, "Image must be non-null.");
         Required.nonNull(path, "Path must be non-null.");
         Required.nonNull(properties, "Properties must be non null.");
 

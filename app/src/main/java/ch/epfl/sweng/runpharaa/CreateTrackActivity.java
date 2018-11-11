@@ -19,6 +19,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.location.RealGpsService;
+import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Util;
+
 public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
     private PolylineOptions lines;
@@ -31,21 +35,18 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     /**
      * The listener used for the main button
      */
-    private View.OnClickListener buttonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!creating) {
-                creating = true;
-                createButton.setText("STOP");
-                handleNewLocation();
+    private View.OnClickListener buttonOnClickListener = (v) -> {
+        if (!creating) {
+            creating = true;
+            createButton.setText("STOP");
+            handleNewLocation();
+        } else {
+            if (points.size() < 2) {
+                Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
             } else {
-                if (points.size() < 2) {
-                    Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
-                } else {
-                    creating = false;
-                    createButton.setText("PROCESSING");
-                    launchSecondPart();
-                }
+                creating = false;
+                createButton.setText("PROCESSING");
+                launchSecondPart();
             }
         }
     };
@@ -77,7 +78,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     @Override
     protected void handleNewLocation() {
         // Get new location
-        Location location = GpsService.getCurrentLocation();
+        Location location = User.instance.getService().getCurrentLocation();
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
 
         // Move camera

@@ -40,6 +40,7 @@ import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterf
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -183,6 +184,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Launch the main app
      */
     private void launchApp() {
+        startService(new Intent(getBaseContext(), User.instance.getService().getClass()));
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(launchIntent);
         finish();
@@ -234,10 +236,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return true;
         }
 
-        l = Util.getCurrLocation(this);
-        if (l != null) {
-            lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
-        }
+        //l = Util.getCurrLocation(this);
+        //if (l != null) {
+        //    lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
+        //}
 
         return false;
     }
