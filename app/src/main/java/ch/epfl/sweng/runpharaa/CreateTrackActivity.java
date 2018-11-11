@@ -79,6 +79,10 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     protected void handleNewLocation() {
         // Get new location
         Location location = User.instance.getService().getCurrentLocation();
+
+        if (location == null)
+            return;
+
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
 
         // Move camera
