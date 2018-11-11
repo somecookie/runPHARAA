@@ -138,7 +138,7 @@
                 android:id="@+id/create_map_view2"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="250dp"
                 android:layout_weight="65"
                 tools:context=".CreateTrackActivity2" />
 

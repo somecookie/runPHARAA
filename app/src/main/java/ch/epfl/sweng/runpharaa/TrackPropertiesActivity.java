@@ -42,7 +42,6 @@ import ch.epfl.sweng.runpharaa.user.User;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
-    //TODO: Check if ScrollView is working!
     private GoogleMap map;
     private LatLng[] points;
 
@@ -262,13 +261,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         // Make map static
-        //map.getUiSettings().setAllGesturesEnabled(false);
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                return true;
-            }
-        });
+        map.setOnMarkerClickListener(marker -> true);
 
         // Adapt padding to fit markers
         map.setPadding(50, 150, 50, 50);
@@ -286,7 +279,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.35);
+            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.25);
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));
