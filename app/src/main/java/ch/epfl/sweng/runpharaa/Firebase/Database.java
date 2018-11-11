@@ -202,9 +202,7 @@ public class Database {
         when(snapInitTrackChildren.child("startingPoint")).thenReturn(snapOnDataChangeReadChildStartingPoint);
         when(snapInitTrackChildren.getKey()).thenReturn("0");
 
-
-        when(snapOnDataChangeReadChildStartingPoint.getValue(CustLatLng.class)).thenReturn(new CustLatLng(46.518577, 6.563165));
-
+        when(snapOnDataChangeReadChildStartingPoint.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
@@ -373,11 +371,10 @@ public class Database {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
-        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
-        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
+        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1), p);
 
         t = track;
 

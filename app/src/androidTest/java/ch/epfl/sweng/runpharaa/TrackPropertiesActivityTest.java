@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
-import com.android.dx.command.Main;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
@@ -21,13 +18,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
-
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -48,7 +43,7 @@ public class TrackPropertiesActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Rule
@@ -60,7 +55,7 @@ public class TrackPropertiesActivityTest {
 
     @Before
     public void initUserAndTracks() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Test
@@ -142,7 +137,7 @@ public class TrackPropertiesActivityTest {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
         CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
         CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
