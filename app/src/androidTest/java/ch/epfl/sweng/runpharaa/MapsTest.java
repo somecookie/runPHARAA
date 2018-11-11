@@ -3,7 +3,6 @@ package ch.epfl.sweng.runpharaa;
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,7 +14,6 @@ import android.support.test.uiautomator.UiSelector;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,11 +28,8 @@ import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
-
-import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -56,7 +51,7 @@ public class MapsTest {
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa", FakeGpsService.TEST);
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa", FakeGpsService.INM);
     }
 
     @Rule

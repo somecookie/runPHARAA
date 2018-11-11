@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private final static boolean isTest = true;
+    private final static boolean isTest = false;
     private final static boolean shouldFail = false;
     private final static boolean isCancelled = false;
     private final static boolean userExists = false;

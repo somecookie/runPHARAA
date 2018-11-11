@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
-            User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid(), FakeGpsService.SAT);
+            User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                 @Override
                 public void onSuccess(User value) {
