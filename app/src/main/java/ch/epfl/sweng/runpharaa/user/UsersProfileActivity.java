@@ -30,21 +30,19 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 public class UsersProfileActivity extends AppCompatActivity {
 
     private User actualUser;
-    private boolean isSelfUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        isSelfUser = getIntent().getBooleanExtra("selfUser", false);
-
+        boolean isSelfUser = getIntent().getBooleanExtra("selfUser", true);
         if (isSelfUser) {
             setContentView(R.layout.activity_user);
+            actualUser = User.instance;
         } else {
             setContentView(R.layout.activity_other_user);
+            actualUser = User.instance; // TODO Change when other users profile are accessible
         }
-
-        actualUser = User.instance;
 
         TextView v = findViewById(R.id.user_name);
         v.setText(actualUser.getName());
@@ -69,23 +67,23 @@ public class UsersProfileActivity extends AppCompatActivity {
             Button followButton = findViewById(R.id.follow_button);
             followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) { follow(); }
+                public void onClick(View v) {
+                    User self = User.instance;
+                    if (!self.alreadyInFollowed(actualUser.getID())) {
+                        self.addToFollowed(actualUser.getID());
+                        UserDatabaseManagement.updateFollowedUsers(self);
+                        followButton.setText("UNFOLLOW");
+                    } else {
+                        self.removeFromFollowed(actualUser.getID());
+                        UserDatabaseManagement.removeFollowedUser(actualUser.getID());
+                        followButton.setText("FOLLOW");
+                    }
+                }
             });
         }
 
         new DownloadImageTask((ImageView) findViewById(R.id.profile_picture))
                 .execute(actualUser.getPicture().toString());
-    }
-
-    private void follow() {
-        User self = User.instance;
-        if (!self.alreadyInFollowed(actualUser.getID())) {
-            self.addToFollowed(actualUser.getID());
-            UserDatabaseManagement.updateFollowedUsers(self);
-        } else {
-            self.removeFromFollowed(actualUser.getID());
-            UserDatabaseManagement.removeFollowedUser(actualUser.getID());
-        }
     }
 
     private void signOut() {
@@ -100,15 +98,15 @@ public class UsersProfileActivity extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
-                        Intent login = new Intent(getBaseContext(), LoginActivity.class);
-                        startActivity(login);
-                        finish();
-                    }
-                });
+            new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
+                    Intent login = new Intent(getBaseContext(), LoginActivity.class);
+                    startActivity(login);
+                    finish();
+                }
+            });
     }
 
     /**
