@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
@@ -60,6 +62,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
                 TrackProperties tp = track.getProperties();
 
+                DecimalFormat df = new DecimalFormat("#.##");
+                df.setRoundingMode(RoundingMode.CEILING);
+
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
                 //trackBackground.setImageBitmap(track.getImage()); //TODO: For caching?
                 new DownloadImageTask(trackBackground)
@@ -74,22 +79,21 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
                 //TODO: Add real duration once it is included in the DB.
                 TextView trackDuration = findViewById(R.id.trackDurationID);
-                trackDuration.setText("Duration: " /*+ tp.getAvgDuration()*/ + "5 minutes");
-
+                trackDuration.setText("Duration: " /*+ df.format(tp.getAvgDuration())*/ + "5 minutes");
 
                 TextView trackLength = findViewById(R.id.trackLengthID);
-                trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");
+                trackLength.setText("Length: " + df.format(tp.getLength()) + " m");
 
                 /*
                 TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-                trackHeightDifference.setText("Height Difference: " + Double.toString(track.getHeight_diff())); //TODO: Figure out height difference.
+                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeight_diff())); //TODO: Figure out height difference.
                 */
 
                 TextView trackLikes = findViewById(R.id.trackLikesID);
-                trackLikes.setText(""+tp.getLikes());
+                trackLikes.setText("" + tp.getLikes());
 
                 TextView trackFavourites = findViewById(R.id.trackFavouritesID);
-                trackFavourites.setText(""+tp.getFavorites());
+                trackFavourites.setText("" + tp.getFavorites());
 
                 ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
                 ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
