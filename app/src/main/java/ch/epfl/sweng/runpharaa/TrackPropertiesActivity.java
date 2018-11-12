@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -46,12 +47,14 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     private LatLng[] points;
+    private ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
+        imageLoader = new ImageLoader(this, false);
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
@@ -66,9 +69,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 df.setRoundingMode(RoundingMode.CEILING);
 
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-                //trackBackground.setImageBitmap(track.getImage()); //TODO: For caching?
-                new DownloadImageTask(trackBackground)
-                        .execute(track.getImageStorageUri());
+
+                imageLoader.displayImage(track.getImageStorageUri(), trackBackground); // caching
+                /*new DownloadImageTask(trackBackground)
+                        .execute(track.getImageStorageUri());*/
 
                 TextView trackTitle = findViewById(R.id.trackTitleID);
                 trackTitle.setText(track.getName());

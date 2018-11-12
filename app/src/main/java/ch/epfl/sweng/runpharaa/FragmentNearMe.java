@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
@@ -35,6 +36,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     View v;
     SwipeRefreshLayout swipeLayout;
     TextView emptyMessage;
+    private ImageLoader imageLoader;
 
     public FragmentNearMe(){ }
 
@@ -52,6 +54,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
 
+        imageLoader = new ImageLoader(getContext());
+
         Log.i("FragmentNearMeLife", "on create view");
 
         emptyMessage = v.findViewById(R.id.emptyMessage);
@@ -62,29 +66,14 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
-        // Load if the fragment is visible
-        //if (getUserVisibleHint()) {
+        // Load initial data
             loadData();
-        //}
 
         return v;
     }
 
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        Log.i("FragmentNearMeLife", "set user visible hint");
-
-        // If the fragment is visible, reload the data
-        //if (isVisibleToUser && isResumed()) {
-        //    onResume();
-        //}
-    }*/
-
     @Override
     public void onRefresh() {
-        Log.i("FragmentNearMeLife", "on refresh");
         loadData();
         // Stop refreshing once it is done
         //swipeLayout.setRefreshing(false);
@@ -93,13 +82,6 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("FragmentNearMeLife", "on resume");
-        // Do nothing if the fragment is not visible
-        //if (!getUserVisibleHint()) {
-        //    return;
-        //}
-        // Else load the data
-        //loadData();
     }
 
     /**
@@ -133,8 +115,9 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                if(listCardItem.isEmpty())
+                if (listCardItem.isEmpty()) {
                     setEmptyMessage();
+                }
 
                 swipeLayout.setRefreshing(false);
             }
@@ -174,8 +157,9 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.name.setText(listCardItem.get(position).getName());
 
-            new DownloadImageTask(viewHolder.background_img)
-                    .execute(listCardItem.get(position).getImageURL());
+            imageLoader.displayImage(listCardItem.get(position).getImageURL(), viewHolder.background_img);
+            /*new DownloadImageTask(viewHolder.background_img)
+                    .execute(listCardItem.get(position).getImageURL());*/
 
             viewHolder.bind(listCardItem.get(position), listener);
         }

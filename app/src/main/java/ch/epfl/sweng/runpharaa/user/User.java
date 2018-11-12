@@ -1,9 +1,6 @@
 package ch.epfl.sweng.runpharaa.user;
 
-import android.annotation.TargetApi;
 import android.net.Uri;
-import android.os.Build;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -14,6 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.location.GpsService;
+import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
@@ -28,6 +27,7 @@ public final class User {
     private Set<String> favoriteTracks;
     private Set<String> likedTracks;
     private LatLng location;
+    private GpsService gpsService;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
     public User(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
@@ -44,14 +44,28 @@ public final class User {
         this.likedTracks = new HashSet<>();
         this.location = location;
         this.uId = uId;
+        this.gpsService = new RealGpsService();
     }
 
     public User(String name, LatLng location, int preferredRadius) {
-        this(name, preferredRadius, null, location, name);
+        this(name, preferredRadius,  Uri.parse(""), location, name);
+    }
+
+    public User(String name, float preferredRadius, Uri picture, LatLng location, String uId, GpsService service) {
+        this(name, (int) (preferredRadius * 1000), picture, location, uId);
+        this.gpsService = service;
     }
 
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
-        instance = new User(name, (int)(preferredRadius*1000), picture, location, uId);
+        instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
+    }
+
+    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId, GpsService service) {
+        instance = new User(name, preferredRadius, picture, location, uId, service);
+    }
+
+    public GpsService getService() {
+        return gpsService;
     }
 
     public FirebaseUserAdapter getFirebaseAdapter() { return new FirebaseUserAdapter(this); }
@@ -61,11 +75,10 @@ public final class User {
     }
 
     /**
-     *
      * @param newRadius in km
      */
     public void setPreferredRadius(float newRadius) {
-        this.preferredRadius = (int)(newRadius*1000);
+        this.preferredRadius = (int) (newRadius * 1000);
     }
 
     /**
@@ -104,7 +117,6 @@ public final class User {
      * @return
      */
     public boolean alreadyInFavorites(String trackId) {
-        Log.i("Favourites", "already in favotites" + favoriteTracks.contains(trackId));
         return favoriteTracks.contains(trackId);
     }
 

@@ -11,7 +11,37 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class Util {
+
+    public static Location locationFromLatLng(LatLng p) {
+        Location l = new Location(LocationManager.GPS_PROVIDER);
+        l.setLatitude(p.latitude);
+        l.setLongitude(p.longitude);
+        l.setAltitude(0);
+        l.setAccuracy(1);
+        l.setTime(System.currentTimeMillis());
+        return l;
+    }
+
+    public static void copyStream(InputStream is, OutputStream os) {
+        final int bufferSize = 1024;
+        try {
+            byte[] bytes = new byte[bufferSize];
+            while(true) {
+                int count = is.read(bytes, 0, bufferSize);
+                if(count == -1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * A one color image.

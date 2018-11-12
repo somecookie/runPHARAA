@@ -1,8 +1,11 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +31,7 @@ public class TrackDatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
@@ -50,7 +53,7 @@ public class TrackDatabaseManagement {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
         byte[] data = baos.toByteArray();
 
-        StorageReference trackImageRef = mStorageRef.child(TRACK_IMAGE_PATH).child(key);
+        /*StorageReference trackImageRef = mStorageRef.child(TRACK_IMAGE_PATH).child(key);
         UploadTask uploadTask = trackImageRef.putBytes(data);
         uploadTask.addOnFailureListener(e -> Log.e("Storage", "Failed to upload image to storage : " + e.getMessage()));
         uploadTask.addOnCompleteListener(task -> {
@@ -64,7 +67,37 @@ public class TrackDatabaseManagement {
                         trackRef.setValue(track).addOnFailureListener(e ->
                                 Log.e("Database", "Failed to upload new track : " + e.getMessage())).addOnSuccessListener(aVoid -> {
                             User.instance.addToCreatedTracks(key);
-                            UserDatabaseManagement.updateCreatedTracks(key);
+                            UserDatabaseManagement.updateCreatedTracks(key);*/
+
+        UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Storage", "Failed to upload image to storage :" + e.getMessage());
+            }
+        });
+        uploadTask.addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Storage", "Failed to download image url :"+ e.getMessage());
+                    }
+                }).addOnCompleteListener(task1 -> {
+                    if(task1.isSuccessful()){
+                        track.setImageStorageUri(task1.getResult().toString());
+                        track.setTrackUid(key);
+                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Database", "Failed to upload new track :" + e.getMessage());
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                User.instance.addToCreatedTracks(key);
+                                UserDatabaseManagement.updateCreatedTracks(key);
+                            }
                         });
                     }
                 });

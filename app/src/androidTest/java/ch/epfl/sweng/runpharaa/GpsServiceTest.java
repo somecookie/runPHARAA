@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -15,8 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
-import java.util.ArrayList;
-
+import ch.epfl.sweng.runpharaa.location.FakeGpsService;
+import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.os.SystemClock.sleep;
@@ -26,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the GpsService Service to see if it launches / doesn't launch at the right time
+ * Tests the RealGpsService Service to see if it launches / doesn't launch at the right time
  */
 @RunWith(AndroidJUnit4.class)
 public class GpsServiceTest {
@@ -45,9 +46,19 @@ public class GpsServiceTest {
             android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
-    public void correctlyLaunchesServiceOnMainActivity() {
-        sleep(500);
-        assertTrue(isMyServiceRunning(GpsService.class));
+    public void launchesRealServiceOnMainActivity() {
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
+        sleep(1000);
+        assertTrue(isMyServiceRunning(RealGpsService.class));
+    }
+
+    @Test
+    public void launchesFakeServiceOnMainActivity() {
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa", FakeGpsService.SAT);
+        mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
+        sleep(1000);
+        assertTrue(isMyServiceRunning(FakeGpsService.class));
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

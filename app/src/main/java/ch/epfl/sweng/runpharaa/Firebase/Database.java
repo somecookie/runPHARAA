@@ -2,6 +2,8 @@ package ch.epfl.sweng.runpharaa.Firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,7 +20,9 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
@@ -37,7 +41,7 @@ import static org.mockito.Mockito.when;
 public class Database {
 
     private final static boolean isTest = false;
-    private final static boolean shouldFail = true;
+    private final static boolean shouldFail = false;
     private final static boolean isCancelled = false;
     private final static boolean userExists = false;
 
@@ -50,21 +54,33 @@ public class Database {
 
     private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
-    //Should create a track for this?
-    private static String trackUID = "id";
+    //Tracks already in the fakeDB
+    private static String trackUID = "0";
 
     private Track t = new Track();
+    private int countLikes = 0;
+    private int countFavorites = 0;
 
     //For all mocked objects
+
+    //First Level
     @Mock
     private FirebaseDatabase firebaseDatabaseMock;
 
     @Mock
     private DatabaseReference databaseReferenceMock;
 
+
+    //Second level
+
     @Mock
     private DatabaseReference drTracks;
 
+    @Mock
+    private DatabaseReference drUser;
+
+
+    //Third level
     @Mock
     private DatabaseReference drTracksPush;
 
@@ -74,8 +90,6 @@ public class Database {
     @Mock
     private DatabaseReference drTracksUID;
 
-    @Mock
-    private DatabaseReference drUser;
 
     @Mock
     private DatabaseReference drUserAnyChild;
@@ -108,6 +122,9 @@ public class Database {
     private DataSnapshot snapOnDataChangeRead;
 
     @Mock
+    private DataSnapshot snapOnDataChangeReadChildStartingPoint;
+
+    @Mock
     private DatabaseError snapOnDataErrorRead;
 
     @Mock
@@ -126,16 +143,24 @@ public class Database {
     private DataSnapshot snapInitTrack;
 
     @Mock
+    private DataSnapshot snapInitTrackChildren;
+
+    @Mock
     private Track track;
 
-    private Database() { }
+    @Mock
+    private Task<Void> removeTask;
+
+
+    private Database() {
+
+    }
 
     public static FirebaseDatabase getInstance(){
-        return (isTest)? new Database().instanciateMock() : FirebaseDatabase.getInstance();
+        return (isTest) ? new Database().instanciateMock() :  FirebaseDatabase.getInstance();
     }
 
     private FirebaseDatabase instanciateMock(){
-        if(isTest){
             MockitoAnnotations.initMocks(this);
             createTrack();
             instanciateDB();
@@ -146,9 +171,6 @@ public class Database {
             instanciateRead();
             instanciateSnapshots();
             return firebaseDatabaseMock;
-        } else {
-            return FirebaseDatabase.getInstance();
-        }
     }
 
     private void instanciateDB() {
@@ -164,7 +186,17 @@ public class Database {
     private void instanciateSnapshots() {
         //TODO: verifier si on a que ca comme cle
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
-        when(snapInitTrack.getValue(Track.class)).thenReturn(t);
+
+        when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
+        when(snapOnDataChangeRead.child("TrackID")).thenReturn(snapInitTrackChildren);
+        when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
+
+
+        when(snapInitTrackChildren.getValue(Track.class)).thenReturn(t);
+        when(snapInitTrackChildren.child("startingPoint")).thenReturn(snapOnDataChangeReadChildStartingPoint);
+        when(snapInitTrackChildren.getKey()).thenReturn("0");
+
+        when(snapOnDataChangeReadChildStartingPoint.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
@@ -244,9 +276,30 @@ public class Database {
             }
         }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
+        when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                int fav = t.getProperties().getFavorites();
+                if(fav >= 1){
+                    t.getProperties().setFavorites(fav - 1);
+                }
+                return removeTask;
+            }
+        });
+
+        when(drUserAnyChildLikesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                int likes = t.getProperties().getLikes();
+                if(likes >= 1){
+                    t.getProperties().setLikes(likes - 1);
+                }
+                return removeTask;
+            }
+        });
+
         //TODO: How to make it
         //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
-        //when(drUserAnyChildIdFavoritesChild.removeValue())
         //when(drUserAnyChildCreatesChild.setValue(any(String)))
         //when(drUserAnyChildLikeChild.removeValue())
 
@@ -310,11 +363,10 @@ public class Database {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
-        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
-        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
+        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1), p);
 
         t = track;
 

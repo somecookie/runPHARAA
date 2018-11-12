@@ -13,6 +13,7 @@
         android:name="android.permission.ACCESS_MOCK_LOCATION"
         tools:ignore="MockLocation,ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
@@ -24,7 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:largeHeap="true"
+        android:name="android.support.multidex.MultiDexApplication" >
+
         <activity android:name=".MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -50,7 +53,8 @@
             android:exported="true" />
         <activity android:name=".CreateTrackActivity2" />
 
-        <service android:name=".GpsService" />
+        <service android:name=".location.RealGpsService" />
+        <service android:name=".location.FakeGpsService" />
 
         <uses-library
             android:name="org.apache.http.legacy"

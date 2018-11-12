@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +39,8 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     private TextView testText;
     private List<Marker> markers; // used to check if a windowInfo is opened
     private Map<String, TrackProperties> markerToTP = new HashMap<>();
+    private static final int transparentBlue = 0x2f0000ff;
+    private static final int transBlueBorder = 0x000000ff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +80,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         mMap.clear();
         markers.clear();
-
-        int transparentBlue = 0x2f0000ff;
-        int transBlueBorder = 0x000000ff;
 
         // Add a circle around the current location
         mMap.addCircle(new CircleOptions()

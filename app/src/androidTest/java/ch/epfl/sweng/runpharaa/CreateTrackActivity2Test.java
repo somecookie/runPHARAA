@@ -15,12 +15,14 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,6 +38,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressKey;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -63,8 +66,8 @@ public class CreateTrackActivity2Test {
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @BeforeClass
-    public static void initUser() {
+    @Before
+    public void initUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112),  "FakeUser");
     }
 
@@ -110,6 +113,7 @@ public class CreateTrackActivity2Test {
                 .perform(click());
         sleep(WAIT_TIME);
         selectFirstType(true);
+
         onView(withId(R.id.create_track_button)).perform(click());
     }
 
