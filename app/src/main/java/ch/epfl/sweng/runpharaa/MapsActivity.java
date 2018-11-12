@@ -7,13 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +35,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     private GoogleMap mMap;
     private TextView testText;
     private List<Marker> markers; // used to check if a windowInfo is opened
+    private boolean userFocused = true;
+    private LatLng longClickLocation = null;
+    private Marker m = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,21 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) (pos) -> {
+            longClickLocation = pos;
+            userFocused = false;
+
+            Marker m = mMap.addMarker(new MarkerOptions()
+                    .position(longClickLocation)
+                    .title("selected Position")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+
+
+
+            Log.v("long clicked","pos: " + pos);
+
+        });
         InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
         mMap.setInfoWindowAdapter(customInfoWindow);
         testText.setText("ready");
@@ -64,6 +85,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
     @Override
     protected void handleNewLocation() {
+        final LatLng position = (userFocused)? User.instance.getLocation() : longClickLocation;
 
         final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
 
@@ -73,22 +95,26 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         int transparentBlue = 0x2f0000ff;
         int transBlueBorder = 0x000000ff;
 
+        if(m != null){
+            markers.add(m);
+        }
+
         // Add a circle around the current location
         mMap.addCircle(new CircleOptions()
-                .center(User.instance.getLocation())
+                .center(position)
                 .radius(User.instance.getPreferredRadius())
                 .fillColor(transparentBlue)
                 .strokeColor(transBlueBorder));
 
         // Follow the user (only if no infoWindow is opened)
         if (trackUidInfoWindow == null)
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(User.instance.getLocation()));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
         // Add a marker for each starting point inside the preferred radius
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
-                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, position);
                 for (Track t : tracks) {
                     Marker m = mMap.addMarker(new MarkerOptions()
                             .position(t.getStartingPoint().ToLatLng())
@@ -167,7 +193,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                 @Override
                 public void onSuccess(DataSnapshot data) {
                     // Get the correct track by it's id
-                    List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                    List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
                     Track track = null;
                     for (Track t : tracks) {
                         if (t.getTrackUid() == marker.getTag())

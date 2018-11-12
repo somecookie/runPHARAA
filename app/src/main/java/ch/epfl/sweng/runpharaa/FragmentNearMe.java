@@ -30,6 +30,7 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.user.User;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
@@ -120,7 +121,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
-                List<Track> tracks = DatabaseManagement.initTracksNearMe(data);
+                List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
