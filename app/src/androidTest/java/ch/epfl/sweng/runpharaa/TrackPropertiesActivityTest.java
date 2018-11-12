@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
-import com.android.dx.command.Main;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
@@ -21,13 +18,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
-
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -48,7 +43,7 @@ public class TrackPropertiesActivityTest {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Rule
@@ -60,7 +55,7 @@ public class TrackPropertiesActivityTest {
 
     @Before
     public void initUserAndTracks() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Test

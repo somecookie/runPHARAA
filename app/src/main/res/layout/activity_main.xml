@@ -38,6 +38,6 @@
         android:backgroundTint="@color/colorPrimary"
         app:borderWidth="0dp"
         app:elevation="5dp"
-        android:src="@drawable/ic_plus" />
+        app:srcCompat="@drawable/ic_plus" />
 
 </android.support.design.widget.CoordinatorLayout>

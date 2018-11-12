@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +31,8 @@ import ch.epfl.sweng.runpharaa.user.User;
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
+    private static final int transparentBlue = 0x2f0000ff;
+    private static final int transBlueBorder = 0x000000ff;
     private GoogleMap mMap;
     private TextView testText;
     private List<Marker> markers; // used to check if a windowInfo is opened
@@ -65,16 +66,15 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) (pos) -> {
             longClickLocation = pos;
             userFocused = false;
-
-            Marker m = mMap.addMarker(new MarkerOptions()
+            mMap.addMarker(new MarkerOptions()
                     .position(longClickLocation)
                     .title("selected Position")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
 
+            handleNewLocation();
 
-
-            Log.v("long clicked","pos: " + pos);
+            Log.v("long clicked", "pos: " + pos);
 
         });
         InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
@@ -85,18 +85,18 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
     @Override
     protected void handleNewLocation() {
-        final LatLng position = (userFocused)? User.instance.getLocation() : longClickLocation;
+        final LatLng position = (userFocused) ? User.instance.getLocation() : longClickLocation;
 
         final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
 
         mMap.clear();
         markers.clear();
 
-        int transparentBlue = 0x2f0000ff;
-        int transBlueBorder = 0x000000ff;
-
-        if(m != null){
-            markers.add(m);
+        if (!userFocused) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(longClickLocation)
+                    .title("selected Position")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         }
 
         // Add a circle around the current location

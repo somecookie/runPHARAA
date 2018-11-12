@@ -101,6 +101,11 @@ public class SettingsActivityTest {
     }
 
     @Test
+    public void correctlyClearsCache(){
+        selectItemAtPos(8).perform(click());
+    }
+
+    @Test
     public void correctlyResetsAllValues() {
         selectItemAtPos(7).perform(click());
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity().getBaseContext());

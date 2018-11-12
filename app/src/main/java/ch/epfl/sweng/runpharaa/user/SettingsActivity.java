@@ -1,18 +1,15 @@
 package ch.epfl.sweng.runpharaa.user;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatDelegate;
-import android.view.MenuItem;
 import android.widget.Toast;
 
-import ch.epfl.sweng.runpharaa.GpsService;
+import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -21,6 +18,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_MIN_TIME_INTERVAL = "min_time_interval";
     public static final String PREF_KEY_MIN_DISTANCE = "min_distance_interval";
     public static final String PREF_KEY_RESET_PREFS = "reset_prefs";
+    public static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             for(String key : sp.getAll().keySet())
                 onSharedPreferenceChanged(sp, key);
             // Add reset preferences "button"
-            findPreference(PREF_KEY_RESET_PREFS).setOnPreferenceClickListener(resetPrefsListener());
+            findPreference(PREF_KEY_RESET_PREFS).setOnPreferenceClickListener(resetPrefsListener);
+            // Add clear cache "button"
+            findPreference(PREF_KEY_CLEAR_CACHE).setOnPreferenceClickListener(clearCacheListener);
         }
 
         @Override
@@ -67,7 +67,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 case PREF_KEY_MIN_DISTANCE: {
                     Preference p = findPreference(key);
                     int minDistance = getInt(sharedPreferences, key, 5);
-                    GpsService.setMinDistanceInterval(minDistance);
+                    User.instance.getService().setMinDistanceInterval(minDistance);
                     String s = minDistance + " m";
                     p.setSummary(s);
                     break;
@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 case PREF_KEY_TIME_INTERVAL: {
                     Preference p = findPreference(key);
                     int time = getInt(sharedPreferences, key, 5);
-                    GpsService.setTimeInterval(time);
+                    User.instance.getService().setTimeInterval(time);
                     String s = time + " s";
                     p.setSummary(s);
                     break;
@@ -83,7 +83,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 case PREF_KEY_MIN_TIME_INTERVAL: {
                     Preference p = findPreference(key);
                     int minTime = getInt(sharedPreferences, key, 1);
-                    GpsService.setMinTimeInterval(minTime);
+                    User.instance.getService().setMinTimeInterval(minTime);
                     String s = minTime + " s";
                     p.setSummary(s);
                     break;
@@ -116,8 +116,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return Integer.parseInt(val);
     }
 
-    private static Preference.OnPreferenceClickListener resetPrefsListener() {
-        return preference -> {
+    private static Preference.OnPreferenceClickListener resetPrefsListener = preference ->  {
             // Clear the preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
             SharedPreferences.Editor editor = preferences.edit();
@@ -128,5 +127,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
             return true;
         };
-    }
+
+    private static Preference.OnPreferenceClickListener clearCacheListener = preference -> {
+            new ImageLoader(preference.getContext()).clearCache();
+            Toast.makeText(preference.getContext(), "Cache cleared !", Toast.LENGTH_SHORT).show();
+            return true;
+        };
 }

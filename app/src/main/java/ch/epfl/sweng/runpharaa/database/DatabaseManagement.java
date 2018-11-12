@@ -36,7 +36,7 @@ public class DatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
@@ -130,8 +130,10 @@ public class DatabaseManagement {
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if(c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
-                tracksNearMe.add(c.getValue(Track.class));
+            if(c.child("startingPoint").getValue(CustLatLng.class) != null) {
+                if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                    tracksNearMe.add(c.getValue(Track.class));
+                }
             }
         }
         Collections.sort(tracksNearMe, new Comparator<Track>() {
@@ -160,13 +162,10 @@ public class DatabaseManagement {
                 }
             }
         }
-        Collections.sort(createdTracks, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                return Double.compare(d1, d2);
-            }
+        Collections.sort(createdTracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
         });
         return createdTracks;
     }

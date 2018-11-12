@@ -4,6 +4,7 @@ package ch.epfl.sweng.runpharaa.Firebase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -160,11 +161,10 @@ public class Database {
     }
 
     public static FirebaseDatabase getInstance(){
-        return (isTest)? new Database().instanciateMock() : FirebaseDatabase.getInstance();
+        return (isTest) ? new Database().instanciateMock() :  FirebaseDatabase.getInstance();
     }
 
     private FirebaseDatabase instanciateMock(){
-        if(isTest){
             MockitoAnnotations.initMocks(this);
             createTrack();
             instanciateDB();
@@ -175,11 +175,7 @@ public class Database {
             instanciateRead();
             instanciateSnapshots();
             return firebaseDatabaseMock;
-        } else {
-            return FirebaseDatabase.getInstance();
-        }
     }
-
 
     private void instanciateDB() {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);
@@ -206,9 +202,7 @@ public class Database {
         when(snapInitTrackChildren.child("startingPoint")).thenReturn(snapOnDataChangeReadChildStartingPoint);
         when(snapInitTrackChildren.getKey()).thenReturn("0");
 
-
         when(snapOnDataChangeReadChildStartingPoint.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
-
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
