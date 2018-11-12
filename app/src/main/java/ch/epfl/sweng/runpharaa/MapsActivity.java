@@ -39,7 +39,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     private List<Marker> markers; // used to check if a windowInfo is opened
     private boolean userFocused = true;
     private LatLng longClickLocation = null;
-    private Marker m = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +66,13 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) (pos) -> {
             longClickLocation = pos;
             userFocused = false;
+
             mMap.addMarker(new MarkerOptions()
                     .position(longClickLocation)
                     .title("selected Position")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
-
             handleNewLocation();
-
-            Log.v("long clicked", "pos: " + pos);
 
         });
         InfoWindowGoogleMap customInfoWindow = new InfoWindowGoogleMap(this);
@@ -180,7 +177,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         @Override
         public View getInfoWindow(Marker marker) {
             if(marker.getTitle().equals("selected Position")){
-                return getReturnToLocation(marker);
+                return getReturnToLocation();
             }
             return null;
         }
@@ -244,10 +241,9 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         /**
          * Handle the window that allow the user to go back from a certain position to its location
-         * @param marker
          * @return
          */
-        private View getReturnToLocation(final Marker marker){
+        private View getReturnToLocation(){
             View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_other_location, null);
 

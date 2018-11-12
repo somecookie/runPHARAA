@@ -49,11 +49,16 @@ public final class User {
         this.gpsService = new RealGpsService();
     }
 
-    public User(String name, LatLng location, int preferredRadius) {
-        //TODO must be changed later when the user's login and the database are on
-        this(name, preferredRadius,  Uri.parse(""), location, name);
-    }
 
+    /**
+     * Constucotr used to mock User's localisation
+     * @param name
+     * @param preferredRadius
+     * @param picture
+     * @param location
+     * @param uId
+     * @param service
+     */
     public User(String name, float preferredRadius, Uri picture, LatLng location, String uId, GpsService service) {
         this(name, (int) (preferredRadius * 1000), picture, location, uId);
         this.gpsService = service;
@@ -84,34 +89,6 @@ public final class User {
      */
     public void setPreferredRadius(float newRadius) {
         this.preferredRadius = (int) (newRadius * 1000);
-    }
-
-    /**
-     * Make an ordered list of all the tracks that are in a RADIUS of 2km.
-     *
-     * @return ordered list of tracks
-     */
-    public ArrayList<Track> tracksNearMe() {
-        ArrayList<Track> nm = new ArrayList<>();
-        ArrayList<Track> allTracks = Track.allTracks; //Todo muste be changed when the database is done -> Can actually be deleted?
-
-        //filter the tracks that start too far from the location
-        for (Track tr : allTracks) {
-            if (tr.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location)) <= preferredRadius) {
-                nm.add(tr);
-            }
-        }
-
-        //order them from the nearest to the furthest
-        Collections.sort(nm, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
-                return Double.compare(d1, d2);
-            }
-        });
-        return nm;
     }
 
     /**

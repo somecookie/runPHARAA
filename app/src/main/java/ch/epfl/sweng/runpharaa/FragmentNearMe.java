@@ -94,14 +94,20 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         // Create a fresh recyclerView and listCardItem
         String s = DatabaseManagement.TRACKS_PATH;
 
+
+
         DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
+                Log.i("BEUZER", "VALOUUUUUUUUUUu");
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
+                Log.i("BEUZER", User.instance.getLocation().toString());
                 List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
+
                 for (Track t : tracks) {
+                    Log.i("BEUZER", t.getName());
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
                 }
@@ -128,6 +134,9 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
                 swipeLayout.setRefreshing(false);
             }
         };
+
+
+
 
         DatabaseManagement.mReadDataOnce(s, d);
     }

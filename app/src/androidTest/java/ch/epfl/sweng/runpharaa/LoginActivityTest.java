@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.login;
+package ch.epfl.sweng.runpharaa;
 
 import android.Manifest;
 import android.support.test.espresso.intent.Intents;
@@ -10,8 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitNoLocation;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -20,7 +22,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class LoginActivityTest {
+public class LoginActivityTest extends TestInitNoLocation {
 
     @Rule
     public final ActivityTestRule<LoginActivity> mActivityRule =

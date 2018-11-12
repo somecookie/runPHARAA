@@ -36,7 +36,7 @@ public class DatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
@@ -127,6 +127,7 @@ public class DatabaseManagement {
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location){
         List<Track> tracksNearMe = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
+            Log.i("WESHH", c.toString());
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
@@ -204,9 +205,11 @@ public class DatabaseManagement {
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
         DatabaseReference ref =  mDataBaseRef.child(child);
+        Log.i("WESHHHHHHHHH",ref.toString() );
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("WESHHHHHHHHH","2" );
                 listener.onSuccess(dataSnapshot);
             }
 

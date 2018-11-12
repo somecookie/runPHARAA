@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitNoLocation;
 import ch.epfl.sweng.runpharaa.cache.MemoryCache;
 
 import static org.junit.Assert.assertEquals;
 
-public class MemoryCacheTest {
+public class MemoryCacheTest extends TestInitNoLocation {
     private MemoryCache cache = new MemoryCache();
     private Bitmap b4 = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
     private Bitmap b400 = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
