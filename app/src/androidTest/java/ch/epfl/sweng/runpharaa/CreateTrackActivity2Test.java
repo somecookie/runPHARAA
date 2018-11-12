@@ -28,6 +28,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+>>>>>>> c4698ad1b24eaa715f07882adc47ea1488291a9f
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -54,17 +60,13 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateTrackActivity2Test {
+public class CreateTrackActivity2Test extends TestInitLocation {
 
     private static final int WAIT_TIME = 1000;
 
     @Rule
     public ActivityTestRule<CreateTrackActivity2> mActivityRule =
             new ActivityTestRule<>(CreateTrackActivity2.class, true, false);
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Before
     public void initUser() {

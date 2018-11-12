@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.TimeoutException;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -35,7 +36,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class CreateTrackActivityTest {
+public class CreateTrackActivityTest extends TestInitLocation {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
@@ -44,10 +45,6 @@ public class CreateTrackActivityTest {
     public static void initUser() {
         User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa", FakeGpsService.SAT);
     }
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void createTrackWithTwoPoints() {

@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private final static boolean isTest = true;
+    public static boolean isTest = false;
     private final static boolean shouldFail = false;
     private final static boolean isCancelled = false;
     private final static boolean userExists = false;
@@ -219,18 +219,6 @@ public class Database {
             }
         }).when(drUserAnyChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
-        //when(drUserAnyChild.child(any(String.class))).thenReturn(drUserAnyChild);
-        /*when(drUserAnyChildId.setValue(any(FirebaseUserAdapter.class))).thenAnswer(new Answer<Task<User>>() {
-            @Override
-            public Task<User> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if (shouldFail) {
-                    l.onFailure(new IllegalStateException("Could not retrieve User"));
-                }
-                return ;
-            }
-        });*/
-
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
@@ -337,12 +325,26 @@ public class Database {
                 if (isCancelled) {
                     l.onCancelled(snapOnDataErrorRead);
                 } else {
+                    Log.i("BEUZER", "HUGO LA GALETTE");
                     l.onDataChange(snapOnDataChangeRead);
                 }
                 return l;
             }
         }).when(drTracks).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    Log.i("BEUZER", "HUGO LA GALETTE #2");
+                    l.onDataChange(snapOnDataChangeRead);
+                }
+                return l;
+            }
+        }).when(drTracks).addValueEventListener(any(ValueEventListener.class));
 
         //Read tracks from drKey
         doAnswer(new Answer<ValueEventListener>() {
@@ -357,14 +359,15 @@ public class Database {
                 return l;
             }
         }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
     }
 
     private void createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084);
+        CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
         Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1), p);
 

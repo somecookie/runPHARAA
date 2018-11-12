@@ -31,6 +31,7 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.user.User;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
@@ -93,16 +94,18 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         // Create a fresh recyclerView and listCardItem
         String s = TrackDatabaseManagement.TRACKS_PATH;
 
-        Log.i("FragmentNearMeLife", "load data");
-
         TrackDatabaseManagement.OnGetDataListener d = new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
+                Log.i("BEUZER", "VALOUUUUUUUUUUu");
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
-                List<Track> tracks = TrackDatabaseManagement.initTracksNearMe(data);
+                Log.i("BEUZER", User.instance.getLocation().toString());
+                List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
+
                 for (Track t : tracks) {
+                    Log.i("BEUZER", t.getName());
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());
                 }

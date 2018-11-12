@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -30,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the RealGpsService Service to see if it launches / doesn't launch at the right time
  */
 @RunWith(AndroidJUnit4.class)
-public class GpsServiceTest {
+public class GpsServiceTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser(){
@@ -40,10 +41,6 @@ public class GpsServiceTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void launchesRealServiceOnMainActivity() {

@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +20,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.Firebase.Database;
@@ -31,7 +34,7 @@ public class TrackDatabaseManagement {
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
@@ -132,19 +135,25 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initTracksNearMe(DataSnapshot dataSnapshot){
+    public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location){
         List<Track> tracksNearMe = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
+            Log.i("WESHH", c.toString());
+            CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
-            if(c.child("startingPoint").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){
-                tracksNearMe.add(c.getValue(Track.class));
+            if(c.child("startingPoint").getValue(CustLatLng.class) != null) {
+                if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                    tracksNearMe.add(c.getValue(Track.class));
+                }
             }
         }
-        Collections.sort(tracksNearMe, (o1, o2) -> {
-            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            return Double.compare(d1, d2);
+        Collections.sort(tracksNearMe, new Comparator<Track>() {
+            @Override
+            public int compare(Track o1, Track o2) {
+                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
+                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
+                return Double.compare(d1, d2);
+            }
         });
         return tracksNearMe;
     }
@@ -211,9 +220,11 @@ public class TrackDatabaseManagement {
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
         DatabaseReference ref =  mDataBaseRef.child(child);
+        Log.i("WESHHHHHHHHH",ref.toString() );
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("WESHHHHHHHHH","2" );
                 listener.onSuccess(dataSnapshot);
             }
 
