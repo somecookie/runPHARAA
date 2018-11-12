@@ -77,7 +77,7 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     private void follow() {
-
+        
     }
 
     private void signOut() {

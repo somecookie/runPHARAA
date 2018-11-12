@@ -28,6 +28,7 @@ public final class User {
     private Set<String> createdTracks;
     private Set<String> favoriteTracks;
     private Set<String> likedTracks;
+    private Set<String> followedUsers;
     private LatLng location;
     private GpsService gpsService;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
@@ -44,6 +45,7 @@ public final class User {
         this.createdTracks = new HashSet<>();
         this.favoriteTracks = new HashSet<>();
         this.likedTracks = new HashSet<>();
+        this.followedUsers = new HashSet<>();
         this.location = location;
         this.uId = uId;
         this.gpsService = new RealGpsService();
@@ -158,10 +160,7 @@ public final class User {
      *
      * @param trackId the track's id
      */
-    public void addToFavorites(String trackId) {
-        favoriteTracks.add(trackId);
-
-    }
+    public void addToFavorites(String trackId) { favoriteTracks.add(trackId); }
 
     /**
      * Add a Track id in the set of created tracks.
@@ -180,6 +179,27 @@ public final class User {
     public void removeFromFavorites(String trackId) {
         favoriteTracks.remove(trackId);
     }
+
+    /**
+     * Check if a User id is in the set of followed users
+     *
+     * @param userId
+     */
+    public void alreadyInFollowed(String userId) { followedUsers.contains(userId); }
+
+    /**
+     * Add a User id in the set of followed users
+     *
+     * @param userId
+     */
+    public void addToFollowed(String userId) { followedUsers.add(userId); }
+
+    /**
+     * Remove a User id from the set of followed users
+     *
+     * @param userId
+     */
+    public void removeFromFollowed(String userId) { followedUsers.remove(userId); }
 
     /**
      * Getter for the user's location
