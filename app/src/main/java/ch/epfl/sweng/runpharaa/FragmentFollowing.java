@@ -21,11 +21,13 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -91,33 +93,15 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
         UserDatabaseManagement.mReadDataOnce("users", new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
-                RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-                List<CardItem> listCardItem = new ArrayList<>();
-                OnItemClickListener listener = new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(CardItem item) {
-                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                        intent.putExtra("TrackID", item.getParentTrackID());
-                        startActivity(intent);
-                    }
-                };
 
+                Set<String> followedUsers = User.instance.getFollowedUsers();
                 List<User> users = new ArrayList<>();
-                Set<String> followedUid = User.instance.getFollowedUsers();
 
+                // TODO
+                System.out.println("______SIZE:______" + users.size());
 
-
-                for (User u : users) {
-                    u.setCardItem(new CardItem(u.getName(), u.getID(), u.getImageStorageUri()));
-                    listCardItem.add(u.getCardItem());
-                }
-                Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-                if (listCardItem.isEmpty())
+                if (users.isEmpty())
                     setEmptyMessage();
-
             }
 
             @Override
