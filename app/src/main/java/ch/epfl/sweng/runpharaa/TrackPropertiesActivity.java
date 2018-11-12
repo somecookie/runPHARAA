@@ -187,51 +187,12 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
     }
 
-    private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
+    /*private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
         for (Track t : tracks) {
             if (t.getTrackUid().equals(trackID)) {
                 return t;
             }
         }
         return null;
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-
-            Bitmap decoded = null;
-
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                mIcon11 = BitmapFactory.decodeStream(in, null, options);
-
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
-                decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return decoded;
-        }
-
-        /**
-         ** Set the ImageView to the bitmap result
-         * @param result
-         */
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
+    }*/
 }
