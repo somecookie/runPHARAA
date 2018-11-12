@@ -24,20 +24,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.InputStream;
 
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
     private User actualUser;
-    private boolean selfUser;
+    private boolean isSelfUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        selfUser = getIntent().getBooleanExtra("selfUser", false);
+        isSelfUser = getIntent().getBooleanExtra("selfUser", false);
 
-        if (selfUser) {
+        if (isSelfUser) {
             setContentView(R.layout.activity_user);
         } else {
             setContentView(R.layout.activity_other_user);
@@ -56,7 +57,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         int nbFav = actualUser.getFavoriteTracks().size();
         v2.setText(Integer.toString(nbFav));
 
-        if (selfUser) {
+        if (isSelfUser) {
             Button signOutButton = findViewById(R.id.sign_out_button);
             signOutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,7 +78,14 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     private void follow() {
-        
+        User self = User.instance;
+        if (!self.alreadyInFollowed(actualUser.getID())) {
+            self.addToFollowed(actualUser.getID());
+            UserDatabaseManagement.updateFollowedUsers(self);
+        } else {
+            self.removeFromFollowed(actualUser.getID());
+            UserDatabaseManagement.removeFollowedUser(actualUser.getID());
+        }
     }
 
     private void signOut() {

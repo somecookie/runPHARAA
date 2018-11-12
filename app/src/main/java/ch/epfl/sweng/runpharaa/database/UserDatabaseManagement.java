@@ -19,6 +19,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";
     private final static String CREATE = "createdTracks";
+    private final static String FOLLOWING = "followedUsers";
 
     public static void writeNewUser(final User user, final Callback<User> callback) {
         DatabaseReference usersRef = mDataBaseRef.child(USERS);
@@ -66,6 +67,18 @@ public class UserDatabaseManagement extends DatabaseManagement {
         likedRef.removeValue().addOnFailureListener(Throwable::printStackTrace);
     }
 
+    public static void updateFollowedUsers(final User user) {
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(user.getID()).child(FOLLOWING);
+
+        for (String followed : user.getFollowedUsers()) {
+            followedRef.child(followed).setValue(followed);
+        }
+    }
+
+    public static void removeFollowedUser(final String userID) {
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getID()).child(FOLLOWING).child(userID);
+        followedRef.removeValue().addOnFailureListener(Throwable::printStackTrace);
+    }
 
     public static void updateCreatedTracks(final String trackID) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getID()).child(CREATE).child(trackID);
@@ -82,10 +95,16 @@ public class UserDatabaseManagement extends DatabaseManagement {
                         downloadUserTracks(UID, LIKES, new Callback<Set<String>>() {
                             @Override
                             public void onSuccess(Set<String> likedTracks) {
-                                User.instance.setCreatedTracks(createdTracks);
-                                User.instance.setFavoriteTracks(favoriteTracks);
-                                User.instance.setLikedTracks(likedTracks);
-                                whenFinishedCallback.onSuccess(User.instance);
+                                downloadUserTracks(UID, FOLLOWING, new Callback<Set<String>>() {
+                                    @Override
+                                    public void onSuccess(Set<String> followedTracks) {
+                                        User.instance.setCreatedTracks(createdTracks);
+                                        User.instance.setFavoriteTracks(favoriteTracks);
+                                        User.instance.setLikedTracks(likedTracks);
+                                        User.instance.setFollowedUsers(followedTracks);
+                                        whenFinishedCallback.onSuccess(User.instance);
+                                    }
+                                });
                             }
                         });
                     }

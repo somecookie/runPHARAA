@@ -185,21 +185,21 @@ public final class User {
      *
      * @param userId
      */
-    public void alreadyInFollowed(String userId) { followedUsers.contains(userId); }
+    public boolean alreadyInFollowed(String userId) { return followedUsers.contains(userId); }
 
     /**
      * Add a User id in the set of followed users
      *
      * @param userId
      */
-    public void addToFollowed(String userId) { followedUsers.add(userId); }
+    public void addToFollowed(String userId) { followedUsers.add(userId); System.out.println(userId + " - ADDED !"); }
 
     /**
      * Remove a User id from the set of followed users
      *
      * @param userId
      */
-    public void removeFromFollowed(String userId) { followedUsers.remove(userId); }
+    public void removeFromFollowed(String userId) { followedUsers.remove(userId); System.out.println(userId + " - REMOVED !"); }
 
     /**
      * Getter for the user's location
@@ -259,5 +259,9 @@ public final class User {
     public void setLikedTracks(Set<String> likedTracks) {
         this.likedTracks = likedTracks;
     }
+
+    public Set<String> getFollowedUsers() { return followedUsers; }
+
+    public void setFollowedUsers(Set<String> followedUsers) { this.followedUsers = followedUsers; }
 
 }
