@@ -82,6 +82,34 @@ public final class User {
     }
 
     /**
+     * Make an ordered list of all the tracks that are in a RADIUS of 2km.
+     *
+     * @return ordered list of tracks
+     */
+    public ArrayList<Track> tracksNearMe() {
+        ArrayList<Track> nm = new ArrayList<>();
+        ArrayList<Track> allTracks = Track.allTracks;
+
+        //filter the tracks that start too far from the location
+        for (Track tr : allTracks) {
+            if (tr.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location)) <= preferredRadius) {
+                nm.add(tr);
+            }
+        }
+
+        //order them from the nearest to the furthest
+        Collections.sort(nm, new Comparator<Track>() {
+            @Override
+            public int compare(Track o1, Track o2) {
+                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
+                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
+                return Double.compare(d1, d2);
+            }
+        });
+        return nm;
+    }
+
+    /**
      * Check if the user already liked a particular track
      *
      * @param trackId the track's id

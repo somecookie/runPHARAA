@@ -31,6 +31,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -115,6 +116,15 @@ public class TrackPropertiesActivityTest {
     }
 
     @Test
+    public void testTrackPropertiesMap() {
+        mActivityRule.launchActivity(null);
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+        sleep(5_000);
+        onView(withId(R.id.create_map_view2)).check(matches(withText("ready")));
+    }
+
+    @Test
     public void addingToFavoritesUpdatesUser() {
         mActivityRule.launchActivity(null);
         sleep(2000);
@@ -124,6 +134,7 @@ public class TrackPropertiesActivityTest {
         sleep(5000);
         assertTrue(User.instance.getFavoriteTracks().contains("0"));
     }
+
 
     private void launchWithTrackId(String id) {
         Context targetContext = InstrumentationRegistry.getInstrumentation()

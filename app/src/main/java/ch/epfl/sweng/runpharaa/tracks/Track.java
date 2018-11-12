@@ -75,6 +75,36 @@ public class Track {
     //For Firebase
     public Track() { }
 
+    public static ArrayList<Track> allTracks;
+
+    static {
+
+        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
+        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
+        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
+        CustLatLng coord3 = new CustLatLng(46.518475, 6.561960); //BC
+        CustLatLng coord4 = new CustLatLng(46.517563, 6.562350); //Innovation parc
+        CustLatLng coord5 = new CustLatLng(46.518447, 6.568238); //Rolex
+        CustLatLng coord6 = new CustLatLng(46.523206, 6.564945); //SwissTech
+        CustLatLng coord7 = new CustLatLng(46.520566, 6.567820); //Sat
+        CustLatLng coord8 = new CustLatLng(46.506279, 6.626111); //Ouchy
+        CustLatLng coord9 = new CustLatLng(46.517210, 6.630105); //Gare
+        CustLatLng coord10 = new CustLatLng(46.519531, 6.633149);// Saint-Francois
+        CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
+        CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
+
+        Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
+        Set<TrackType> types = new HashSet<>();
+        types.add(TrackType.FOREST);
+        TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
+        Track t = new Track("0", "Bobzer", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+
+        ArrayList<Track> all = new ArrayList<>();
+        all.add(t);
+
+        allTracks = all;
+    }
+
     public TrackProperties getProperties() { return properties; }
 
     @Exclude
