@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -120,22 +123,24 @@ public class DatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initTracksNearMe(DataSnapshot dataSnapshot){
+    public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location){
         List<Track> tracksNearMe = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
+            CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            //.child("0")
-            if(c.child("path").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
-                tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
+            if(c.child("path").child("0").getValue(CustLatLng.class) != null) {
+                if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                    tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
+
+                }
             }
         }
         Collections.sort(tracksNearMe, new Comparator<Track>() {
             @Override
             public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
+                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
                 return Double.compare(d1, d2);
             }
         });
