@@ -30,6 +30,9 @@ public class FirebaseTrackAdapter {
     private int likes;
     private int favorites;
 
+    //For Firebase
+    public FirebaseTrackAdapter(){}
+
     public FirebaseTrackAdapter(String name, String creatorId, Bitmap image, List<CustLatLng> path, TrackProperties properties){
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");

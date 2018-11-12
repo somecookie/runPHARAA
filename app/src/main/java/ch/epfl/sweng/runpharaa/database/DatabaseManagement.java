@@ -29,7 +29,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 
 public class DatabaseManagement {
 
-    public final static String TRACKS_PATH = "tracks";
+    public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
     public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
@@ -126,7 +126,8 @@ public class DatabaseManagement {
             CustLatLng userLocation = new CustLatLng(User.instance.getLocation().latitude, User.instance.getLocation().longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if(c.child("path").child("0").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
+            //.child("0")
+            if(c.child("path").getValue(CustLatLng.class).distance(userLocation) <= userPreferredRadius){ //TODO: Need to change because the default location of the user is in the US.
                 tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
             }
         }

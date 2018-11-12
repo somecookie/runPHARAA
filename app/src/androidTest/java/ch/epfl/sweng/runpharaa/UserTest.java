@@ -55,16 +55,16 @@ public class UserTest {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        ArrayList<Track> all = new ArrayList<>();
+        ArrayList<Track> tracks = new ArrayList<>();
 
-        all.add(new Track("0","0", null,"Innovation Parc -> BC",Arrays.asList(new CustLatLng(46.517563, 6.562350), new CustLatLng(46.518475, 6.561960)),p));
-        all.add(new Track("1","0",null,"Rolex -> Swisstech",Arrays.asList(new CustLatLng(46.518447, 6.568238), new CustLatLng(46.523206, 6.564945)),p));
-        all.add(new Track("2","0",null,"Sat -> INM",Arrays.asList(new CustLatLng(46.520566, 6.567820), new CustLatLng(46.518577, 6.563165)),p));
-        all.add(new Track("3","0", null,"Banane -> Centre Sportif",Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),p));
+        tracks.add(new Track("0","0","Innovation Parc -> BC",Arrays.asList(new CustLatLng(46.517563, 6.562350), new CustLatLng(46.518475, 6.561960)),p));
+        tracks.add(new Track("1","0","Rolex -> Swisstech",Arrays.asList(new CustLatLng(46.518447, 6.568238), new CustLatLng(46.523206, 6.564945)),p));
+        tracks.add(new Track("2","0","Sat -> INM",Arrays.asList(new CustLatLng(46.520566, 6.567820), new CustLatLng(46.518577, 6.563165)),p));
+        tracks.add(new Track("3","0", "Banane -> Centre Sportif",Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)),p));
 
         //Test done in function of the location, maybe override equals in tracks to test
-        for(int i = 0; i < all.size(); i++){
-            assertEquals(all.get(i).getName(), FAKE_USER.tracksNearMe().get(i).getName());
+        for(int i = 0; i < tracks.size(); i++){
+            assertEquals(tracks.get(i).getName(), FAKE_USER.tracksNearMe().get(i).getName());
         }
     }
 

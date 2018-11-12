@@ -30,6 +30,8 @@ public class Track {
 
     private TrackProperties properties;
 
+    public Track(){};
+
     public Track(String name, String creatorUid, Bitmap image, List<CustLatLng> path, TrackProperties properties){
 
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
@@ -121,7 +123,6 @@ public class Track {
 
     public TrackProperties getProperties() { return properties; }
 
-    @Exclude
     public CardItem getCardItem() { return cardItem; }
 
     public CustLatLng getStartingPoint() { return startingPoint; }
@@ -130,16 +131,11 @@ public class Track {
 
     public String getTrackUid() { return trackUid; }
 
-    @Exclude
     public String getCreatorUid() { return creatorUid; }
 
     public List<CustLatLng> getPath() { return path; }
 
     public String getImageStorageUri() { return imageStorageUri; }
 
-    public void setImageStorageUri(String imageStorageUri) { this.imageStorageUri = imageStorageUri; }
-
     public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
-
-    public void setTrackUid(String trackUid) { this.trackUid = trackUid; }
 }
