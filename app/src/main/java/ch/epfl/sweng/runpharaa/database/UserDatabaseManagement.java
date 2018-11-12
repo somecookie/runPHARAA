@@ -101,11 +101,11 @@ public class UserDatabaseManagement extends DatabaseManagement {
                             public void onSuccess(Set<String> likedTracks) {
                                 downloadUserTracks(UID, FOLLOWING, new Callback<Set<String>>() {
                                     @Override
-                                    public void onSuccess(Set<String> followedTracks) {
+                                    public void onSuccess(Set<String> followedUsers) {
                                         User.instance.setCreatedTracks(createdTracks);
                                         User.instance.setFavoriteTracks(favoriteTracks);
                                         User.instance.setLikedTracks(likedTracks);
-                                        User.instance.setFollowedUsers(followedTracks);
+                                        User.instance.setFollowedUsers(followedUsers);
                                         whenFinishedCallback.onSuccess(User.instance);
                                     }
                                 });
