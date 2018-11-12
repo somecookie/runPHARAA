@@ -30,14 +30,12 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
-    private ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
-        imageLoader = new ImageLoader(this, false);
 
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
@@ -49,9 +47,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
 
-                imageLoader.displayImage(track.getImageStorageUri(), trackBackground); // caching
-                /*new DownloadImageTask(trackBackground)
-                        .execute(track.getImageStorageUri());*/
+                ImageLoader.getLoader(getBaseContext()).displayImage(track.getImageStorageUri(), trackBackground, false); // caching
 
                 TextView trackTitle = findViewById(R.id.trackTitleID);
                 trackTitle.setText(track.getName());
