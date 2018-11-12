@@ -29,11 +29,19 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 public class UsersProfileActivity extends AppCompatActivity {
 
     private User actualUser;
+    private boolean selfUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+
+        selfUser = getIntent().getBooleanExtra("selfUser", false);
+
+        if (selfUser) {
+            setContentView(R.layout.activity_user);
+        } else {
+            setContentView(R.layout.activity_other_user);
+        }
 
         actualUser = User.instance;
 
@@ -48,20 +56,31 @@ public class UsersProfileActivity extends AppCompatActivity {
         int nbFav = actualUser.getFavoriteTracks().size();
         v2.setText(Integer.toString(nbFav));
 
-        Button signOutButton = findViewById(R.id.sign_out_button);
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
+        if (selfUser) {
+            Button signOutButton = findViewById(R.id.sign_out_button);
+            signOutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signOut();
+                }
+            });
+        } else {
+            Button followButton = findViewById(R.id.follow_button);
+            followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) { follow(); }
+            });
+        }
 
         new DownloadImageTask((ImageView) findViewById(R.id.profile_picture))
                 .execute(actualUser.getPicture().toString());
     }
 
-    private void signOut() {
+    private void follow() {
 
+    }
+
+    private void signOut() {
         FirebaseAuth.getInstance().signOut();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.profileIcon:
                 Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);
+                profileIntent.putExtra("selfProfile", true);
                 startActivity(profileIntent);
                 return true;
             case R.id.mapIcon:
