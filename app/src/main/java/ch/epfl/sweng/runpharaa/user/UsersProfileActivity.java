@@ -35,7 +35,7 @@ public class UsersProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean isSelfUser = getIntent().getBooleanExtra("selfUser", true);
+        boolean isSelfUser = getIntent().getBooleanExtra("selfUser", false); // TODO should be true
         if (isSelfUser) {
             setContentView(R.layout.activity_user);
             actualUser = User.instance;
@@ -64,11 +64,16 @@ public class UsersProfileActivity extends AppCompatActivity {
                 }
             });
         } else {
+            User self = User.instance;
             Button followButton = findViewById(R.id.follow_button);
+            if (!self.alreadyInFollowed(actualUser.getID())) {
+                followButton.setText("FOLLOW");
+            } else {
+                followButton.setText("UNFOLLOW");
+            }
             followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    User self = User.instance;
                     if (!self.alreadyInFollowed(actualUser.getID())) {
                         self.addToFollowed(actualUser.getID());
                         UserDatabaseManagement.updateFollowedUsers(self);

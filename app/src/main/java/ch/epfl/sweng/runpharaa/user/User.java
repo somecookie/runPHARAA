@@ -3,6 +3,7 @@ package ch.epfl.sweng.runpharaa.user;
 import android.net.Uri;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.CardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.location.RealGpsService;
@@ -31,7 +33,12 @@ public final class User {
     private Set<String> followedUsers;
     private LatLng location;
     private GpsService gpsService;
+    @Exclude
+    private CardItem cardItem;
+    private String imageStorageUri;
     //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
+
+    public User() {}
 
     public User(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
         Required.nonNull(name, "The name of an user cannot be null");
@@ -192,14 +199,14 @@ public final class User {
      *
      * @param userId
      */
-    public void addToFollowed(String userId) { followedUsers.add(userId); System.out.println(userId + " - ADDED !"); }
+    public void addToFollowed(String userId) { followedUsers.add(userId); }
 
     /**
      * Remove a User id from the set of followed users
      *
      * @param userId
      */
-    public void removeFromFollowed(String userId) { followedUsers.remove(userId); System.out.println(userId + " - REMOVED !"); }
+    public void removeFromFollowed(String userId) { followedUsers.remove(userId); }
 
     /**
      * Getter for the user's location
@@ -263,5 +270,14 @@ public final class User {
     public Set<String> getFollowedUsers() { return followedUsers; }
 
     public void setFollowedUsers(Set<String> followedUsers) { this.followedUsers = followedUsers; }
+
+    @Exclude
+    public CardItem getCardItem() { return cardItem; }
+
+    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
+
+    public String getImageStorageUri() { return imageStorageUri; }
+
+    public void setImageStorageUri(String imageStorageUri) { this.imageStorageUri = imageStorageUri; }
 
 }

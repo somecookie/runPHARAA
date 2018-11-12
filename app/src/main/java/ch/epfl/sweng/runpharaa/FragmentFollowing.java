@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,19 +18,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
     SwipeRefreshLayout swipeLayout;
     TextView emptyMessage;
-    List<CardItem> listCardItem; // TODO: remove when DB
+    private ImageLoader imageLoader;
 
-    public FragmentFollowing(){ }
+    public FragmentFollowing(){}
 
     public interface OnItemClickListener {
         void onItemClick(CardItem item);
@@ -39,15 +53,12 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
         emptyMessage.setVisibility(View.VISIBLE);
     }
 
-    private void initList() { // TODO: remove when DB
-        // Create a fresh recyclerView and listCardItem
-        listCardItem = new ArrayList<>();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
+
+        imageLoader = new ImageLoader(getContext());
 
         emptyMessage = v.findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
@@ -63,16 +74,6 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
         return v;
     }
 
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        // If the fragment is visible, reload the data
-        if (isVisibleToUser && isResumed()) {
-            onResume();
-        }
-    }*/
-
     @Override
     public void onRefresh() {
         loadData();
@@ -81,32 +82,61 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        // Do nothing if the fragment is not visible
-        //if (!getUserVisibleHint()) {
-        //    return;
-        //}
-        // Else load the data
-        //loadData();
-    }
+    public void onResume() { super.onResume(); }
 
     public void loadData() {
         emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listCardItem
-        initList();
-        if(listCardItem.isEmpty())
-            setEmptyMessage();
+
+        UserDatabaseManagement.mReadDataOnce("users", new DatabaseManagement.OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                RecyclerView recyclerView = v.findViewById(R.id.cardListId);
+                List<CardItem> listCardItem = new ArrayList<>();
+                OnItemClickListener listener = new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(CardItem item) {
+                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                        intent.putExtra("TrackID", item.getParentTrackID());
+                        startActivity(intent);
+                    }
+                };
+
+                List<User> users = new ArrayList<>();
+                Set<String> followedUid = User.instance.getFollowedUsers();
+
+
+
+                for (User u : users) {
+                    u.setCardItem(new CardItem(u.getName(), u.getID(), u.getImageStorageUri()));
+                    listCardItem.add(u.getCardItem());
+                }
+                Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                if (listCardItem.isEmpty())
+                    setEmptyMessage();
+
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+                Log.d("DB Read: ", "Failed to read data from DB in FragmentFollowing.");
+                setEmptyMessage();
+            }
+        });
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
         Context context;
         List<CardItem> listCardItem;
-        FragmentNearMe.OnItemClickListener listener;
+        OnItemClickListener listener;
 
         public Adapter(Context context, List<CardItem> listCardItem, OnItemClickListener listener) {
             this.context = context;
             this.listCardItem = listCardItem;
+            this.listener = listener;
         }
 
         @NonNull
@@ -114,7 +144,7 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
         public Adapter.viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             View v = layoutInflater.inflate(R.layout.card_item, viewGroup, false);
-            return new Adapter.viewHolder(v);
+            return new viewHolder(v);
         }
 
         @Override
@@ -122,8 +152,7 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.name.setText(listCardItem.get(position).getName());
 
-            new Adapter.DownloadImageTask(viewHolder.background_img)
-                    .execute(listCardItem.get(position).getImageURL());
+            imageLoader.displayImage(listCardItem.get(position).getImageURL(), viewHolder.background_img);
 
             viewHolder.bind(listCardItem.get(position), listener);
         }
@@ -145,7 +174,7 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
                 name = itemView.findViewById(R.id.nameID);
             }
 
-            public void bind(final CardItem item, final FragmentNearMe.OnItemClickListener listener) {
+            public void bind(final CardItem item, final FragmentFollowing.OnItemClickListener listener) {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
                         listener.onItemClick(item);

@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 

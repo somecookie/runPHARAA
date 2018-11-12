@@ -1,14 +1,18 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.support.annotation.NonNull;
+import android.telecom.Call;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.user.User;
@@ -111,9 +115,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
                 });
             }
         });
-
     }
-
 
     private static void downloadUserTracks(String UID, String type, Callback<Set<String>> callback) {
 
@@ -123,7 +125,6 @@ public class UserDatabaseManagement extends DatabaseManagement {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Set<String> createdTracks = new HashSet<>();
                 for(DataSnapshot createdSnapshot: dataSnapshot.getChildren()){
-                    Log.i("AfricaToto", type+" adding "+ createdSnapshot.getKey());
                     createdTracks.add(createdSnapshot.getKey());
                 }
 
