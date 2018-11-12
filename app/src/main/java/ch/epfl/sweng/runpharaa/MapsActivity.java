@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -139,9 +140,15 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Intent i = new Intent(this, TrackPropertiesActivity.class);
-        i.putExtra("TrackID", (String) marker.getTag());
-        startActivity(i);
+        if(marker.getTitle().equals("selected Position")) {
+            longClickLocation = null;
+            userFocused = true;
+            handleNewLocation();
+        } else {
+            Intent i = new Intent(this, TrackPropertiesActivity.class);
+            i.putExtra("TrackID", (String) marker.getTag());
+            startActivity(i);
+        }
     }
 
     /**
@@ -172,11 +179,28 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         @Override
         public View getInfoWindow(Marker marker) {
+            if(marker.getTitle().equals("selected Position")){
+                return getReturnToLocation(marker);
+            }
             return null;
         }
 
         @Override
         public View getInfoContents(final Marker marker) {
+            /*if(marker.getTitle().equals("selected Position")){
+                return getReturnToLocation(marker);
+            } else {*/if(!marker.getTitle().equals("selected Position")) {
+                return getInfoTracks(marker);
+            }
+            return null;
+        }
+
+        /**
+         * Handle the windows that display the properties of the track in the map
+         * @param marker
+         * @return
+         */
+        private View getInfoTracks(final Marker marker){
             View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_info_window, null);
 
@@ -214,6 +238,26 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                     Log.d("DB Read: ", "Failed to read data from DB in InfoWindowGoogleMap.");
                 }
             });
+            return view;
+        }
+
+
+        /**
+         * Handle the window that allow the user to go back from a certain position to its location
+         * @param marker
+         * @return
+         */
+        private View getReturnToLocation(final Marker marker){
+            View view = ((Activity) context).getLayoutInflater()
+                    .inflate(R.layout.marker_other_location, null);
+
+            Button b = view.findViewById(R.id.return_to_location);
+            b.setOnClickListener(v -> {
+                longClickLocation = null;
+                userFocused = true;
+                handleNewLocation();
+            });
+
             return view;
         }
     }
