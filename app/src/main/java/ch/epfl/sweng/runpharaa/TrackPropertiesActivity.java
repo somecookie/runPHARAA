@@ -119,6 +119,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         });
     }
 
+    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -138,10 +139,8 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
             i++;
         }
-
         return sb.toString();
-
-    }
+    }*/
 
     private void updateLikes(Track track1, String trackID) {
         final Track track = track1;
