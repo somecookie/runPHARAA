@@ -30,9 +30,6 @@ public class FirebaseTrackAdapter {
     private int likes;
     private int favorites;
 
-    //For Firebase
-    public FirebaseTrackAdapter(){}
-
     public FirebaseTrackAdapter(String name, String creatorId, Bitmap image, List<CustLatLng> path, TrackProperties properties){
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
@@ -59,6 +56,37 @@ public class FirebaseTrackAdapter {
         this.likes = 0;
         this.favorites = 0;
     }
+
+    public FirebaseTrackAdapter(Track track){
+        Required.nonNull(track.getName(), "Track name send to database must be non null");
+        Required.nonNull(track.getCreatorUid(), "Track creatorId send to database must be non null");
+        Required.nonNull(track.getPath(), "Track path sent to database must be non null");
+        Required.nonNull(track.getProperties(), "Track properties sent to database must must be non null");
+
+        this.name = track.getName();
+        this.creatorId = track.getCreatorUid();
+        this.path = track.getPath();
+        this.trackUid = track.getTrackUid();
+
+        //Initializing track properties
+        List<String> types = new ArrayList<>();
+        for(TrackType t : track.getProperties().getType()){
+            types.add(t.toString());
+        }
+        this.trackTypes = types;
+        this.length= track.getProperties().getLength();
+        this.heightDifference = track.getProperties().getHeightDifference();
+        this.avgDiffTotal = track.getProperties().getAvgDifficultyTotal();
+        this.avgDiffNbr = track.getProperties().getAvgDifficultyNbr();
+        this.avgDurTotal = track.getProperties().getAvgDurationTotal();
+        this.avgDurNbr = track.getProperties().getAvgDurationNbr();
+        this.likes = track.getProperties().getLikes();
+        this.favorites = track.getProperties().getFavorites();
+        this.imageStorageUri = track.getImageStorageUri();
+    }
+
+    //For Firebase
+    public FirebaseTrackAdapter(){}
 
     public String getName() {
         return name;

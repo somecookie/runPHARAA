@@ -101,9 +101,8 @@ public class DatabaseManagement {
      * @param track
      */
     public static void updateTrack(Track track){
-        //TODO check if it works
-        //Check if track exists? Return a success or error message?
-        mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
+        FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track);
+        mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
 
     /**
@@ -130,6 +129,7 @@ public class DatabaseManagement {
             int userPreferredRadius = User.instance.getPreferredRadius();
 
             if(c.child("path").child("0").getValue(CustLatLng.class) != null) {
+                Log.d("Database", "track near me");
                 if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
                     tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
 

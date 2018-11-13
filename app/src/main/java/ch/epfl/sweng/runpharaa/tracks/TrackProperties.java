@@ -72,11 +72,11 @@ public class TrackProperties {
     public int getAvgDurationNbr() { return avgDur.getNbr();}
 
     public void addLike(){ likes++; }
-    public void removeLike(){ likes--; }
+    public void removeLike(){ if(likes > 0) likes--; }
     public int getLikes(){ return likes; }
 
     public void addFavorite(){ favorites++; }
-    public void removeFavorite(){ favorites--; }
+    public void removeFavorite(){ if(favorites > 0) favorites--; }
     public int getFavorites(){ return favorites; }
 
     @Exclude //TODO exclude for now but make f(string) -> TrackType for database (@Hugo for more explications)

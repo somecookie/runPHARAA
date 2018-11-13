@@ -32,6 +32,7 @@ import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View v;
@@ -39,7 +40,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
     TextView emptyMessage;
     private ImageLoader imageLoader;
 
-    public FragmentNearMe(){ }
+    public FragmentNearMe(){
+    }
 
     public interface OnItemClickListener {
         void onItemClick(CardItem item);
@@ -67,6 +69,8 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
+
+        Log.d("Test", "azeraer : " + MainActivity.difficultyFilter);
         // Load initial data
             loadData();
 
@@ -75,6 +79,7 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
+        Log.d("Test", "azeraer : " + MainActivity.difficultyFilter);
         loadData();
         // Stop refreshing once it is done
         //swipeLayout.setRefreshing(false);
@@ -102,14 +107,17 @@ public class FragmentNearMe extends Fragment implements SwipeRefreshLayout.OnRef
 
                 List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
                 for (Track t : tracks) {
-                    t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
-                    listCardItem.add(t.getCardItem());
+                    if(MainActivity.passFilters(t)){
+                        t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
+                        listCardItem.add(t.getCardItem());
+                    }
                 }
                 OnItemClickListener listener = item -> {
                     Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
+
                 Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

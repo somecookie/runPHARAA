@@ -70,8 +70,8 @@ public class Track {
         Required.nonNull(trackAdapter.getTrackUid(), "Track ID must be non-null.");
         Required.nonNull(trackAdapter.getCreatorId(), "Creator ID must be non-null.");
         Required.nonNull(trackAdapter.getName(), "Track name must be non-null");
-        Required.nonNull(path, "Path must be non-null.");
-        if (path.size() < 2) throw new IllegalArgumentException("A path must have at least 2 points");
+        Required.nonNull(trackAdapter.getPath(), "Path must be non-null.");
+        if (trackAdapter.getPath().size() < 2) throw new IllegalArgumentException("A path must have at least 2 points");
         Required.nonNull(trackAdapter.getTrackTypes(), "Set of track types must be non null.");
 
         Set<TrackType> trackTypes = new HashSet<>();
@@ -132,6 +132,8 @@ public class Track {
     public String getTrackUid() { return trackUid; }
 
     public String getCreatorUid() { return creatorUid; }
+
+    public Double getHeightDifference() {return properties.getHeightDifference();}
 
     public List<CustLatLng> getPath() { return path; }
 

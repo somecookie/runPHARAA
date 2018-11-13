@@ -28,6 +28,7 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
     private ImageLoader imageLoader;
@@ -58,20 +59,27 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
                 //TODO: make method like getNameFromID(uid) -> once the Users are in DB
-                trackCreator.setText("By Test User" /*+ track.getCreatorUid()*/);
+                UserDatabaseManagement.downloadUser(track.getCreatorUid(), new Callback<User>() {
+                    @Override
+                    public void onSuccess(User value) {
+                        trackCreator.setText("By "+ value.getName());
+                    }
+                });
 
-                //TODO: Add real duration once it is included in the DB.
                 TextView trackDuration = findViewById(R.id.trackDurationID);
-                trackDuration.setText("Duration: " /*+ tp.getAvgDuration()*/ + "5 minutes");
+                trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");
 
 
                 TextView trackLength = findViewById(R.id.trackLengthID);
                 trackLength.setText("Length: " + Double.toString(tp.getLength()) + " m");
 
-                /*
+                TextView trackDifficulty = findViewById(R.id.track_difficulty);
+                trackDifficulty.setText("Difficulty: " + Double.toString(tp.getAvgDifficulty()) + " / 5.0");
+
+
                 TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-                trackHeightDifference.setText("Height Difference: " + Double.toString(track.getHeight_diff())); //TODO: Figure out height difference.
-                */
+                trackHeightDifference.setText("Height Difference: " + Double.toString(track.getHeightDifference()) + " m");
+
 
                 TextView trackLikes = findViewById(R.id.trackLikesID);
                 trackLikes.setText(""+tp.getLikes());
@@ -110,10 +118,10 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                     }
                 });
 
-                /*
+
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));
-                */
+
             }
 
             @Override
