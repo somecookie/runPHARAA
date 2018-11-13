@@ -1,24 +1,19 @@
 package ch.epfl.sweng.runpharaa.utils;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Util {
+public interface Util {
 
-    public static Location locationFromLatLng(LatLng p) {
+    static Location locationFromLatLng(LatLng p) {
         Location l = new Location(LocationManager.GPS_PROVIDER);
         l.setLatitude(p.latitude);
         l.setLongitude(p.longitude);
@@ -28,13 +23,13 @@ public class Util {
         return l;
     }
 
-    public static void copyStream(InputStream is, OutputStream os) {
+    static void copyStream(InputStream is, OutputStream os) {
         final int bufferSize = 1024;
         try {
             byte[] bytes = new byte[bufferSize];
-            while(true) {
+            while (true) {
                 int count = is.read(bytes, 0, bufferSize);
-                if(count == -1)
+                if (count == -1)
                     break;
                 os.write(bytes, 0, count);
             }
@@ -45,12 +40,13 @@ public class Util {
 
     /**
      * A one color image.
+     *
      * @param width
      * @param height
      * @param color
      * @return A one color image with the given width and height.
      */
-    public static Bitmap createImage(int width, int height, int color) {
+    static Bitmap createImage(int width, int height, int color) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
@@ -59,14 +55,7 @@ public class Util {
         return bitmap;
     }
 
-    @SuppressLint("MissingPermission")
-    public static Location getCurrLocation(Activity a){
-        LocationManager locationManager = (LocationManager) a.getSystemService(Context.LOCATION_SERVICE);
-
-        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    }
-
-    public static double[] computeDistanceAndElevationChange(Location[] locations) {
+    static double[] computeDistanceAndElevationChange(Location[] locations) {
         double maxAltitude = Double.NEGATIVE_INFINITY;
         double minAltitude = Double.POSITIVE_INFINITY;
         double[] res = new double[2];
@@ -82,15 +71,5 @@ public class Util {
         }
         res[1] = maxAltitude - minAltitude;
         return res;
-    }
-
-    public static boolean isServiceRunning(Class<?> serviceClass, Activity activity) {
-        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

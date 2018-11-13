@@ -3,28 +3,28 @@ package ch.epfl.sweng.runpharaa;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getContext;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -33,14 +33,14 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class GpsServiceTest extends TestInitLocation {
 
-    @BeforeClass
-    public static void initUser(){
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
-    }
-
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
+
+    @BeforeClass
+    public static void initUser() {
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+    }
 
     @Test
     public void launchesRealServiceOnMainActivity() {
@@ -57,6 +57,31 @@ public class GpsServiceTest extends TestInitLocation {
         sleep(1000);
         assertTrue(isMyServiceRunning(FakeGpsService.class));
     }
+
+    @Test
+    public void getLocationFromGps() {
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
+        sleep(1000);
+        assertTrue(User.instance.getService().getCurrentLocation() != null);
+    }
+
+    @Test
+    public void setNewLocationFailsOnGps() {
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
+        sleep(1000);
+        Location old = User.instance.getService().getCurrentLocation();
+        User.instance.getService().setNewLocation(mActivityRule.getActivity().getBaseContext(), Util.locationFromLatLng(new LatLng(0,0)));
+        assertEquals(old, User.instance.getService().getCurrentLocation());
+    }
+
+    @After
+    public void endServices() {
+        if (isMyServiceRunning(User.instance.getService().getClass()))
+            mActivityRule.getActivity().stopService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
+    }
+
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
