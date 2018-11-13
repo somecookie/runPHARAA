@@ -2,17 +2,20 @@ package ch.epfl.sweng.runpharaa;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -47,14 +50,18 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withTitle;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -68,132 +75,101 @@ public class SettingsActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Before
     public void init() {
         resetSharedPreferences();
-        r = mActivityRule.getActivity().getResources();
+        r = InstrumentationRegistry.getTargetContext().getResources();
     }
 
     @Test
-    public void correctlyUpdatesPrefRadius() {
-        writeTextToPreference("1.5", 1);
-        assertTrue(User.instance.getPreferredRadius() == 1500);
+    public void updateRadius() {
+        setValueToPref(R.string.pref_key_radius, "0.5");
+        assertEquals(500, User.instance.getPreferredRadius());
     }
 
     @Test
-    public void correctlyUpdatesMinTimeInterval() {
-        writeTextToPreference("2", 4);
+    public void updateTimeInterval() {
+        setValueToPref(R.string.pref_key_time_interval, "6");
     }
 
     @Test
-    public void correctlyUpdatesTimeInterval() {
-        writeTextToPreference("6", 3);
+    public void updateMinTimeInterval() {
+        setValueToPref(R.string.pref_key_min_time_interval, "2");
     }
 
     @Test
-    public void correctlyUpdatesDistanceInterval() {
-        writeTextToPreference("1", 5);
+    public void updateDistanceInterval() {
+        setValueToPref(R.string.pref_key_min_distance_interval, "1");
     }
 
     @Test
-    public void correctlyClearsCache(){
-        selectItemAtPos(8).perform(click());
-    }
-
-    @Test
-    public void correctlyResetsAllValues() {
-        selectItemAtPos(7).perform(click());
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity().getBaseContext());
-        checkDefaultValueCorresponds(sp, R.string.pref_key_radius, R.string.pref_default_radius);
-        checkDefaultValueCorresponds(sp, R.string.pref_key_min_distance_interval, R.string.pref_default_min_distance_interval);
-        checkDefaultValueCorresponds(sp, R.string.pref_key_min_time_interval, R.string.pref_default_min_time_interval);
-        checkDefaultValueCorresponds(sp, R.string.pref_key_time_interval, R.string.pref_default_time_interval);
-    }
-
-    private void checkDefaultValueCorresponds(SharedPreferences sp, int keyId, int defaultId) {
-        assertTrue(sp.getString(r.getString(keyId), "").equals(r.getString(defaultId)));
-    }
-
-    private DataInteraction selectItemAtPos(int pos) {
-        return onData(anything())
-                .inAdapterView(allOf(withId(android.R.id.list),
-                        childAtPosition(
-                                withId(android.R.id.list_container),
-                                0)))
-                .atPosition(pos);
-    }
-
-    // TODO: make this work, currently selecting 2 different views ??
-    private void typeNewValueInPreference(int titleId, String key, String value) {
-        onData(allOf(is(instanceOf(Preference.class)), withTitle(titleId), withKey(key)))
-                .onChildView(withClassName(is(EditText.class.getName())))
-                .perform(click()).perform(typeText(value)).perform(ViewActions.closeSoftKeyboard());
-        onView(withText("OK"))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
+    public void resetsPreferences() {
+        onPreferenceRow(
+                withKey(r.getString(R.string.pref_key_reset_prefs)))
+                /*withTitle(R.string.pref_title_radius)))*/
                 .perform(click());
     }
 
-    public void writeTextToPreference(String newVal, int pos) {
-        selectItemAtPos(pos).perform(click());
-        sleep(500);
-        ViewInteraction editText = onView(
-                allOf(withId(android.R.id.edit),
-                        childAtPosition(
-                                allOf(withClassName(is("android.widget.LinearLayout")),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.ScrollView")),
-                                                0)),
-                                1)));
-        editText.perform(scrollTo(), replaceText(newVal));
-        sleep(500);
-        ViewInteraction editText2 = onView(
-                allOf(withText(newVal),
-                        childAtPosition(
-                                allOf(withClassName(is("android.widget.LinearLayout")),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.ScrollView")),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        editText2.perform(closeSoftKeyboard());
-        sleep(500);
-        ViewInteraction appCompatButton = onView(
-                allOf(withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        appCompatButton.perform(scrollTo(), click());
+    @Test
+    public void clearCache() {
+        onPreferenceRow(
+                withKey(r.getString(R.string.pref_key_clear_cache)))
+                /*withTitle(R.string.pref_title_radius)))*/
+                .perform(click());
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
+    // ---- HELPERS ----
+
+    private void setValueToPref(int keyId, String value){
+        onPreferenceRow(
+                withKey(r.getString(keyId)))
+                /*withTitle(R.string.pref_title_radius)))*/
+                .perform(click());
+
+        onView(allOf(withId(android.R.id.edit),
+                isDisplayed()))
+                .perform(replaceText(value));
+
+        onView(allOf(withResName("button1"),
+                isDisplayed()))
+                .perform(click());
+    }
+
+    private static Matcher<View> withResName(final String resName) {
 
         return new TypeSafeMatcher<View>() {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
+                description.appendText("with res-name: " + resName);
             }
 
             @Override
             public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
+                int identifier = view.getResources().getIdentifier(resName, "id", "android");
+                return !TextUtils.isEmpty(resName) && (view.getId() == identifier);
             }
         };
     }
 
+    private static DataInteraction onPreferenceRow(Matcher<? extends Object> datamatcher) {
+
+        DataInteraction interaction = onData(datamatcher);
+
+        return interaction
+                .inAdapterView(allOf(
+                        withId(android.R.id.list),
+                        not(withParent(withResName("headers")))));
+    }
+
     private void resetSharedPreferences() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mActivityRule.getActivity().getBaseContext());
+        Context c = InstrumentationRegistry.getTargetContext();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
+        PreferenceManager.setDefaultValues(c, R.xml.preferences, true);
     }
 }
