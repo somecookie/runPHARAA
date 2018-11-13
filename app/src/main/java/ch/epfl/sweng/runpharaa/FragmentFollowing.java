@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-
 import android.view.View;
 
 public class FragmentFollowing extends UpdatableCardItemFragment {
