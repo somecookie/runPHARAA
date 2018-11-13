@@ -18,6 +18,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
     private final static String CREATE = "createdTracks";
 
     public static void writeNewUser(final User user, final Callback<User> callback){
+        Log.i("KWAY", user.getUid()+" "+user.getName());
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -27,7 +28,7 @@ public class UserDatabaseManagement extends DatabaseManagement {
                     callback.onSuccess(storedUser);
 
                 }else{
-                    DatabaseReference userRef = mDataBaseRef.child(USERS);
+                    DatabaseReference userRef = mDataBaseRef.child(USERS).child(user.getUid());
                     userRef.setValue(user).addOnSuccessListener(aVoid -> callback.onSuccess(user)).addOnFailureListener(callback::onError);
                 }
             }
