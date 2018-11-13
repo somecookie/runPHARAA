@@ -61,8 +61,6 @@ public class FavoritesFragmentTest extends TestInitLocation {
 
     @Test
     public void testFavoritesAppears() {
-        Log.i("WESH", Database.getInstance().toString());
-
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 swipeDown());
         sleep(5000);

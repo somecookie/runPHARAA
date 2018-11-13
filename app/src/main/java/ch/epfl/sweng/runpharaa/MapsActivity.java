@@ -135,6 +135,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         });
     }
 
+
     @Override
     public void onInfoWindowClick(Marker marker) {
         if(marker.getTitle().equals("selected Position")) {
@@ -166,7 +167,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     /**
      * Private class that applies the customized info window layout
      */
-    private class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
+    public class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
         private Context context;
 
@@ -176,20 +177,16 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         @Override
         public View getInfoWindow(Marker marker) {
-            if(marker.getTitle().equals("selected Position")){
-                return getReturnToLocation();
-            }
             return null;
         }
 
         @Override
         public View getInfoContents(final Marker marker) {
-            /*if(marker.getTitle().equals("selected Position")){
-                return getReturnToLocation(marker);
-            } else {*/if(!marker.getTitle().equals("selected Position")) {
+            if(!marker.getTitle().equals("selected Position")) {
                 return getInfoTracks(marker);
+            } else {
+                return getReturnToLocation();
             }
-            return null;
         }
 
         /**
