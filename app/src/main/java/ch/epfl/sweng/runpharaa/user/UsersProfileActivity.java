@@ -66,7 +66,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         } else {
             User self = User.instance;
             Button followButton = findViewById(R.id.follow_button);
-            if (!self.alreadyInFollowed(actualUser.getID())) {
+            if (!self.alreadyInFollowed(actualUser.getUid())) {
                 followButton.setText("FOLLOW");
             } else {
                 followButton.setText("UNFOLLOW");
@@ -74,13 +74,13 @@ public class UsersProfileActivity extends AppCompatActivity {
             followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!self.alreadyInFollowed(actualUser.getID())) {
-                        self.addToFollowed(actualUser.getID());
+                    if (!self.alreadyInFollowed(actualUser.getUid())) {
+                        self.addToFollowed(actualUser);
                         UserDatabaseManagement.updateFollowedUsers(self);
                         followButton.setText("UNFOLLOW");
                     } else {
-                        self.removeFromFollowed(actualUser.getID());
-                        UserDatabaseManagement.removeFollowedUser(actualUser.getID());
+                        self.removeFromFollowed(actualUser.getUid());
+                        UserDatabaseManagement.removeFollowedUser(actualUser.getUid());
                         followButton.setText("FOLLOW");
                     }
                 }

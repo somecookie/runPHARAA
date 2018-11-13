@@ -82,9 +82,30 @@ public class UserDatabaseManagement extends DatabaseManagement {
             }
         });
     }
+
     public static void updateCreatedTracks(final String trackID) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE).child(trackID);
         createRef.setValue(trackID).addOnFailureListener(Throwable::printStackTrace);
+    }
+
+    public static void updateFollowedUsers(final User user) {
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FOLLOWING);
+        followedRef.setValue(user.getFollowedUsers()).addOnFailureListener(Throwable::printStackTrace);
+    }
+
+    public static void removeFollowedUser(final String uID) {
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING).child(uID);
+        followedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
     }
 
 }

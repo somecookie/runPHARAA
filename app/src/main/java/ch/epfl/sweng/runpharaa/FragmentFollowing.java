@@ -94,14 +94,8 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
             @Override
             public void onSuccess(DataSnapshot data) {
 
-                Set<String> followedUsers = User.instance.getFollowedUsers();
-                List<User> users = new ArrayList<>();
+                List<User> followedUsers = User.instance.getFollowedUsers();
 
-                // TODO
-                System.out.println("______SIZE:______" + users.size());
-
-                if (users.isEmpty())
-                    setEmptyMessage();
             }
 
             @Override
