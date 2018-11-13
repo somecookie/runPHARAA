@@ -1,5 +1,8 @@
 package ch.epfl.sweng.runpharaa.Initializer;
 
+import android.support.test.espresso.Espresso;
+
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -9,13 +12,13 @@ import ch.epfl.sweng.runpharaa.Firebase.Storage;
 public class TestInitNoLocation {
 
     @BeforeClass
-    public static void setTestModeOn(){
+    public static void setTestModeOn() {
         Database.isTest = true;
         Storage.isTest = true;
     }
 
     @AfterClass
-    public static void setTestModeOff(){
+    public static void setTestModeOff() {
         Database.isTest = false;
         Database.isTest = false;
     }
