@@ -38,23 +38,26 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class CreateTrackActivityTest extends TestInitLocation {
 
+    Context c;
+
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa", FakeGpsService.SAT);
+        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        GpsService.initFakeGps(FakeGpsService.SAT);
     }
 
     @Test
     public void createTrackWithTwoPoints() {
-        Context c = mActivityRule.getActivity().getBaseContext();
-        mActivityRule.getActivity().startService(new Intent(c, User.instance.getService().getClass()));
+        c = InstrumentationRegistry.getTargetContext();
+        c.startService(new Intent(c, GpsService.getInstance().getClass()));
         onView(withId(R.id.fab)).perform(click());
         sleep(3000);
         onView(withId(R.id.start_create_button)).perform(click());
         onView(withId(R.id.start_create_button)).perform(click());
-        User.instance.getService().setNewLocation(c, Util.locationFromLatLng(new LatLng(46.506279, 6.626111))); // Ouchy
+        GpsService.getInstance().setNewLocation(c, Util.locationFromLatLng(new LatLng(46.506279, 6.626111))); // Ouchy
         sleep(3000);
         onView(withId(R.id.start_create_button)).perform(click());
     }

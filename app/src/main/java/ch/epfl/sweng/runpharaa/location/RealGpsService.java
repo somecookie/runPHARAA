@@ -51,11 +51,11 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (mGoogleApiClient.isConnected()) {
             mFusedLocationClient.removeLocationUpdates(locationCallback);
             mGoogleApiClient.disconnect();
         }
+        super.onDestroy();
     }
 
     @Nullable
