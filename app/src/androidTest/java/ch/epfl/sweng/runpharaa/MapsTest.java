@@ -77,12 +77,23 @@ public class MapsTest extends TestInitLocation {
         }
 
 
-        try {
+        /*try {
             marker.click();
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             fail("Failed to click on marker 1");
+        }*/
+
+
+        try {
+            int XMarker = marker.getBounds().centerX();
+            int YMarker = marker.getBounds().centerY();
+            device.click(XMarker,YMarker);
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            fail("Cannot get bound of marker");
         }
+
         int x = 0;
         try {
             x = marker.getBounds().centerX();
