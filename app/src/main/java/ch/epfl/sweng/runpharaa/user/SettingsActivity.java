@@ -129,7 +129,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         };
 
     private static Preference.OnPreferenceClickListener clearCacheListener = preference -> {
-            new ImageLoader(preference.getContext()).clearCache();
+            ImageLoader.getLoader(preference.getContext()).clearCache();
             Toast.makeText(preference.getContext(), "Cache cleared !", Toast.LENGTH_SHORT).show();
             return true;
         };

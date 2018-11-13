@@ -41,30 +41,27 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private final static boolean isTest = false;
-    private final static boolean shouldFail = false;
-    private final static boolean isCancelled = false;
-    private final static boolean userExists = false;
+    public static boolean isTest = false;
+    private static boolean shouldFail = false;
+    private static boolean isCancelled = false;
+    private static boolean userExists = false;
 
 
     private final static String s_tracks = "tracks";
-    private final static String s_key = "key";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
+    private final static String s_key = "key";
 
     private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
     //Tracks already in the fakeDB
-    private static String trackUID = "0";
+    private final static String trackUID = "0";
 
     private Track t = new Track();
-    private int countLikes = 0;
-    private int countFavorites = 0;
 
     //For all mocked objects
-
     //First Level
     @Mock
     private FirebaseDatabase firebaseDatabaseMock;
@@ -74,7 +71,6 @@ public class Database {
 
 
     //Second level
-
     @Mock
     private DatabaseReference drTracks;
 
@@ -225,18 +221,6 @@ public class Database {
             }
         }).when(drUserAnyChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
-        //when(drUserAnyChild.child(any(String.class))).thenReturn(drUserAnyChild);
-        /*when(drUserAnyChildId.setValue(any(FirebaseUserAdapter.class))).thenAnswer(new Answer<Task<User>>() {
-            @Override
-            public Task<User> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if (shouldFail) {
-                    l.onFailure(new IllegalStateException("Could not retrieve User"));
-                }
-                return ;
-            }
-        });*/
-
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
@@ -351,6 +335,18 @@ public class Database {
             }
         }).when(drTracks).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataChangeRead);
+                }
+                return l;
+            }
+        }).when(drTracks).addValueEventListener(any(ValueEventListener.class));
 
         //Read tracks from drKey
         doAnswer(new Answer<ValueEventListener>() {
@@ -365,18 +361,31 @@ public class Database {
                 return l;
             }
         }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
     }
 
     private void createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084);
+        CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
         Track track = new Track("0", "Bob", "Cours forest !", Arrays.asList(coord0, coord1), p);
 
         t = track;
 
+    }
+
+    public static void setShouldFail(boolean shouldFail) {
+        Database.shouldFail = shouldFail;
+    }
+
+    public static void setIsCancelled(boolean isCancelled) {
+        Database.isCancelled = isCancelled;
+    }
+
+    public static void setUserExists(boolean userExists) {
+        Database.userExists = userExists;
     }
 }

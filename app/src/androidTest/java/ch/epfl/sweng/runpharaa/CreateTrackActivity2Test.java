@@ -10,6 +10,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -30,6 +31,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -56,17 +58,13 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateTrackActivity2Test {
+public class CreateTrackActivity2Test extends TestInitLocation {
 
     private static final int WAIT_TIME = 1000;
 
     @Rule
     public ActivityTestRule<CreateTrackActivity2> mActivityRule =
             new ActivityTestRule<>(CreateTrackActivity2.class, true, false);
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Before
     public void initUser() {
@@ -104,7 +102,7 @@ public class CreateTrackActivity2Test {
         LatLng[] points = {eiffel, placeTrocadero};
         Location[] locations = generateLocations(points);
         launchWithExtras(locations, points);
-        onView(withId(R.id.create_text_name)).perform(typeText("Name")).perform(closeSoftKeyboard());
+        sleep(2000);
         onView(withId(R.id.set_properties)).perform(click());
         onView(withId(R.id.time)).perform(typeText("10.00"))
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER))
@@ -113,6 +111,7 @@ public class CreateTrackActivity2Test {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
+        onView(withId(R.id.create_text_name)).perform(typeText("Name")).perform(closeSoftKeyboard());
         sleep(WAIT_TIME);
         selectFirstType(true);
 

@@ -1,17 +1,18 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.view.View;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -32,18 +34,22 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
+import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class MapsTest {
+public class MapsTest extends TestInitLocation {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -54,9 +60,6 @@ public class MapsTest {
         User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa", FakeGpsService.INM);
     }
 
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void testIfMapLoads() {
@@ -65,6 +68,7 @@ public class MapsTest {
         sleep(5_000);
         onView(withId(R.id.maps_test_text)).check(matches(withText("ready")));
     }
+
 
     @Test
     public void clickOnMarkerWorks() {
@@ -81,6 +85,31 @@ public class MapsTest {
             device.click(x, y-100);
             sleep(500);
             onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            fail("Couldn't find marker");
+        }
+    }
+
+    @Test
+    public void changeMapLocation(){
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.mapIcon)).perform(click());
+        sleep(5000);
+
+        onView(withId(R.id.map)).perform(swipeDown());
+        sleep(5000);
+        onView(withId(R.id.map)).perform(longClick());
+        UiDevice device = UiDevice.getInstance(getInstrumentation());
+        UiObject marker = device.findObject(new UiSelector().descriptionContains("selected Position"));
+        try{
+            marker.click();
+            int x = marker.getBounds().centerX();
+            int y = marker.getBounds().centerY();
+            device.click(x, y-50);
+            sleep(500);
+            marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
+            assertTrue(marker != null);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             fail("Couldn't find marker");

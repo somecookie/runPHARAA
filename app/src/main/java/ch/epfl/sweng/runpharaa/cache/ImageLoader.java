@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -21,38 +20,41 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class ImageLoader {
+    private static final Bitmap defaultBitmap = Util.createImage(100, 100, 0); //TODO: put id of default image here
+    private static ImageLoader INSTANCE;
+    private final ExecutorService executor;
     private MemoryCache memoryCache = new MemoryCache();
     private FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-    private final ExecutorService executor;
-    private final int defaultId = R.mipmap.ic_launcher; //TODO: put id of default image here
-    private boolean defaultWhileLoad;
 
-    public ImageLoader(Context context) {
+    private ImageLoader(Context context) {
         fileCache = new FileCache(context);
         executor = Executors.newFixedThreadPool(5);
-        defaultWhileLoad = true;
     }
 
-    public ImageLoader(Context context, boolean defaultWhileLoad) {
-        fileCache = new FileCache(context);
-        executor = Executors.newFixedThreadPool(5);
-        this.defaultWhileLoad = defaultWhileLoad;
+    public static ImageLoader getLoader(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new ImageLoader(context);
+        }
+        return INSTANCE;
     }
 
     public void displayImage(String url, ImageView view) {
+        displayImage(url, view, true);
+    }
+
+    public void displayImage(String url, ImageView view, boolean defaultWhileLoad) {
         imageViews.put(view, url);
         Bitmap b = memoryCache.get(url);
-        if(b != null)
+        if (b != null)
             view.setImageBitmap(b);
         else {
             queuePhoto(url, view);
-            if(defaultWhileLoad)
-                view.setImageResource(defaultId);
+            if (defaultWhileLoad)
+                view.setImageBitmap(defaultBitmap);
         }
     }
 
@@ -64,7 +66,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url) {
         File f = fileCache.getFile(url);
         Bitmap b = decodeFile(f);
-        if(b != null)
+        if (b != null)
             return b;
         try {
             URL imageUrl = new URL(url);
@@ -91,7 +93,7 @@ public class ImageLoader {
             o.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
-            final int REQUIRED_SIZE = 70;
+            /*final int REQUIRED_SIZE = 70;
             int tempWidth = o.outWidth, tempHeight = o.outHeight;
             int scale = 1;
 
@@ -99,15 +101,25 @@ public class ImageLoader {
                 tempWidth/= 2;
                 tempHeight/= 2;
                 scale *= 2;
-            }
+            }*/
 
             BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
+            o2.inSampleSize = 1;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private boolean imageViewReused(PhotoToLoad p) {
+        String tag = imageViews.get(p.imageView);
+        return (tag == null || !tag.equals(p.url));
+    }
+
+    public void clearCache() {
+        memoryCache.clear();
+        fileCache.clear();
     }
 
     /**
@@ -116,6 +128,7 @@ public class ImageLoader {
     private class PhotoToLoad {
         public String url;
         public ImageView imageView;
+
         PhotoToLoad(String url, ImageView view) {
             this.url = url;
             imageView = view;
@@ -131,23 +144,18 @@ public class ImageLoader {
 
         @Override
         public void run() {
-            if(imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad))
                 return;
             Bitmap b = getBitmap(photoToLoad.url);
             memoryCache.put(photoToLoad.url, b);
 
-            if(imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad))
                 return;
 
             BitmapDisplayer bd = new BitmapDisplayer(b, photoToLoad);
             Activity a = (Activity) photoToLoad.imageView.getContext();
             a.runOnUiThread(bd);
         }
-    }
-
-    private boolean imageViewReused(PhotoToLoad p) {
-        String tag = imageViews.get(p.imageView);
-        return (tag == null || !tag.equals(p.url));
     }
 
     class BitmapDisplayer implements Runnable {
@@ -161,17 +169,12 @@ public class ImageLoader {
 
         @Override
         public void run() {
-            if(imageViewReused(p))
+            if (imageViewReused(p))
                 return;
-            if(b != null)
+            if (b != null)
                 p.imageView.setImageBitmap(b);
             else
-                p.imageView.setImageResource(defaultId);
+                p.imageView.setImageBitmap(defaultBitmap);
         }
-    }
-
-    public void clearCache() {
-        memoryCache.clear();
-        fileCache.clear();
     }
 }

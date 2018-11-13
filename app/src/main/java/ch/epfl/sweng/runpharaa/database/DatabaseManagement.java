@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
@@ -35,7 +36,7 @@ public class DatabaseManagement {
     public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
-    public static FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance(); //Database.getInstance();
+    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
@@ -153,7 +154,7 @@ public class DatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
+    /*public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(User.instance.getCreatedTracks() != null){
@@ -168,7 +169,7 @@ public class DatabaseManagement {
             return Double.compare(d1, d2);
         });
         return createdTracks;
-    }
+    }*/
 
     /**
      * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.

@@ -31,14 +31,12 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
-    private ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
-        imageLoader = new ImageLoader(this, false);
 
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
             @Override
@@ -50,9 +48,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
 
-                imageLoader.displayImage(track.getImageStorageUri(), trackBackground); // caching
-                /*new DownloadImageTask(trackBackground)
-                        .execute(track.getImageStorageUri());*/
+                ImageLoader.getLoader(getBaseContext()).displayImage(track.getImageStorageUri(), trackBackground, false); // caching
 
                 TextView trackTitle = findViewById(R.id.trackTitleID);
                 trackTitle.setText(track.getName());
@@ -131,6 +127,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         });
     }
 
+    //TODO: uncomment when u need this, it's f*cking up coverage rn
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -150,9 +147,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
             i++;
         }
-
         return sb.toString();
-
     }
 
     private void updateLikes(Track track1, String trackID) {
@@ -199,51 +194,12 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
     }
 
-    private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
+    /*private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
         for (Track t : tracks) {
             if (t.getTrackUid().equals(trackID)) {
                 return t;
             }
         }
         return null;
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-
-            Bitmap decoded = null;
-
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                mIcon11 = BitmapFactory.decodeStream(in, null, options);
-
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
-                decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return decoded;
-        }
-
-        /**
-         ** Set the ImageView to the bitmap result
-         * @param result
-         */
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
+    }*/
 }
