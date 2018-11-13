@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class UserDatabaseManagement extends DatabaseManagement {
@@ -56,7 +57,6 @@ public class UserDatabaseManagement extends DatabaseManagement {
                 if(dataSnapshot.exists()) dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("DatabaseError", databaseError.getDetails());
@@ -95,12 +95,22 @@ public class UserDatabaseManagement extends DatabaseManagement {
     }
 
     public static void removeFollowedUser(final User user) {
-        String serializedUser = user.serialize();
-        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING).child(serializedUser);
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING);
+
         followedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        User userFromDatabase = null;
+                        if (child.getValue() != null) {
+                            userFromDatabase = User.deserialize(child.getValue().toString());
+                        }
+                        if (userFromDatabase != null && userFromDatabase.getUid().equals(user.getUid())) {
+                            child.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
+                        }
+                    }
+                }
             }
 
             @Override

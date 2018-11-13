@@ -175,7 +175,8 @@ public final class User implements Serializable {
      */
     public void removeFromFollowed(User u) {
         for (String serializedUser : followedUsers) {
-            if (deserialize(serializedUser).getUid().equals(u.getUid())) {
+            User deserializedUser = deserialize(serializedUser);
+            if (deserializedUser != null && deserializedUser.getUid().equals(u.getUid())) {
                 followedUsers.remove(serializedUser);
                 return;
             }
