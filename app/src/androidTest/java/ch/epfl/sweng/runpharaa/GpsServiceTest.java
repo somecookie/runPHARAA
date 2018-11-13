@@ -76,7 +76,8 @@ public class GpsServiceTest extends TestInitLocation {
         assertEquals(old, User.instance.getService().getCurrentLocation());
     }
 
-    @Test void setNewLocationParamsOnMockFails() {
+    @Test
+    public void setNewLocationParamsOnMockFails() {
         User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa", FakeGpsService.SAT);
         mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
         sleep(1000);
