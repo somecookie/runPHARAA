@@ -101,8 +101,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         LatLng[] points = {eiffel, placeTrocadero};
         Location[] locations = generateLocations(points);
         launchWithExtras(locations, points);
-        onView(withId(R.id.create_text_name)).perform(typeText("Name")).perform(closeSoftKeyboard());
-        onView(withId(R.id.set_properties)).perform(click());
         onView(withId(R.id.time)).perform(typeText("10.00"))
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER))
                 .perform(closeSoftKeyboard());
@@ -110,6 +108,8 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
+        onView(withId(R.id.set_properties)).perform(click());
+        onView(withId(R.id.create_text_name)).perform(typeText("Name")).perform(closeSoftKeyboard());
         sleep(WAIT_TIME);
         selectFirstType(true);
 
