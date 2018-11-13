@@ -35,7 +35,7 @@ public class UsersProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean isSelfUser = getIntent().getBooleanExtra("selfUser", false); // TODO should be true
+        boolean isSelfUser = getIntent().getBooleanExtra("selfUser", false); // TODO Change when other users profile are accessible, should be true
         if (isSelfUser) {
             setContentView(R.layout.activity_user);
             actualUser = User.instance;

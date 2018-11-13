@@ -24,6 +24,8 @@ public final class User implements Serializable {
     private transient int preferredRadius = 2000;
     @Exclude
     private transient LatLng location;
+    @Exclude
+    private UserCardItem userCardItem;
 
     private String name;
     private String picture;
@@ -292,5 +294,10 @@ public final class User implements Serializable {
             return null;
         }
     }
+
+    @Exclude
+    public UserCardItem getUserCardItem() { return userCardItem; }
+
+    public void setUserCardItem(UserCardItem userCardItem) { this.userCardItem = userCardItem; }
 
 }
