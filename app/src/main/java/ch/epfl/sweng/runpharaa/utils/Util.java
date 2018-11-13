@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.location.Location;
@@ -8,6 +9,8 @@ import android.location.LocationManager;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -56,6 +59,7 @@ public interface Util {
     }
 
     static double[] computeDistanceAndElevationChange(Location[] locations) {
+
         double maxAltitude = Double.NEGATIVE_INFINITY;
         double minAltitude = Double.POSITIVE_INFINITY;
         double[] res = new double[2];
@@ -71,5 +75,16 @@ public interface Util {
         }
         res[1] = maxAltitude - minAltitude;
         return res;
+    }
+
+    static Bitmap InputStreamToBitmap(InputStream inputStream) {
+        //Resize and compress image
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        final int REQUIRED_SIZE = 100;
+        Bitmap trackPhotoTemp = BitmapFactory.decodeStream(inputStream, null, options);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        trackPhotoTemp.compress(Bitmap.CompressFormat.PNG, 75, out);
+        return BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
     }
 }
