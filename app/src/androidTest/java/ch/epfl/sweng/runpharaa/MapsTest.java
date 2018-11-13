@@ -69,6 +69,7 @@ public class MapsTest extends TestInitLocation {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.mapIcon)).perform(click());
         sleep(5_000);
+
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
