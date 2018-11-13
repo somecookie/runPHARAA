@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa.cache;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ public class MemoryCache {
     private long limit = 1000000;
 
     public MemoryCache() {
+        Log.i("HI", limit+"");
         setLimit(Runtime.getRuntime().maxMemory() / 4);
     }
 

@@ -32,25 +32,10 @@ import static ch.epfl.sweng.runpharaa.user.SettingsActivity.getInt;
 public class RealGpsService extends GpsService implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private IBinder iBinder = new LocalBinder();
-
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-
-    // Needed for launching service during tests
-    public class LocalBinder extends Binder {
-        public RealGpsService getService() {
-            return RealGpsService.this;
-        }
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return iBinder;
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -64,25 +49,19 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
         return START_STICKY;
     }
 
-    /*@Override
-    public void onCreate() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-        //Toast.makeText(getApplicationContext(), "Starting GPS Service", Toast.LENGTH_SHORT).show();
-    }*/
-
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        //Toast.makeText(getApplicationContext(), "Ending GPS Service", Toast.LENGTH_SHORT).show();
         if (mGoogleApiClient.isConnected()) {
             mFusedLocationClient.removeLocationUpdates(locationCallback);
             mGoogleApiClient.disconnect();
         }
+        super.onDestroy();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @SuppressLint("MissingPermission")
@@ -94,19 +73,12 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-    }
+    public void onConnectionSuspended(int i) { }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("GPS_SERVICE", "Location services connection failed with code " + connectionResult.getErrorCode());
     }
-
-    /*@Override
-    public void onLocationChanged(Location location) {
-        Toast.makeText(this, "onLocationChanged", Toast.LENGTH_SHORT).show();
-        sendNewLocation(location);
-    }*/
 
     @Override
     protected void updateAndSendNewLocation(Location location) {

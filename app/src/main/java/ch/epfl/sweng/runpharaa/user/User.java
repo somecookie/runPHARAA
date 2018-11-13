@@ -23,8 +23,6 @@ public final class User {
     private int preferredRadius = 2000;
     @Exclude
     private LatLng location;
-    @Exclude
-    private GpsService gpsService;
 
     private String name;
     private String picture;
@@ -50,25 +48,10 @@ public final class User {
         this.likedTracks = new ArrayList<>();
         this.location = location;
         this.uid = uid;
-        this.gpsService = new RealGpsService();
-    }
-
-    public User(String name, float preferredRadius, Uri picture, LatLng location, String uid, GpsService service) {
-        this(name, (int) (preferredRadius * 1000), picture, location, uid);
-        this.gpsService = service;
     }
 
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
-    }
-
-    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId, GpsService service) {
-        instance = new User(name, preferredRadius, picture, location, uId, service);
-    }
-
-    @Exclude
-    public GpsService getService() {
-        return gpsService;
     }
 
     @Exclude

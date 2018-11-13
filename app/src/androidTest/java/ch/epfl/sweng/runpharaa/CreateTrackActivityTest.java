@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.TimeoutException;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -35,29 +36,28 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class CreateTrackActivityTest {
+public class CreateTrackActivityTest extends TestInitLocation {
+
+    Context c;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa", FakeGpsService.SAT);
+        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        GpsService.initFakeGps(FakeGpsService.SAT);
     }
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void createTrackWithTwoPoints() {
-        Context c = mActivityRule.getActivity().getBaseContext();
-        mActivityRule.getActivity().startService(new Intent(c, User.instance.getService().getClass()));
+        c = InstrumentationRegistry.getTargetContext();
+        c.startService(new Intent(c, GpsService.getInstance().getClass()));
         onView(withId(R.id.fab)).perform(click());
         sleep(3000);
         onView(withId(R.id.start_create_button)).perform(click());
         onView(withId(R.id.start_create_button)).perform(click());
-        User.instance.getService().setNewLocation(c, Util.locationFromLatLng(new LatLng(46.506279, 6.626111))); // Ouchy
+        GpsService.getInstance().setNewLocation(c, Util.locationFromLatLng(new LatLng(46.506279, 6.626111))); // Ouchy
         sleep(3000);
         onView(withId(R.id.start_create_button)).perform(click());
     }
