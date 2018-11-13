@@ -265,7 +265,7 @@ public final class User implements Serializable {
         return uid.hashCode();
     }
 
-    public String serialize() {
+    private String serialize() {
         String serialized = "";
 
         try {
