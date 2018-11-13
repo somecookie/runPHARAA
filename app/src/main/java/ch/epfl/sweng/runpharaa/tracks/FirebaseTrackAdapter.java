@@ -85,6 +85,39 @@ public class FirebaseTrackAdapter {
         this.imageStorageUri = track.getImageStorageUri();
     }
 
+    public FirebaseTrackAdapter(String name, String trackUid, String creatorId, List<CustLatLng> path,
+                                String imageStorageUri, List<String> trackTypes, double length, double heightDifference,
+                                int avgDiffTotal, int avgDiffNbr, double avgDurTotal, int avgDurNbr, int likes, int favorites) {
+        Required.nonNull(name, "Track name send to database must be non null");
+        Required.nonNull(creatorId, "Track creatorId send to database must be non null");
+        Required.nonNull(path, "Track path sent to database must be non null");
+        Required.nonNull(imageStorageUri, "Track imageStorageUri sent to database must be non null");
+        Required.nonNull(trackTypes, "Track types sent to database must be non null");
+        Required.nonNull(length, "Track length sent to database must be non null");
+        Required.nonNull(heightDifference, "Track height difference sent to database must be non null");
+        Required.nonNull(avgDiffTotal, "Track average difficulty total sent to database must be non null");
+        Required.nonNull(avgDurTotal, "Track average duration total sent to database must be non null");
+        Required.nonNull(avgDiffNbr, "Track number of average difficulties sent to database must be non null");
+        Required.nonNull(avgDurNbr, "Track number of average durations sent to database must be non null");
+        Required.nonNull(likes, "Track likes sent to database must be non null");
+        Required.nonNull(favorites, "Track favorites sent to database must be non null");
+
+        this.name = name;
+        this.trackUid = trackUid;
+        this.creatorId = creatorId;
+        this.path = path;
+        this.imageStorageUri = imageStorageUri;
+        this.trackTypes = trackTypes;
+        this.length = length;
+        this.heightDifference = heightDifference;
+        this.avgDiffTotal = avgDiffTotal;
+        this.avgDiffNbr = avgDiffNbr;
+        this.avgDurTotal = avgDurTotal;
+        this.avgDurNbr = avgDurNbr;
+        this.likes = likes;
+        this.favorites = favorites;
+    }
+
     //For Firebase
     public FirebaseTrackAdapter(){}
 

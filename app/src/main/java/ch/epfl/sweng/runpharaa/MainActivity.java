@@ -188,14 +188,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         TextView maxTime = mView.findViewById(R.id.maxTime);
@@ -218,14 +214,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         builder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
@@ -236,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         builder.setCancelable(false);
-
         builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -262,8 +253,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-
 
         builder.setView(mView);
         AlertDialog dialog = builder.create();
