@@ -43,6 +43,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertTrue;
 
+import ch.epfl.sweng.runpharaa.Firebase.Database;
+
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
 
@@ -112,11 +114,10 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
     @Test
     public void testTrackPropertiesMap() {
-        mActivityRule.launchActivity(null);
-        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
-                actionOnItemAtPosition(0, click()));
+        Track t1 = createTrack();
+        launchWithExtras(t1);
         sleep(5_000);
-        onView(withId(R.id.create_map_view2)).check(matches(withText("ready")));
+        onView(withId(R.id.maps_test_text2)).check(matches(withText("ready")));
     }
 
     private Track createTrack() {

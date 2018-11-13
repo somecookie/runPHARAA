@@ -141,6 +141,12 @@
                 android:layout_weight="65"
                 tools:context=".CreateTrackActivity2" />
 
+            <TextView
+                android:id="@+id/maps_test_text2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text=""/>
+
 
         </LinearLayout>
     </LinearLayout>

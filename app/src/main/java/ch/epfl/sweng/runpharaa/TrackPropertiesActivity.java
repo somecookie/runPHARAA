@@ -47,6 +47,7 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     private LatLng[] points;
+    private TextView testText;
     private ImageLoader imageLoader;
 
     @Override
@@ -55,6 +56,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
         imageLoader = new ImageLoader(this, false);
+        testText = findViewById(R.id.maps_test_text2);
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
@@ -268,11 +270,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         map = googleMap;
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-        // Make map static
         map.setOnMarkerClickListener(marker -> true);
-
         // Adapt padding to fit markers
         map.setPadding(50, 150, 50, 50);
+        testText.setText("ready");
     }
 
     /**

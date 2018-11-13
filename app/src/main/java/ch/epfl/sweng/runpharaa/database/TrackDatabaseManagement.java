@@ -56,22 +56,6 @@ public class TrackDatabaseManagement {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
         byte[] data = baos.toByteArray();
 
-        /*StorageReference trackImageRef = mStorageRef.child(TRACK_IMAGE_PATH).child(key);
-        UploadTask uploadTask = trackImageRef.putBytes(data);
-        uploadTask.addOnFailureListener(e -> Log.e("Storage", "Failed to upload image to storage : " + e.getMessage()));
-        uploadTask.addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                trackImageRef.getDownloadUrl().addOnFailureListener(e ->
-                        Log.e("Storage", "Failed to download image url : "+ e.getMessage())).addOnCompleteListener(task1 -> {
-                    if(task1.isSuccessful()){
-                        track.setImageStorageUri(task1.getResult().toString());
-                        track.setTrackUid(key);
-                        DatabaseReference trackRef = mDataBaseRef.child(TRACKS_PATH).child(key);
-                        trackRef.setValue(track).addOnFailureListener(e ->
-                                Log.e("Database", "Failed to upload new track : " + e.getMessage())).addOnSuccessListener(aVoid -> {
-                            User.instance.addToCreatedTracks(key);
-                            UserDatabaseManagement.updateCreatedTracks(key);*/
-
         UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -114,7 +98,6 @@ public class TrackDatabaseManagement {
      * @param track
      */
     public static void updateTrack(Track track){
-        //Check if track exists? Return a success or error message?
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
     }
 
