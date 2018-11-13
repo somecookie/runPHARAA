@@ -8,11 +8,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class UserDatabaseManagement extends DatabaseManagement {
-    private final static String USERS = "users";
+    public final static String USERS = "users";
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";
     private final static String CREATE = "createdTracks";
@@ -115,5 +118,17 @@ public class UserDatabaseManagement extends DatabaseManagement {
                 Log.e("DatabaseError", databaseError.getDetails());
             }
         });
+    }
+
+    public static List<User> initFragmentFollowing(DataSnapshot data) {
+        List<User> users = new ArrayList<>();
+        DataSnapshot followed = data.child(User.instance.getUid()).child(FOLLOWING);
+        for (DataSnapshot f : followed.getChildren()) {
+            if (followed.getValue() != null) {
+                users.add(User.deserialize(followed.getValue().toString()));
+            }
+        }
+
+        return users;
     }
 }

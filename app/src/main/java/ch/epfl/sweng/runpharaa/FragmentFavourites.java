@@ -59,6 +59,8 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
 
                 if (listCardItem.isEmpty())
                     setEmptyMessage();
+
+                swipeLayout.setRefreshing(false);
             }
 
             @Override
