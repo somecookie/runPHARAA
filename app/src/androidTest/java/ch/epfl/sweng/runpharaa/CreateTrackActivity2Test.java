@@ -10,6 +10,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -86,7 +87,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
 
     // ------------- TESTS ---------------
 
-    @Test
+    @LargeTest
     public void correctValuesDisplayedForInmBananeCs() {
         LatLng[] points = {inm, banane, cs};
         Location[] locations = generateLocations(points);
@@ -96,7 +97,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_total_distance)).check(matches(withText(String.format("Total distance: %.2f m", skrr[0]))));
     }
 
-    @Test
+    @LargeTest
     public void createTrackWorksWithTwoFakePoints() {
         LatLng[] points = {eiffel, placeTrocadero};
         Location[] locations = generateLocations(points);
@@ -116,7 +117,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_track_button)).perform(click());
     }
 
-    @Test
+    @LargeTest
     public void creatingTrackWithoutSettingPropertiesFails() {
         LatLng[] points = {buckingham, localPub};
         Location[] locations = generateLocations(points);
@@ -130,7 +131,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     }
 
 
-    @Test
+    @LargeTest
     public void creatingTrackWithoutSettingTypesFails() {
         LatLng[] points = {marina, esplaTheatre};
         Location[] locations = generateLocations(points);
@@ -150,7 +151,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .check(matches(isDisplayed()));
     }
 
-    @Test
+    @LargeTest
     public void slideBarCorrectlyUpdatesDifficulty() {
         LatLng[] points = {inm, banane};
         Location[] locations = generateLocations(points);
@@ -174,7 +175,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .check(matches(isDisplayed()));
     }
 
-    @Test
+    @LargeTest
     public void creatingTrackWithoutSettingNameFails() {
         LatLng[] points = {inm, banane};
         Location[] locations = generateLocations(points);

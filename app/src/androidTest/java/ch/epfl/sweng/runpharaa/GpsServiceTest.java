@@ -62,7 +62,7 @@ public class GpsServiceTest extends TestInitLocation {
     public void getLocationFromGps() {
         User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
         mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
-        sleep(1000);
+        sleep(3000);
         assertTrue(User.instance.getService().getCurrentLocation() != null);
     }
 
@@ -74,6 +74,15 @@ public class GpsServiceTest extends TestInitLocation {
         Location old = User.instance.getService().getCurrentLocation();
         User.instance.getService().setNewLocation(mActivityRule.getActivity().getBaseContext(), Util.locationFromLatLng(new LatLng(0,0)));
         assertEquals(old, User.instance.getService().getCurrentLocation());
+    }
+
+    @Test void setNewLocationParamsOnMockFails() {
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa", FakeGpsService.SAT);
+        mActivityRule.getActivity().startService(new Intent(mActivityRule.getActivity().getBaseContext(), User.instance.getService().getClass()));
+        sleep(1000);
+        User.instance.getService().setTimeInterval(0);
+        User.instance.getService().setMinTimeInterval(0);
+        User.instance.getService().setMinDistanceInterval(0);
     }
 
     @After
