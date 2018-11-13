@@ -40,7 +40,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -108,7 +107,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 } else {
                     // TODO: add track to created tracks
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(nameText.getText().toString(), User.instance.getID(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                    Track track = new Track(nameText.getText().toString(), User.instance.getUid(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
                     DatabaseManagement.writeNewTrack(track );
                     finish();
                 }

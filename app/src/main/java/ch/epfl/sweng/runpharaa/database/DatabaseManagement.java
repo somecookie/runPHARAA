@@ -1,15 +1,9 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,12 +16,11 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
-import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -41,8 +34,8 @@ public class DatabaseManagement {
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
-    public DatabaseManagement() { }
-
+    public DatabaseManagement() {
+    }
 
 
     /**
@@ -61,34 +54,16 @@ public class DatabaseManagement {
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Storage", "Failed to upload image to storage :" + e.getMessage());
-            }
-        });
+        uploadTask.addOnFailureListener(e -> Log.e("Storage", "Failed to upload image to storage :" + e.getMessage()));
         uploadTask.addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Storage", "Failed to download image url :"+ e.getMessage());
-                    }
-                }).addOnCompleteListener(task1 -> {
-                    if(task1.isSuccessful()){
+            if (task.isSuccessful()) {
+                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(e -> Log.e("Storage", "Failed to download image url :" + e.getMessage())).addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
                         track.setImageStorageUri(task1.getResult().toString());
                         track.setTrackUid(key);
-                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("Database", "Failed to upload new track :" + e.getMessage());
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                User.instance.addToCreatedTracks(key);
-                                UserDatabaseManagement.updateCreatedTracks(key);
-                            }
+                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(e -> Log.e("Database", "Failed to upload new track :" + e.getMessage())).addOnSuccessListener(aVoid -> {
+                            User.instance.addToCreatedTracks(key);
+                            UserDatabaseManagement.updateCreatedTracks(key);
                         });
                     }
                 });
@@ -101,7 +76,7 @@ public class DatabaseManagement {
      *
      * @param track
      */
-    public static void updateTrack(Track track){
+    public static void updateTrack(Track track) {
         //TODO check if it works
         //Check if track exists? Return a success or error message?
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
@@ -114,8 +89,8 @@ public class DatabaseManagement {
      * @param key
      * @return
      */
-    public static Track initTrack(DataSnapshot dataSnapshot, String key){
-       return dataSnapshot.child(key).getValue(Track.class);
+    public static Track initTrack(DataSnapshot dataSnapshot, String key) {
+        return dataSnapshot.child(key).getValue(Track.class);
     }
 
     /**
@@ -124,25 +99,23 @@ public class DatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location){
+    public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location) {
         List<Track> tracksNearMe = new ArrayList<>();
-        for(DataSnapshot c : dataSnapshot.getChildren()){
+        for (DataSnapshot c : dataSnapshot.getChildren()) {
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if(c.child("startingPoint").getValue(CustLatLng.class) != null) {
+            if (c.child("startingPoint").getValue(CustLatLng.class) != null) {
                 if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
                     tracksNearMe.add(c.getValue(Track.class));
                 }
             }
         }
-        Collections.sort(tracksNearMe, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(location));
-                return Double.compare(d1, d2);
-            }
+
+        Collections.sort(tracksNearMe, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
         });
         return tracksNearMe;
     }
@@ -176,9 +149,9 @@ public class DatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot){
+    public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot) {
         List<Track> favouriteTracks = new ArrayList<>();
-        for(DataSnapshot c : dataSnapshot.getChildren()) {
+        for (DataSnapshot c : dataSnapshot.getChildren()) {
             if (User.instance.getFavoriteTracks() != null) {
                 if (User.instance.getFavoriteTracks().contains(c.getKey())) {
                     favouriteTracks.add(c.getValue(Track.class));
@@ -189,21 +162,13 @@ public class DatabaseManagement {
     }
 
     /**
-     * Listener interface for the mReadDataOnce method.
-     */
-    public interface OnGetDataListener {
-        void onSuccess(DataSnapshot data);
-        void onFailed(DatabaseError databaseError);
-    }
-
-    /**
      * Read the data from the Firebase Database. Two methods to override.
      *
      * @param child
      * @param listener
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
-        DatabaseReference ref =  mDataBaseRef.child(child);
+        DatabaseReference ref = mDataBaseRef.child(child);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -216,5 +181,14 @@ public class DatabaseManagement {
             }
         });
 
+    }
+
+    /**
+     * Listener interface for the mReadDataOnce method.
+     */
+    public interface OnGetDataListener {
+        void onSuccess(DataSnapshot data);
+
+        void onFailed(DatabaseError databaseError);
     }
 }
