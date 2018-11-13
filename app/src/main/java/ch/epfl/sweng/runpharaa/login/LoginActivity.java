@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.testfairy.TestFairy;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
@@ -41,6 +43,7 @@ import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -104,8 +107,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                // TODO: setting a fake user for now, change it later
-                //User.set("Fake User", 2000, null, new ArrayList<String>(), new ArrayList<String>(), lastLocation, false, "Fake User");
+                User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+                GpsService.initFakeGps(FakeGpsService.GOOGLE);
                 launchApp();
                 break;
             case R.id.sign_in_button_google:
@@ -184,7 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Launch the main app
      */
     private void launchApp() {
-        startService(new Intent(getBaseContext(), User.instance.getService().getClass()));
+        startService(new Intent(getBaseContext(), GpsService.getInstance().getClass()));
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(launchIntent);
         finish();

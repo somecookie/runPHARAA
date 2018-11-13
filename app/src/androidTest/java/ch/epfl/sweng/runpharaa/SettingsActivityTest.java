@@ -30,6 +30,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -56,17 +58,13 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class SettingsActivityTest {
+public class SettingsActivityTest extends TestInitLocation {
 
     Resources r;
 
     @Rule
     public final ActivityTestRule<SettingsActivity> mActivityRule =
             new ActivityTestRule<>(SettingsActivity.class);
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @BeforeClass
     public static void initUser() {
