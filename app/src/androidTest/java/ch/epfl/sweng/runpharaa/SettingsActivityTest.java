@@ -133,7 +133,7 @@ public class SettingsActivityTest extends TestInitLocation {
                 isDisplayed()))
                 .perform(replaceText(value));
 
-        onView(allOf(withResName("button1"),
+        onView(allOf(withId(android.R.id.button1),
                 isDisplayed()))
                 .perform(click());
     }
