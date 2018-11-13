@@ -50,6 +50,7 @@ public final class User {
         this.createdTracks = new ArrayList<>();
         this.favoriteTracks = new ArrayList<>();
         this.likedTracks = new ArrayList<>();
+        this.followedUsers = new ArrayList<>();
         this.location = location;
         this.uid = uid;
         this.gpsService = new RealGpsService();
@@ -81,15 +82,6 @@ public final class User {
     @Exclude
     public void setPreferredRadius(float newRadius) {
         this.preferredRadius = (int) (newRadius * 1000);
-    }
-
-
-    public boolean alreadyFollowed(User u) {
-        return followedUsers.contains(u);
-    }
-
-    public void addFollower(User u) {
-        if (!alreadyFollowed(u)) followedUsers.add(u);
     }
 
     /**
@@ -162,23 +154,23 @@ public final class User {
     /**
      * Check if a User id is in the set of followed users
      *
-     * @param userId
+     * @param u
      */
-    public boolean alreadyInFollowed(String userId) { return followedUsers.contains(userId); }
+    public boolean alreadyInFollowed(User u) { return followedUsers.contains(u); }
 
     /**
      * Add a User id in the set of followed users
      *
      * @param u
      */
-    public void addToFollowed(User u) { followedUsers.add(u); }
+    public void addToFollowed(User u) { if (!alreadyInFollowed(u)) followedUsers.add(u); }
 
     /**
      * Remove a User id from the set of followed users
      *
-     * @param userId
+     * @param u
      */
-    public void removeFromFollowed(String userId) { followedUsers.remove(userId); }
+    public void removeFromFollowed(User u) { followedUsers.remove(u); }
 
     /**
      * Getter for the user's location
