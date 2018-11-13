@@ -163,11 +163,9 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             UserDatabaseManagement.updateLikedTracks(User.instance);
         }
         DatabaseManagement.updateTrack(track);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-                trackLikesUpdated.setText(""+track.getProperties().getLikes());
-            }
+        runOnUiThread(() -> {
+            TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
+            trackLikesUpdated.setText(""+track.getProperties().getLikes());
         });
 
     }
