@@ -87,7 +87,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
 
     // ------------- TESTS ---------------
 
-    @LargeTest
+    @Test
     public void correctValuesDisplayedForInmBananeCs() {
         LatLng[] points = {inm, banane, cs};
         Location[] locations = generateLocations(points);
@@ -97,7 +97,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_total_distance)).check(matches(withText(String.format("Total distance: %.2f m", skrr[0]))));
     }
 
-    @LargeTest
+    @Test
     public void createTrackWorksWithTwoFakePoints() {
         LatLng[] points = {eiffel, placeTrocadero};
         Location[] locations = generateLocations(points);
@@ -117,7 +117,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_track_button)).perform(click());
     }
 
-    @LargeTest
+    @Test
     public void creatingTrackWithoutSettingPropertiesFails() {
         LatLng[] points = {buckingham, localPub};
         Location[] locations = generateLocations(points);
@@ -131,7 +131,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     }
 
 
-    @LargeTest
+    @Test
     public void creatingTrackWithoutSettingTypesFails() {
         LatLng[] points = {marina, esplaTheatre};
         Location[] locations = generateLocations(points);
@@ -151,7 +151,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .check(matches(isDisplayed()));
     }
 
-    @LargeTest
+    @Test
     public void slideBarCorrectlyUpdatesDifficulty() {
         LatLng[] points = {inm, banane};
         Location[] locations = generateLocations(points);
@@ -175,7 +175,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .check(matches(isDisplayed()));
     }
 
-    @LargeTest
+    @Test
     public void creatingTrackWithoutSettingNameFails() {
         LatLng[] points = {inm, banane};
         Location[] locations = generateLocations(points);
