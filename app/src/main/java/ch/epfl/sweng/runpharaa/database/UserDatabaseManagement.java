@@ -1,9 +1,7 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.support.annotation.NonNull;
-import android.telecom.Call;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,7 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class UserDatabaseManagement extends DatabaseManagement {
@@ -119,5 +116,4 @@ public class UserDatabaseManagement extends DatabaseManagement {
             }
         });
     }
-
 }
