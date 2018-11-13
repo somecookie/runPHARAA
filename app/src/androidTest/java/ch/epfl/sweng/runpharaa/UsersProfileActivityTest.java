@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.Initializer.TestInitNoLocation;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -30,7 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class UsersProfileActivityTest extends TestInitNoLocation {
+public class UsersProfileActivityTest extends TestInitLocation {
 
     @Rule
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =

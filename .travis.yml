@@ -14,8 +14,8 @@ android:
     #- extra-android-m2repository # needed for play services
     #- addon-google_apis-google-19 # google apis
     #- sys-img-armeabi-v7a-google_apis-21 # image to be used for emulator, make sure it's a apis-google one
-    - android-16
-    - sys-img-armeabi-v7a-android-16
+    - android-19
+    - sys-img-armeabi-v7a-android-19
 
 # Uncomment if you are getting install timeouts
 env:
@@ -41,7 +41,7 @@ notifications:
 before_script:
   # Emulator Management: Create, Start and Wait: put the android version you chose for emulator and make sure you put the right abi (google_apis/armeabi-v7a)
   # - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
-  - echo no | android create avd --force -n test -t android-16 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell settings put global window_animation_scale 0 &
