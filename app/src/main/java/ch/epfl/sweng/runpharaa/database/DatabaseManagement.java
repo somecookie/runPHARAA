@@ -1,14 +1,11 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +21,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -60,34 +56,16 @@ public class DatabaseManagement {
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Storage", "Failed to upload image to storage :" + e.getMessage());
-            }
-        });
+        uploadTask.addOnFailureListener(e -> Log.e("Storage", "Failed to upload image to storage :" + e.getMessage()));
         uploadTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Storage", "Failed to download image url :"+ e.getMessage());
-                    }
-                }).addOnCompleteListener(task1 -> {
+                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(e -> Log.e("Storage", "Failed to download image url :"+ e.getMessage())).addOnCompleteListener(task1 -> {
                     if(task1.isSuccessful()){
                         track.setImageStorageUri(task1.getResult().toString());
                         track.setTrackUid(key);
-                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("Database", "Failed to upload new track :" + e.getMessage());
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                User.instance.addToCreatedTracks(key);
-                                UserDatabaseManagement.updateCreatedTracks(key);
-                            }
+                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(e -> Log.e("Database", "Failed to upload new track :" + e.getMessage())).addOnSuccessListener(aVoid -> {
+                            User.instance.addToCreatedTracks(key);
+                            UserDatabaseManagement.updateCreatedTracks(key);
                         });
                     }
                 });
@@ -133,13 +111,10 @@ public class DatabaseManagement {
                 tracksNearMe.add(c.getValue(Track.class));
             }
         }
-        Collections.sort(tracksNearMe, new Comparator<Track>() {
-            @Override
-            public int compare(Track o1, Track o2) {
-                double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-                return Double.compare(d1, d2);
-            }
+        Collections.sort(tracksNearMe, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
         });
         return tracksNearMe;
     }
