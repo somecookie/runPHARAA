@@ -47,7 +47,6 @@ public class FragmentFollowing extends UpdatableCardItemFragment {
                 //List<Track> tracks = DatabaseManagement.initFavouritesTracks(data);
 
                 List<User> users = UserDatabaseManagement.initFragmentFollowing(data);
-                System.out.println("____________________"+users.size());
 
                 for (User u : users) {
                     //u.setCardItem(new CardItem());
