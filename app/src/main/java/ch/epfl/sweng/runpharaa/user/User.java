@@ -22,9 +22,7 @@ public final class User implements Serializable {
     public transient static User instance;
     @Exclude
     private transient int preferredRadius = 2000;
-
     @Exclude
-
     private transient LatLng location;
 
     private String name;

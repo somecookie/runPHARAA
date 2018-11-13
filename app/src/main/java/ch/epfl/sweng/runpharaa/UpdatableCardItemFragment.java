@@ -74,7 +74,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         @Override
         public Adapter.viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View v = layoutInflater.inflate(R.layout.card_item, viewGroup, false);
+            View v = layoutInflater.inflate(R.layout.track_card_item, viewGroup, false);
             return new Adapter.viewHolder(v);
         }
 
