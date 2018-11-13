@@ -55,7 +55,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
         final Intent intent = getIntent();
-        imageLoader = new ImageLoader(this, false);
+        imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
@@ -72,9 +72,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
 
-                imageLoader.displayImage(track.getImageStorageUri(), trackBackground); // caching
-                /*new DownloadImageTask(trackBackground)
-                        .execute(track.getImageStorageUri());*/
+                ImageLoader.getLoader(getBaseContext()).displayImage(track.getImageStorageUri(), trackBackground, false); // caching
 
                 TextView trackTitle = findViewById(R.id.trackTitleID);
                 trackTitle.setText(track.getName());
@@ -152,6 +150,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         mapFragment.getMapAsync(this);
     }
 
+    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -171,9 +170,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
             i++;
         }
-
         return sb.toString();
-    }
+    }*/
 
     private void updateLikes(Track track1, String trackID) {
         final Track track = track1;
@@ -215,7 +213,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
-    private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
+    /*private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
         for (Track t : tracks) {
             if (t.getTrackUid().equals(trackID)) {
                 return t;
@@ -258,10 +256,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
          ** Set the ImageView to the bitmap result
          * @param result
          */
-        protected void onPostExecute(Bitmap result) {
+        /*protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
         }
-    }
+    }*/
 
     @SuppressLint("MissingPermission")
     @Override
@@ -297,5 +295,4 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             map.addMarker(new MarkerOptions().position(points[points.length - 1]).icon(defaultMarker(20)).alpha(0.8f));
         }
     }
-
 }

@@ -26,8 +26,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitNoLocation {
@@ -41,6 +44,7 @@ public class UsersProfileActivityTest extends TestInitNoLocation {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
     }
 
+    
     @Test
     public void correctlyDisplaysName() {
         mActivityRule.launchActivity(new Intent());
@@ -74,11 +78,14 @@ public class UsersProfileActivityTest extends TestInitNoLocation {
     }
 
     @Test
-    public void logoutButtonLeadsToSignIn() {
+    public void logoutButtonLogOut() {
         Intents.init();
         mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.sign_out_button)).perform(click());
-        intended(hasComponent(LoginActivity.class.getName()));
+        //intended(hasComponent(LoginActivity.class.getName()));
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.loggedOut)))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
         Intents.release();
     }
 }

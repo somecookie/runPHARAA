@@ -41,28 +41,25 @@ import static org.mockito.Mockito.when;
 public class Database {
 
     public static boolean isTest = false;
-    private final static boolean shouldFail = false;
-    private final static boolean isCancelled = false;
-    private final static boolean userExists = false;
+    private static boolean shouldFail = false;
+    private static boolean isCancelled = false;
+    private static boolean userExists = false;
 
     private final static String s_tracks = "tracks";
-    private final static String s_key = "key";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
+    private final static String s_key = "key";
 
     private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
     //Tracks already in the fakeDB
-    private static String trackUID = "0";
+    private final static String trackUID = "0";
 
     private Track t = new Track();
-    private int countLikes = 0;
-    private int countFavorites = 0;
 
     //For all mocked objects
-
     //First Level
     @Mock
     private FirebaseDatabase firebaseDatabaseMock;
@@ -72,7 +69,6 @@ public class Database {
 
 
     //Second level
-
     @Mock
     private DatabaseReference drTracks;
 
@@ -325,7 +321,6 @@ public class Database {
                 if (isCancelled) {
                     l.onCancelled(snapOnDataErrorRead);
                 } else {
-                    Log.i("BEUZER", "HUGO LA GALETTE");
                     l.onDataChange(snapOnDataChangeRead);
                 }
                 return l;
@@ -339,7 +334,6 @@ public class Database {
                 if (isCancelled) {
                     l.onCancelled(snapOnDataErrorRead);
                 } else {
-                    Log.i("BEUZER", "HUGO LA GALETTE #2");
                     l.onDataChange(snapOnDataChangeRead);
                 }
                 return l;
@@ -373,5 +367,17 @@ public class Database {
 
         t = track;
 
+    }
+
+    public static void setShouldFail(boolean shouldFail) {
+        Database.shouldFail = shouldFail;
+    }
+
+    public static void setIsCancelled(boolean isCancelled) {
+        Database.isCancelled = isCancelled;
+    }
+
+    public static void setUserExists(boolean userExists) {
+        Database.userExists = userExists;
     }
 }

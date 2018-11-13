@@ -121,7 +121,6 @@ public class TrackDatabaseManagement {
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location){
         List<Track> tracksNearMe = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            Log.i("WESHH", c.toString());
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
             if(c.child("startingPoint").getValue(CustLatLng.class) != null) {
@@ -147,7 +146,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
+    /*public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(User.instance.getCreatedTracks() != null){
@@ -162,7 +161,7 @@ public class TrackDatabaseManagement {
             return Double.compare(d1, d2);
         });
         return createdTracks;
-    }
+    }*/
 
     /**
      * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
@@ -203,11 +202,9 @@ public class TrackDatabaseManagement {
      */
     public static void mReadDataOnce(String child, final OnGetDataListener listener) {
         DatabaseReference ref =  mDataBaseRef.child(child);
-        Log.i("WESHHHHHHHHH",ref.toString() );
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("WESHHHHHHHHH","2" );
                 listener.onSuccess(dataSnapshot);
             }
 
