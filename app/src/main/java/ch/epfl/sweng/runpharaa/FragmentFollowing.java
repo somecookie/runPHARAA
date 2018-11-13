@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 public class FragmentFollowing extends UpdatableCardItemFragment {
 
@@ -29,34 +31,32 @@ public class FragmentFollowing extends UpdatableCardItemFragment {
     @Override
     protected void loadData() {
         emptyMessage.setVisibility(View.GONE);
-        // Create a fresh recyclerView and listCardItem
+        // Create a fresh recyclerView and listTrackCardItem
 
         UserDatabaseManagement.mReadDataOnce(UserDatabaseManagement.USERS, new UserDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 //RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-                List<CardItem> listCardItem = new ArrayList<>();
+                List<TrackCardItem> listTrackCardItem = new ArrayList<>();
                 OnItemClickListener listener = new OnItemClickListener() {
                     @Override
-                    public void onItemClick(CardItem item) {
-                        //Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                        //intent.putExtra("TrackID", item.getParentTrackID());
-                        //startActivity(intent);
+                    public void onItemClick(TrackCardItem item) {
+                        Intent intent = new Intent(getContext(), UsersProfileActivity.class);
+                        //intent.putExtra("UserID", item.getParentUserID());
+                        startActivity(intent);
                     }
                 };
-                //List<Track> tracks = DatabaseManagement.initFavouritesTracks(data);
 
                 List<User> users = UserDatabaseManagement.initFragmentFollowing(data);
-
                 for (User u : users) {
-                    //u.setCardItem(new CardItem());
-                    //listCardItem.add(u.getCardItem());
+                    //u.setTrackCardItem(new TrackCardItem());
+                    //listTrackCardItem.add(u.getTrackCardItem());
                 }
-                Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+                Adapter adapter = new Adapter(getActivity(), listTrackCardItem, listener);
                 //recyclerView.setAdapter(adapter);
                 //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                if (listCardItem.isEmpty())
+                if (listTrackCardItem.isEmpty())
                     setEmptyMessage();
 
                 swipeLayout.setRefreshing(false);

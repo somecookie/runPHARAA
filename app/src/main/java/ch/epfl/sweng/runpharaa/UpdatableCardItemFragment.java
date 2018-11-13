@@ -1,29 +1,18 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
@@ -34,7 +23,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     TextView emptyMessage;
 
     public interface OnItemClickListener {
-        void onItemClick(CardItem item);
+        void onItemClick(TrackCardItem item);
     }
 
     @Nullable
@@ -72,12 +61,12 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
 
     protected class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
         Context context;
-        List<CardItem> listCardItem;
+        List<TrackCardItem> listTrackCardItem;
         OnItemClickListener listener;
 
-        Adapter(Context context, List<CardItem> listCardItem, OnItemClickListener listener) {
+        Adapter(Context context, List<TrackCardItem> listTrackCardItem, OnItemClickListener listener) {
             this.context = context;
-            this.listCardItem = listCardItem;
+            this.listTrackCardItem = listTrackCardItem;
             this.listener = listener;
         }
 
@@ -92,16 +81,16 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         @Override
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            viewHolder.name.setText(listCardItem.get(position).getName());
+            viewHolder.name.setText(listTrackCardItem.get(position).getName());
 
-            ImageLoader.getLoader(getContext()).displayImage(listCardItem.get(position).getImageURL(), viewHolder.background_img);
+            ImageLoader.getLoader(getContext()).displayImage(listTrackCardItem.get(position).getImageURL(), viewHolder.background_img);
 
-            viewHolder.bind(listCardItem.get(position), listener);
+            viewHolder.bind(listTrackCardItem.get(position), listener);
         }
 
         @Override
         public int getItemCount() {
-            return listCardItem.size();
+            return listTrackCardItem.size();
         }
 
         public class viewHolder extends RecyclerView.ViewHolder {
@@ -116,7 +105,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
                 name = itemView.findViewById(R.id.nameID);
             }
 
-            public void bind(final CardItem item, final OnItemClickListener listener) {
+            public void bind(final TrackCardItem item, final OnItemClickListener listener) {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

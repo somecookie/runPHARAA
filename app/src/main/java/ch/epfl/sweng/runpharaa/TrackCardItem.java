@@ -2,15 +2,15 @@ package ch.epfl.sweng.runpharaa;
 
 import android.graphics.Bitmap;
 
-public class CardItem {
+public class TrackCardItem {
     private Bitmap background; //TODO: Keep for Image caching.
     private String name;
     private String parentTrackID;
     private String imageURL;
 
-    public CardItem() { }
+    public TrackCardItem() { }
 
-    public CardItem(/*Bitmap background,*/ String name, String parentTrackID, String imageURL) {
+    public TrackCardItem(/*Bitmap background,*/ String name, String parentTrackID, String imageURL) {
         //this.background = background;
         this.name = name;
         this.parentTrackID = parentTrackID;

@@ -32,31 +32,31 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
      */
     protected void loadData() {
         emptyMessage.setVisibility(View.GONE);
-        // Create a fresh recyclerView and listCardItem
+        // Create a fresh recyclerView and listTrackCardItem
         String s = DatabaseManagement.TRACKS_PATH;
 
         DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-                List<CardItem> listCardItem = new ArrayList<>();
+                List<TrackCardItem> listTrackCardItem = new ArrayList<>();
 
                 List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
 
                 for (Track t : tracks) {
-                    t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
-                    listCardItem.add(t.getCardItem());
+                    t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
+                    listTrackCardItem.add(t.getTrackCardItem());
                 }
                 OnItemClickListener listener = item -> {
                     Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+                Adapter adapter = new Adapter(getActivity(), listTrackCardItem, listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                if (listCardItem.isEmpty()) {
+                if (listTrackCardItem.isEmpty()) {
                     setEmptyMessage();
                 }
 

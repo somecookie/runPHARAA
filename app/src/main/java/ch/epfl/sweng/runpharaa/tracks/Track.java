@@ -1,8 +1,6 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 
@@ -12,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.CardItem;
+import ch.epfl.sweng.runpharaa.TrackCardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.utils.Required;
@@ -26,7 +24,7 @@ public class Track {
     @Exclude
     private Bitmap image;
     @Exclude
-    private CardItem cardItem;
+    private TrackCardItem trackCardItem;
     private static int COUNTER_ID = 0;
 
     //Track specifics
@@ -109,7 +107,7 @@ public class Track {
     public TrackProperties getProperties() { return properties; }
 
     @Exclude
-    public CardItem getCardItem() { return cardItem; }
+    public TrackCardItem getTrackCardItem() { return trackCardItem; }
 
     public CustLatLng getStartingPoint() { return startingPoint; }
 
@@ -129,7 +127,7 @@ public class Track {
 
     public void setImageStorageUri(String imageStorageUri) { this.imageStorageUri = imageStorageUri; }
 
-    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
+    public void setTrackCardItem(TrackCardItem trackCardItem) { this.trackCardItem = trackCardItem; }
 
     public void setTrackUid(String trackUid) { this.trackUid = trackUid; }
 }
