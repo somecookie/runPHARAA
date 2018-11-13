@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,6 +83,7 @@ public class MainActivityTest extends TestInitLocation {
         intended(hasComponent(SettingsActivity.class.getName()));
     }
 
+    @Ignore
     @Test
     public void testSetUpFilters(){
         onView(withId(R.id.filterIcon)).perform(click());

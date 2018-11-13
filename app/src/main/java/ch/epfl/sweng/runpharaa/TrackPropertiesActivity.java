@@ -55,12 +55,14 @@ public class TrackPropertiesActivity extends AppCompatActivity {
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
                 //TODO: make method like getNameFromID(uid) -> once the Users are in DB
+                /*
                 UserDatabaseManagement.downloadUser(track.getCreatorUid(), new Callback<User>() {
                     @Override
                     public void onSuccess(User value) {
                         trackCreator.setText("By "+ value.getName());
                     }
                 });
+                */
 
                 TextView trackDuration = findViewById(R.id.trackDurationID);
                 trackDuration.setText("Duration: " + tp.getAvgDuration() + " minutes");

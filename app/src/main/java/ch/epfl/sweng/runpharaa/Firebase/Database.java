@@ -28,6 +28,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -59,7 +60,7 @@ public class Database {
     //Tracks already in the fakeDB
     private final static String trackUID = "0";
 
-    private Track t = new Track();
+    private FirebaseTrackAdapter t = new FirebaseTrackAdapter();
 
     //For all mocked objects
     //First Level
@@ -194,7 +195,7 @@ public class Database {
         when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
 
 
-        when(snapInitTrackChildren.getValue(Track.class)).thenReturn(t);
+        when(snapInitTrackChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
         when(snapInitTrackChildren.child("startingPoint")).thenReturn(snapOnDataChangeReadChildStartingPoint);
         when(snapInitTrackChildren.getKey()).thenReturn("0");
 
@@ -269,9 +270,9 @@ public class Database {
         when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int fav = t.getProperties().getFavorites();
+                int fav = t.getFavorites();
                 if(fav >= 1){
-                    t.getProperties().setFavorites(fav - 1);
+                    //t.setFavorites(fav - 1);
                 }
                 return removeTask;
             }
@@ -280,9 +281,9 @@ public class Database {
         when(drUserAnyChildLikesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int likes = t.getProperties().getLikes();
+                int likes = t.getLikes();
                 if(likes >= 1){
-                    t.getProperties().setLikes(likes - 1);
+                    //t.getProperties().setLikes(likes - 1);
                 }
                 return removeTask;
             }
@@ -371,7 +372,7 @@ public class Database {
         CustLatLng coord0 = new CustLatLng(37.422, -122.084);
         CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", "Cours forest !", Arrays.asList(coord0, coord1), p);
+        FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "Bob", b, Arrays.asList(coord0, coord1), p);
 
         t = track;
 
