@@ -8,11 +8,8 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.view.View;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,6 +24,7 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -34,7 +32,6 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
-import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -57,7 +54,8 @@ public class MapsTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa", FakeGpsService.INM);
+        GpsService.initFakeGps(FakeGpsService.GOOGLE);
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
 

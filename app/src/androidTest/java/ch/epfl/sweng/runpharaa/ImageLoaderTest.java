@@ -24,7 +24,7 @@ public class ImageLoaderTest {
 
     @Before
     public void init() {
-        context = InstrumentationRegistry.getContext();
+        context = InstrumentationRegistry.getTargetContext();
         view = new ImageView(context);
         ImageLoader.getLoader(context).clearCache();
     }

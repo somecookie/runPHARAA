@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -78,7 +79,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     @Override
     protected void handleNewLocation() {
         // Get new location
-        Location location = User.instance.getService().getCurrentLocation();
+        Location location = GpsService.getInstance().getCurrentLocation();
 
         if (location == null)
             return;

@@ -44,7 +44,6 @@ public class LoginActivityTest extends TestInitLocation {
         Intents.release();
     }
 
-    // TODO: THIS INM PROBABLY CAUSED THE ROOT FOCUSED ERROR
     /*@Test
     public void connectWithGoogleSuccess(){
         Intent intent = new Intent();

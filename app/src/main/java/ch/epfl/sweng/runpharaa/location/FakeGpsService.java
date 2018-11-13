@@ -14,7 +14,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 
 public final class FakeGpsService extends GpsService {
 
-    public static FakeGpsService INM = new FakeGpsService(new LatLng(37.422, -122.084));
+    public static FakeGpsService GOOGLE = new FakeGpsService(new LatLng(37.422, -122.084));
     public static FakeGpsService SAT = new FakeGpsService(new LatLng(46.520566, 6.567820));
 
     public FakeGpsService() {}

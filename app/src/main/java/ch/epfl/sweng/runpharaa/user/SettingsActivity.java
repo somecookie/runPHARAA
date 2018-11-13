@@ -7,6 +7,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
@@ -67,7 +68,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 case PREF_KEY_MIN_DISTANCE: {
                     Preference p = findPreference(key);
                     int minDistance = getInt(sharedPreferences, key, 5);
-                    User.instance.getService().setMinDistanceInterval(minDistance);
+                    GpsService.getInstance().setMinDistanceInterval(minDistance);
                     String s = minDistance + " m";
                     p.setSummary(s);
                     break;
@@ -75,7 +76,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 case PREF_KEY_TIME_INTERVAL: {
                     Preference p = findPreference(key);
                     int time = getInt(sharedPreferences, key, 5);
-                    User.instance.getService().setTimeInterval(time);
+                    GpsService.getInstance().setTimeInterval(time);
                     String s = time + " s";
                     p.setSummary(s);
                     break;
@@ -83,7 +84,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 case PREF_KEY_MIN_TIME_INTERVAL: {
                     Preference p = findPreference(key);
                     int minTime = getInt(sharedPreferences, key, 1);
-                    User.instance.getService().setMinTimeInterval(minTime);
+                    GpsService.getInstance().setMinTimeInterval(minTime);
                     String s = minTime + " s";
                     p.setSummary(s);
                     break;
