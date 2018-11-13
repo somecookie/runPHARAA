@@ -94,8 +94,9 @@ public class UserDatabaseManagement extends DatabaseManagement {
         followedRef.setValue(user.getFollowedUsers()).addOnFailureListener(Throwable::printStackTrace);
     }
 
-    public static void removeFollowedUser(final String uID) {
-        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING).child(uID);
+    public static void removeFollowedUser(final User user) {
+        String serializedUser = user.serialize();
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING).child(serializedUser);
         followedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

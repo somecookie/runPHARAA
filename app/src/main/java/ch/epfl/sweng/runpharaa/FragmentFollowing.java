@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -94,7 +95,7 @@ public class FragmentFollowing extends Fragment implements SwipeRefreshLayout.On
             @Override
             public void onSuccess(DataSnapshot data) {
 
-                List<User> followedUsers = User.instance.getFollowedUsers();
+                //List<User> followedUsers = User.instance.getFollowedUsers();
 
             }
 

@@ -1,10 +1,17 @@
 package ch.epfl.sweng.runpharaa.user;
 
 import android.net.Uri;
+import android.util.Base64;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,24 +24,24 @@ import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
-public final class User {
+public final class User implements Serializable {
     @Exclude
-    public static User instance;
+    public transient static User instance;
     @Exclude
-    private int preferredRadius = 2000;
+    private transient int preferredRadius = 2000;
 
     @Exclude
-    private LatLng location;
+    private transient LatLng location;
     @Exclude
-    private GpsService gpsService;
+    private transient GpsService gpsService;
 
     private String name;
     private String picture;
     private String uid;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
-    private List<String> likedTracks;
-    private List<User> followedUsers;
+    private transient List<String> likedTracks;
+    private transient List<String> followedUsers;
 
     public User(){}
 
@@ -156,21 +163,40 @@ public final class User {
      *
      * @param u
      */
-    public boolean alreadyInFollowed(User u) { return followedUsers.contains(u); }
+    public boolean alreadyInFollowed(User u) {
+        for (String serializedUser : followedUsers) {
+            User user = deserialize(serializedUser);
+            if (user != null && user.getUid().equals(u.getUid())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Add a User id in the set of followed users
      *
      * @param u
      */
-    public void addToFollowed(User u) { if (!alreadyInFollowed(u)) followedUsers.add(u); }
+    public void addToFollowed(User u) {
+        String serializedUser = u.serialize();
+        if (!alreadyInFollowed(u))
+            followedUsers.add(serializedUser);
+    }
 
     /**
      * Remove a User id from the set of followed users
      *
      * @param u
      */
-    public void removeFromFollowed(User u) { followedUsers.remove(u); }
+    public void removeFromFollowed(User u) {
+        for (String serializedUser : followedUsers) {
+            if (deserialize(serializedUser).getUid().equals(u.getUid())) {
+                followedUsers.remove(serializedUser);
+                return;
+            }
+        }
+    }
 
     /**
      * Getter for the user's location
@@ -240,11 +266,11 @@ public final class User {
         this.likedTracks = likedTracks;
     }
 
-    public List<User> getFollowedUsers() {
+    public List<String> getFollowedUsers() {
         return followedUsers;
     }
 
-    public void setFollowedUsers(List<User> followedUsers) {
+    public void setFollowedUsers(List<String> followedUsers) {
         this.followedUsers = followedUsers;
     }
 
@@ -261,6 +287,34 @@ public final class User {
     @Override
     public int hashCode() {
         return uid.hashCode();
+    }
+
+    public String serialize() {
+        String serialized = "";
+
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(this);
+            objectOutputStream.flush();
+            serialized =  new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
+        } catch (Exception e) {
+            Log.d("Serialization Error", e.toString());
+        }
+
+        return serialized;
+    }
+
+    public static User deserialize(String s) {
+        try {
+            byte b[] = Base64.decode(s.getBytes(), 0);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            return (User) objectInputStream.readObject();
+        } catch (Exception e) {
+            Log.d("Deserialization Error", e.toString());
+            return null;
+        }
     }
 
 }

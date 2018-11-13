@@ -80,7 +80,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                         followButton.setText("UNFOLLOW");
                     } else {
                         self.removeFromFollowed(actualUser);
-                        UserDatabaseManagement.removeFollowedUser(actualUser.getUid());
+                        UserDatabaseManagement.removeFollowedUser(actualUser);
                         followButton.setText("FOLLOW");
                     }
                 }
