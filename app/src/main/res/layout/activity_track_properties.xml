@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollID"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -135,7 +136,7 @@
 
             <fragment
                 android:id="@+id/create_map_view2"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:name = "ch.epfl.sweng.runpharaa.CustomMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_weight="65"

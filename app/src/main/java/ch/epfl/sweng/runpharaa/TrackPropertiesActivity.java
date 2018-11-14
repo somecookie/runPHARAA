@@ -1,8 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -82,14 +86,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 trackTitle.setText(track.getName());
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
-
-                //TODO: add the creatorName attribute back to Track.
                 trackCreator.setText("By" + track.getCreatorName());
 
                 TextView trackDuration = findViewById(R.id.trackDurationID);
-
-                trackDuration.setText("Duration: " + df.format(tp.getAvgDuration())  + " minutes");
-
+                trackDuration.setText("Duration: " + df.format(tp.getAvgDuration()) + " minutes");
 
                 TextView trackLength = findViewById(R.id.trackLengthID);
                 trackLength.setText("Length: " + df.format(tp.getLength()) + " m");
@@ -99,8 +99,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
 
                 TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-
-                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeightDifference()) + "m"); //TODO: Figure out height difference.
+                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeightDifference()) + "m");
 
                 TextView trackLikes = findViewById(R.id.trackLikesID);
                 trackLikes.setText("" + tp.getLikes());
@@ -163,12 +162,32 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
 
         // Get map
+        if (map == null) {
+            SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
+            mapFragment.getMapAsync(googleMap -> {
+                map = googleMap;
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+                googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                map.getUiSettings().setZoomControlsEnabled(true);
+
+                testText.setText("ready");
+
+                ScrollView mScrollView = findViewById(R.id.scrollID); //parent scrollview in xml, give your scrollview id value
+                ((CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2))
+                        .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
+            });
+        }
+        /*
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view2);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);*/
     }
 
-    //TODO: uncomment when u need this, it's f*cking up coverage rn
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -205,7 +224,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         TrackDatabaseManagement.updateTrack(track);
         runOnUiThread(() -> {
             TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-            trackLikesUpdated.setText(""+track.getProperties().getLikes());
+            trackLikesUpdated.setText("" + track.getProperties().getLikes());
         });
     }
 
@@ -224,7 +243,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
         runOnUiThread(() -> {
             TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
-            trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
+            trackFavoritesUpdated.setText("" + track.getProperties().getFavorites());
         });
 
     }
@@ -280,14 +299,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //Prepare the map that we are going to draw the track on
         map = googleMap;
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         map.setOnMarkerClickListener(marker -> true);
-        // Adapt padding to fit markers
         map.setPadding(50, 150, 50, 50);
-        testText.setText("ready");
     }
 
     /**
@@ -302,7 +316,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.25);
+            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.25);
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));
