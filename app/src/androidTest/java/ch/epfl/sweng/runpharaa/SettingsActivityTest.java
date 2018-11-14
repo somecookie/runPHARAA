@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -81,6 +83,8 @@ public class SettingsActivityTest extends TestInitLocation {
 
     @Before
     public void init() {
+        Context c = InstrumentationRegistry.getTargetContext();
+        c.startService(new Intent(c, GpsService.getInstance().getClass()));
         resetSharedPreferences();
         r = InstrumentationRegistry.getTargetContext().getResources();
     }
