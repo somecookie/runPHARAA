@@ -2,15 +2,12 @@ package ch.epfl.sweng.runpharaa.login;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,15 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.testfairy.TestFairy;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
@@ -47,7 +40,6 @@ import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
-import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //TestFairy.begin(this, "404771920c67776e429dc8548b060d68b58d433b");
         setContentView(R.layout.activity_login);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        for(Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())
+        for (Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())
             System.out.println(e.getKey() + " " + e.getValue());
         requestPermissions();
 
@@ -162,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onError(Exception e) {
                     // If sign in fails, display a message to the user.
-                    Log.e(TAG, "Impossible to send the user to the database: "+e.getMessage());
+                    Log.e(TAG, "Impossible to send the user to the database: " + e.getMessage());
                     Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                 }
             });

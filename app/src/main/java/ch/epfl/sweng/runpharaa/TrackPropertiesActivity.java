@@ -1,40 +1,66 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.Locale;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class TrackPropertiesActivity extends AppCompatActivity {
+
+    ShareDialog shareDialog;
+
+    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
+    private String createTagString(Track track) {
+        Set<TrackType> typeSet = track.getProperties().getType();
+        int nbrTypes = typeSet.size();
+        String[] trackType = getResources().getStringArray(R.array.track_types);
+
+        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(start);
+
+        int i = 0;
+
+        for(TrackType tt : typeSet){
+
+            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
+            if(i < nbrTypes - 1) sb.append(", ");
+
+            i++;
+        }
+        return sb.toString();
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
+
+        shareDialog = new ShareDialog(this);
+
         final Intent intent = getIntent();
 
         DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
@@ -70,10 +96,10 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 */
 
                 TextView trackLikes = findViewById(R.id.trackLikesID);
-                trackLikes.setText(""+tp.getLikes());
+                trackLikes.setText("" + tp.getLikes());
 
                 TextView trackFavourites = findViewById(R.id.trackFavouritesID);
-                trackFavourites.setText(""+tp.getFavorites());
+                trackFavourites.setText("" + tp.getFavorites());
 
                 ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
                 ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
@@ -106,6 +132,17 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                     }
                 });
 
+                ImageButton fb = findViewById(R.id.fb_share_button);
+                fb.setOnClickListener( v -> {
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                                .setShareHashtag(new ShareHashtag.Builder()
+                                        .setHashtag(String.format(getString(R.string.facebook_post_message), track.getName())).build())
+                                .build();
+                        shareDialog.show(content);
+                    }
+                });
                 /*
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));
@@ -118,29 +155,6 @@ public class TrackPropertiesActivity extends AppCompatActivity {
             }
         });
     }
-
-    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
-    private String createTagString(Track track) {
-        Set<TrackType> typeSet = track.getProperties().getType();
-        int nbrTypes = typeSet.size();
-        String[] trackType = getResources().getStringArray(R.array.track_types);
-
-        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(start);
-
-        int i = 0;
-
-        for(TrackType tt : typeSet){
-
-            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
-            if(i < nbrTypes - 1) sb.append(", ");
-
-            i++;
-        }
-        return sb.toString();
-    }*/
 
     private void updateLikes(Track track1, String trackID) {
         final Track track = track1;
@@ -157,7 +171,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         DatabaseManagement.updateTrack(track);
         runOnUiThread(() -> {
             TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-            trackLikesUpdated.setText(""+track.getProperties().getLikes());
+            trackLikesUpdated.setText("" + track.getProperties().getLikes());
         });
 
     }
@@ -179,7 +193,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
         runOnUiThread(() -> {
             TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
-            trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
+            trackFavoritesUpdated.setText("" + track.getProperties().getFavorites());
         });
 
     }
