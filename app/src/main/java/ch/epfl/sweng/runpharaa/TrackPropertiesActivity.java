@@ -136,7 +136,7 @@ public class TrackPropertiesActivity extends AppCompatActivity {
                 fb.setOnClickListener( v -> {
                     if (ShareDialog.canShow(ShareLinkContent.class)) {
                         ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                                .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
                                 .setShareHashtag(new ShareHashtag.Builder()
                                         .setHashtag(String.format(getString(R.string.facebook_post_message), track.getName())).build())
                                 .build();
