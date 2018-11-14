@@ -2,8 +2,6 @@ package ch.epfl.sweng.runpharaa.Firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,18 +19,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.FirebaseUserAdapter;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
@@ -48,7 +47,8 @@ public class Database {
     private static boolean isCancelled = false;
     private static boolean userExists = false;
 
-    private final static String s_tracks = "tracks";
+
+    private final static String s_tracks = "tracksRefractored";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
@@ -58,9 +58,9 @@ public class Database {
     private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
     //Tracks already in the fakeDB
-    private final static String trackUID = "0";
+    private final static String trackUID = "TrackID";
 
-    private Track t = new Track();
+    private FirebaseTrackAdapter t = new FirebaseTrackAdapter();
 
     //For all mocked objects
     //First Level
@@ -124,7 +124,10 @@ public class Database {
     private DataSnapshot snapOnDataChangeRead;
 
     @Mock
-    private DataSnapshot snapOnDataChangeReadChildStartingPoint;
+    private DataSnapshot snapOnDataChangeReadChildPath;
+
+    @Mock
+    private DataSnapshot snapOnDataChangeReadChildPath0;
 
     @Mock
     private DatabaseError snapOnDataErrorRead;
@@ -151,7 +154,10 @@ public class Database {
     private DataSnapshot snapInitTrackChildren;
 
     @Mock
-    private Track track;
+    private FirebaseTrackAdapter track;
+
+    @Mock
+    private List<String> userFavoritesList;
 
     @Mock
     private Task<Void> removeTask;
@@ -199,15 +205,16 @@ public class Database {
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
 
         when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
-        when(snapOnDataChangeRead.child("TrackID")).thenReturn(snapInitTrackChildren);
+        when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitTrackChildren);
         when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
 
 
-        when(snapInitTrackChildren.getValue(Track.class)).thenReturn(t);
-        when(snapInitTrackChildren.child("startingPoint")).thenReturn(snapOnDataChangeReadChildStartingPoint);
+        when(snapInitTrackChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
+        when(snapInitTrackChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
         when(snapInitTrackChildren.getKey()).thenReturn("0");
 
-        when(snapOnDataChangeReadChildStartingPoint.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
+        when(snapOnDataChangeReadChildPath.child("0")).thenReturn(snapOnDataChangeReadChildPath0);
+        when(snapOnDataChangeReadChildPath0.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
@@ -233,6 +240,14 @@ public class Database {
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
+
+        when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                fake_user.setFavoriteTracks(userFavoritesList);
+                return null;
+            }
+        });
 
         when(drUserAnyChildFavorites.child(any(String.class))).thenReturn(drUserAnyChildFavoritesChild);
         when(drUserAnyChildLikes.child(any(String.class))).thenReturn(drUserAnyChildLikesChild);
@@ -278,9 +293,9 @@ public class Database {
         when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int fav = t.getProperties().getFavorites();
+                int fav = t.getFavorites();
                 if(fav >= 1){
-                    t.getProperties().setFavorites(fav - 1);
+                    //t.setFavorites(fav - 1);
                 }
                 return removeTask;
             }
@@ -289,9 +304,9 @@ public class Database {
         when(drUserAnyChildLikesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int likes = t.getProperties().getLikes();
+                int likes = t.getLikes();
                 if(likes >= 1){
-                    t.getProperties().setLikes(likes - 1);
+                    //t.getProperties().setLikes(likes - 1);
                 }
                 return removeTask;
             }
@@ -319,7 +334,13 @@ public class Database {
         when(drTracksPush.getKey()).thenReturn(s_key);
 
         when(drTracks.child(trackUID)).thenReturn(drTracksUID);
-        when(drTracksUID.setValue(track)).thenReturn(setValueTrack);
+        when(drTracksUID.setValue(track)).then(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                t = track;
+                return null;
+            }
+        });
 
         when(drTracks.child(s_key)).thenReturn(drTracksKey);
         when(drTracksKey.setValue(any(Track.class))).thenReturn(setTask);
@@ -407,13 +428,14 @@ public class Database {
     }
 
     private void createTrack() {
-        Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
-        Set<TrackType> types = new HashSet<>();
-        types.add(TrackType.FOREST);
+        List<String> types = new ArrayList<>();
+        types.add(TrackType.FOREST.toString());
         CustLatLng coord0 = new CustLatLng(37.422, -122.084);
         CustLatLng coord1 = new CustLatLng(37.425, -122.082);
-        TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1), p);
+        int length = 100;
+        int heigthDiff = 10;
+        FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
+                types, length, heigthDiff, 1, 1, 1, 1, 0, 0);
 
         t = track;
 
