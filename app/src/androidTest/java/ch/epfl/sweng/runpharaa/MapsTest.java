@@ -12,6 +12,7 @@ import android.support.test.uiautomator.UiSelector;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,8 +39,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertTrue;
@@ -76,17 +75,34 @@ public class MapsTest extends TestInitLocation {
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
+        if(marker == null){
+            fail("Null marker");
+        }
+
+
         try {
             marker.click();
-            int x = marker.getBounds().centerX();
-            int y = marker.getBounds().centerY();
-            device.click(x, y-100);
-            sleep(500);
-            onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
-            fail("Couldn't find marker");
+            fail("Failed to click on marker 1");
         }
+        int x = 0;
+        try {
+            x = marker.getBounds().centerX();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            fail("Failed to get X of marker");
+        }
+        int y = 0;
+        try {
+            y = marker.getBounds().centerY();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            fail("failed to get Y of marker");
+        }
+        device.click(x, y-100);
+        sleep(500);
+        onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
     }
 
     @Test

@@ -35,12 +35,15 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertTrue;
+
+import ch.epfl.sweng.runpharaa.Firebase.Database;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -107,6 +110,14 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(500);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore));
+    }
+
+    @Test
+    public void testTrackPropertiesMap() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(5_000);
+        onView(withId(R.id.maps_test_text2)).check(matches(withText("ready")));
     }
 
     private Track createTrack() {

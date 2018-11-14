@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class FragmentFavourites extends UpdatableCardItemFragment {
@@ -52,7 +52,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
         emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listCardItem
 
-        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -65,7 +65,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
                         startActivity(intent);
                     }
                 };
-                List<Track> tracks = DatabaseManagement.initFavouritesTracks(data);
+                List<Track> tracks = TrackDatabaseManagement.initFavouritesTracks(data);
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listCardItem.add(t.getCardItem());

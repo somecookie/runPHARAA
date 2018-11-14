@@ -1,7 +1,13 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
@@ -24,7 +30,7 @@ import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
-public class DatabaseManagement {
+public class TrackDatabaseManagement {
 
     public final static String TRACKS_PATH = "tracks";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
@@ -34,9 +40,7 @@ public class DatabaseManagement {
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
-    public DatabaseManagement() {
-    }
-
+    public TrackDatabaseManagement() { }
 
     /**
      * Track a {@link Track} and add it to the database
@@ -77,8 +81,6 @@ public class DatabaseManagement {
      * @param track
      */
     public static void updateTrack(Track track) {
-        //TODO check if it works
-        //Check if track exists? Return a success or error message?
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
     }
 
@@ -94,7 +96,7 @@ public class DatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase Database, returns the list of tracks near location.
      *
      * @param dataSnapshot
      * @return
@@ -104,9 +106,8 @@ public class DatabaseManagement {
         for (DataSnapshot c : dataSnapshot.getChildren()) {
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
-
             if (c.child("startingPoint").getValue(CustLatLng.class) != null) {
-                if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) {
                     tracksNearMe.add(c.getValue(Track.class));
                 }
             }
@@ -121,7 +122,7 @@ public class DatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase Database, returns the list of created tracks.
      *
      * @param dataSnapshot
      * @return
@@ -158,6 +159,11 @@ public class DatabaseManagement {
                 }
             }
         }
+        Collections.sort(favouriteTracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
+        });
         return favouriteTracks;
     }
 
@@ -180,7 +186,6 @@ public class DatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
-
     }
 
     /**

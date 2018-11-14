@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -33,15 +33,15 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
     protected void loadData() {
         emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listCardItem
-        String s = DatabaseManagement.TRACKS_PATH;
+        String s = TrackDatabaseManagement.TRACKS_PATH;
 
-        DatabaseManagement.OnGetDataListener d = new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.OnGetDataListener d = new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
 
-                List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
+                List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
 
                 for (Track t : tracks) {
                     t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
@@ -71,6 +71,6 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
             }
         };
 
-        DatabaseManagement.mReadDataOnce(s, d);
+        TrackDatabaseManagement.mReadDataOnce(s, d);
     }
 }
