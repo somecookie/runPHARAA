@@ -20,8 +20,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.io.InputStream;
+import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
@@ -29,30 +32,63 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
-    private User actualUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean isSelfUser = getIntent().getBooleanExtra("selfUser", false);
+        final String finalProfileUserId = userProfileUid();
+        boolean isSelfUser = true;
+
+        if (finalProfileUserId != null)
+            isSelfUser = finalProfileUserId.equals(User.instance.getUid());
+
         if (isSelfUser) {
             setContentView(R.layout.activity_user);
-            actualUser = User.instance;
+            loadActivity(User.instance, true);
         } else {
             setContentView(R.layout.activity_other_user);
-            actualUser = User.instance; // TODO Change when other users profile are accessible
+
+            UserDatabaseManagement.mReadDataOnce(UserDatabaseManagement.USERS, new UserDatabaseManagement.OnGetDataListener() {
+                @Override
+                public void onSuccess(DataSnapshot data) {
+                    // Load and search which User we want to see the profile
+                    User user = UserDatabaseManagement.getUser(data, finalProfileUserId);
+
+                    // Load the corresponding activity
+                    if (user != null)
+                        loadActivity(user, false);
+
+                }
+
+                @Override
+                public void onFailed(DatabaseError databaseError) {
+                    Log.d("DB Read: ", "Failed to read users from DB in UserProfileActivity.");
+                }
+            });
+        }
+    }
+
+    private String userProfileUid () {
+        Intent i = getIntent();
+        String profileUserId = null;
+
+        if (i != null) {
+            profileUserId = getIntent().getStringExtra("userId");
         }
 
+        return profileUserId;
+    }
+
+    private void loadActivity(User user, Boolean isSelfUser) {
         TextView v = findViewById(R.id.user_name);
-        v.setText(actualUser.getName());
+        v.setText(user.getName());
 
         TextView v1 = findViewById(R.id.nbTracks);
-        int nbTracks = actualUser.getCreatedTracks().size();
+        int nbTracks = user.getCreatedTracks().size();
         v1.setText(Integer.toString(nbTracks));
 
         TextView v2 = findViewById(R.id.nbFav);
-        int nbFav = actualUser.getFavoriteTracks().size();
+        int nbFav = user.getFavoriteTracks().size();
         v2.setText(Integer.toString(nbFav));
 
         if (isSelfUser) {
@@ -66,7 +102,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         } else {
             User self = User.instance;
             Button followButton = findViewById(R.id.follow_button);
-            if (!self.alreadyInFollowed(actualUser)) {
+            if (!self.alreadyInFollowed(user)) {
                 followButton.setText("FOLLOW");
             } else {
                 followButton.setText("UNFOLLOW");
@@ -74,13 +110,13 @@ public class UsersProfileActivity extends AppCompatActivity {
             followButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!self.alreadyInFollowed(actualUser)) {
-                        self.addToFollowed(actualUser);
+                    if (!self.alreadyInFollowed(user)) {
+                        self.addToFollowed(user);
                         UserDatabaseManagement.updateFollowedUsers(self);
                         followButton.setText("UNFOLLOW");
                     } else {
-                        self.removeFromFollowed(actualUser);
-                        UserDatabaseManagement.removeFollowedUser(actualUser);
+                        self.removeFromFollowed(user);
+                        UserDatabaseManagement.removeFollowedUser(user);
                         followButton.setText("FOLLOW");
                     }
                 }
@@ -88,7 +124,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         }
 
         new DownloadImageTask((ImageView) findViewById(R.id.profile_picture))
-                .execute(actualUser.getPicture().toString());
+                .execute(user.getPicture().toString());
     }
 
     private void signOut() {

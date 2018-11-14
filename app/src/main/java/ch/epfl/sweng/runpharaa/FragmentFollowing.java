@@ -45,12 +45,12 @@ public class FragmentFollowing extends UpdatableUserCardItemFragment {
                     @Override
                     public void onItemClick(UserCardItem item) {
                         Intent intent = new Intent(getContext(), UsersProfileActivity.class);
-                        intent.putExtra("UserID", item.getParentUserID());
+                        intent.putExtra("userId", item.getParentUserID());
                         startActivity(intent);
                     }
                 };
 
-                List<User> users = UserDatabaseManagement.initFragmentFollowing(data);
+                List<User> users = UserDatabaseManagement.initFollowingFragment(data);
                 for (User u : users) {
                     u.setUserCardItem(new UserCardItem(u.getName(), u.getUid(), u.getPicture(), u.getCreatedTracks().size()));
                     listUserCardItem.add(u.getUserCardItem());
