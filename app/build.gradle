@@ -106,6 +106,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
+    implementation 'com.facebook.android:facebook-android-sdk:4.38.1'
     implementation 'com.facebook.android:facebook-share:4.38.1'
 
     // dependencies for testing
