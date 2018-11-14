@@ -3,12 +3,12 @@ package ch.epfl.sweng.runpharaa.user;
 import android.net.Uri;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.location.GpsService;
@@ -17,78 +17,59 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public final class User {
-
+    @Exclude
     public static User instance;
+    @Exclude
     private int preferredRadius = 2000;
-    private String name;
-    //TODO: put default picture
-    private Uri picture;
-    //Of type String because we only need the key reference of the track in the database
-    private String uId;
-    private Set<String> createdTracks;
-    private Set<String> favoriteTracks;
-    private Set<String> likedTracks;
+    @Exclude
     private LatLng location;
-    private GpsService gpsService;
-    //public static User FAKE_USER = new User("Toto", new LatLng(46.518510, 6.563199), 2000);
 
-    public User(String name, int preferredRadius, Uri picture, LatLng location, String uId) {
+    private String name;
+    private String picture;
+    private String uid;
+    private List<String> createdTracks;
+    private List<String> favoriteTracks;
+    private List<String> likedTracks;
+    private List<User> followedUsers;
+
+    public User(){}
+
+    public User(String name, int preferredRadius, Uri picture, LatLng location, String uid) {
         Required.nonNull(name, "The name of an user cannot be null");
         Required.nonNull(location, "The location of an user cannot be null");
-        Required.nonNull(uId, "The uId of an user cannot be null");
+        Required.nonNull(uid, "The uid of an user cannot be null");
         Required.nonNull(picture, "The picture of an user cannot be null");
 
         this.preferredRadius = preferredRadius;
         this.name = name;
-        this.picture = picture;
-        this.createdTracks = new HashSet<>();
-        this.favoriteTracks = new HashSet<>();
-        this.likedTracks = new HashSet<>();
+        this.picture = picture.toString();
+        this.createdTracks = new ArrayList<>();
+        this.favoriteTracks = new ArrayList<>();
+        this.likedTracks = new ArrayList<>();
         this.location = location;
-        this.uId = uId;
-        this.gpsService = new RealGpsService();
-    }
-
-
-    /**
-     * Constucotr used to mock User's localisation
-     * @param name
-     * @param preferredRadius
-     * @param picture
-     * @param location
-     * @param uId
-     * @param service
-     */
-    public User(String name, float preferredRadius, Uri picture, LatLng location, String uId, GpsService service) {
-        this(name, (int) (preferredRadius * 1000), picture, location, uId);
-        this.gpsService = service;
+        this.uid = uid;
     }
 
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
 
-    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId, GpsService service) {
-        instance = new User(name, preferredRadius, picture, location, uId, service);
-    }
-
-    public GpsService getService() {
-        return gpsService;
-    }
-
-    public FirebaseUserAdapter getFirebaseAdapter() {
-        return new FirebaseUserAdapter(this);
-    }
-
+    @Exclude
     public int getPreferredRadius() {
         return preferredRadius;
     }
 
-    /**
-     * @param newRadius in km
-     */
+    @Exclude
     public void setPreferredRadius(float newRadius) {
         this.preferredRadius = (int) (newRadius * 1000);
+    }
+
+    public boolean alreadyFollowed(User u) {
+        return followedUsers.contains(u);
+    }
+
+    public void addFollower(User u) {
+        if (!alreadyFollowed(u)) followedUsers.add(u);
     }
 
     /**
@@ -107,7 +88,7 @@ public final class User {
      * @param trackId the track's id
      */
     public void like(String trackId) {
-        likedTracks.add(trackId);
+        if (!alreadyLiked(trackId)) likedTracks.add(trackId);
     }
 
     /**
@@ -135,18 +116,14 @@ public final class User {
      *
      * @param trackId the track's id
      */
-    public void addToFavorites(String trackId) {
-        favoriteTracks.add(trackId);
-
-    }
-
+    public void addToFavorites(String trackId) { if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId); }
     /**
      * Add a Track id in the set of created tracks.
      *
      * @param trackId
      */
     public void addToCreatedTracks(String trackId) {
-        createdTracks.add(trackId);
+        if (!createdTracks.contains(trackId)) createdTracks.add(trackId);
     }
 
     /**
@@ -163,6 +140,7 @@ public final class User {
      *
      * @return location
      */
+    @Exclude
     public LatLng getLocation() {
         return location;
     }
@@ -172,49 +150,78 @@ public final class User {
      *
      * @param newLocation
      */
+    @Exclude
     public void setLocation(LatLng newLocation) {
         this.location = newLocation;
     }
 
-    /**
-     * Return the name of the user
-     *
-     * @return name
-     */
     public String getName() {
         return name;
     }
 
-    public String getID() {
-        return uId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Uri getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public Set<String> getCreatedTracks() {
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public List<String> getCreatedTracks() {
         return createdTracks;
     }
 
-    public void setCreatedTracks(Set<String> createdTracks) {
+    public void setCreatedTracks(List<String> createdTracks) {
         this.createdTracks = createdTracks;
     }
 
-    public Set<String> getFavoriteTracks() {
+    public List<String> getFavoriteTracks() {
         return favoriteTracks;
     }
 
-    public void setFavoriteTracks(Set<String> favoriteTracks) {
-        this.favoriteTracks = favoriteTracks;
-    }
+    public void setFavoriteTracks(List<String> favoriteTracks) { this.favoriteTracks = favoriteTracks; }
 
-    public Set<String> getLikedTracks() {
+    public List<String> getLikedTracks() {
         return likedTracks;
     }
 
-    public void setLikedTracks(Set<String> likedTracks) {
+    public void setLikedTracks(List<String> likedTracks) {
         this.likedTracks = likedTracks;
+    }
+
+    public List<User> getFollowedUsers() {
+        return followedUsers;
+    }
+
+    public void setFollowedUsers(List<User> followedUsers) {
+        this.followedUsers = followedUsers;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) return false;
+        else {
+            User that = (User) obj;
+            return this.uid.equals(that.uid);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return uid.hashCode();
     }
 
 }

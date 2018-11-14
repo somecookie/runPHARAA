@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.location.FakeGpsService;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -57,27 +59,44 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     @Rule
     public ActivityTestRule<CreateTrackActivity2> mActivityRule =
             new ActivityTestRule<>(CreateTrackActivity2.class, true, false);
-
-    @Before
-    public void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112),  "FakeUser");
-    }
-
     // ------------- COORDS --------------
     private LatLng inm = new LatLng(46.518577, 6.563165); //inm
     private LatLng banane = new LatLng(46.522735, 6.579772); //Banane
     private LatLng cs = new LatLng(46.519380, 6.580669); //centre sportif
-
     private LatLng eiffel = new LatLng(48.858664, 2.294424);
     private LatLng placeTrocadero = new LatLng(48.863048, 2.287890);
-
     private LatLng buckingham = new LatLng(51.501478, -0.141702);
     private LatLng localPub = new LatLng(51.499248, -0.136834);
-
     private LatLng marina = new LatLng(1.283536, 103.860319);
     private LatLng esplaTheatre = new LatLng(1.288845, 103.855491);
 
+    private static ViewAction setProgress(final int progress) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                SeekBar seekBar = (SeekBar) view;
+                seekBar.setProgress(progress);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Set a progress on a SeekBar";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
+
     // ------------- TESTS ---------------
+
+    @Before
+    public void initUser() {
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
+        GpsService.initFakeGps(FakeGpsService.GOOGLE);
+    }
 
     @Test
     public void correctValuesDisplayedForInmBananeCs() {
@@ -122,7 +141,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
-
 
     @Test
     public void creatingTrackWithoutSettingTypesFails() {
@@ -179,6 +197,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
+
         sleep(WAIT_TIME);
         selectAllTypes(true);
         onView(withId(R.id.create_track_button)).perform(click());
@@ -186,8 +205,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
-
-    // ------------ Useful stuff --------------
 
     private void selectFirstType(boolean pressOk) {
         onView(withId(R.id.types)).perform(click());
@@ -204,7 +221,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
 
     private void selectAllTypes(boolean pressOk) {
         onView(withId(R.id.types)).perform(click());
-        for(int i = 0; i < TrackType.values().length; ++i) {
+        for (int i = 0; i < TrackType.values().length; ++i) {
             onData(is(instanceOf(String.class))).inAdapterView(allOf(withClassName(equalTo("com.android.internal.app.AlertController$RecycleListView")), isDisplayed()))
                     .atPosition(i)
                     .perform(click())
@@ -244,26 +261,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         intent.putExtra("points", points);
         mActivityRule.launchActivity(intent);
         sleep(5_000);
-    }
-
-    private static ViewAction setProgress(final int progress) {
-        return new ViewAction() {
-            @Override
-            public void perform(UiController uiController, View view) {
-                SeekBar seekBar = (SeekBar) view;
-                seekBar.setProgress(progress);
-            }
-
-            @Override
-            public String getDescription() {
-                return "Set a progress on a SeekBar";
-            }
-
-            @Override
-            public Matcher<View> getConstraints() {
-                return ViewMatchers.isAssignableFrom(SeekBar.class);
-            }
-        };
     }
 
 }

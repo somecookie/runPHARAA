@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa.Firebase;
 
-
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -48,7 +47,6 @@ public class Database {
     private static boolean shouldFail = false;
     private static boolean isCancelled = false;
     private static boolean userExists = false;
-
 
     private final static String s_tracks = "tracks";
     private final static String s_user = "users";
@@ -143,10 +141,8 @@ public class Database {
     @Mock
     private DatabaseError snapOnDataErrorUser;
 
-
     @Mock
     private DataSnapshot snapInit;
-
 
     @Mock
     private DataSnapshot snapInitTrack;
@@ -192,13 +188,11 @@ public class Database {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);
     }
 
-
     private void instanciateDBRef() {
         when(databaseReferenceMock.child(s_tracks)).thenReturn(drTracks);
         when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
         when(databaseReferenceMock.child(s_user)).thenReturn(drUser);
     }
-
 
     private void instanciateSnapshots() {
         //TODO: verifier si on a que ca comme cle
@@ -303,7 +297,6 @@ public class Database {
             }
         });
 
-
         //TODO: How to make it
         when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
@@ -320,7 +313,6 @@ public class Database {
         //when(drUserAnyChildLikeChild.removeValue())
 
     }
-
 
     private void instanciatedrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);

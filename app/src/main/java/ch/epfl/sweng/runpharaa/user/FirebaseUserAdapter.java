@@ -4,7 +4,6 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
@@ -24,11 +23,10 @@ public class FirebaseUserAdapter {
     public FirebaseUserAdapter(User user){
         Required.nonNull(user,"User we want to send to the database must be non-null");
         this.user= user;
-        uId = user.getID();
+        uId = user.getUid();
         createdTracks = new ArrayList <>(user.getCreatedTracks());
         favoriteTracks = new ArrayList<>(user.getFavoriteTracks());
         likedTracks = new ArrayList<>(user.getLikedTracks());
-
     }
 
     public String getuId() {
