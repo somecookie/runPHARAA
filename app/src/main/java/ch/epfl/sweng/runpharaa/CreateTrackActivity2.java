@@ -107,8 +107,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
                 } else {
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(nameText.getText().toString(), User.instance.getID(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
-                    TrackDatabaseManagement.writeNewTrack(track);
+                    Track track = new Track(nameText.getText().toString(), User.instance.getUid(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                    TrackDatabaseManagement.writeNewTrack(track );
                     finish();
                 }
             }

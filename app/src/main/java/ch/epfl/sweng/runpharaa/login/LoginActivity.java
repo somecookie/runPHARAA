@@ -41,6 +41,7 @@ import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -104,7 +105,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa", FakeGpsService.SAT);
+                User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+                GpsService.initFakeGps(FakeGpsService.GOOGLE);
                 launchApp();
                 break;
             case R.id.sign_in_button_google:
@@ -183,8 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Launch the main app
      */
     private void launchApp() {
-        Log.i("WESHHHHHHHH", User.instance.getService().toString());
-        startService(new Intent(getBaseContext(), User.instance.getService().getClass()));
+        startService(new Intent(getBaseContext(), GpsService.getInstance().getClass()));
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(launchIntent);
         finish();
