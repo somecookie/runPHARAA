@@ -2,7 +2,6 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -14,14 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
-<<<<<<< HEAD
-import ch.epfl.sweng.runpharaa.Initializer.TestInitNoLocation;
-=======
->>>>>>> 9f66e4a46449122baff3e9accb75b2f625dd3d3e
-import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
@@ -29,14 +21,8 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -50,7 +36,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
     }
 
-    
+
     @Test
     public void correctlyDisplaysName() {
         mActivityRule.launchActivity(new Intent());
