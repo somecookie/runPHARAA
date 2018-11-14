@@ -67,6 +67,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
             public void onFailed(DatabaseError databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentFavourites.");
                 setEmptyMessage();
+                swipeLayout.setRefreshing(false);
             }
         });
     }
