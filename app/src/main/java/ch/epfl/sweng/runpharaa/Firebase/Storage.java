@@ -83,12 +83,12 @@ public class Storage {
                 return uploadTask;
             }
         });
-        when(uploadTask.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer(new Answer<Task<Void>>() {
+        when(uploadTask.addOnCompleteListener(any(OnCompleteListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task answer(InvocationOnMock invocation) throws Throwable {
-                OnSuccessListener l = (OnSuccessListener) invocation.getArguments()[0];
+                OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
                 if(!shouldFail){
-                    l.onSuccess(null);
+                    l.onComplete(uploadTask);
                 }
                 return uploadTask;
             }
@@ -115,6 +115,8 @@ public class Storage {
                 return downloadUrlTask;
             }
         });
+
+
 
         when(addTrackToStorageTask.isSuccessful()).thenReturn(true);
     }

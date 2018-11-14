@@ -72,6 +72,7 @@ public class MapsTest extends TestInitLocation {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.mapIcon)).perform(click());
         sleep(5_000);
+
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
@@ -80,12 +81,26 @@ public class MapsTest extends TestInitLocation {
         }
 
 
+
+        assertTrue(marker.exists());
+
         try {
             marker.click();
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             fail("Failed to click on marker 1");
         }
+
+        /*
+        try {
+            int XMarker = marker.getBounds().centerX() + 50;
+            int YMarker = marker.getBounds().centerY() + 50;
+            device.click(XMarker,YMarker);
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            fail("Cannot get bound of marker");
+        }*/
+
         int x = 0;
         try {
             x = marker.getBounds().centerX();

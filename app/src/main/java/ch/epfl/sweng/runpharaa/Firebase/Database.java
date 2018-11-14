@@ -6,7 +6,9 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +37,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -88,6 +91,9 @@ public class Database {
 
 
     @Mock
+    private DatabaseReference drTracksKey;
+
+    @Mock
     private DatabaseReference drUserAnyChild;
 
     @Mock
@@ -124,6 +130,9 @@ public class Database {
     private DatabaseError snapOnDataErrorRead;
 
     @Mock
+    private DatabaseError snapOnDataErrorSet;
+
+    @Mock
     private DataSnapshot snapOnDataChangeUser;
 
     @Mock
@@ -146,6 +155,12 @@ public class Database {
 
     @Mock
     private Task<Void> removeTask;
+
+    @Mock
+    private Task<Void> setTask;
+
+    @Mock
+    private Task<Void> setValueTask;
 
 
     private Database() {
@@ -283,8 +298,18 @@ public class Database {
         });
 
         //TODO: How to make it
+        when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
+        when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+                if(shouldFail){
+                    l.onFailure(new IllegalStateException("Cant set value"));
+                }
+                return setValueTrack;
+            }
+        });
         //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
-        //when(drUserAnyChildCreatesChild.setValue(any(String)))
         //when(drUserAnyChildLikeChild.removeValue())
 
     }
@@ -295,6 +320,31 @@ public class Database {
 
         when(drTracks.child(trackUID)).thenReturn(drTracksUID);
         when(drTracksUID.setValue(track)).thenReturn(setValueTrack);
+
+        when(drTracks.child(s_key)).thenReturn(drTracksKey);
+        when(drTracksKey.setValue(any(Track.class))).thenReturn(setTask);
+
+        when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+                if(shouldFail){
+                    l.onFailure(new IllegalStateException());
+                }
+                return setTask;
+            }
+        });
+
+        when(setTask.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnSuccessListener<Void> l = (OnSuccessListener<Void>) invocation.getArguments()[0];
+                if(!shouldFail){
+                    l.onSuccess(null);
+                }
+                return setTask;
+            }
+        });
 
     }
 
