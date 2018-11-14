@@ -15,16 +15,19 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FragmentNearMe extends UpdatableCardItemFragment {
 
-    public FragmentNearMe() {
+
+    public FragmentNearMe(){
     }
 
     protected void setEmptyMessage() {
         emptyMessage.setText(R.string.no_tracks);
         emptyMessage.setVisibility(View.VISIBLE);
     }
+
 
     /**
      * Create the recyclerView and the list of cardItem used to draw the list of tracks "near me".
@@ -44,14 +47,17 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
                 List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
 
                 for (Track t : tracks) {
-                    t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
-                    listCardItem.add(t.getCardItem());
+                    if(MainActivity.passFilters(t)){
+                        t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
+                        listCardItem.add(t.getCardItem());
+                    }
                 }
                 OnItemClickListener listener = item -> {
                     Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
+
                 Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

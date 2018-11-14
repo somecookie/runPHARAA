@@ -72,6 +72,7 @@ public class MapsTest extends TestInitLocation {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.mapIcon)).perform(click());
         sleep(5_000);
+
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
@@ -80,12 +81,26 @@ public class MapsTest extends TestInitLocation {
         }
 
 
+
+        assertTrue(marker.exists());
+
         try {
             marker.click();
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             fail("Failed to click on marker 1");
         }
+
+        /*
+        try {
+            int XMarker = marker.getBounds().centerX() + 50;
+            int YMarker = marker.getBounds().centerY() + 50;
+            device.click(XMarker,YMarker);
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            fail("Cannot get bound of marker");
+        }*/
+
         int x = 0;
         try {
             x = marker.getBounds().centerX();
@@ -139,7 +154,7 @@ public class MapsTest extends TestInitLocation {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track t = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track t = new Track("0", "Bob", "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
 
         ArrayList<Track> all = new ArrayList<>();
         all.add(t);

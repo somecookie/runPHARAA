@@ -41,6 +41,7 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -78,20 +79,25 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 trackTitle.setText(track.getName());
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
-                //TODO: add the creatorName attribute back to Track.
-                trackCreator.setText("By Test User" /*+ track.getCreatorUid()*/);
 
-                //TODO: Add real duration once it is included in the DB.
+                //TODO: add the creatorName attribute back to Track.
+                trackCreator.setText("By" + track.getCreatorName());
+
                 TextView trackDuration = findViewById(R.id.trackDurationID);
-                trackDuration.setText("Duration: " /*+ df.format(tp.getAvgDuration())*/ + "5 minutes");
+
+                trackDuration.setText("Duration: " + df.format(tp.getAvgDuration())  + " minutes");
+
 
                 TextView trackLength = findViewById(R.id.trackLengthID);
                 trackLength.setText("Length: " + df.format(tp.getLength()) + " m");
 
-                /*
+                TextView trackDifficulty = findViewById(R.id.track_difficulty);
+                trackDifficulty.setText("Difficulty: " + Double.toString(tp.getAvgDifficulty()) + " / 5.0");
+
+
                 TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeight_diff())); //TODO: Figure out height difference.
-                */
+
+                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeightDifference()) + "m"); //TODO: Figure out height difference.
 
                 TextView trackLikes = findViewById(R.id.trackLikesID);
                 trackLikes.setText("" + tp.getLikes());
@@ -130,10 +136,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     }
                 });
 
-                /*
+
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));
-                */
 
                 drawTrackOnMap();
             }
@@ -150,7 +155,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         mapFragment.getMapAsync(this);
     }
 
-    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
+    //TODO: uncomment when u need this, it's f*cking up coverage rn
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -171,7 +176,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             i++;
         }
         return sb.toString();
-    }*/
+    }
 
     private void updateLikes(Track track1, String trackID) {
         final Track track = track1;

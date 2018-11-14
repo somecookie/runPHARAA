@@ -44,7 +44,7 @@ public class TrackTest {
         path.add(coord0);
         path.add(coord1);
 
-        legalTestTrack = new Track("7864", "0", b, "test", path , p);
+        legalTestTrack = new Track("7864", "0", "test", path , p);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class TrackTest {
         path.add(coord0);
 
         exception.expect(IllegalArgumentException.class);
-        new Track("8498", "0", b, "test", path, p);
+        new Track("8498", "0","test", path, p);
 
     }
 
