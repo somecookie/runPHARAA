@@ -14,7 +14,7 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
-public class UserDatabaseManagement extends DatabaseManagement {
+public class UserDatabaseManagement extends TrackDatabaseManagement {
     public final static String USERS = "users";
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";

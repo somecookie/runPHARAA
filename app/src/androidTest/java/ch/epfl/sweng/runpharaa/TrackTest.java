@@ -45,7 +45,6 @@ public class TrackTest {
         path.add(coord1);
 
         legalTestTrack = new Track("7864", "0", "test", path , p);
-
     }
 
     @Test

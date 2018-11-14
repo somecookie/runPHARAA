@@ -118,14 +118,14 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.time)).perform(typeText("10.00"))
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER))
                 .perform(closeSoftKeyboard());
-        onView(withText("OK"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
         onView(withId(R.id.create_text_name)).perform(typeText("Name")).perform(closeSoftKeyboard());
         sleep(WAIT_TIME);
         selectFirstType(true);
-
+        sleep(WAIT_TIME * 2);
         onView(withId(R.id.create_track_button)).perform(click());
     }
 
@@ -137,7 +137,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_name)).perform(typeText("Buckingham to pub")).perform(closeSoftKeyboard());
         sleep(WAIT_TIME);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText("The properties must be set up"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.properties_not_set)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
@@ -150,14 +150,14 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_name)).perform(typeText("Marina Bay to theatre")).perform(closeSoftKeyboard());
         onView(withId(R.id.set_properties)).perform(click());
         sleep(WAIT_TIME);
-        onView(withText("OK"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
         sleep(WAIT_TIME);
         selectAllTypes(false);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText("The types must be set up"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.types_not_set)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
@@ -171,17 +171,17 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withClassName(Matchers.equalTo(SeekBar.class.getName()))).perform(setProgress(1));
         onView(withId(R.id.diff_text)).check(matches(withText("Difficulty is 1")));
         sleep(WAIT_TIME);
-        onView(withText("OK"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-        onView(withText("Default run time was chosen"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.default_time)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
         sleep(WAIT_TIME);
         selectFirstType(true);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText("A track needs a name!"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.need_name)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
@@ -193,14 +193,15 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         launchWithExtras(locations, points);
         onView(withId(R.id.set_properties)).perform(click());
         sleep(WAIT_TIME);
-        onView(withText("OK"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
+
         sleep(WAIT_TIME);
         selectAllTypes(true);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText("A track needs a name!"))
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.need_name)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
@@ -211,7 +212,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .atPosition(0)
                 .perform(click());
         sleep(WAIT_TIME);
-        onView(withText(pressOk ? "OK" : "Dismiss"))
+        onView(withText(pressOk ? mActivityRule.getActivity().getResources().getString(R.string.OK) : mActivityRule.getActivity().getResources().getString(R.string.dismiss)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
@@ -228,7 +229,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                     .perform(click());
         }
         sleep(WAIT_TIME);
-        onView(withText(pressOk ? "OK" : "Dismiss"))
+        onView(withText(pressOk ? mActivityRule.getActivity().getResources().getString(R.string.OK) : mActivityRule.getActivity().getResources().getString(R.string.dismiss)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());

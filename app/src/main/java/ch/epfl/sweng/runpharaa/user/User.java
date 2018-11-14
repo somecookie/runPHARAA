@@ -112,11 +112,7 @@ public final class User implements Serializable {
      *
      * @param trackId the track's id
      */
-    public void addToFavorites(String trackId) {
-        if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId);
-
-    }
-
+    public void addToFavorites(String trackId) { if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId); }
     /**
      * Add a Track id in the set of created tracks.
      *
@@ -232,9 +228,7 @@ public final class User implements Serializable {
         return favoriteTracks;
     }
 
-    public void setFavoriteTracks(List<String> favoriteTracks) {
-        this.favoriteTracks = favoriteTracks;
-    }
+    public void setFavoriteTracks(List<String> favoriteTracks) { this.favoriteTracks = favoriteTracks; }
 
     public List<String> getLikedTracks() {
         return likedTracks;

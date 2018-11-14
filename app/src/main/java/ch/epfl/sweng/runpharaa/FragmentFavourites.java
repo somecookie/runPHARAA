@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class FragmentFavourites extends UpdatableCardItemFragment {
@@ -35,7 +35,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
         emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listTrackCardItem
 
-        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -48,7 +48,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
                         startActivity(intent);
                     }
                 };
-                List<Track> tracks = DatabaseManagement.initFavouritesTracks(data);
+                List<Track> tracks = TrackDatabaseManagement.initFavouritesTracks(data);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     listTrackCardItem.add(t.getTrackCardItem());

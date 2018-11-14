@@ -35,12 +35,15 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertTrue;
+
+import ch.epfl.sweng.runpharaa.Firebase.Database;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -109,6 +112,14 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore));
     }
 
+    @Test
+    public void testTrackPropertiesMap() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(5_000);
+        onView(withId(R.id.maps_test_text2)).check(matches(withText("ready")));
+    }
+
     private Track createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
@@ -116,7 +127,9 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1), p);
+
+        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1), p);
+
 
         return track;
     }
