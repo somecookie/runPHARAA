@@ -179,7 +179,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-        
+
         sleep(WAIT_TIME);
         selectAllTypes(true);
         onView(withId(R.id.create_track_button)).perform(click());
