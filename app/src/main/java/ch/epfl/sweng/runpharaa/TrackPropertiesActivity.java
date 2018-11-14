@@ -187,7 +187,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         TrackDatabaseManagement.updateTrack(track);
         runOnUiThread(() -> {
             TextView trackLikesUpdated = findViewById(R.id.trackLikesID);
-            trackLikesUpdated.setText(""+track.getProperties().getLikes());
+            trackLikesUpdated.setText("" + track.getProperties().getLikes());
         });
     }
 
@@ -206,7 +206,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
         runOnUiThread(() -> {
             TextView trackFavoritesUpdated = findViewById(R.id.trackFavouritesID);
-            trackFavoritesUpdated.setText(""+track.getProperties().getFavorites());
+            trackFavoritesUpdated.setText("" + track.getProperties().getFavorites());
         });
 
     }
@@ -284,7 +284,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.25);
+            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.25);
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));
