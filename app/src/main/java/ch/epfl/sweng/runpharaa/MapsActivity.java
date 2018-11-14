@@ -22,10 +22,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -37,6 +41,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     private GoogleMap mMap;
     private TextView testText;
     private List<Marker> markers; // used to check if a windowInfo is opened
+    private Map<String, TrackProperties> markerToTP = new HashMap<>();
     private boolean userFocused = true;
     private LatLng longClickLocation = null;
 
@@ -85,6 +90,8 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     protected void handleNewLocation() {
         final LatLng position = (userFocused) ? User.instance.getLocation() : longClickLocation;
 
+        Context context = this;
+
         final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
 
         mMap.clear();
@@ -109,15 +116,17 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
         // Add a marker for each starting point inside the preferred radius
-        DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
-                List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, position);
+                List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(data, position);
                 for (Track t : tracks) {
                     Marker m = mMap.addMarker(new MarkerOptions()
                             .position(t.getStartingPoint().ToLatLng())
                             .title(t.getName()));
                     m.setTag(t.getTrackUid());
+
+                    markerToTP.put(m.getTag().toString(), t.getProperties());
 
                     // If a marker had its infoWindow opened, reopen it
                     if (trackUidInfoWindow != null && trackUidInfoWindow.equals(t.getTrackUid())) {
@@ -180,6 +189,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public View getInfoContents(final Marker marker) {
             if(!marker.getTitle().equals("selected Position")) {
@@ -198,40 +208,23 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_info_window, null);
 
+            // Set title
             TextView title = view.findViewById(R.id.marker_window_title);
+            title.setText(marker.getTitle());
+
+            TrackProperties tp = markerToTP.get(marker.getTag().toString());
 
             final TextView lenText = view.findViewById(R.id.marker_window_text_len);
             final TextView diffText = view.findViewById(R.id.marker_window_text_diff);
             final TextView likeText = view.findViewById(R.id.marker_window_text_like);
 
-            // Set title
-            title.setText(marker.getTitle());
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.setRoundingMode(RoundingMode.CEILING);
 
-            DatabaseManagement.mReadDataOnce(DatabaseManagement.TRACKS_PATH, new DatabaseManagement.OnGetDataListener() {
-                @Override
-                public void onSuccess(DataSnapshot data) {
-                    // Get the correct track by it's id
-                    List<Track> tracks = DatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
-                    Track track = null;
-                    for (Track t : tracks) {
-                        if (t.getTrackUid() == marker.getTag())
-                            track = t;
-                    }
+            lenText.setText(df.format(tp.getLength()) + " m");
+            diffText.setText(df.format(tp.getHeightDifference()) + " m");
+            likeText.setText(df.format(tp.getLikes()) + "");
 
-                    // Get other info from the track (should never be null be we check just in case)
-                    if (track != null) {
-                        TrackProperties tp = track.getProperties();
-                        lenText.setText(tp.getLength() + " m");
-                        diffText.setText(tp.getHeightDifference() + " m");
-                        likeText.setText(tp.getLikes() + "");
-                    }
-                }
-
-                @Override
-                public void onFailed(DatabaseError databaseError) {
-                    Log.d("DB Read: ", "Failed to read data from DB in InfoWindowGoogleMap.");
-                }
-            });
             return view;
         }
 

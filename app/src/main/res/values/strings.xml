@@ -4,6 +4,7 @@
     <string name="facebook_login_protocol_scheme" translatable="false">fb2002032346519478</string>
     <string name="app_name">RunPHARAA</string>
     <string name="settings">Settings</string>
+    <string name="filters">Filters</string>
     <string name="profile" translatable="false">Profile</string>
     <string name="map">Map</string>
     <string name="title_activity_maps">Near me</string>
@@ -31,11 +32,15 @@
     <string name="choose_types">Choose the types of the track</string>
     <string name="default_time">Default run time was chosen</string>
     <string name="dismiss">Dismiss</string>
+    <string name="noFilter">Do not filter</string>
     <string name="OK">OK</string>
     <string name="by">by %s</string>
     <string name="duration">Duration: %.2f minutes</string>
     <string name="distance">Distance: %.2f meters</string>
     <string name="difficulty">Difficulty: %.2f</string>
+    <string name="max_difficulty_of">At most a difficulty of </string>
+    <string name="max_time_of">At most </string>
+    <string name="no_time_limit">No time limitations</string>
     <string-array name="track_types">
         <item>City</item>
         <item>Forest</item>

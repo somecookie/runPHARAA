@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">RunPHARAA</string>
     <string name="settings">Paramètres</string>
+    <string name="filters">filters</string>
     <string name="title_activity_maps">Proche</string>
     <string name="password">Mot de passe</string>
     <string name="map">Carte</string>
@@ -26,6 +27,9 @@
     <string name="types_not_set">Les types doivent être configurés</string>
     <string name="default_time">Temps de course choisi par défaut</string>
     <string name="dismiss">Annuler</string>
+    <string name="max_time_of">Au plus </string>
+    <string name="no_time_limit">Pas de limites de temps</string>
+    <string name="noFilter">Ne pas filtrer</string>
     <string name="OK">OK</string>
     <string-array name="track_types">
         <item>Ville</item>

@@ -1,7 +1,13 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
@@ -18,15 +24,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.CustLatLng;
+
 import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
+import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
-public class DatabaseManagement {
+public class TrackDatabaseManagement {
 
-    public final static String TRACKS_PATH = "tracks";
+    public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
     public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
@@ -34,16 +42,14 @@ public class DatabaseManagement {
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
-    public DatabaseManagement() {
-    }
-
+    public TrackDatabaseManagement() { }
 
     /**
      * Track a {@link Track} and add it to the database
      *
      * @param track
      */
-    public static void writeNewTrack(final Track track) {
+    public static void writeNewTrack(final FirebaseTrackAdapter track) {
         //Generate a new key in the database
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
@@ -76,10 +82,9 @@ public class DatabaseManagement {
      *
      * @param track
      */
-    public static void updateTrack(Track track) {
-        //TODO check if it works
-        //Check if track exists? Return a success or error message?
-        mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
+    public static void updateTrack(Track track){
+        FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track);
+        mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
 
     /**
@@ -89,12 +94,12 @@ public class DatabaseManagement {
      * @param key
      * @return
      */
-    public static Track initTrack(DataSnapshot dataSnapshot, String key) {
-        return dataSnapshot.child(key).getValue(Track.class);
+    public static Track initTrack(DataSnapshot dataSnapshot, String key){
+       return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase Database, returns the list of tracks near location.
      *
      * @param dataSnapshot
      * @return
@@ -105,9 +110,10 @@ public class DatabaseManagement {
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if (c.child("startingPoint").getValue(CustLatLng.class) != null) {
-                if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
-                    tracksNearMe.add(c.getValue(Track.class));
+            if(c.child("path").child("0").getValue(CustLatLng.class) != null) {
+                Log.d("Database", "track near me");
+                if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                    tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }
@@ -121,7 +127,7 @@ public class DatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase Database, returns the list of created tracks.
      *
      * @param dataSnapshot
      * @return
@@ -131,7 +137,7 @@ public class DatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(User.instance.getCreatedTracks() != null){
                 if(User.instance.getCreatedTracks().contains(c.getKey())){
-                    createdTracks.add(c.getValue(Track.class));
+                    createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }
@@ -154,10 +160,15 @@ public class DatabaseManagement {
         for (DataSnapshot c : dataSnapshot.getChildren()) {
             if (User.instance.getFavoriteTracks() != null) {
                 if (User.instance.getFavoriteTracks().contains(c.getKey())) {
-                    favouriteTracks.add(c.getValue(Track.class));
+                    favouriteTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }
+        Collections.sort(favouriteTracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
+        });
         return favouriteTracks;
     }
 
@@ -180,7 +191,6 @@ public class DatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
-
     }
 
     /**

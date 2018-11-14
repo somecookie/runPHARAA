@@ -6,4 +6,12 @@ public class Required {
         if(o == null) throw new NullPointerException(messageError);
     }
 
+    public static void greaterOrEqualZero(int i, String messageError) {
+        if(i < 0) throw new IllegalArgumentException(messageError);
+    }
+
+    public static void greaterOrEqualZero(double i, String messageError) {
+        if(i < 0) throw new IllegalArgumentException(messageError);
+    }
+
 }

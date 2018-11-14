@@ -11,7 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
-public class UserDatabaseManagement extends DatabaseManagement {
+public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String USERS = "users";
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";

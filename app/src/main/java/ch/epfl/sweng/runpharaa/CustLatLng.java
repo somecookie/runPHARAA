@@ -109,4 +109,12 @@ public class CustLatLng {
         }
         return result;
     }
+
+    public static  List<LatLng> CustLatLngToLatLng(List<CustLatLng> l) {
+        List<LatLng> result = new ArrayList<>();
+        for(CustLatLng p : l){
+            result.add(new LatLng(p.latitude, p.longitude));
+        }
+        return result;
+    }
 }
