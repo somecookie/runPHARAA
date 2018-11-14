@@ -37,8 +37,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.database.DatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -106,7 +108,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
 
                     FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
-                    DatabaseManagement.writeNewTrack(track);
+                    TrackDatabaseManagement.writeNewTrack(track);
 
                     finish();
                 }

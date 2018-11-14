@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -131,6 +132,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/small_margin" />
+
+            <fragment
+                android:id="@+id/create_map_view2"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_weight="65"
+                tools:context=".CreateTrackActivity2" />
+
+            <TextView
+                android:id="@+id/maps_test_text2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text=""/>
 
 
         </LinearLayout>

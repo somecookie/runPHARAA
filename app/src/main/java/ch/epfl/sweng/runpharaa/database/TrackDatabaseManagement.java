@@ -1,7 +1,13 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +32,7 @@ import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
-public class DatabaseManagement {
+public class TrackDatabaseManagement {
 
     public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
@@ -36,9 +42,7 @@ public class DatabaseManagement {
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
-    public DatabaseManagement() {
-    }
-
+    public TrackDatabaseManagement() { }
 
     /**
      * Track a {@link Track} and add it to the database
@@ -95,7 +99,7 @@ public class DatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase Database, returns the list of tracks near location.
      *
      * @param dataSnapshot
      * @return
@@ -123,7 +127,7 @@ public class DatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase Database, returns the list of created tracks.
      *
      * @param dataSnapshot
      * @return
@@ -160,6 +164,11 @@ public class DatabaseManagement {
                 }
             }
         }
+        Collections.sort(favouriteTracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
+        });
         return favouriteTracks;
     }
 
@@ -182,7 +191,6 @@ public class DatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
-
     }
 
     /**

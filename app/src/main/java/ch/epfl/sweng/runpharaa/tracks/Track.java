@@ -90,7 +90,6 @@ public class Track {
         this.imageStorageUri = trackAdapter.getImageStorageUri();
     }
 
-    //TODO: either delete this or do it again when the database is on
     public static ArrayList<Track> allTracks;
 
     static {
