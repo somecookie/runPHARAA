@@ -16,5 +16,6 @@ public class FragmentFollowing extends UpdatableCardItemFragment {
     @Override
     protected void loadData() {
         setEmptyMessage();
+        swipeLayout.setRefreshing(false);
     }
 }
