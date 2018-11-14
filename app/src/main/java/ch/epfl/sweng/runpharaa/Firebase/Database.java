@@ -434,7 +434,7 @@ public class Database {
         CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         int length = 100;
         int heigthDiff = 10;
-        FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", trackUID, "Bob", Arrays.asList(coord0, coord1), "imageUri",
+        FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
                 types, length, heigthDiff, 1, 1, 1, 1, 0, 0);
 
         t = track;

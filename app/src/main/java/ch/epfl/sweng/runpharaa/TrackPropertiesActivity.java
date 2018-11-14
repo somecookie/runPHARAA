@@ -81,7 +81,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
 
                 //TODO: add the creatorName attribute back to Track.
-                trackCreator.setText("By" + track.getCreatorUid());
+                trackCreator.setText("By" + track.getCreatorName());
 
                 TextView trackDuration = findViewById(R.id.trackDurationID);
 

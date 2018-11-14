@@ -107,7 +107,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 } else {
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
 
-                    FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                    FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
                     TrackDatabaseManagement.writeNewTrack(track);
 
                     finish();

@@ -15,6 +15,7 @@ public class FirebaseTrackAdapter {
     private String name;
     private String trackUid;
     private String creatorId;
+    private String creatorName;
     private Bitmap image;
     private List<CustLatLng> path;
     private String imageStorageUri;
@@ -30,14 +31,16 @@ public class FirebaseTrackAdapter {
     private int likes;
     private int favorites;
 
-    public FirebaseTrackAdapter(String name, String creatorId, Bitmap image, List<CustLatLng> path, TrackProperties properties){
+    public FirebaseTrackAdapter(String name, String creatorId, String creatorName, Bitmap image, List<CustLatLng> path, TrackProperties properties){
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
+        Required.nonNull(creatorName, "Track creator name send to database must be non null");
         Required.nonNull(path, "Track path sent to database must be non null");
         Required.nonNull(properties, "Track properties sent to database must must be non null");
 
         this.name = name;
         this.creatorId = creatorId;
+        this.creatorName = creatorName;
         this.image = image;
         this.path = path;
 
@@ -60,11 +63,13 @@ public class FirebaseTrackAdapter {
     public FirebaseTrackAdapter(Track track){
         Required.nonNull(track.getName(), "Track name send to database must be non null");
         Required.nonNull(track.getCreatorUid(), "Track creatorId send to database must be non null");
+        Required.nonNull(track.getCreatorName(), "Track creator name send to database must be non null");
         Required.nonNull(track.getPath(), "Track path sent to database must be non null");
         Required.nonNull(track.getProperties(), "Track properties sent to database must must be non null");
 
         this.name = track.getName();
         this.creatorId = track.getCreatorUid();
+        this.creatorName = track.getCreatorName();
         this.path = track.getPath();
         this.trackUid = track.getTrackUid();
 
@@ -85,11 +90,12 @@ public class FirebaseTrackAdapter {
         this.imageStorageUri = track.getImageStorageUri();
     }
 
-    public FirebaseTrackAdapter(String name, String trackUid, String creatorId, List<CustLatLng> path,
+    public FirebaseTrackAdapter(String name, String trackUid, String creatorId, String creatorName, List<CustLatLng> path,
                                 String imageStorageUri, List<String> trackTypes, double length, double heightDifference,
                                 int avgDiffTotal, int avgDiffNbr, double avgDurTotal, int avgDurNbr, int likes, int favorites) {
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
+        Required.nonNull(creatorName, "Track creator name send to database must be non null");
         Required.nonNull(path, "Track path sent to database must be non null");
         Required.nonNull(imageStorageUri, "Track imageStorageUri sent to database must be non null");
         Required.nonNull(trackTypes, "Track types sent to database must be non null");
@@ -105,6 +111,7 @@ public class FirebaseTrackAdapter {
         this.name = name;
         this.trackUid = trackUid;
         this.creatorId = creatorId;
+        this.creatorName = creatorName;
         this.path = path;
         this.imageStorageUri = imageStorageUri;
         this.trackTypes = trackTypes;
@@ -128,6 +135,8 @@ public class FirebaseTrackAdapter {
     public String getCreatorId() {
         return creatorId;
     }
+
+    public String getCreatorName() { return creatorName;}
 
     @Exclude
     public Bitmap getImage() {

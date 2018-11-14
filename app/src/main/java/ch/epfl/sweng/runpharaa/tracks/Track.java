@@ -20,6 +20,7 @@ public class Track {
     //Track identifiers
     private String trackUid;
     private String creatorUid;
+    private String creatorName;
     private String imageStorageUri;
     private CardItem cardItem;
 
@@ -69,6 +70,7 @@ public class Track {
     public Track(FirebaseTrackAdapter trackAdapter) {
         Required.nonNull(trackAdapter.getTrackUid(), "Track ID must be non-null.");
         Required.nonNull(trackAdapter.getCreatorId(), "Creator ID must be non-null.");
+        Required.nonNull(trackAdapter.getCreatorName(), "Creator name must be non-null.");
         Required.nonNull(trackAdapter.getName(), "Track name must be non-null");
         Required.nonNull(trackAdapter.getPath(), "Path must be non-null.");
         if (trackAdapter.getPath().size() < 2) throw new IllegalArgumentException("A path must have at least 2 points");
@@ -84,6 +86,7 @@ public class Track {
 
         this.trackUid = trackAdapter.getTrackUid();
         this.creatorUid = trackAdapter.getCreatorId();
+        this.creatorName = trackAdapter.getCreatorName();
         this.name = trackAdapter.getName();
         this.path = trackAdapter.getPath();
         this.startingPoint = path.get(0);
@@ -131,6 +134,8 @@ public class Track {
     public String getTrackUid() { return trackUid; }
 
     public String getCreatorUid() { return creatorUid; }
+
+    public String getCreatorName() { return creatorName; }
 
     public Double getHeightDifference() {return properties.getHeightDifference();}
 
