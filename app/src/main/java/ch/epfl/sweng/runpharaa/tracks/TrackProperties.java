@@ -51,7 +51,7 @@ public class TrackProperties {
         this.trackType = trackType;
     }
 
-    @Exclude //TODO think about how to put it in databse
+    @Exclude //TODO think about how to put it in database
     public double getAvgDifficulty(){
         return avgDiff.getAverage();
     }
@@ -61,7 +61,7 @@ public class TrackProperties {
     public int getAvgDifficultyTotal() { return avgDiff.getTotal();}
     public int getAvgDifficultyNbr() { return avgDiff.getNbr();}
 
-    @Exclude //TODO think about how to put it in databse
+    @Exclude //TODO think about how to put it in database
     public double getAvgDuration(){
         return avgDur.getAverage();
     }
