@@ -86,10 +86,6 @@
         <activity
             android:name=".user.SettingsActivity"
             android:label="@string/settings" />
-
-        <activity
-            android:name="com.twitter.sdk.android"
-            android:label="@string/settings" />
     </application>
 
 </manifest>

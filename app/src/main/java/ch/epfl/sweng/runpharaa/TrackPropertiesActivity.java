@@ -33,12 +33,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.RoundingMode;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,6 +95,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
+
+        Twitter.initialize(this);
 
         shareDialog = new ShareDialog(this);
 
@@ -187,7 +193,16 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 // Share on Twitter
                 ImageButton twitter = findViewById(R.id.twitter_share_button);
                 twitter.setOnClickListener(v -> {
-                    startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
+                    //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
+                    TweetComposer.Builder builder = null;
+                    try {
+                        builder = new TweetComposer.Builder(getApplicationContext())
+                                .text(String.format(getString(R.string.facebook_post_message), track.getName()))
+                                .url(new URL("https://github.com/somecookie/runPHARAA"));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    builder.show();
 
                 });
 
