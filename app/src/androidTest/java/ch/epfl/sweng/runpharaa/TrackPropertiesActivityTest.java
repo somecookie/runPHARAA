@@ -11,6 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,10 +37,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
 
-    /*@BeforeClass
+    @BeforeClass
     public static void initUser() {
         User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
-    }*/
+        InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("adb install ~/facebook-android-sdk-3.5/bin/FBAndroid-28.apk");
+    }
 
     @Rule
     public ActivityTestRule<TrackPropertiesActivity> mActivityRule =
@@ -48,6 +50,14 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @Before
     public void initUserAndTracks() {
         User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+    }
+
+    @Test
+    public void shareOnFacebook() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.fb_share_button)).perform(click());
     }
 
     @Test
@@ -77,6 +87,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         withId(R.id.trackFavouritesID).matches(withText("1"));
     }
 
+    @Test
     public void pressingLikeUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);

@@ -303,12 +303,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         map = googleMap;
         // Make map static
         map.getUiSettings().setAllGesturesEnabled(false);
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                return true;
-            }
-        });
+        map.setOnMarkerClickListener(marker -> true);
         // Adapt padding to fit markers
         map.setPadding(50, 150, 50, 50);
         handleExtras();
