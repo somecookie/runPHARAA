@@ -167,4 +167,14 @@
         android:layout_marginEnd="@dimen/classic_margin"
         android:layout_marginTop="@dimen/classic_margin"
         android:background="@drawable/ic_facebook_logo" />
+
+    <ImageButton
+        android:id="@+id/twitter_share_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="82dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/ic_twitter" />
 </RelativeLayout>

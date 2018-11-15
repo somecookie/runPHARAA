@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -51,6 +52,7 @@ import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -168,6 +170,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     }
                 });
 
+                // Share on Facebook
                 ImageButton fb = findViewById(R.id.fb_share_button);
                 fb.setOnClickListener( v -> {
                     if (ShareDialog.canShow(ShareLinkContent.class)) {
@@ -179,6 +182,15 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                         shareDialog.show(content);
                     }
                 });
+
+
+                // Share on Twitter
+                ImageButton twitter = findViewById(R.id.twitter_share_button);
+                twitter.setOnClickListener(v -> {
+                    startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
+
+                });
+
 
 
                 TextView trackTags = findViewById(R.id.trackTagsID);

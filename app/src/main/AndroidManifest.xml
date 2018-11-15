@@ -37,6 +37,7 @@
             android:authorities="com.facebook.app.FacebookContentProvider2002032346519478"
             android:exported="true" />
 
+
         <activity android:name=".MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -84,6 +85,10 @@
         </activity>
         <activity
             android:name=".user.SettingsActivity"
+            android:label="@string/settings" />
+
+        <activity
+            android:name="com.twitter.sdk.android"
             android:label="@string/settings" />
     </application>
 

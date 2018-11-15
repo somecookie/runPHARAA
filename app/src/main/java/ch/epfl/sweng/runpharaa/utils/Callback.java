@@ -15,5 +15,4 @@ abstract public class Callback<T> {
     public void onError(Exception e){
         e.printStackTrace();
     }
-
 }
