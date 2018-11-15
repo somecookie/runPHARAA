@@ -24,15 +24,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.CustLatLng;
+
 import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
+import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class TrackDatabaseManagement {
 
-    public final static String TRACKS_PATH = "tracks";
+    public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
 
     public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
@@ -47,7 +49,7 @@ public class TrackDatabaseManagement {
      *
      * @param track
      */
-    public static void writeNewTrack(final Track track) {
+    public static void writeNewTrack(final FirebaseTrackAdapter track) {
         //Generate a new key in the database
         final String key = mDataBaseRef.child(TRACKS_PATH).push().getKey();
 
@@ -80,8 +82,9 @@ public class TrackDatabaseManagement {
      *
      * @param track
      */
-    public static void updateTrack(Track track) {
-        mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).setValue(track);
+    public static void updateTrack(Track track){
+        FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track);
+        mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
 
     /**
@@ -91,8 +94,8 @@ public class TrackDatabaseManagement {
      * @param key
      * @return
      */
-    public static Track initTrack(DataSnapshot dataSnapshot, String key) {
-        return dataSnapshot.child(key).getValue(Track.class);
+    public static Track initTrack(DataSnapshot dataSnapshot, String key){
+       return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
 
     /**
@@ -106,9 +109,11 @@ public class TrackDatabaseManagement {
         for (DataSnapshot c : dataSnapshot.getChildren()) {
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
-            if (c.child("startingPoint").getValue(CustLatLng.class) != null) {
-                if (c.child("startingPoint").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) {
-                    tracksNearMe.add(c.getValue(Track.class));
+
+            if(c.child("path").child("0").getValue(CustLatLng.class) != null) {
+                Log.d("Database", "track near me");
+                if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                    tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }
@@ -132,7 +137,7 @@ public class TrackDatabaseManagement {
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(User.instance.getCreatedTracks() != null){
                 if(User.instance.getCreatedTracks().contains(c.getKey())){
-                    createdTracks.add(c.getValue(Track.class));
+                    createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }
@@ -155,7 +160,7 @@ public class TrackDatabaseManagement {
         for (DataSnapshot c : dataSnapshot.getChildren()) {
             if (User.instance.getFavoriteTracks() != null) {
                 if (User.instance.getFavoriteTracks().contains(c.getKey())) {
-                    favouriteTracks.add(c.getValue(Track.class));
+                    favouriteTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
         }

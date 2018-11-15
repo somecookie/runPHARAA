@@ -1,21 +1,16 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
-import ch.epfl.sweng.runpharaa.Initializer.TestInitNoLocation;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -36,14 +30,8 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.Assert.assertTrue;
-
-import ch.epfl.sweng.runpharaa.Firebase.Database;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -127,7 +115,9 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track track = new Track("0", "Bob", b, "Cours forest !", Arrays.asList(coord0, coord1), p);
+
+        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1), p);
+
 
         return track;
     }

@@ -30,8 +30,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -39,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -107,8 +106,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
                 } else {
                     trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
-                    Track track = new Track(nameText.getText().toString(), User.instance.getUid(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
-                    TrackDatabaseManagement.writeNewTrack(track );
+
+                    FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                    TrackDatabaseManagement.writeNewTrack(track);
+
                     finish();
                 }
             }
