@@ -91,6 +91,16 @@ public class UsersProfileActivity extends AppCompatActivity {
         int nbFav = user.getFavoriteTracks().size();
         v2.setText(Integer.toString(nbFav));
 
+        Button createdTracksButton = findViewById(R.id.createdTracks_button);
+        createdTracksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent seeTracks = new Intent(getBaseContext(), createdTracksActivity.class);
+                //startActivity(seeTracks);
+                //finish();
+            }
+        });
+
         if (isSelfUser) {
             Button signOutButton = findViewById(R.id.sign_out_button);
             signOutButton.setOnClickListener(new View.OnClickListener() {
