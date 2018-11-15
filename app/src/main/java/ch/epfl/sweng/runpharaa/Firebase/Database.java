@@ -160,6 +160,9 @@ public class Database {
     private List<String> userFavoritesList;
 
     @Mock
+    private List<String> userLikesList;
+
+    @Mock
     private Task<Void> removeTask;
 
     @Mock
@@ -249,6 +252,15 @@ public class Database {
             }
         });
 
+        //TODO: Delete?? (Andra)
+        when(drUserAnyChildLikes.setValue(userLikesList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                fake_user.setLikedTracks(userLikesList);
+                return null;
+            }
+        });
+
         when(drUserAnyChildFavorites.child(any(String.class))).thenReturn(drUserAnyChildFavoritesChild);
         when(drUserAnyChildLikes.child(any(String.class))).thenReturn(drUserAnyChildLikesChild);
         when(drUserAnyChildCreate.child(any(String.class))).thenReturn(drUserAnyChildCreatesChild);
@@ -265,6 +277,7 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChildFavoritesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -277,6 +290,7 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChildCreatesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -325,7 +339,18 @@ public class Database {
             }
         });
         //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
-        //when(drUserAnyChildLikeChild.removeValue())
+        //when(drUserAnyChildIdLikesChild.setValue(any(String.class))).thenReturn();
+        when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setTask);
+        when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+                if(shouldFail){
+                    l.onFailure(new IllegalStateException("Cant set value"));
+                }
+                return setValueTrack;
+            }
+        });
 
     }
 
