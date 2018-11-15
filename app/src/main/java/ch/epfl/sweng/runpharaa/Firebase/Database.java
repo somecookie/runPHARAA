@@ -162,6 +162,12 @@ public class Database {
     @Mock
     private Task<Void> setValueTask;
 
+    @Mock
+    private Task<Void> setValueFavoriteTask;
+
+    @Mock
+    private Task<Void> setValueLikeTask;
+
 
     private Database() {
 
@@ -238,6 +244,12 @@ public class Database {
         when(drUserAnyChildLikes.child(any(String.class))).thenReturn(drUserAnyChildLikesChild);
         when(drUserAnyChildCreate.child(any(String.class))).thenReturn(drUserAnyChildCreatesChild);
 
+
+        when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
+
+        when(drUserAnyChildFavorites.setValue(any(Object.class))).thenReturn(setValueFavoriteTask);
+        when(drUserAnyChildLikes.setValue(any(Object.class))).thenReturn(setValueLikeTask);
+
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -297,8 +309,6 @@ public class Database {
             }
         });
 
-        //TODO: How to make it
-        when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
@@ -309,7 +319,31 @@ public class Database {
                 return setValueTrack;
             }
         });
-        //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
+
+
+        when(setValueFavoriteTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+                if(shouldFail){
+                    l.onFailure(new IllegalStateException("Cant set value"));
+                }
+                return setValueFavoriteTask;
+            }
+        });
+
+        when(setValueLikeTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+                if(shouldFail){
+                    l.onFailure(new IllegalStateException("Cant set value"));
+                }
+                return setValueLikeTask;
+            }
+        });
+
+
         //when(drUserAnyChildLikeChild.removeValue())
 
     }
