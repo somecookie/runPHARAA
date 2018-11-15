@@ -163,6 +163,9 @@ public class Database {
     private List<String> userLikesList;
 
     @Mock
+    private List<String> userCreatesList;
+
+    @Mock
     private Task<Void> removeTask;
 
     @Mock
@@ -204,7 +207,6 @@ public class Database {
     }
 
     private void instanciateSnapshots() {
-        //TODO: verifier si on a que ca comme cle
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
 
         when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
@@ -252,11 +254,18 @@ public class Database {
             }
         });
 
-        //TODO: Delete?? (Andra)
         when(drUserAnyChildLikes.setValue(userLikesList)).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) {
                 fake_user.setLikedTracks(userLikesList);
+                return null;
+            }
+        });
+
+        when(drUserAnyChildLikes.setValue(userCreatesList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                fake_user.setCreatedTracks(userCreatesList);
                 return null;
             }
         });
@@ -326,22 +335,14 @@ public class Database {
             }
         });
 
-        //TODO: How to make it
+        when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
+        when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
+        when(drUserAnyChildCreate.setValue(any(List.class))).thenReturn(setValueTask);
+
         when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
+        when(drUserAnyChildLikesChild.setValue(any(String.class))).thenReturn(setValueTask);
+        when(drUserAnyChildFavoritesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail){
-                    l.onFailure(new IllegalStateException("Cant set value"));
-                }
-                return setValueTrack;
-            }
-        });
-        //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
-        //when(drUserAnyChildIdLikesChild.setValue(any(String.class))).thenReturn();
-        when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setTask);
-        when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
