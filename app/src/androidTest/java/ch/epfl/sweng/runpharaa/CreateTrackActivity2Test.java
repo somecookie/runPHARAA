@@ -235,7 +235,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .perform(click());
         sleep(WAIT_TIME);
     }
-    
+
     private Location generateLocation(LatLng p) {
         Location l = new Location(LocationManager.GPS_PROVIDER);
         l.setLatitude(p.latitude);
