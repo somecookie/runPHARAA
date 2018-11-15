@@ -95,7 +95,8 @@ public class UsersProfileActivity extends AppCompatActivity {
         createdTracksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent seeTracks = new Intent(getBaseContext(), createdTracksActivity.class);
+                //Intent seeTracks = new Intent(getBaseContext(), CreatedTracksActivity.class);
+                //seeTracks.putExtra("user", user.getUid());
                 //startActivity(seeTracks);
                 //finish();
             }
