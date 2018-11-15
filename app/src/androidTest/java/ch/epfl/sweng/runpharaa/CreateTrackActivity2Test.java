@@ -169,7 +169,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         launchWithExtras(locations, points);
         onView(withId(R.id.set_properties)).perform(click());
         onView(withClassName(Matchers.equalTo(SeekBar.class.getName()))).perform(setProgress(1));
-        onView(withId(R.id.diff_text)).check(matches(withText("Difficulty is 1")));
+        onView(withId(R.id.diff_text)).check(matches(withText(mActivityRule.getActivity().getResources().getString(R.string.difficulty_is) + 1)));
         sleep(WAIT_TIME);
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
