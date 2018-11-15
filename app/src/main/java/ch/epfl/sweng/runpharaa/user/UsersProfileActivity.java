@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa.user;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +8,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +31,9 @@ import java.io.InputStream;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.TrackCardItem;
+import ch.epfl.sweng.runpharaa.UpdatableCardItemFragment;
+import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
@@ -90,17 +97,6 @@ public class UsersProfileActivity extends AppCompatActivity {
         TextView v2 = findViewById(R.id.nbFav);
         int nbFav = user.getFavoriteTracks().size();
         v2.setText(Integer.toString(nbFav));
-
-        Button createdTracksButton = findViewById(R.id.createdTracks_button);
-        createdTracksButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Intent seeTracks = new Intent(getBaseContext(), CreatedTracksActivity.class);
-                //seeTracks.putExtra("user", user.getUid());
-                //startActivity(seeTracks);
-                //finish();
-            }
-        });
 
         if (isSelfUser) {
             Button signOutButton = findViewById(R.id.sign_out_button);
@@ -193,5 +189,4 @@ public class UsersProfileActivity extends AppCompatActivity {
             bmImage.setImageBitmap(result);
         }
     }
-
 }
