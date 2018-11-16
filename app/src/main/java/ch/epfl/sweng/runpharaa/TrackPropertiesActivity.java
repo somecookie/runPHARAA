@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,23 +27,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -55,8 +46,6 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.utils.Callback;
-import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -183,7 +172,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                         ShareLinkContent content = new ShareLinkContent.Builder()
                                 .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
                                 .setShareHashtag(new ShareHashtag.Builder()
-                                        .setHashtag(String.format(getString(R.string.facebook_post_message), track.getName())).build())
+                                        .setHashtag(String.format(getString(R.string.social_media_post_message), track.getName())).build())
                                 .build();
                         shareDialog.show(content);
                     }
@@ -197,7 +186,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     TweetComposer.Builder builder = null;
                     try {
                         builder = new TweetComposer.Builder(getApplicationContext())
-                                .text(String.format(getString(R.string.facebook_post_message), track.getName()))
+                                .text(String.format(getString(R.string.social_media_post_message), track.getName()))
                                 .url(new URL("https://github.com/somecookie/runPHARAA"));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();

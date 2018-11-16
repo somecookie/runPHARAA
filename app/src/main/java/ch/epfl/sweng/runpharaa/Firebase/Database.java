@@ -516,4 +516,8 @@ public class Database {
     public static void setUserExists(boolean userExists) {
         Database.userExists = userExists;
     }
+
+    public User getUser(){
+        return fake_user;
+    }
 }
