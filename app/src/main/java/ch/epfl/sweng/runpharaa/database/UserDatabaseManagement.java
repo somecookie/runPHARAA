@@ -9,6 +9,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
+import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
@@ -26,6 +29,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     User storedUser = dataSnapshot.getValue(User.class);
+                    Log.d("Hugo", storedUser.getFavoriteTracks().toString());
                     callback.onSuccess(storedUser);
 
                 }else{

@@ -1,34 +1,17 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 
@@ -57,13 +40,10 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
-                OnItemClickListener listener = new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(CardItem item) {
-                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                        intent.putExtra("TrackID", item.getParentTrackID());
-                        startActivity(intent);
-                    }
+                OnItemClickListener listener = item -> {
+                    Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                    intent.putExtra("TrackID", item.getParentTrackID());
+                    startActivity(intent);
                 };
                 List<Track> tracks = TrackDatabaseManagement.initFavouritesTracks(data);
                 for (Track t : tracks) {
@@ -76,6 +56,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
 
                 if (listCardItem.isEmpty())
                     setEmptyMessage();
+
                 swipeLayout.setRefreshing(false);
             }
 

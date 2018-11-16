@@ -148,6 +148,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                 @Override
                 public void onSuccess(User value) {
+                    User.instance.setFavoriteTracks(value.getFavoriteTracks());
+                    User.instance.setCreatedTracks(value.getCreatedTracks());
+                    User.instance.setLikedTracks(value.getLikedTracks());
+                    User.instance.setFollowedUsers(value.getFollowedUsers());
                     launchApp();
                 }
 

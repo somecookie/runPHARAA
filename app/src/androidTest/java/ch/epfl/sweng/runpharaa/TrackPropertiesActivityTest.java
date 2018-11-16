@@ -10,6 +10,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -33,6 +34,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -40,7 +42,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
-        InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("adb install ~/facebook-android-sdk-3.5/bin/FBAndroid-28.apk");
+        //InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("adb install ~/facebook-android-sdk-3.5/bin/FBAndroid-28.apk");
     }
 
     @Rule
@@ -59,6 +61,16 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(2000);
         onView(withId(R.id.fb_share_button)).perform(click());
     }
+
+    @Test
+    public void shareOnTwitter() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.twitter_share_button)).perform(click());
+    }
+
+
 
     @Test
     public void correctValuesDisplayedForTrack1() {

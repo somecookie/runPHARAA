@@ -112,7 +112,7 @@ public class TrackDatabaseManagement {
 
             if(c.child("path").child("0").getValue(CustLatLng.class) != null) {
                 Log.d("Database", "track near me");
-                if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) { //TODO: Need to change because the default location of the user is in the US.
+                if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) {
                     tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
