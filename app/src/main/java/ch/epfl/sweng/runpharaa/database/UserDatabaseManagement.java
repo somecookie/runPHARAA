@@ -28,6 +28,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     User storedUser = dataSnapshot.getValue(User.class);
+                    Log.d("Hugo", storedUser.getFavoriteTracks().toString());
                     callback.onSuccess(storedUser);
 
                 }else{
