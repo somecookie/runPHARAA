@@ -160,6 +160,12 @@ public class Database {
     private List<String> userFavoritesList;
 
     @Mock
+    private List<String> userLikesList;
+
+    @Mock
+    private List<String> userCreatesList;
+
+    @Mock
     private Task<Void> removeTask;
 
     @Mock
@@ -201,7 +207,6 @@ public class Database {
     }
 
     private void instanciateSnapshots() {
-        //TODO: verifier si on a que ca comme cle
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
 
         when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
@@ -249,6 +254,22 @@ public class Database {
             }
         });
 
+        when(drUserAnyChildLikes.setValue(userLikesList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                fake_user.setLikedTracks(userLikesList);
+                return null;
+            }
+        });
+
+        when(drUserAnyChildLikes.setValue(userCreatesList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                fake_user.setCreatedTracks(userCreatesList);
+                return null;
+            }
+        });
+
         when(drUserAnyChildFavorites.child(any(String.class))).thenReturn(drUserAnyChildFavoritesChild);
         when(drUserAnyChildLikes.child(any(String.class))).thenReturn(drUserAnyChildLikesChild);
         when(drUserAnyChildCreate.child(any(String.class))).thenReturn(drUserAnyChildCreatesChild);
@@ -265,6 +286,7 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChildFavoritesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -277,6 +299,7 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChildCreatesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
         doAnswer(new Answer<ValueEventListener>() {
             @Override
             public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
@@ -312,8 +335,13 @@ public class Database {
             }
         });
 
-        //TODO: How to make it
+        when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
+        when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
+        when(drUserAnyChildCreate.setValue(any(List.class))).thenReturn(setValueTask);
+
         when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
+        when(drUserAnyChildLikesChild.setValue(any(String.class))).thenReturn(setValueTask);
+        when(drUserAnyChildFavoritesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
@@ -324,8 +352,6 @@ public class Database {
                 return setValueTrack;
             }
         });
-        //when(drUserAnyChildIdFavoritesChild.setValue(any(String.class))).thenReturn();
-        //when(drUserAnyChildLikeChild.removeValue())
 
     }
 

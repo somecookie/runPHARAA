@@ -4,19 +4,24 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -55,10 +60,38 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private TextView testText;
     private ImageLoader imageLoader;
 
+    ShareDialog shareDialog;
+
+    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
+    private String createTagString(Track track) {
+        Set<TrackType> typeSet = track.getProperties().getType();
+        int nbrTypes = typeSet.size();
+        String[] trackType = getResources().getStringArray(R.array.track_types);
+
+        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(start);
+
+        int i = 0;
+
+        for(TrackType tt : typeSet){
+
+            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
+            if(i < nbrTypes - 1) sb.append(", ");
+
+            i++;
+        }
+        return sb.toString();
+    }*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
+
+        shareDialog = new ShareDialog(this);
+
         final Intent intent = getIntent();
         imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
@@ -134,6 +167,19 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                         }
                     }
                 });
+
+                ImageButton fb = findViewById(R.id.fb_share_button);
+                fb.setOnClickListener( v -> {
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
+                                .setShareHashtag(new ShareHashtag.Builder()
+                                        .setHashtag(String.format(getString(R.string.facebook_post_message), track.getName())).build())
+                                .build();
+                        shareDialog.show(content);
+                    }
+                });
+
 
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));
@@ -302,7 +348,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.25);
+            int height = 250;
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));

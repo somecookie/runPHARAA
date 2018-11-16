@@ -1,5 +1,4 @@
 language: android
-dist: trusty # choose the type of operating system (Ubuntu 14)
 sudo: required # toggle sudo mode (should be a bit faster)
 android:
   components:
@@ -21,13 +20,13 @@ env:
   global:
     - ADB_INSTALL_TIMEOUT=8
 
-deploy:
-  provider: testfairy
-  api-key: "404771920c67776e429dc8548b060d68b58d433b"
-  app-file: app/build/outputs/apk/debug/app-debug.apk
-  auto-update: true
-  screenshot-interval: 1
-  metrics: gps
+#deploy:
+#  provider: testfairy
+#  api-key: "404771920c67776e429dc8548b060d68b58d433b"
+#  app-file: app/build/outputs/apk/debug/app-debug.apk
+#  auto-update: true
+#  screenshot-interval: 1
+#  metrics: gps
 
 notifications:
   email: false # disable email notifications
@@ -52,7 +51,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - ./gradlew connectedCheck jacocoTestReport -i
+  - travis_retry ./gradlew connectedCheck jacocoTestReport --info
 
 after_script:
   # Report test coverage to Code Climate
