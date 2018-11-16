@@ -40,13 +40,10 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<CardItem> listCardItem = new ArrayList<>();
-                OnItemClickListener listener = new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(CardItem item) {
-                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                        intent.putExtra("TrackID", item.getParentTrackID());
-                        startActivity(intent);
-                    }
+                OnItemClickListener listener = item -> {
+                    Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                    intent.putExtra("TrackID", item.getParentTrackID());
+                    startActivity(intent);
                 };
                 List<Track> tracks = TrackDatabaseManagement.initFavouritesTracks(data);
                 for (Track t : tracks) {
