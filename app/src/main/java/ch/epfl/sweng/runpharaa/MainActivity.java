@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void filterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        final View mView = getLayoutInflater().inflate(R.layout.dialog_filters, null);
+        final View mView = getLayoutInflater().inflate(R.layout.dialog_filters, null, false);
 
         builder.setTitle(getResources().getString(R.string.filters));
 
