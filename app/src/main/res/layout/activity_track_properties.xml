@@ -1,154 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollID"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context=".TrackPropertiesActivity">
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/trackBackgroundID"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop" />
+        android:id="@+id/scrollID">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
+            <ImageView
+                android:id="@+id/trackBackgroundID"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/small_margin">
+                android:layout_height="150dp"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/small_margin"
+                android:orientation="vertical">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/small_margin">
+
+                    <TextView
+                        android:id="@+id/trackTitleID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:text="Track Title"
+                        android:textColor="#000"
+                        android:textSize="@dimen/large_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/trackCreatorID"
+                        android:layout_width="82dp"
+                        android:layout_height="wrap_content"
+                        android:text="Track Creator"
+                        android:textStyle="italic"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/trackTitleID" />
+
+                    <ToggleButton
+                        android:id="@+id/buttonLikeID"
+                        android:layout_width="@dimen/large_text"
+                        android:layout_height="@dimen/large_text"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginRight="24dp"
+                        android:background="@drawable/ic_button_like"
+                        android:checked="false"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/trackFavouritesID"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ToggleButton
+                        android:id="@+id/buttonFavoriteID"
+                        android:layout_width="@dimen/large_text"
+                        android:layout_height="@dimen/large_text"
+                        android:background="@drawable/ic_button_favorite"
+                        android:checked="false"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/trackLikesID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonLikeID"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.538" />
+
+                    <TextView
+                        android:id="@+id/trackFavouritesID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/buttonFavoriteID"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.538" />
+
+                </android.support.constraint.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/trackTitleID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:text="Track Title"
-                    android:textColor="#000"
-                    android:textSize="@dimen/large_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/trackCreatorID"
-                    android:layout_width="82dp"
+                    android:id="@+id/trackDurationID"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Track Creator"
-                    android:textStyle="italic"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/trackTitleID" />
-
-                <ToggleButton
-                    android:id="@+id/buttonLikeID"
-                    android:layout_width="@dimen/large_text"
-                    android:layout_height="@dimen/large_text"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@drawable/ic_button_like"
-                    android:checked="false"
-                    android:text=""
-                    android:textOff=""
-                    android:textOn=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/trackFavouritesID"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ToggleButton
-                    android:id="@+id/buttonFavoriteID"
-                    android:layout_width="@dimen/large_text"
-                    android:layout_height="@dimen/large_text"
-                    android:background="@drawable/ic_button_favorite"
-                    android:checked="false"
-                    android:text=""
-                    android:textOff=""
-                    android:textOn=""
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Track Duration" />
 
                 <TextView
-                    android:id="@+id/trackLikesID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="19dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonLikeID"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.538" />
+                    android:id="@+id/trackLengthID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Track Length" />
 
                 <TextView
-                    android:id="@+id/trackFavouritesID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="19dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonFavoriteID"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.538" />
+                    android:id="@+id/track_difficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Difficulty" />
 
-            </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:id="@+id/trackTagsID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Tags" />
 
-            <TextView
-                android:id="@+id/trackDurationID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin"
-                android:text="Track Duration" />
+                <TextView
+                    android:id="@+id/trackHeightDiffID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin" />
 
-            <TextView
-                android:id="@+id/trackLengthID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin"
-                android:text="Track Length" />
+                <fragment
+                    android:id="@+id/create_map_view2"
+                    android:name="ch.epfl.sweng.runpharaa.CustomMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    tools:context=".TrackPropertiesActivity" />
 
-            <TextView
-                android:id="@+id/track_difficulty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin"
-                android:text="Difficulty" />
-
-            <TextView
-                android:id="@+id/trackTagsID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin"
-                android:text="Tags" />
-
-            <TextView
-                android:id="@+id/trackHeightDiffID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin" />
-
-            <fragment
-                android:id="@+id/create_map_view2"
-                android:name = "ch.epfl.sweng.runpharaa.CustomMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_weight="65"
-                tools:context=".CreateTrackActivity2" />
-
-            <TextView
-                android:id="@+id/maps_test_text2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:text=""/>
+                <TextView
+                    android:id="@+id/maps_test_text2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:text="" />
 
 
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/fb_share_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="@dimen/classic_margin"
+        android:layout_marginTop="@dimen/classic_margin"
+        android:background="@drawable/ic_facebook_logo" />
+
+    <ImageButton
+        android:id="@+id/twitter_share_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="82dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/ic_twitter" />
+</RelativeLayout>

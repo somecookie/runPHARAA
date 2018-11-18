@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="facebook_app_id" translatable="false">2002032346519478</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb2002032346519478</string>
     <string name="app_name">RunPHARAA</string>
     <string name="settings">Settings</string>
     <string name="filters">Filters</string>
@@ -90,4 +92,5 @@
         <string name="pref_title_clear_cache">Clear cache</string>
         <string name="pref_key_clear_cache" translatable="false">clear_cache</string>
 
+    <string name="social_media_post_message">Check out this awesome track on RunPharaa !\nIt\'s called \"%s\"\n #runPharaaWayFromTravis 😍😍🔥🔥</string>
 </resources>
