@@ -8,6 +8,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -81,8 +82,12 @@ public class MapsTest extends TestInitLocation {
         }
 
 
+        try{
+            Log.i("WESHHHHH", marker.getText());
 
-        assertTrue(marker.exists());
+        } catch (UiObjectNotFoundException e){
+            fail("cant get text");
+        }
 
         try {
             marker.click();

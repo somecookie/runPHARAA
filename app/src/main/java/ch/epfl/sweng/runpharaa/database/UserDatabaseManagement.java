@@ -3,6 +3,7 @@ package ch.epfl.sweng.runpharaa.database;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,8 +52,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     public static void updateFavoriteTracks(final User user){
-        DatabaseReference favRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FAVORITE);
-        favRef.setValue(user.getFavoriteTracks()).addOnFailureListener(Throwable::printStackTrace);
+        DatabaseReference favRef = mDataBaseRef.child(USERS);
+        DatabaseReference favRef2 = favRef.child(user.getUid());
+        DatabaseReference favRef3 = favRef2.child(FAVORITE);
+        Task<Void> t = favRef3.setValue(user.getFavoriteTracks());
+
+        t.addOnFailureListener(Throwable::printStackTrace);
     }
 
     public static void removeFavoriteTrack(final String trackID) {
