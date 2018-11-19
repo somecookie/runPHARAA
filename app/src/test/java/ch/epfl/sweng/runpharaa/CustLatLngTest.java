@@ -1,6 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -49,6 +54,26 @@ public class CustLatLngTest {
         assertNotEquals(longitudeMax, l4.getLongitude());
         assertEquals(((longitudeMax - 180.0D) % 360.0D + 360.0D) % 360.0D - 180.0D, l4.getLongitude(), 0);
 
+    }
+
+    @Test
+    public void testLatLngToCustLatLng(){
+        double latitude = 10;
+        double longitude = 10;
+        LatLng ll = new LatLng(latitude, longitude);
+        LatLng l2 = new LatLng(latitude + 1, longitude + 1);
+        CustLatLng cll = CustLatLng.LatLngToCustLatLng(ll);
+        assertEquals(cll.getLatitude(), 10, 0);
+        assertEquals(cll.getLongitude(), 10, 0);
+
+        List<LatLng> list = new ArrayList<>();
+        list.add(ll);
+        list.add(l2);
+        List<CustLatLng> listccl = CustLatLng.LatLngToCustLatLng(list);
+        assertEquals(listccl.get(0).getLatitude(), 10, 0);
+        assertEquals(listccl.get(0).getLongitude(), 10, 0);
+        assertEquals(listccl.get(1).getLatitude(), 11, 0);
+        assertEquals(listccl.get(1).getLongitude(), 11, 0);
 
     }
 

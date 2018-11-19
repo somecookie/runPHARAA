@@ -50,7 +50,8 @@ public final class User {
         this.uid = uid;
     }
 
-    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
+    public static void
+    set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
 

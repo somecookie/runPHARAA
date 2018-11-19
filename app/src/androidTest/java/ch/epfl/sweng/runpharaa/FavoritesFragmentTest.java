@@ -14,6 +14,9 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -75,6 +78,9 @@ public class FavoritesFragmentTest extends TestInitLocation {
 
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        List<String> fav = new ArrayList<>();
+        fav.add("0");
+        User.instance.setFavoriteTracks(fav);
         sleep(2000);
         onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
                 swipeDown());
@@ -84,6 +90,8 @@ public class FavoritesFragmentTest extends TestInitLocation {
                 actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+
+        User.instance.setFavoriteTracks(new ArrayList<>());
 
         onView(withId(R.id.buttonFavoriteID)).perform(click());
 
