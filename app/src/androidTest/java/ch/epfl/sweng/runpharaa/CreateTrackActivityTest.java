@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -49,6 +50,7 @@ public class CreateTrackActivityTest extends TestInitLocation {
         GpsService.initFakeGps(FakeGpsService.SAT);
     }
 
+    @Ignore
     @Test
     public void createTrackWithTwoPoints() {
         c = InstrumentationRegistry.getTargetContext();
