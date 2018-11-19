@@ -40,6 +40,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertTrue;
@@ -75,6 +76,7 @@ public class MapsTest extends TestInitLocation {
         sleep(5_000);
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
+
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
         if(marker == null){
@@ -149,6 +151,8 @@ public class MapsTest extends TestInitLocation {
             fail("Couldn't find marker");
         }
     }
+
+
 
     @AfterClass
     public static void cleanUp() {
