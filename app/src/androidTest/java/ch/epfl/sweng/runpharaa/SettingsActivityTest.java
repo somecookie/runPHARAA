@@ -107,7 +107,6 @@ public class SettingsActivityTest extends TestInitLocation {
         setValueToPref(R.string.pref_key_min_time_interval, "2");
     }
 
-    @Ignore
     @Test
     public void updateDistanceInterval() {
         setValueToPref(R.string.pref_key_min_distance_interval, "1");
