@@ -13,20 +13,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -177,7 +180,36 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu, menu);
+        initSearch(menu);
         return true;
+    }
+
+    private void initSearch(Menu menu) {
+        MenuItem item = menu.findItem(R.id.searchIcon);
+        SearchView sv = (SearchView)item.getActionView();
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
+                    @Override
+                    public void onSuccess(String value) {
+                        if(value == null){
+                            Toast.makeText(getBaseContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
+                        }else{
+                            Intent i = new Intent(getBaseContext(),TrackPropertiesActivity.class);
+                            i.putExtra("TrackID", value);
+                            startActivity(i);
+                        }
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
     }
 
     @Override

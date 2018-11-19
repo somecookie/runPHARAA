@@ -5,11 +5,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,25 +19,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
-import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class TrackDatabaseManagement {
 
     public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
+    public final static String NAME_PATH = "name";
+    public final static String ID_PATH = "trackUid";
 
     public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     public static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
-    public TrackDatabaseManagement() { }
+    public TrackDatabaseManagement() {
+    }
 
     /**
      * Track a {@link Track} and add it to the database
@@ -77,12 +76,38 @@ public class TrackDatabaseManagement {
         });
     }
 
+    public static void findTrackUIDByName(final String name, Callback<String> callback) {
+        DatabaseReference ref = mDataBaseRef.child(TRACKS_PATH);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    String dataName = formatString(data.child(NAME_PATH).getValue(String.class));
+                    String formattedName = formatString(name);
+
+                    if (dataName.equals(formattedName)) {
+                        String id = data.child(ID_PATH).getValue(String.class);
+                        callback.onSuccess(id);
+                        return;
+                    }
+                }
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
+    }
+
+
     /**
      * Given a track, updates the corresponding entry in the Firebase Database..
      *
      * @param track
      */
-    public static void updateTrack(Track track){
+    public static void updateTrack(Track track) {
         FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track);
         mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
@@ -94,8 +119,8 @@ public class TrackDatabaseManagement {
      * @param key
      * @return
      */
-    public static Track initTrack(DataSnapshot dataSnapshot, String key){
-       return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
+    public static Track initTrack(DataSnapshot dataSnapshot, String key) {
+        return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
 
     /**
@@ -110,7 +135,7 @@ public class TrackDatabaseManagement {
             CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if(c.child("path").child("0").getValue(CustLatLng.class) != null) {
+            if (c.child("path").child("0").getValue(CustLatLng.class) != null) {
                 Log.d("Database", "track near me");
                 if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius) {
                     tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
@@ -191,6 +216,25 @@ public class TrackDatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
+    }
+
+    /**
+     * Remove the accents of the string and transform it to lower cas
+     *
+     * @param s the string we want to format
+     * @return the formatted string
+     */
+    private static String formatString(String s) {
+        Required.nonNull(s, "Cannot format null string");
+        if (s.isEmpty()) return "";
+
+        s = s.toLowerCase();
+        s = s.replaceAll("[èéêë]", "e");
+        s = s.replaceAll("[ûù]", "u");
+        s = s.replaceAll("[ïî]", "i");
+        s = s.replaceAll("[àâ]", "a");
+        s = s.replaceAll("Ô", "o");
+        return s;
     }
 
     /**

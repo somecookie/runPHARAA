@@ -82,4 +82,12 @@ public class TrackPropertiesTest {
         assert tp.getHeightDifference() == 200.0;
     }
 
+    @Test
+    public void testSetters(){
+        tp.setFavorites(1);
+        tp.setHeightDifference(10);
+        tp.setLength(300);
+        tp.setLikes(3);
+    }
+
 }

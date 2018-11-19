@@ -7,6 +7,7 @@ import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -35,18 +36,23 @@ import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -175,6 +181,28 @@ public class MainActivityTest extends TestInitLocation {
         assertFalse(MainActivity.difficultyIsFiltered);
     }
 
+    @Test
+    public void testUnsuccessfulSearch(){
+        onView(withId(R.id.searchIcon)).perform(click());
+        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"))
+                .perform(pressKey(KeyEvent.KEYCODE_ENTER))
+                .perform(closeSoftKeyboard());
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "Do I exist?");
+        onView(withText(expected))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSuccessfulSearch(){
+        onView(withId(R.id.searchIcon)).perform(click());
+        onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"))
+                .perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        sleep(2000);
+        withId(R.id.trackTitleID).matches(withText("Cours forest !"));
+    }
+
+
     /*@Test
     public void testOpenCreateTrackActivity() {
         onView(withId(R.id.fab)).perform(click());
@@ -216,11 +244,35 @@ public class MainActivityTest extends TestInitLocation {
         int length = 100;
         int heigthDiff = 10;
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "0", "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
-                types, length, heigthDiff, 1, 1, 1, 1, 0, 0);
+                types, length, heigthDiff, 2, 1, 40, 1, 0, 0);
         Track t = new Track(track);
+
         assertTrue(MainActivity.passFilters(t));
         MainActivity.typesFilter.remove(TrackType.FOREST);
         MainActivity.typesFilter.add(TrackType.CITY);
+        assertFalse(MainActivity.passFilters(t));
+
+        MainActivity.difficultyIsFiltered = false;
+        assertFalse(MainActivity.passFilters(t));
+
+        MainActivity.typesAreFiltered = false;
+        assertTrue(MainActivity.passFilters(t));
+
+        MainActivity.difficultyIsFiltered = true;
+        assertTrue(MainActivity.passFilters(t));
+
+        MainActivity.timeIsFiltered = false;
+        assertTrue(MainActivity.passFilters(t));
+
+        MainActivity.difficultyIsFiltered = true;
+        MainActivity.typesAreFiltered = true;
+        assertFalse(MainActivity.passFilters(t));
+
+        MainActivity.typesAreFiltered = false;
+        assertTrue(MainActivity.passFilters(t));
+
+        MainActivity.difficultyIsFiltered = false;
+        MainActivity.typesAreFiltered = true;
         assertFalse(MainActivity.passFilters(t));
     }
 

@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +70,7 @@ public class MapsTest extends TestInitLocation {
     }
 
 
+    @Ignore
     @Test
     public void clickOnMarkerWorks() {
         mActivityRule.launchActivity(null);
@@ -127,6 +129,7 @@ public class MapsTest extends TestInitLocation {
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
     }
 
+    @Ignore
     @Test
     public void changeMapLocation(){
         mActivityRule.launchActivity(null);
