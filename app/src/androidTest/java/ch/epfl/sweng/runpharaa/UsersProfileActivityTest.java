@@ -20,9 +20,13 @@ import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -35,7 +39,6 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void initEmptyUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
     }
-
 
     @Test
     public void correctlyDisplaysName() {
@@ -79,5 +82,18 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.loggedOut)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));*/
+    }
+
+    @Test
+    public void createdTracksAreClickableAndDisplay() {
+        User.instance.addToCreatedTracks("0");
+        mActivityRule.launchActivity(new Intent());
+        sleep(500);
+        onView(allOf(withId(R.id.createdTracksCardListId), isDisplayed())).perform(
+                swipeDown());
+        sleep(5000);
+
+        onView(allOf(withId(R.id.createdTracksCardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
     }
 }
