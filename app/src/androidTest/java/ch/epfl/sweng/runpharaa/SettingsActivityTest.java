@@ -21,6 +21,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -106,6 +107,7 @@ public class SettingsActivityTest extends TestInitLocation {
         setValueToPref(R.string.pref_key_min_time_interval, "2");
     }
 
+    @Ignore
     @Test
     public void updateDistanceInterval() {
         setValueToPref(R.string.pref_key_min_distance_interval, "1");

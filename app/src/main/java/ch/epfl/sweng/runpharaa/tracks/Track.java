@@ -35,20 +35,6 @@ public class Track {
 
     public Track(){};
 
-    public Track(String name, String creatorUid, Bitmap image, List<CustLatLng> path, TrackProperties properties){
-
-        Required.nonNull(creatorUid, "Creator ID must be non-null.");
-        Required.nonNull(image, "Image must be non-null.");
-        Required.nonNull(path, "Path must be non-null.");
-        Required.nonNull(properties, "Properties must be non null.");
-
-        this.name = name;
-        this.creatorUid = creatorUid;
-        this.path = path;
-        startingPoint = path.get(0);
-        this.properties = properties;
-    }
-
     public Track(String trackUid, String creatorUid, String name, List<CustLatLng> path, TrackProperties properties) {
 
         Required.nonNull(trackUid, "Track ID must be non-null.");
