@@ -32,9 +32,10 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                 if(dataSnapshot.exists()){
                     User storedUser = dataSnapshot.getValue(User.class);
                     assert storedUser != null;
-
+                    
                     if(!dataSnapshot.child(LIKES).exists()) storedUser.setLikedTracks(new ArrayList<>());
                     if(!dataSnapshot.child(CREATE).exists()) storedUser.setCreatedTracks(new ArrayList<>());
+                    if(!dataSnapshot.child(FOLLOWING).exists()) storedUser.setFollowedUsers(new ArrayList<>());
 
                     callback.onSuccess(storedUser);
 
