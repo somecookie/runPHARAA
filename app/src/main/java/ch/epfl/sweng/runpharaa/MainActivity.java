@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,16 +13,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseUser;
 
-
-import net.bytebuddy.dynamic.scaffold.TypeInitializer;
-
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -34,26 +30,65 @@ import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static boolean difficultyIsFiltered;
+    public static int difficultyFilter;
+    public static boolean timeIsFiltered;
+    public static int timeFilter;
+    public static Set<TrackType> typesFilter;
+    public static boolean typesAreFiltered;
+    public static User main;
+    private static String[] listTypesStr;
+    private static boolean[] checkedTypes;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
-
     private FloatingActionButton fab;
-
-    public static boolean difficultyIsFiltered;
-    public static int difficultyFilter;
-
-    public static boolean timeIsFiltered;
-    public static int timeFilter;
-
-    private static String[] listTypesStr;
-    private static boolean[] checkedTypes;
-    public static Set<TrackType> typesFilter;
-    public static boolean typesAreFiltered;
-
     private FirebaseUser user;
 
-    public static User main;
+    public static boolean passFilters(Track t) {
+        if (timeIsFiltered) {
+            if (difficultyIsFiltered) {
+                if (typesAreFiltered) {
+                    Log.d("Filters", "time , diff, types");
+                    return filterTime(t) && filterDifficulty(t) && filterTypes(t);
+                }
+                Log.d("Filters", "time , diff");
+                return filterTime(t) && filterDifficulty(t);
+            }
+            if (typesAreFiltered) {
+                Log.d("Filters", "time , types");
+                return filterTime(t) && filterTypes(t);
+            }
+            Log.d("Filters", "time");
+            return filterTime(t);
+        }
+        if (difficultyIsFiltered) {
+            if (typesAreFiltered) {
+                Log.d("Filters", "diff , types");
+                return filterDifficulty(t) && filterTypes(t);
+            }
+            Log.d("Filters", "diff");
+            return filterDifficulty(t);
+        }
+        if (typesAreFiltered) {
+            Log.d("Filters", "types");
+            return filterTypes(t);
+        }
+        Log.d("Filters", "no filters");
+        return true;
+    }
+
+    private static boolean filterTime(Track t) {
+        return t.getProperties().getAvgDuration() <= timeFilter;
+    }
+
+    private static boolean filterDifficulty(Track t) {
+        return t.getProperties().getAvgDifficulty() <= difficultyFilter;
+    }
+
+    private static boolean filterTypes(Track t) {
+        return t.getProperties().getType().containsAll(typesFilter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void filterDialog(){
+    private void filterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        final  View mView = getLayoutInflater().inflate(R.layout.dialog_filters, null);
+        final View mView = getLayoutInflater().inflate(R.layout.dialog_filters, null, false);
 
         builder.setTitle(getResources().getString(R.string.filters));
 
@@ -189,10 +224,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         TextView maxTime = mView.findViewById(R.id.maxTime);
@@ -203,11 +240,11 @@ public class MainActivity extends AppCompatActivity {
         timeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(progress >= 115){
+                if (progress >= 115) {
                     timeFilter = 120;
                     maxTime.setText(getResources().getString(R.string.no_time_limit));
                     timeIsFiltered = false;
-                }else{
+                } else {
                     timeFilter = progress;
                     maxTime.setText(getResources().getString(R.string.max_time_of) + " " + timeFilter + " minutes.");
                     timeIsFiltered = true;
@@ -215,10 +252,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         builder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
@@ -233,8 +272,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 typesFilter.clear();
-                for(int i = 0; i < checkedTypes.length; i++){
-                    if(checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
+                for (int i = 0; i < checkedTypes.length; i++) {
+                    if (checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
                 }
                 typesAreFiltered = !typesFilter.isEmpty();
             }
@@ -246,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                 timeIsFiltered = false;
                 difficultyIsFiltered = false;
                 typesAreFiltered = false;
-                for(int i = 0; i < checkedTypes.length; i++){
+                for (int i = 0; i < checkedTypes.length; i++) {
                     checkedTypes[i] = false;
                 }
                 timeFilter = 60;
@@ -258,50 +297,5 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(mView);
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    public static boolean passFilters(Track t){
-        if(timeIsFiltered){
-            if(difficultyIsFiltered){
-                if(typesAreFiltered){
-                    Log.d("Filters", "time , diff, types");
-                    return filterTime(t) && filterDifficulty(t) && filterTypes(t);
-                }
-                Log.d("Filters", "time , diff");
-                return filterTime(t) && filterDifficulty(t);
-            }
-            if(typesAreFiltered){
-                Log.d("Filters", "time , types");
-                return filterTime(t) && filterTypes(t);
-            }
-            Log.d("Filters", "time");
-            return  filterTime(t);
-        }
-        if(difficultyIsFiltered){
-            if(typesAreFiltered){
-                Log.d("Filters", "diff , types");
-                return filterDifficulty(t) && filterTypes(t);
-            }
-            Log.d("Filters", "diff");
-            return filterDifficulty(t);
-        }
-        if(typesAreFiltered){
-            Log.d("Filters", "types");
-            return filterTypes(t);
-        }
-        Log.d("Filters", "no filters");
-        return true;
-    }
-
-    private static boolean filterTime(Track t){
-        return t.getProperties().getAvgDuration() <= timeFilter;
-    }
-
-    private static boolean filterDifficulty(Track t){
-        return t.getProperties().getAvgDifficulty() <= difficultyFilter;
-    }
-
-    private static boolean filterTypes(Track t){
-        return t.getProperties().getType().containsAll(typesFilter);
     }
 }

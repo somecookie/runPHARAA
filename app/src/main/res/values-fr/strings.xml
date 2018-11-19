@@ -71,5 +71,6 @@
 
     <string name="pref_title_reset_prefs">Paramètres par défaut</string>
     <string name="pref_title_clear_cache">Vider cache</string>
+    <string name="social_media_post_message">Matte-moi ce parcours de ouf trouvé sur RunPharaa !\nIl s\'appelle \"%s\" \n#runPharaaWayFromTravis 😍😍🔥🔥</string>
 
 </resources>

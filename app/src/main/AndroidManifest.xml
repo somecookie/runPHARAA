@@ -18,15 +18,25 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true"
-        android:name="android.support.multidex.MultiDexApplication" >
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider2002032346519478"
+            android:exported="true" />
+
 
         <activity android:name=".MainActivity" />
         <!--
@@ -60,7 +70,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".TrackPropertiesActivity" />
+        <activity
+            android:name=".TrackPropertiesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".user.UsersProfileActivity" />
         <activity
             android:name=".login.LoginActivity"
@@ -71,8 +83,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".user.SettingsActivity"
-            android:label="@string/settings"/>
+        <activity
+            android:name=".user.SettingsActivity"
+            android:label="@string/settings" />
     </application>
 
 </manifest>
