@@ -45,6 +45,8 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
+    TextView emptyMessage;
+
     public interface OnItemClickListener {
         void onItemClick(TrackCardItem item);
     }
@@ -96,7 +98,19 @@ public class UsersProfileActivity extends AppCompatActivity {
         return profileUserId;
     }
 
+    protected void setEmptyMessage(boolean selfUser) {
+        if (selfUser)
+            emptyMessage.setText(R.string.no_created_self);
+        else
+            emptyMessage.setText(R.string.no_created_other);
+        emptyMessage.setVisibility(View.VISIBLE);
+    }
+
     private void loadActivity(User user, Boolean isSelfUser) {
+        emptyMessage = findViewById(R.id.emptyMessage);
+        emptyMessage.setVisibility(View.GONE);
+        emptyMessage.setVisibility(View.GONE);
+
         Context context = this;
 
         TextView v = findViewById(R.id.user_name);
@@ -165,13 +179,17 @@ public class UsersProfileActivity extends AppCompatActivity {
                     createdTracks.add(t.getTrackCardItem());
                 }
                 Adapter adapter = new Adapter(context, createdTracks, listener);
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+                if (createdTracks.isEmpty())
+                    setEmptyMessage(isSelfUser);
             }
 
             @Override
             public void onFailed(DatabaseError databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in UserProfileActivity.");
+                setEmptyMessage(isSelfUser);
             }
         });
     }
@@ -190,7 +208,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Adapter.viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
             View v = layoutInflater.inflate(R.layout.track_card_item, viewGroup, false);
             return new Adapter.viewHolder(v);
         }
@@ -200,12 +218,12 @@ public class UsersProfileActivity extends AppCompatActivity {
             // Set here the buttons, images and texts created in the viewHolder
             viewHolder.name.setText(createdTracks.get(position).getName());
 
-            ImageLoader.getLoader(getBaseContext()/*getContext()*/).displayImage(createdTracks.get(position).getImageURL(), viewHolder.background_img);
+            ImageLoader.getLoader(context).displayImage(createdTracks.get(position).getImageURL(), viewHolder.background_img);
 
             viewHolder.bind(createdTracks.get(position), new OnItemClickListener() {
                 @Override
                 public void onItemClick(TrackCardItem item) {
-                    Intent intent = new Intent(getBaseContext()/*getContext()*/, TrackPropertiesActivity.class);
+                    Intent intent = new Intent(context, TrackPropertiesActivity.class);
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 }
