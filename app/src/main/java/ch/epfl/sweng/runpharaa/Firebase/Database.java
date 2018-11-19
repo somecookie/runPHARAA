@@ -517,7 +517,7 @@ public class Database {
         Database.userExists = userExists;
     }
 
-    public User getUser(){
+    public static User getUser(){
         return fake_user;
     }
 }
