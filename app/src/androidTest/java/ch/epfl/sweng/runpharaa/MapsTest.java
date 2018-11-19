@@ -69,7 +69,6 @@ public class MapsTest extends TestInitLocation {
     }
 
 
-    @Ignore
     @Test
     public void clickOnMarkerWorks() {
         mActivityRule.launchActivity(null);
@@ -127,7 +126,6 @@ public class MapsTest extends TestInitLocation {
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
     }
 
-    @Ignore
     @Test
     public void changeMapLocation(){
         mActivityRule.launchActivity(null);
