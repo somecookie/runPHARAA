@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String value) {
                         if(value == null){
-                            Toast.makeText(getBaseContext(),String.format("No track is called %s!", query), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
                         }else{
                             Intent i = new Intent(getBaseContext(),TrackPropertiesActivity.class);
                             i.putExtra("TrackID", value);
