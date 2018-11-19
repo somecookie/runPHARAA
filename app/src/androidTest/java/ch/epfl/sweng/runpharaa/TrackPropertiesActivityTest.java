@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -41,7 +42,8 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2000,  Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.instance = Database.getUser();
+        //User.set(Database.getUser());
         //InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("adb install ~/facebook-android-sdk-3.5/bin/FBAndroid-28.apk");
     }
 
@@ -51,10 +53,12 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
     @Before
     public void initUserAndTracks() {
-        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.instance = Database.getUser();
+        //User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     /*
+
     @Test
     public void shareOnFacebook() {
         Track t1 = createTrack();
@@ -69,8 +73,8 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         launchWithExtras(t1);
         sleep(2000);
         onView(withId(R.id.twitter_share_button)).perform(click());
-    }*/
-
+    }
+*/
 
 
     @Test
