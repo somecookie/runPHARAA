@@ -173,7 +173,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data, user);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());

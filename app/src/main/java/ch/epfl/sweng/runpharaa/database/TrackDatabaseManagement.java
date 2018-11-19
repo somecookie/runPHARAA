@@ -32,6 +32,7 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 public class TrackDatabaseManagement {
 
     public final static String TRACKS_PATH = "tracksRefractored";
+    public final static String USERS_PATH = "users";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
     public final static String NAME_PATH = "name";
     public final static String ID_PATH = "trackUid";
@@ -153,11 +154,11 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
+    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(User.instance.getCreatedTracks() != null){
-                if(User.instance.getCreatedTracks().contains(c.getKey())){
+            if(user.getCreatedTracks() != null){
+                if(user.getCreatedTracks().contains(c.getKey())){
                     createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
