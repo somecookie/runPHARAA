@@ -10,9 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
@@ -21,25 +19,31 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";
     private final static String CREATE = "createdTracks";
+    private final static String FOLLOW = "followedUsers";
 
-    public static void writeNewUser(final User user, final Callback<User> callback){
-        Log.i("KWAY", user.getUid()+" "+user.getName());
+    public static void writeNewUser(final User user, final Callback<User> callback) {
+        Log.i("KWAY", user.getUid() + " " + user.getName());
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     User storedUser = dataSnapshot.getValue(User.class);
 
                     assert storedUser != null;
 
-                    if(!dataSnapshot.child(LIKES).exists()) storedUser.setLikedTracks(new ArrayList<>());
-                    if(!dataSnapshot.child(CREATE).exists()) storedUser.setCreatedTracks(new ArrayList<>());
-                    if(!dataSnapshot.child(FAVORITE).exists()) storedUser.setFavoriteTracks(new ArrayList<>());
+                    if (!dataSnapshot.child(LIKES).exists())
+                        storedUser.setLikedTracks(new ArrayList<>());
+                    if (!dataSnapshot.child(CREATE).exists())
+                        storedUser.setCreatedTracks(new ArrayList<>());
+                    if (!dataSnapshot.child(FAVORITE).exists())
+                        storedUser.setFavoriteTracks(new ArrayList<>());
+                    if (!dataSnapshot.child(FOLLOW).exists())
+                        storedUser.setFollowedUsers(new ArrayList<>());
 
                     callback.onSuccess(storedUser);
 
-                }else{
+                } else {
                     DatabaseReference userRef = mDataBaseRef.child(USERS).child(user.getUid());
                     userRef.setValue(user).addOnSuccessListener(aVoid -> callback.onSuccess(user)).addOnFailureListener(callback::onError);
                 }
@@ -52,7 +56,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-    public static void updateFavoriteTracks(final User user){
+    public static void updateFavoriteTracks(final User user) {
         DatabaseReference favRef = mDataBaseRef.child(USERS);
         DatabaseReference favRef2 = favRef.child(user.getUid());
         DatabaseReference favRef3 = favRef2.child(FAVORITE);
@@ -66,7 +70,8 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         favRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
+                if (dataSnapshot.exists())
+                    dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
             }
 
             @Override
@@ -86,7 +91,8 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
+                if (dataSnapshot.exists())
+                    dataSnapshot.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
             }
 
             @Override
@@ -95,6 +101,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             }
         });
     }
+
     public static void updateCreatedTracks(final String trackID) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE).child(trackID);
         createRef.setValue(trackID).addOnFailureListener(Throwable::printStackTrace);

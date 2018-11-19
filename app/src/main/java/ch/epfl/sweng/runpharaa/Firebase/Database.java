@@ -59,6 +59,7 @@ public class Database {
 
     //Tracks already in the fakeDB
     private final static String trackUID = "TrackID";
+    private final static String trackName = "name";
 
     private FirebaseTrackAdapter t = new FirebaseTrackAdapter();
 
@@ -88,6 +89,9 @@ public class Database {
 
     @Mock
     private DatabaseReference drTracksUID;
+
+    @Mock
+    private DataSnapshot drTrackName;
 
 
     @Mock
@@ -125,6 +129,9 @@ public class Database {
 
     @Mock
     private DataSnapshot snapOnDataChangeReadChildPath;
+
+    @Mock
+    private DataSnapshot snapOnDataChangedChildTrackUID;
 
     @Mock
     private DataSnapshot snapOnDataChangeReadChildPath0;
@@ -219,11 +226,14 @@ public class Database {
         when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitTrackChildren);
         when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
 
-
+        when(snapInitTrackChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
         when(snapInitTrackChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
         when(snapInitTrackChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
+        when(snapInitTrackChildren.child("trackUid")).thenReturn(snapOnDataChangedChildTrackUID);
         when(snapInitTrackChildren.getKey()).thenReturn("0");
 
+        when(snapOnDataChangeReadChildPath.getValue((String.class))).thenReturn("Cours forest !");
+        when(snapOnDataChangedChildTrackUID.getValue((String.class))).thenReturn(trackUID);
         when(snapOnDataChangeReadChildPath.child("0")).thenReturn(snapOnDataChangeReadChildPath0);
         when(snapOnDataChangeReadChildPath0.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
 
