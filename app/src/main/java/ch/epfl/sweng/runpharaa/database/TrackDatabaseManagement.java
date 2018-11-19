@@ -5,11 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,11 +27,14 @@ import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class TrackDatabaseManagement {
 
     public final static String TRACKS_PATH = "tracksRefractored";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
+    public final static String NAME_PATH = "name";
+    public final static String ID_PATH = "trackUid";
 
     public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
@@ -73,6 +72,28 @@ public class TrackDatabaseManagement {
                         });
                     }
                 });
+            }
+        });
+    }
+
+    public static void findTrackUIDByName(String name, Callback<String> callback){
+        DatabaseReference ref = mDataBaseRef.child(TRACKS_PATH);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    if(data.child(NAME_PATH).getValue(String.class).equals(name)){
+                        String id = data.child(ID_PATH).getValue(String.class);
+                        callback.onSuccess(id);
+                    }
+                }
+
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
             }
         });
     }
