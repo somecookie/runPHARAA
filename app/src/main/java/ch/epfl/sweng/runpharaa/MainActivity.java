@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                TrackDatabaseManagement.findTrackUIDByName(query, new Callback<String>() {
+                TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
                     @Override
                     public void onSuccess(String value) {
                         if(value == null){
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-                return false;
+                return true;
             }
 
             @Override
