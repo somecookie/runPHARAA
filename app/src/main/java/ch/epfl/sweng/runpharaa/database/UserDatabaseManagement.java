@@ -25,14 +25,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String PICTURE = "picture";
 
     public static void writeNewUser(final User user, final Callback<User> callback){
-        Log.i("KWAY", user.getUid()+" "+user.getName());
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     User storedUser = dataSnapshot.getValue(User.class);
-                    Log.d("Hugo", storedUser.getFavoriteTracks().toString());
                     callback.onSuccess(storedUser);
 
                 }else{
