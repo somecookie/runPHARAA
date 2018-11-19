@@ -218,19 +218,31 @@ public class MainActivityTest extends TestInitLocation {
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "0", "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
                 types, length, heigthDiff, 2, 1, 40, 1, 0, 0);
         Track t = new Track(track);
+
         assertTrue(MainActivity.passFilters(t));
         MainActivity.typesFilter.remove(TrackType.FOREST);
         MainActivity.typesFilter.add(TrackType.CITY);
         assertFalse(MainActivity.passFilters(t));
+
+        MainActivity.difficultyIsFiltered = false;
+        assertFalse(MainActivity.passFilters(t));
+
         MainActivity.typesAreFiltered = false;
         assertTrue(MainActivity.passFilters(t));
+
+        MainActivity.difficultyIsFiltered = true;
+        assertTrue(MainActivity.passFilters(t));
+
         MainActivity.timeIsFiltered = false;
         assertTrue(MainActivity.passFilters(t));
+
         MainActivity.difficultyIsFiltered = true;
         MainActivity.typesAreFiltered = true;
         assertFalse(MainActivity.passFilters(t));
+
         MainActivity.typesAreFiltered = false;
         assertTrue(MainActivity.passFilters(t));
+
         MainActivity.difficultyIsFiltered = false;
         MainActivity.typesAreFiltered = true;
         assertFalse(MainActivity.passFilters(t));
