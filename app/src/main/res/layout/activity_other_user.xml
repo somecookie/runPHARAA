@@ -41,26 +41,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="367dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginTop="145dp"
-        android:orientation="vertical"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:layout_marginTop="80dp"
-            android:layout_marginLeft="115dp"
+            android:layout_marginStart="115dp"
             android:text="USER"
             android:textAlignment="center"
             android:textSize="24sp"
@@ -76,8 +67,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="81dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="48dp"
@@ -137,12 +127,6 @@
                 app:srcCompat="@drawable/hardwork_badge" />
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/follow_button"
             android:layout_width="match_parent"
@@ -152,31 +136,21 @@
             android:layout_marginRight="20dp"
             android:text="FOLLOW" />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/cardListId"
+        <TextView
+            android:id="@+id/emptyMessage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@color/colorFragmentBackground"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:padding="@dimen/classic_margin"
+            android:textSize="@dimen/normal_text"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/emptyMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:padding="@dimen/classic_margin"
-                android:textSize="@dimen/normal_text"
-                android:visibility="gone" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/createdTracksCardListId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible" />
-
-        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/createdTracksCardListId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
 
     </LinearLayout>
 
