@@ -9,35 +9,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="145dp"
+        android:layout_height="150dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp">
+        android:orientation="horizontal">
 
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_picture"
-        android:layout_width="147dp"
-        android:layout_height="144dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="119dp"
-        android:layout_marginLeft="119dp"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="118dp"
-        android:layout_marginRight="118dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="230dp"
         android:src="@drawable/unknown_person"
         app:civ_border_color="#FF000000"
         app:civ_border_width="0dp" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="45dp"
+        android:text="USER"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,24 +46,6 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="145dp"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:layout_marginStart="115dp"
-            android:text="USER"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            android:layout_marginTop="25dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,6 +75,7 @@
                     android:layout_weight="0.5"
                     android:gravity="center"
                     android:text="Number of tracks created" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -117,6 +101,7 @@
                     android:layout_weight="0.5"
                     android:gravity="center"
                     android:text="Number of favorite tracks" />
+
             </LinearLayout>
 
             <ImageView
@@ -125,6 +110,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/hardwork_badge" />
+
         </LinearLayout>
 
         <Button
@@ -150,6 +136,7 @@
             android:id="@+id/createdTracksCardListId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:visibility="visible" />
 
     </LinearLayout>
