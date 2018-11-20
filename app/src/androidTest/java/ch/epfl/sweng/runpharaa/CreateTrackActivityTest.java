@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,10 +36,15 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.TestCase.assertNotNull;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class CreateTrackActivityTest extends TestInitLocation {
 
     Context c;
+    private MainActivity mMainActivity;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
@@ -47,6 +53,25 @@ public class CreateTrackActivityTest extends TestInitLocation {
     public static void initUser() {
         User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
         GpsService.initFakeGps(FakeGpsService.SAT);
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        mMainActivity = mActivityRule.getActivity();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        // Call finish() on all activities in @After to avoid exceptions in
+        // later calls to getActivity() in subsequent tests
+        mMainActivity.finish();
+    }
+
+
+    @Test
+    public void testPreconditions() {
+        assertNotNull(mMainActivity);
+        assertTrue(mMainActivity.hasWindowFocus());
     }
 
     @Test

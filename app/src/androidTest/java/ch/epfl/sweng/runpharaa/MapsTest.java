@@ -41,6 +41,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertTrue;
@@ -69,7 +70,6 @@ public class MapsTest extends TestInitLocation {
     }
 
 
-    @Ignore
     @Test
     public void clickOnMarkerWorks() {
         mActivityRule.launchActivity(null);
@@ -77,57 +77,24 @@ public class MapsTest extends TestInitLocation {
         sleep(5_000);
 
         UiDevice device = UiDevice.getInstance(getInstrumentation());
+
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
-        if(marker == null){
-            fail("Null marker");
-        }
-
-
-        try{
-            Log.i("WESHHHHH", marker.getText());
-
-        } catch (UiObjectNotFoundException e){
-            fail("cant get text");
-        }
 
         try {
             marker.click();
-        } catch (UiObjectNotFoundException e) {
-            e.printStackTrace();
-            fail("Failed to click on marker 1");
-        }
 
-        /*
-        try {
-            int XMarker = marker.getBounds().centerX() + 50;
-            int YMarker = marker.getBounds().centerY() + 50;
-            device.click(XMarker,YMarker);
+            int XMarker = marker.getBounds().centerX();
+            int YMarker = marker.getBounds().centerY();
+            device.click(XMarker, YMarker-100);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             fail("Cannot get bound of marker");
-        }*/
-
-        int x = 0;
-        try {
-            x = marker.getBounds().centerX();
-        } catch (UiObjectNotFoundException e) {
-            e.printStackTrace();
-            fail("Failed to get X of marker");
         }
-        int y = 0;
-        try {
-            y = marker.getBounds().centerY();
-        } catch (UiObjectNotFoundException e) {
-            e.printStackTrace();
-            fail("failed to get Y of marker");
-        }
-        device.click(x, y-100);
         sleep(500);
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
     }
 
-    @Ignore
     @Test
     public void changeMapLocation(){
         mActivityRule.launchActivity(null);
@@ -152,6 +119,8 @@ public class MapsTest extends TestInitLocation {
             fail("Couldn't find marker");
         }
     }
+
+
 
     @AfterClass
     public static void cleanUp() {
