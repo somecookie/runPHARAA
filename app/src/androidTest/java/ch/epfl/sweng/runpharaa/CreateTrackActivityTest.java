@@ -44,10 +44,9 @@ import static org.junit.Assert.assertTrue;
 public class CreateTrackActivityTest extends TestInitLocation {
 
     Context c;
-    private MainActivity mMainActivity;
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @BeforeClass
     public static void initUser() {
@@ -55,27 +54,12 @@ public class CreateTrackActivityTest extends TestInitLocation {
         GpsService.initFakeGps(FakeGpsService.SAT);
     }
 
-    @Before
-    public void setUp() throws Exception {
-        mMainActivity = mActivityRule.getActivity();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        // Call finish() on all activities in @After to avoid exceptions in
-        // later calls to getActivity() in subsequent tests
-        mMainActivity.finish();
-    }
-
-
-    @Test
-    public void testPreconditions() {
-        assertNotNull(mMainActivity);
-        assertTrue(mMainActivity.hasWindowFocus());
-    }
-
     @Test
     public void createTrackWithTwoPoints() {
+        mActivityRule.launchActivity(null);
+        while(!mActivityRule.getActivity().hasWindowFocus()){
+            //Stay in test
+        }
         c = InstrumentationRegistry.getTargetContext();
         c.startService(new Intent(c, GpsService.getInstance().getClass()));
         onView(withId(R.id.fab)).perform(click());
