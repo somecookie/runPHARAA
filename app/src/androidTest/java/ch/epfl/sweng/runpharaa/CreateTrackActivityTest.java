@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,13 +36,17 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.TestCase.assertNotNull;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class CreateTrackActivityTest extends TestInitLocation {
 
     Context c;
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @BeforeClass
     public static void initUser() {
@@ -51,6 +56,10 @@ public class CreateTrackActivityTest extends TestInitLocation {
 
     @Test
     public void createTrackWithTwoPoints() {
+        mActivityRule.launchActivity(null);
+        while(!mActivityRule.getActivity().hasWindowFocus()){
+            //Stay in test
+        }
         c = InstrumentationRegistry.getTargetContext();
         c.startService(new Intent(c, GpsService.getInstance().getClass()));
         onView(withId(R.id.fab)).perform(click());

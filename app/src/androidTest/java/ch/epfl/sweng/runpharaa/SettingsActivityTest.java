@@ -35,6 +35,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -107,7 +108,6 @@ public class SettingsActivityTest extends TestInitLocation {
         setValueToPref(R.string.pref_key_min_time_interval, "2");
     }
 
-    @Ignore
     @Test
     public void updateDistanceInterval() {
         setValueToPref(R.string.pref_key_min_distance_interval, "1");
@@ -135,7 +135,7 @@ public class SettingsActivityTest extends TestInitLocation {
         onPreferenceRow(
                 withKey(r.getString(keyId)))
                 /*withTitle(R.string.pref_title_radius)))*/
-                .perform(click());
+                .perform(scrollTo(), click());
 
         onView(allOf(withId(android.R.id.edit),
                 isDisplayed()))

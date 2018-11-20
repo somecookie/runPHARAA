@@ -60,6 +60,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private ImageLoader imageLoader;
 
     ShareDialog shareDialog;
+    TweetComposer.Builder tweetBuilder;
 
     /* //TODO: uncomment when u need this, it's f*cking up coverage rn
     private String createTagString(Track track) {
@@ -92,6 +93,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         Twitter.initialize(this);
 
         shareDialog = new ShareDialog(this);
+        tweetBuilder = new TweetComposer.Builder(this);
 
         final Intent intent = getIntent();
         imageLoader = ImageLoader.getLoader(this);
@@ -198,16 +200,14 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 ImageButton twitter = findViewById(R.id.twitter_share_button);
                 twitter.setOnClickListener(v -> {
                     //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
-                    TweetComposer.Builder builder = null;
                     try {
-                        builder = new TweetComposer.Builder(getApplicationContext())
+                        tweetBuilder
                                 .text(String.format(getString(R.string.social_media_post_message), track.getName()))
                                 .url(new URL("https://github.com/somecookie/runPHARAA"));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                    builder.show();
-
+                    tweetBuilder.show();
                 });
 
                 TextView trackTags = findViewById(R.id.trackTagsID);
