@@ -55,6 +55,8 @@ public class Database {
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
 
+    private final static String keyWriteTrack = "key";
+
     private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
     //Tracks already in the fakeDB
@@ -405,7 +407,7 @@ public class Database {
 
     private void instanciatedrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);
-        when(drTracksPush.getKey()).thenReturn(s_key);
+        when(drTracksPush.getKey()).thenReturn(keyWriteTrack);
 
         when(drTracks.child(trackUID)).thenReturn(drTracksUID);
         when(drTracksUID.setValue(track)).then(new Answer<Task<Void>>() {
@@ -416,18 +418,15 @@ public class Database {
             }
         });
 
-        when(drTracks.child(s_key)).thenReturn(drTracksKey);
+        when(drTracks.child(keyWriteTrack)).thenReturn(drTracksKey);
         when(drTracksKey.setValue(any(Track.class))).thenReturn(setTask);
 
-        when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail){
-                    l.onFailure(new IllegalStateException());
-                }
-                return setTask;
+        when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if(shouldFail){
+                l.onFailure(new IllegalStateException());
             }
+            return setTask;
         });
 
         when(setTask.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer(new Answer<Task<Void>>() {
@@ -514,6 +513,7 @@ public class Database {
         t = track;
 
     }
+
 
     public static void setShouldFail(boolean shouldFail) {
         Database.shouldFail = shouldFail;

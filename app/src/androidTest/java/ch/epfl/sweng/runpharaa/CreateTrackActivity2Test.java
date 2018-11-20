@@ -110,7 +110,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_total_distance)).check(matches(withText(String.format("Total distance: %.2f m", skrr[0]))));
     }
 
-    @Ignore
     @Test
     public void createTrackWorksWithTwoFakePoints() {
         LatLng[] points = {eiffel, placeTrocadero};
