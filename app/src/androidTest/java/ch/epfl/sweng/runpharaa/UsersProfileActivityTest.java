@@ -50,7 +50,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         sleep(500);
         onView(withId(R.id.nbTracks)).check(matches(withText("1")));
     }
-
+    
     @Test
     public void correctlyDisplaysNumberOfFavorites() {
         User.instance.addToFavorites("0");
