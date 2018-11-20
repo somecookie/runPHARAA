@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -56,6 +57,8 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateTrackActivity2Test extends TestInitLocation {
 
     private static final int WAIT_TIME = 1000;
+    private CreateTrackActivity2 mMainActivity;
+
 
     @Rule
     public ActivityTestRule<CreateTrackActivity2> mActivityRule =
@@ -89,6 +92,18 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
             }
         };
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        mMainActivity = mActivityRule.getActivity();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        // Call finish() on all activities in @After to avoid exceptions in
+        // later calls to getActivity() in subsequent tests
+        mMainActivity.finish();
     }
 
     // ------------- TESTS ---------------
