@@ -80,28 +80,16 @@ public class MapsTest extends TestInitLocation {
 
         UiObject marker = device.findObject(new UiSelector().descriptionContains("Cours forest !"));
 
+
         try {
-            int XMarker = marker.getBounds().centerX() + 50;
-            int YMarker = marker.getBounds().centerY() + 50;
-            device.click(XMarker,YMarker);
+            marker.click();
+
+            int XMarker = marker.getBounds().centerX();
+            int YMarker = marker.getBounds().centerY();
+            device.click(XMarker, YMarker-100);
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
             fail("Cannot get bound of marker");
-        }
-
-        int x = 0;
-        try {
-            x = marker.getBounds().centerX();
-        } catch (UiObjectNotFoundException e) {
-            e.printStackTrace();
-            fail("Failed to get X of marker");
-        }
-        int y = 0;
-        try {
-            y = marker.getBounds().centerY();
-        } catch (UiObjectNotFoundException e) {
-            e.printStackTrace();
-            fail("failed to get Y of marker");
         }
         sleep(500);
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
