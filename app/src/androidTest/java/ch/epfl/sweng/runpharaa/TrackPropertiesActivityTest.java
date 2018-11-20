@@ -57,8 +57,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         //User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
-    /*
-
     @Test
     public void shareOnFacebook() {
         Track t1 = createTrack();
@@ -74,8 +72,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(2000);
         onView(withId(R.id.twitter_share_button)).perform(click());
     }
-*/
-
 
     @Test
     public void correctValuesDisplayedForTrack1() {

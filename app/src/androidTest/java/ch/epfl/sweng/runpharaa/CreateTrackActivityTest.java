@@ -74,6 +74,7 @@ public class CreateTrackActivityTest extends TestInitLocation {
         assertTrue(mMainActivity.hasWindowFocus());
     }
 
+    @Ignore
     @Test
     public void createTrackWithTwoPoints() {
         c = InstrumentationRegistry.getTargetContext();
