@@ -419,7 +419,7 @@ public class Database {
         });
 
         when(drTracks.child(keyWriteTrack)).thenReturn(drTracksKey);
-        when(drTracksKey.setValue(any(Track.class))).thenReturn(setTask);
+        when(drTracksKey.setValue(any(FirebaseTrackAdapter.class))).thenReturn(setTask);
 
         when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
