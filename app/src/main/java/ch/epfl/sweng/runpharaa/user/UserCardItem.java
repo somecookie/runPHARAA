@@ -27,15 +27,10 @@ public class UserCardItem {
 
     public String getImageURL() { return this.imageURL; }
 
-    public int getNbCreatedTracks() {return this.nbCreatedTracks; }
-
-    public void setProfilePic(Bitmap background) { this.profilePic = background; }
+    public int getNbCreatedTracks() { return this.nbCreatedTracks; }
 
     public void setName(String name) { this.name = name; }
 
     public void setParentUserID(String parentUserID) { this.parentUserID = parentUserID; }
 
-    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
-
-    public void setNbCreatedTracks(int nbCreatedTracks) { this.nbCreatedTracks = nbCreatedTracks; }
 }
