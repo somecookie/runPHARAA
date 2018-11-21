@@ -33,28 +33,31 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
     @Override
     protected void loadData() {
         emptyMessage.setVisibility(View.GONE);
-        // Create a fresh recyclerView and listCardItem
+        // Create a fresh recyclerView and listTrackCardItem
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-                List<CardItem> listCardItem = new ArrayList<>();
-                OnItemClickListener listener = item -> {
-                    Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                    intent.putExtra("TrackID", item.getParentTrackID());
-                    startActivity(intent);
+                List<TrackCardItem> listTrackCardItem = new ArrayList<>();
+                OnItemClickListener listener = new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(TrackCardItem item) {
+                        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+                        intent.putExtra("TrackID", item.getParentTrackID());
+                        startActivity(intent);
+                    }
                 };
                 List<Track> tracks = TrackDatabaseManagement.initFavouritesTracks(data);
                 for (Track t : tracks) {
-                    t.setCardItem(new CardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
-                    listCardItem.add(t.getCardItem());
+                    t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
+                    listTrackCardItem.add(t.getTrackCardItem());
                 }
-                Adapter adapter = new Adapter(getActivity(), listCardItem, listener);
+                Adapter adapter = new Adapter(getActivity(), listTrackCardItem, listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                if (listCardItem.isEmpty())
+                if (listTrackCardItem.isEmpty())
                     setEmptyMessage();
 
                 swipeLayout.setRefreshing(false);

@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.CardItem;
+import ch.epfl.sweng.runpharaa.TrackCardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.utils.Required;
@@ -22,7 +22,9 @@ public class Track {
     private String creatorUid;
     private String creatorName;
     private String imageStorageUri;
-    private CardItem cardItem;
+
+    @Exclude
+    private TrackCardItem trackCardItem;
 
     //Track specifics
     private String name;
@@ -111,7 +113,8 @@ public class Track {
 
     public TrackProperties getProperties() { return properties; }
 
-    public CardItem getCardItem() { return cardItem; }
+    @Exclude
+    public TrackCardItem getTrackCardItem() { return trackCardItem; }
 
     public CustLatLng getStartingPoint() { return startingPoint; }
 
@@ -129,5 +132,6 @@ public class Track {
 
     public String getImageStorageUri() { return imageStorageUri; }
 
-    public void setCardItem(CardItem cardItem) { this.cardItem = cardItem; }
+    public void setTrackCardItem(TrackCardItem trackCardItem) { this.trackCardItem = trackCardItem; }
+
 }

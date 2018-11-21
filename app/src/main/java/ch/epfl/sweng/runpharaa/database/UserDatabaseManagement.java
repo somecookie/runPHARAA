@@ -10,26 +10,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class UserDatabaseManagement extends TrackDatabaseManagement {
-    private final static String USERS = "users";
+    public final static String USERS = "users";
+    private final static String NAME = "name";
     private final static String FAVORITE = "favoriteTracks";
     private final static String LIKES = "likedTracks";
     private final static String CREATE = "createdTracks";
-    private final static String FOLLOW = "followedUsers";
+    private final static String FOLLOWING = "followedUsers";
+    private final static String PICTURE = "picture";
 
     public static void writeNewUser(final User user, final Callback<User> callback) {
-        Log.i("KWAY", user.getUid() + " " + user.getName());
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     User storedUser = dataSnapshot.getValue(User.class);
-
                     assert storedUser != null;
 
                     if (!dataSnapshot.child(LIKES).exists())
@@ -38,7 +39,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                         storedUser.setCreatedTracks(new ArrayList<>());
                     if (!dataSnapshot.child(FAVORITE).exists())
                         storedUser.setFavoriteTracks(new ArrayList<>());
-                    if (!dataSnapshot.child(FOLLOW).exists())
+                    if (!dataSnapshot.child(FOLLOWING).exists())
                         storedUser.setFollowedUsers(new ArrayList<>());
 
                     callback.onSuccess(storedUser);
@@ -107,4 +108,73 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         createRef.setValue(trackID).addOnFailureListener(Throwable::printStackTrace);
     }
 
+    public static void updateFollowedUsers(final User user) {
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FOLLOWING);
+        followedRef.setValue(user.getFollowedUsers()).addOnFailureListener(Throwable::printStackTrace);
+    }
+
+    public static void removeFollowedUser(final User user) {
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING);
+
+        followedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        User userFromDatabase = null;
+                        if (child.getValue() != null) {
+                            userFromDatabase = User.deserialize(child.getValue().toString());
+                        }
+                        if (userFromDatabase != null && userFromDatabase.getUid().equals(user.getUid())) {
+                            child.getRef().removeValue().addOnFailureListener(Throwable::printStackTrace);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
+    }
+
+    public static List<User> initFollowingFragment(DataSnapshot data) {
+        List<User> users = new ArrayList<>();
+        DataSnapshot followed = data.child(User.instance.getUid()).child(FOLLOWING);
+        for (DataSnapshot f : followed.getChildren()) {
+            if (f.getValue() != null) {
+                users.add(User.deserialize(f.getValue().toString()));
+            }
+        }
+
+        return users;
+    }
+
+    public static User getUser(DataSnapshot data, String uId) {
+        User user = null;
+        for (DataSnapshot u : data.getChildren()) {
+            if (u.getValue() != null && u.getKey().equals(uId)) {
+                user = new User();
+                user.setUid(uId);
+                if (u.child(NAME).exists()) {
+                    user.setName(u.child(NAME).getValue().toString());
+                }
+                List<String> createdTracks = new ArrayList<>();
+                for (DataSnapshot c : u.child(CREATE).getChildren()) {
+                    createdTracks.add(c.getKey());
+                }
+                user.setCreatedTracks(createdTracks);
+                List<String> favoriteTracks = new ArrayList<>();
+                for (DataSnapshot c : u.child(FAVORITE).getChildren()) {
+                    favoriteTracks.add(c.getKey());
+                }
+                user.setFavoriteTracks(favoriteTracks);
+                if (u.child(PICTURE).exists()) {
+                    user.setPicture(u.child(PICTURE).getValue().toString());
+                }
+            }
+        }
+        return user;
+    }
 }

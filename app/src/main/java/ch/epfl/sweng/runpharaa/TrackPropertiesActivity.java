@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,6 +48,8 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -167,6 +171,17 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     }
                 });
 
+                Button goToUserProfile = findViewById(R.id.goToUserProfileButtonId);
+                goToUserProfile.setText("VISIT " + track.getCreatorName() + " PROFILE");
+                goToUserProfile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+                        userProfile.putExtra("userId", track.getCreatorUid());
+                        startActivity(userProfile);
+                    }
+                });
+
                 // Share on Facebook
                 ImageButton fb = findViewById(R.id.fb_share_button);
                 fb.setOnClickListener( v -> {
@@ -194,8 +209,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     }
                     tweetBuilder.show();
                 });
-
-
 
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));

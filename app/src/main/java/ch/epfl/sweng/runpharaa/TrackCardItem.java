@@ -1,15 +1,13 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.graphics.Bitmap;
-
-public class CardItem {
+public class TrackCardItem {
     private String name;
     private String parentTrackID;
     private String imageURL;
 
-    public CardItem() { }
+    public TrackCardItem() { }
 
-    public CardItem(String name, String parentTrackID, String imageURL) {
+    public TrackCardItem( String name, String parentTrackID, String imageURL) {
         this.name = name;
         this.parentTrackID = parentTrackID;
         this.imageURL = imageURL;

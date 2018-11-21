@@ -48,7 +48,7 @@ public class UserTest {
         u.setUid("0");
         List<String> favs = Arrays.asList("1234");
         u.setFavoriteTracks(favs);
-        List<User> followed = Arrays.asList(new User());
+        List<String> followed = Arrays.asList("0");
         u.setFollowedUsers(followed);
         u.setLikedTracks(favs);
         u.setCreatedTracks(favs);

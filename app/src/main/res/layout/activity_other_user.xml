@@ -33,22 +33,12 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="-150dp"
-        android:layout_toEndOf="@+id/profile_picture"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="45dp"
         android:text="USER"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/sign_out_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/user_name"
-        android:layout_alignStart="@+id/user_name"
-        android:layout_marginTop="20dp"
-        android:text="@string/signOut" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -123,6 +113,15 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="FOLLOW" />
+
         <TextView
             android:id="@+id/emptyMessage"
             android:layout_width="match_parent"
@@ -136,7 +135,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/createdTracksCardListId"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:visibility="visible" />
 
     </LinearLayout>
