@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification;
+package ch.epfl.sweng.runpharaa.firebase.authentification;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;

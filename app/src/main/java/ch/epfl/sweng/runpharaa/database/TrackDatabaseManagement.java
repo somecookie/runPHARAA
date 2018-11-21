@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.Firebase.Database;
-import ch.epfl.sweng.runpharaa.Firebase.Storage;
+import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.firebase.Storage;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;

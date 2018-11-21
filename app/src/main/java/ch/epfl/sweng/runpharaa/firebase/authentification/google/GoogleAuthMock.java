@@ -1,10 +1,13 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification.Google;
+package ch.epfl.sweng.runpharaa.firebase.authentification.google;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApi;
 
 public class GoogleAuthMock implements GoogleAuthInterface {
 
@@ -17,4 +20,5 @@ public class GoogleAuthMock implements GoogleAuthInterface {
     public Intent getSignInIntent() {
         return new Intent();
     }
+
 }

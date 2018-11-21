@@ -9,27 +9,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
-import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -162,27 +156,17 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_near_me);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_black_24dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
 
         // Add the floating action button
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
-                startActivity(createTrack);
-            }
+        fab.setOnClickListener(v -> {
+            Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
+            startActivity(createTrack);
         });
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_menu, menu);
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

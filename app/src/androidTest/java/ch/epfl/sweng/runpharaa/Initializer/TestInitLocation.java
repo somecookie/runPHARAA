@@ -1,16 +1,15 @@
 package ch.epfl.sweng.runpharaa.Initializer;
 
 import android.Manifest;
-import android.support.test.espresso.Espresso;
 import android.support.test.rule.GrantPermissionRule;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
-import ch.epfl.sweng.runpharaa.Firebase.Database;
-import ch.epfl.sweng.runpharaa.Firebase.Storage;
+import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.firebase.Storage;
+
 
 public class TestInitLocation {
 

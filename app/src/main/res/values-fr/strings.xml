@@ -7,7 +7,9 @@
     <string name="password">Mot de passe</string>
     <string name="map">Carte</string>
     <string name="title_activity_login">Connexion</string>
-    <string name="welcome">Bonjour</string>
+    <string name="loading_data">Téléchargement des données en cours …</string>
+    <string name="welcome">Bienvenue %s !</string>
+    <string name="almost_there">On y est presque !</string>
     <string name="signOut">Se déconnecter</string>
     <string name="loggedOut">Déconnecté(e)</string>
     <string name="no_tracks">Oops! Il n\'y a pas de parcours dans les parages</string>

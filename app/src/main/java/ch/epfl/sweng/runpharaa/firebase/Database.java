@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Firebase;
+package ch.epfl.sweng.runpharaa.firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

@@ -11,7 +11,9 @@
     <string name="title_activity_login">Login</string>
     <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
-    <string name="welcome">Welcome</string>
+    <string name="loading_data">Loading user data …</string>
+    <string name="welcome">Welcome %s !</string>
+    <string name="almost_there">Almost there !</string>
     <string name="signOut">Sign Out</string>
     <string name="loggedOut">Logged out.</string>
     <string name="no_tracks">Oops! There are no tracks nearby</string>

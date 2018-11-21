@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification.Google;
+package ch.epfl.sweng.runpharaa.firebase.authentification.google;
 
 import android.app.Activity;
 import android.content.Intent;

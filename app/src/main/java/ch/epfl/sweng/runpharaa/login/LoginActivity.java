@@ -1,8 +1,10 @@
 package ch.epfl.sweng.runpharaa.login;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,51 +31,43 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Map;
 
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuth;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.FirebaseAuthInterface;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuth;
-import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.firebase.authentification.FirebaseAuth;
+import ch.epfl.sweng.runpharaa.firebase.authentification.FirebaseAuthInterface;
+import ch.epfl.sweng.runpharaa.firebase.authentification.google.GoogleAuth;
+import ch.epfl.sweng.runpharaa.firebase.authentification.google.GoogleAuthInterface;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+
+import static java.lang.Thread.sleep;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
-    public static GoogleSignInClient mGoogleSignInClient;
-    //private static final int RC_SIGN_IN = 1;
-    //Needed public to mock access
+    private GoogleSignInClient mGoogleSignInClient;
     private GoogleAuthInterface mGoogleAuth;
-    //Shared instance of the FirebaseAuth
     private FirebaseAuthInterface mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
     private Location l;
+    private FirebaseUser currentUser;
+    private AnimationDrawable anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TestFairy.begin(this, "404771920c67776e429dc8548b060d68b58d433b");
-        setContentView(R.layout.activity_login);
+        startLoadingAnimation();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         for (Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())
             System.out.println(e.getKey() + " " + e.getValue());
-        requestPermissions();
-
-        TextView tv = findViewById(R.id.textViewLogin);
-        tv.setText("#RunPharaaWayFromTravis!");
-
-        //add listener to the buttons
-        findViewById(R.id.sign_in_button_google).setOnClickListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        //TODO: see if we need to request additional scopes to access Google APIs
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -91,10 +86,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        if(!requestPermissions()) {
+            currentUser = mAuth.getCurrentUser();
+            updateUI(currentUser);
+        }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -133,12 +129,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      *
      * @param currentUser
      */
+    @SuppressLint("StringFormatInvalid")
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             if (l != null) {
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
-            Toast.makeText(getBaseContext(), getResources().getString(R.string.welcome) + " " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+            setLoadingText(getText(R.string.loading_data).toString());
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
@@ -158,10 +155,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                 }
             });
-
         } else {
+            setContentView(R.layout.activity_login);
+            TextView tv = findViewById(R.id.textViewLogin);
+            tv.setText("#RunPharaaWayFromTravis!");
+
+            findViewById(R.id.sign_in_button_google).setOnClickListener(this);
             findViewById(R.id.sign_in_button_google).setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setLoadingText(String text) {
+        TextView textView = findViewById(R.id.loading_text);
+        textView.setText(text);
+    }
+
+    private void startLoadingAnimation() {
+        setContentView(R.layout.loading_screen);
+        ImageView imageView = findViewById(R.id.anim_view);
+        imageView.setBackgroundResource(R.drawable.animation);
+        anim = ((AnimationDrawable)imageView.getBackground());
+        anim.start();
     }
 
     /**
@@ -178,8 +192,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void launchApp() {
         startService(new Intent(getBaseContext(), GpsService.getInstance().getClass()));
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
-        startActivity(launchIntent);
-        finish();
+        setLoadingText(getText(R.string.almost_there).toString());
+        new Thread() {
+            @SuppressLint("StringFormatInvalid")
+            @Override
+            public void run() {
+                try {
+                    sleep(1000);
+                    runOnUiThread(() -> {
+                        setLoadingText(String.format(getString(R.string.welcome), currentUser.getDisplayName()));
+                        findViewById(R.id.anim_view).setBackgroundResource(R.drawable.anim_standing);
+                    });
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    startActivity(launchIntent);
+                    finish();
+                }
+            }
+        }.start();
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -189,6 +221,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        startLoadingAnimation();
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -208,7 +241,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case GPS_PERMISSIONS_REQUEST_CODE: {
-                if (grantResults.length != 1 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    updateUI(currentUser);
+                } else {
                     requestPermissions();
                 }
             }
@@ -227,12 +263,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
             return true;
         }
-
-        //l = Util.getCurrLocation(this);
-        //if (l != null) {
-        //    lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
-        //}
-
         return false;
     }
 }

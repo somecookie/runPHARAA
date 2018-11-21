@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.GrantPermissionRule;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -17,7 +15,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -33,7 +30,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.Assert.fail;
 
 public class FavoritesFragmentTest extends TestInitLocation {
     @Rule
