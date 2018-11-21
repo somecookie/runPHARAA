@@ -21,7 +21,7 @@ public class LoginActivityTest {
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
-    
+
 
     @Test
     public void connectWithGoogle() {

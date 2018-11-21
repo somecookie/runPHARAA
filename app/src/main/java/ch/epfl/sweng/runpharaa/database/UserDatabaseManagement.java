@@ -103,9 +103,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-    public static void updateCreatedTracks(final String trackID) {
-        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE).child(trackID);
-        createRef.setValue(trackID).addOnFailureListener(Throwable::printStackTrace);
+    public static void updateCreatedTracks(final User user) {
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE);
+        createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
     }
 
     public static void updateFollowedUsers(final User user) {
