@@ -39,11 +39,12 @@
     <string name="by">by %s</string>
     <string name="duration">Duration: %.2f minutes</string>
     <string name="distance">Distance: %.2f meters</string>
-    <string name="difficulty">Difficulty: %.2f</string>
+    <string name="difficulty">Difficulty: %.2f / 5.00</string>
     <string name="max_difficulty_of">At most a difficulty of </string>
     <string name="max_time_of">At most </string>
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
+    <string name="and">and</string>
 
     <string-array name="track_types">
         <item>City</item>

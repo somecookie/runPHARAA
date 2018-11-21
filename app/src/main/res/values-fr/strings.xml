@@ -44,7 +44,7 @@
     <string name="by">par %s</string>
     <string name="duration">Durée: %.2f minutes</string>
     <string name="distance">Distance: %.2f mètres</string>
-    <string name="difficulty">Difficulté: %.2f</string>
+    <string name="difficulty">Difficulté: %.2f / 5.00</string>
 
     <!-- Strings related to Settings -->
 
@@ -75,6 +75,7 @@
     <string name="max_difficulty_of">Une difficulté d\'au plus</string>
     <string name="no_track_found">%s n\'existe pas!</string>
     <string name="social_media_post_message">Matte-moi ce parcours de ouf trouvé sur RunPharaa !\nIl s\'appelle \"%s\" \n#runPharaaWayFromTravis</string>
+    <string name="and">et</string>
 
 
 </resources>

@@ -8,9 +8,13 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scrollID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollID">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,6 +57,19 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/trackTitleID" />
+
+                    <Button
+                        android:id="@+id/commentsID"
+                        android:layout_width="36dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="24dp"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
+                        android:background="@android:drawable/sym_action_chat"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/buttonLikeID"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
                         android:id="@+id/buttonLikeID"
@@ -153,14 +170,14 @@
                     android:layout_height="0dp"
                     android:text="" />
 
-            <Button
-                android:id="@+id/goToUserProfileButtonId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:text="SEE CREATOR PROFILE" />
+                <Button
+                    android:id="@+id/goToUserProfileButtonId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="SEE CREATOR PROFILE" />
 
 
             </LinearLayout>

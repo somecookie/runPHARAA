@@ -7,11 +7,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -21,8 +21,6 @@ import android.widget.ToggleButton;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,13 +29,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
-import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -49,41 +47,16 @@ import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
-import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
+    ShareDialog shareDialog;
+    TweetComposer.Builder tweetBuilder;
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
     private ImageLoader imageLoader;
-
-    ShareDialog shareDialog;
-    TweetComposer.Builder tweetBuilder;
-
-    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
-    private String createTagString(Track track) {
-        Set<TrackType> typeSet = track.getProperties().getType();
-        int nbrTypes = typeSet.size();
-        String[] trackType = getResources().getStringArray(R.array.track_types);
-
-        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(start);
-
-        int i = 0;
-
-        for(TrackType tt : typeSet){
-
-            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
-            if(i < nbrTypes - 1) sb.append(", ");
-
-            i++;
-        }
-        return sb.toString();
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,116 +75,18 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
+
                 final String trackID = intent.getStringExtra("TrackID");
                 final Track track = TrackDatabaseManagement.initTrack(data, trackID);
                 points = CustLatLng.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
 
                 TrackProperties tp = track.getProperties();
-
-                DecimalFormat df = new DecimalFormat("#.##");
-                df.setRoundingMode(RoundingMode.CEILING);
-
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-
                 ImageLoader.getLoader(getBaseContext()).displayImage(track.getImageStorageUri(), trackBackground, false); // caching
 
-                TextView trackTitle = findViewById(R.id.trackTitleID);
-                trackTitle.setText(track.getName());
+                setTextOfProperties(track, tp);
+                setButtonsOfProperties(trackID, track);
 
-                TextView trackCreator = findViewById(R.id.trackCreatorID);
-                trackCreator.setText("By" + track.getCreatorName());
-
-                TextView trackDuration = findViewById(R.id.trackDurationID);
-                trackDuration.setText("Duration: " + df.format(tp.getAvgDuration()) + " minutes");
-
-                TextView trackLength = findViewById(R.id.trackLengthID);
-                trackLength.setText("Length: " + df.format(tp.getLength()) + " m");
-
-                TextView trackDifficulty = findViewById(R.id.track_difficulty);
-                trackDifficulty.setText("Difficulty: " + Double.toString(tp.getAvgDifficulty()) + " / 5.0");
-
-
-                TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeightDifference()) + "m");
-
-                TextView trackLikes = findViewById(R.id.trackLikesID);
-                trackLikes.setText("" + tp.getLikes());
-
-                TextView trackFavourites = findViewById(R.id.trackFavouritesID);
-                trackFavourites.setText("" + tp.getFavorites());
-
-                ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
-                ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
-
-                // Check if the user already liked this track and toggle the button accordingly
-                toggleLike.setChecked(User.instance.alreadyLiked(trackID));
-
-                toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        if (isChecked) {
-                            updateLikes(track, trackID);
-                        } else {
-                            updateLikes(track, trackID);
-                        }
-                    }
-                });
-
-                // Check if the track already in favorites and toggle the button accordingly
-                toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
-
-                toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        if (isChecked) {
-                            updateNbFavorites(track, trackID);
-                        } else {
-                            updateNbFavorites(track, trackID);
-                        }
-                    }
-                });
-
-                Button goToUserProfile = findViewById(R.id.goToUserProfileButtonId);
-                goToUserProfile.setText("VISIT " + track.getCreatorName() + " PROFILE");
-                goToUserProfile.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
-                        userProfile.putExtra("userId", track.getCreatorUid());
-                        startActivity(userProfile);
-                    }
-                });
-
-                // Share on Facebook
-                ImageButton fb = findViewById(R.id.fb_share_button);
-                fb.setOnClickListener( v -> {
-                    if (ShareDialog.canShow(ShareLinkContent.class)) {
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
-                                .setShareHashtag(new ShareHashtag.Builder()
-                                        .setHashtag(String.format(getString(R.string.social_media_post_message), track.getName())).build())
-                                .build();
-                        shareDialog.show(content);
-                    }
-                });
-
-
-                // Share on Twitter
-                ImageButton twitter = findViewById(R.id.twitter_share_button);
-                twitter.setOnClickListener(v -> {
-                    //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
-                    try {
-                        tweetBuilder
-                                .text(String.format(getString(R.string.social_media_post_message), track.getName()))
-                                .url(new URL("https://github.com/somecookie/runPHARAA"));
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    tweetBuilder.show();
-                });
-
-                TextView trackTags = findViewById(R.id.trackTagsID);
-                trackTags.setText(createTagString(track));
 
                 drawTrackOnMap();
             }
@@ -249,22 +124,127 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         mapFragment.getMapAsync(this);*/
     }
 
+    private void setButtonsOfProperties(String trackID, Track track) {
+        ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
+        ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
+
+        // Check if the user already liked this track and toggle the button accordingly
+        toggleLike.setChecked(User.instance.alreadyLiked(trackID));
+
+        toggleLike.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                updateLikes(track, trackID);
+            } else {
+                updateLikes(track, trackID);
+            }
+        });
+
+        // Check if the track already in favorites and toggle the button accordingly
+        toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
+
+        toggleFavorite.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                updateNbFavorites(track, trackID);
+            } else {
+                updateNbFavorites(track, trackID);
+            }
+        });
+
+        Button goToUserProfile = findViewById(R.id.goToUserProfileButtonId);
+        goToUserProfile.setText("VISIT " + track.getCreatorName() + " PROFILE");
+        goToUserProfile.setOnClickListener(v -> {
+            Intent userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+            userProfile.putExtra("userId", track.getCreatorUid());
+            startActivity(userProfile);
+        });
+
+        // Share on Facebook
+        ImageButton fb = findViewById(R.id.fb_share_button);
+        fb.setOnClickListener(v -> {
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
+                        .setShareHashtag(new ShareHashtag.Builder()
+                                .setHashtag(String.format(getString(R.string.social_media_post_message), track.getName())).build())
+                        .build();
+                shareDialog.show(content);
+            }
+        });
+
+
+        // Share on Twitter
+        ImageButton twitter = findViewById(R.id.twitter_share_button);
+        twitter.setOnClickListener(v -> {
+            //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
+            try {
+                tweetBuilder
+                        .text(String.format(getString(R.string.social_media_post_message), track.getName()))
+                        .url(new URL("https://github.com/somecookie/runPHARAA"));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            tweetBuilder.show();
+        });
+
+        Button comments = findViewById(R.id.commentsID);
+        comments.setOnClickListener(v -> {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
+
+
+            final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
+            TextView tv = mView.findViewById(R.id.textViewComments);
+            tv.setText("POST A COMMENT YO");
+
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.show();
+        });
+    }
+
+    private void setTextOfProperties(Track track, TrackProperties tp) {
+        TextView trackTitle = findViewById(R.id.trackTitleID);
+        trackTitle.setText(track.getName());
+
+        TextView trackCreator = findViewById(R.id.trackCreatorID);
+        trackCreator.setText(String.format(getResources().getString(R.string.by), track.getCreatorName()));
+
+        TextView trackDuration = findViewById(R.id.trackDurationID);
+        trackDuration.setText(String.format(getResources().getString(R.string.duration), tp.getAvgDuration()));
+
+        TextView trackLength = findViewById(R.id.trackLengthID);
+        trackLength.setText(String.format(getResources().getString(R.string.distance), tp.getLength()));
+
+        TextView trackDifficulty = findViewById(R.id.track_difficulty);
+        trackDifficulty.setText(String.format(getResources().getString(R.string.difficulty), tp.getAvgDifficulty()));
+
+        TextView trackLikes = findViewById(R.id.trackLikesID);
+        trackLikes.setText(String.format("%d", tp.getLikes()));
+
+        TextView trackFavourites = findViewById(R.id.trackFavouritesID);
+        trackFavourites.setText(String.format("%d", tp.getFavorites()));
+
+        TextView trackTags = findViewById(R.id.trackTagsID);
+        trackTags.setText(createTagString(track));
+    }
+
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
         String[] trackType = getResources().getStringArray(R.array.track_types);
 
-        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
+        String start = (nbrTypes > 1) ? "Tags: " : "Tag: ";
 
         StringBuilder sb = new StringBuilder();
         sb.append(start);
 
         int i = 0;
 
-        for(TrackType tt : typeSet){
+        for (TrackType tt : typeSet) {
 
             sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
-            if(i < nbrTypes - 1) sb.append(", ");
+            if (i < nbrTypes - 2) sb.append(", ");
+            else if (i == nbrTypes - 2)
+                sb.append(" " + getResources().getString(R.string.and) + " ");
 
             i++;
         }
