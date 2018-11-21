@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         //Initiate the Firebase Database with these tracks (delete them manually if already there).
         /*
         Log.d("Put Fake Track", "Test");
@@ -152,16 +151,18 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new FragmentNearMe());
         adapter.addFragment(new FragmentFollowing());
         adapter.addFragment(new FragmentFavourites());
+        adapter.addFragment(new FragmentSearch());
 
         // Link all
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
 
         // Set icons
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_near_me);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_black_24dp);
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
@@ -176,41 +177,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu, menu);
-        initSearch(menu);
         return true;
-    }
-
-    private void initSearch(Menu menu) {
-        MenuItem item = menu.findItem(R.id.searchIcon);
-        SearchView sv = (SearchView)item.getActionView();
-        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
-                    @Override
-                    public void onSuccess(String value) {
-                        if(value == null){
-                            Toast.makeText(getBaseContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
-                        }else{
-                            Intent i = new Intent(getBaseContext(),TrackPropertiesActivity.class);
-                            i.putExtra("TrackID", value);
-                            startActivity(i);
-                        }
-                    }
-                });
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
