@@ -348,7 +348,8 @@ public class Database {
             }
         });
 
-        when(drUserAnyChildLikesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
+        when(drUserAnyChildLikesChild.removeValue())
+                .thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
                 int likes = t.getLikes();
