@@ -1,7 +1,11 @@
-package ch.epfl.sweng.runpharaa.review;
+package ch.epfl.sweng.runpharaa.comment;
+
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
@@ -68,8 +72,30 @@ public class Comment implements Comparable<Comment>{
 
     @Override
     public int compareTo(Comment rev) {
-        Date thisDate = new Date(dateStamp);
-        Date thatDate = new Date(dateStamp);
-        return thisDate.compareTo(thatDate);
+        if(this.getDateStamp() < rev.dateStamp) return 1;
+        else if(this.getDateStamp() > rev.getDateStamp()) return -1;
+        else return 0;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment1 = (Comment) o;
+        return dateStamp == comment1.dateStamp &&
+                Objects.equals(creatorID, comment1.creatorID) &&
+                Objects.equals(comment, comment1.comment);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(dateStamp, creatorID, comment);
+    }
+
+    @Override
+    public String toString() {
+        return getComment();
     }
 }

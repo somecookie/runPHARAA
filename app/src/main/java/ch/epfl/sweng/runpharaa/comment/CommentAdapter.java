@@ -1,6 +1,7 @@
-package ch.epfl.sweng.runpharaa.review;
+package ch.epfl.sweng.runpharaa.comment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +14,11 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.DownloadImageTask;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{
 
@@ -45,6 +49,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     public void onSuccess(String picture) {
                         new DownloadImageTask(holder.imageView, mContext.getResources()).execute(picture);
                         holder.name.setText(name);
+
+                        holder.name.setOnClickListener(v -> {
+                            Intent userProfile ;
+                            userProfile = new Intent(mContext, UsersProfileActivity.class);
+                            userProfile.putExtra("userId", comment.getCreatorID());
+                            startActivity(mContext, userProfile, null);
+                        });
+
                         holder.date.setText(comment.getDate());
                         holder.comment.setText(comment.getComment());
 

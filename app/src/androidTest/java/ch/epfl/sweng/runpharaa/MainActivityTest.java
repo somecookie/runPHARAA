@@ -244,7 +244,7 @@ public class MainActivityTest extends TestInitLocation {
         int length = 100;
         int heigthDiff = 10;
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "0", "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
-                types, length, heigthDiff, 2, 1, 40, 1, 0, 0);
+                types, length, heigthDiff, 2, 1, 40, 1, 0, 0, );
         Track t = new Track(track);
 
         assertTrue(MainActivity.passFilters(t));

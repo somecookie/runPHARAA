@@ -2,6 +2,8 @@ package ch.epfl.sweng.runpharaa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,17 +43,15 @@ import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.review.Comment;
-import ch.epfl.sweng.runpharaa.review.CommentAdapter;
+import ch.epfl.sweng.runpharaa.comment.Comment;
+import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -66,7 +67,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private LatLng[] points;
     private TextView testText;
     private ImageLoader imageLoader;
-    private List<Comment> comments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,10 +170,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         initSocialMediaButtons(track);
 
-        initCommentButton();
+        initCommentButton(track);
     }
 
-    private void initCommentButton() {
+    private void initCommentButton(Track track) {
         Button commentsButton = findViewById(R.id.commentsID);
         commentsButton.setOnClickListener(v -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
@@ -184,15 +184,17 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             tv.setHint(String.format(getResources().getString(R.string.comment_hint), Comment.MAX_LENGTH));
 
             Button sendButton = mView.findViewById(R.id.post_button);
-            sendButton.setOnClickListener(v1 ->{
+            sendButton.setOnClickListener(v1 -> {
                 String comment = tv.getText().toString();
 
-                if(Comment.checkSizeComment(comment)){
+                if (Comment.checkSizeComment(comment)) {
                     Date date = new Date();
                     Comment com = new Comment(User.instance.getUid(), comment, date);
-                    comments.add(com);
+                    track.addComment(com);
+                    TrackDatabaseManagement.updateComments(track);
                     tv.setText("");
-                }else{
+                    hideKeyboardFrom(getBaseContext(), mView);
+                } else {
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
                 }
 
@@ -203,7 +205,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             commentRv.setLayoutManager(new LinearLayoutManager(this));
 
             CommentAdapter commentAdapter;
-            commentAdapter = new CommentAdapter(this, comments);
+            commentAdapter = new CommentAdapter(this, track.getComments());
 
             commentRv.setAdapter(commentAdapter);
 
@@ -249,7 +251,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         trackTitle.setText(track.getName());
 
         TextView trackCreator = findViewById(R.id.trackCreatorID);
-        trackCreator.setText(String.format(getResources().getString(R.string.by), track.getCreatorName()));
+        trackCreator.setText(track.getCreatorName());
+        trackCreator.setOnClickListener(v -> {
+            Intent userProfile ;
+            userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+            userProfile.putExtra("userId", track.getCreatorUid());
+            startActivity(userProfile);
+        });
 
         TextView trackDuration = findViewById(R.id.trackDurationID);
         trackDuration.setText(String.format(getResources().getString(R.string.duration), tp.getAvgDuration()));
@@ -332,53 +340,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
-    /*private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
-        for (Track t : tracks) {
-            if (t.getTrackUid().equals(trackID)) {
-                return t;
-            }
-        }
-        return null;
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-
-            Bitmap decoded = null;
-
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                mIcon11 = BitmapFactory.decodeStream(in, null, options);
-
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
-                decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return decoded;
-        }
-
-        /**
-         ** Set the ImageView to the bitmap result
-         * @param result
-         */
-        /*protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }*/
 
     @SuppressLint("MissingPermission")
     @Override
@@ -408,5 +369,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             map.addMarker(new MarkerOptions().position(points[0]).icon(defaultMarker(150)).alpha(0.8f));
             map.addMarker(new MarkerOptions().position(points[points.length - 1]).icon(defaultMarker(20)).alpha(0.8f));
         }
+    }
+
+    private void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

@@ -1,6 +1,9 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 
@@ -13,6 +16,7 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.TrackCardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.utils.Required;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
@@ -30,6 +34,7 @@ public class Track {
     private String name;
     private List<CustLatLng> path;
     private CustLatLng startingPoint;
+    private List<Comment> comments;
 
     private TrackProperties properties;
 
@@ -55,6 +60,7 @@ public class Track {
     }
 
     //For Firebase
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Track(FirebaseTrackAdapter trackAdapter) {
         Required.nonNull(trackAdapter.getTrackUid(), "Track ID must be non-null.");
         Required.nonNull(trackAdapter.getCreatorId(), "Creator ID must be non-null.");
@@ -79,6 +85,10 @@ public class Track {
         this.path = trackAdapter.getPath();
         this.startingPoint = path.get(0);
         this.imageStorageUri = trackAdapter.getImageStorageUri();
+        this.comments = trackAdapter.getComments();
+
+        if(comments == null) comments = new ArrayList<>();
+        else comments.sort(Comment::compareTo);
     }
 
     public static ArrayList<Track> allTracks;
@@ -134,4 +144,15 @@ public class Track {
 
     public void setTrackCardItem(TrackCardItem trackCardItem) { this.trackCardItem = trackCardItem; }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void addComment(Comment comment){
+        if(!comments.contains(comment)){
+            comments.add(comment);
+            comments.sort(Comment::compareTo);
+        }
+    }
 }

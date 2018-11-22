@@ -1,7 +1,9 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -35,6 +37,7 @@ public class TrackDatabaseManagement {
     public final static String TRACK_IMAGE_PATH = "TrackImages";
     public final static String NAME_PATH = "name";
     public final static String ID_PATH = "trackUid";
+    public final static String COMMENTS = "comments";
 
     public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
@@ -113,6 +116,11 @@ public class TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
 
+    public static void updateComments(Track track){
+        DatabaseReference commentsRef = mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).child(COMMENTS);
+        commentsRef.setValue(track.getComments()).addOnFailureListener(Throwable::printStackTrace);
+    }
+
     /**
      * Given a DataSnapshot from the Firebase Database and a track key, return the corresponding track.
      *
@@ -120,6 +128,7 @@ public class TrackDatabaseManagement {
      * @param key
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static Track initTrack(DataSnapshot dataSnapshot, String key) {
         return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
@@ -130,6 +139,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location) {
         List<Track> tracksNearMe = new ArrayList<>();
         for (DataSnapshot c : dataSnapshot.getChildren()) {
@@ -158,6 +168,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
@@ -181,6 +192,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot) {
         List<Track> favouriteTracks = new ArrayList<>();
         for (DataSnapshot c : dataSnapshot.getChildren()) {

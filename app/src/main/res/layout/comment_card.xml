@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/comment_image"
-                android:text="Jean"
+                android:text=""
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -39,7 +39,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/comment_image"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis gravida ipsum. Maecenas sit amet felis elit. Praesent quis ex cras amet."
+                android:text=""
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
 
@@ -51,7 +51,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_toRightOf="@id/comment_image"
-                android:text="Posted on June 21, 2008 9:30 PM"
+                android:text=""
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textSize="10sp"
