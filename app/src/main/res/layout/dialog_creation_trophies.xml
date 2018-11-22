@@ -29,7 +29,8 @@
                     android:id="@+id/trophy_one_track"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/lock" />
+                    android:layout_weight="1"
+                    android:adjustViewBounds="false" />
 
                 <TextView
                     android:id="@+id/textOneCreation"
@@ -49,6 +50,7 @@
                     android:id="@+id/trophy_two_tracks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     app:srcCompat="@drawable/lock" />
 
                 <TextView
@@ -69,6 +71,7 @@
                     android:id="@+id/trophy_ten_tracks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     app:srcCompat="@drawable/lock" />
 
                 <TextView

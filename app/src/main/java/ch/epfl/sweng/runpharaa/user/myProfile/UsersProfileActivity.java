@@ -2,14 +2,17 @@ package ch.epfl.sweng.runpharaa.user.myProfile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +41,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_user);
-        loadActivity(User.instance, true);
+        loadActivity(User.instance);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -46,6 +49,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPagerUser);
 
         Fragment f = new FragmentMyTrophies();
+        updateImages();
 
         // Add fragments
         adapter.addFragment(new FragmentMyTracks());
@@ -59,7 +63,6 @@ public class UsersProfileActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setText("My tracks");
         tabLayout.getTabAt(1).setText("My trophies");
 
-        ((FragmentMyTrophies) f).updateImages();
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
@@ -70,7 +73,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         emptyMessage.setVisibility(View.VISIBLE);
     }
 
-    private void loadActivity(User user, Boolean isSelfUser) {
+    private void loadActivity(User user) {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
         emptyMessage.setVisibility(View.GONE);
@@ -118,5 +121,28 @@ public class UsersProfileActivity extends AppCompatActivity {
                 });
     }
 
+
+    private void updateImages(){
+        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
+        ImageView img= mView.findViewById(R.id.trophies_create);
+        if(User.instance.getCreatedTracks().size() >= 1){
+            Log.i("WESHHHH", "More than 1");
+            img.setVisibility(View.INVISIBLE);
+            img.setImageResource(R.drawable.create_one_track_reward);
+        } else {
+            Log.i("WESHHHH", "Less than 1");
+            img.setImageResource(R.drawable.lock);
+
+        }
+
+
+        Log.i("WESH", "VALOUUUUUU");
+        final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
+        ImageView i = vv.findViewById(R.id.trophy_one_track);
+        //i.setVisibility(View.INVISIBLE);
+        i.setImageResource(R.drawable.create_one_track_reward);
+
+
+    }
 
 }

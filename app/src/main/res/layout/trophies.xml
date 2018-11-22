@@ -29,16 +29,19 @@
 
 
                 <ImageView
-                    android:id="@+id/imageViewCreate"
+                    android:id="@+id/trophies_create"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     app:srcCompat="@drawable/lock" />
 
                 <TextView
                     android:id="@+id/create_Track_Challenge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Creation" />
+                    android:layout_weight="1"
+                    android:text="Creation"
+                    android:textAlignment="center" />
             </LinearLayout>
 
 
@@ -53,13 +56,16 @@
                     android:id="@+id/imageView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     app:srcCompat="@drawable/lock" />
 
                 <TextView
                     android:id="@+id/create_Track_Challenge2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Liked" />
+                    android:layout_weight="1"
+                    android:text="Liked"
+                    android:textAlignment="center" />
             </LinearLayout>
 
 
@@ -74,13 +80,16 @@
                     android:id="@+id/imageView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     app:srcCompat="@drawable/lock" />
 
                 <TextView
                     android:id="@+id/create_Track_Challenge3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Favorite" />
+                    android:layout_weight="1"
+                    android:text="Favorite"
+                    android:textAlignment="center" />
             </LinearLayout>
         </TableRow>
 
