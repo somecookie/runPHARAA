@@ -45,14 +45,29 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/trackCreatorID"
-                        android:layout_width="82dp"
+                        android:id="@+id/trackCreatorIDBy"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
-                        android:text="Track Creator"
+                        android:text="By"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
                         android:textStyle="italic"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/trackTitleID" />
+
+                    <TextView
+                        android:id="@+id/trackCreatorID"
+                        android:layout_width="222dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="Track Creator"
+                        android:textAllCaps="false"
+                        android:textColor="@color/com_facebook_button_login_background_color"
+                        android:textStyle="bold|italic"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/trackTitleID"
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <ToggleButton
                         android:id="@+id/buttonLikeID"

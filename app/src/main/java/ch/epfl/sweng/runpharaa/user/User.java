@@ -1,36 +1,39 @@
 package ch.epfl.sweng.runpharaa.user;
 
 import android.net.Uri;
+import android.util.Base64;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.location.RealGpsService;
-import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
-public final class User {
+public final class User implements Serializable {
     @Exclude
-    public static User instance;
+    public transient static User instance;
     @Exclude
-    private int preferredRadius = 2000;
+    private transient int preferredRadius = 2000;
     @Exclude
-    private LatLng location;
+    private transient LatLng location;
+    @Exclude
+    private UserCardItem userCardItem;
 
     private String name;
     private String picture;
     private String uid;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
-    private List<String> likedTracks;
-    private List<User> followedUsers;
+    private transient List<String> likedTracks;
+    private transient List<String> followedUsers;
 
     public User(){}
 
@@ -46,6 +49,7 @@ public final class User {
         this.createdTracks = new ArrayList<>();
         this.favoriteTracks = new ArrayList<>();
         this.likedTracks = new ArrayList<>();
+        this.followedUsers = new ArrayList<>();
         this.location = location;
         this.uid = uid;
     }
@@ -63,14 +67,6 @@ public final class User {
     @Exclude
     public void setPreferredRadius(float newRadius) {
         this.preferredRadius = (int) (newRadius * 1000);
-    }
-
-    public boolean alreadyFollowed(User u) {
-        return followedUsers.contains(u);
-    }
-
-    public void addFollower(User u) {
-        if (!alreadyFollowed(u)) followedUsers.add(u);
     }
 
     /**
@@ -134,6 +130,47 @@ public final class User {
      */
     public void removeFromFavorites(String trackId) {
         favoriteTracks.remove(trackId);
+    }
+
+    /**
+     * Check if a User id is in the set of followed users
+     *
+     * @param u
+     */
+    public boolean alreadyInFollowed(User u) {
+        for (String serializedUser : followedUsers) {
+            User user = deserialize(serializedUser);
+            if (user != null && user.getUid().equals(u.getUid())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Add a User id in the set of followed users
+     *
+     * @param u
+     */
+    public void addToFollowed(User u) {
+        String serializedUser = u.serialize();
+        if (!alreadyInFollowed(u))
+            followedUsers.add(serializedUser);
+    }
+
+    /**
+     * Remove a User id from the set of followed users
+     *
+     * @param u
+     */
+    public void removeFromFollowed(User u) {
+        for (String serializedUser : followedUsers) {
+            User deserializedUser = deserialize(serializedUser);
+            if (deserializedUser != null && deserializedUser.getUid().equals(u.getUid())) {
+                followedUsers.remove(serializedUser);
+                return;
+            }
+        }
     }
 
     /**
@@ -202,11 +239,11 @@ public final class User {
         this.likedTracks = likedTracks;
     }
 
-    public List<User> getFollowedUsers() {
+    public List<String> getFollowedUsers() {
         return followedUsers;
     }
 
-    public void setFollowedUsers(List<User> followedUsers) {
+    public void setFollowedUsers(List<String> followedUsers) {
         this.followedUsers = followedUsers;
     }
 
@@ -224,5 +261,38 @@ public final class User {
     public int hashCode() {
         return uid.hashCode();
     }
+
+    private String serialize() {
+        String serialized = "";
+
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(this);
+            objectOutputStream.flush();
+            serialized =  new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
+        } catch (Exception e) {
+            Log.d("Serialization Error", e.toString());
+        }
+
+        return serialized;
+    }
+
+    public static User deserialize(String s) {
+        try {
+            byte b[] = Base64.decode(s.getBytes(), 0);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            return (User) objectInputStream.readObject();
+        } catch (Exception e) {
+            Log.d("Deserialization Error", e.toString());
+            return null;
+        }
+    }
+
+    @Exclude
+    public UserCardItem getUserCardItem() { return userCardItem; }
+
+    public void setUserCardItem(UserCardItem userCardItem) { this.userCardItem = userCardItem; }
 
 }

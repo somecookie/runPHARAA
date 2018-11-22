@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,9 +35,8 @@ import ch.epfl.sweng.runpharaa.Firebase.Authentification.Google.GoogleAuthInterf
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
@@ -65,9 +64,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             System.out.println(e.getKey() + " " + e.getValue());
         requestPermissions();
 
+        TextView tv = findViewById(R.id.textViewLogin);
+        tv.setText("#RunPharaaWayFromTravis!");
+
         //add listener to the buttons
         findViewById(R.id.sign_in_button_google).setOnClickListener(this);
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -98,11 +99,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sign_in_button:
-                User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
-                GpsService.initFakeGps(FakeGpsService.GOOGLE);
-                launchApp();
-                break;
             case R.id.sign_in_button_google:
                 signIn();
                 break;
@@ -164,10 +160,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             });
 
         } else {
-            findViewById(R.id.email).setVisibility(View.VISIBLE);
-            findViewById(R.id.password).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_in_button_google).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
         }
     }
 

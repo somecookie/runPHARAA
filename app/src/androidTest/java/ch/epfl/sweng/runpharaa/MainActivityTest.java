@@ -29,9 +29,9 @@ import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;

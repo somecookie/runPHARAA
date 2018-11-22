@@ -26,9 +26,9 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class MainActivity extends AppCompatActivity {
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.profileIcon:
                 Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);
+                profileIntent.putExtra("selfProfile", true);
                 startActivity(profileIntent);
                 return true;
             case R.id.mapIcon:

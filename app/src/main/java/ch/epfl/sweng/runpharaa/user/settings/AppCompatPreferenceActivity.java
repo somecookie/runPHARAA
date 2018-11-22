@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.user;
+package ch.epfl.sweng.runpharaa.user.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

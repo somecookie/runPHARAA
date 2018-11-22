@@ -21,20 +21,20 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -134,7 +134,7 @@ public class SettingsActivityTest extends TestInitLocation {
         onPreferenceRow(
                 withKey(r.getString(keyId)))
                 /*withTitle(R.string.pref_title_radius)))*/
-                .perform(click());
+                .perform(scrollTo(), click());
 
         onView(allOf(withId(android.R.id.edit),
                 isDisplayed()))

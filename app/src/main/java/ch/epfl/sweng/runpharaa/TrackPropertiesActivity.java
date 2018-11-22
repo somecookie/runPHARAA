@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,6 +48,8 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -56,29 +60,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private ImageLoader imageLoader;
 
     ShareDialog shareDialog;
-
-    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
-    private String createTagString(Track track) {
-        Set<TrackType> typeSet = track.getProperties().getType();
-        int nbrTypes = typeSet.size();
-        String[] trackType = getResources().getStringArray(R.array.track_types);
-
-        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(start);
-
-        int i = 0;
-
-        for(TrackType tt : typeSet){
-
-            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
-            if(i < nbrTypes - 1) sb.append(", ");
-
-            i++;
-        }
-        return sb.toString();
-    }*/
+    TweetComposer.Builder tweetBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +70,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         Twitter.initialize(this);
 
         shareDialog = new ShareDialog(this);
+        tweetBuilder = new TweetComposer.Builder(this);
 
         final Intent intent = getIntent();
         imageLoader = ImageLoader.getLoader(this);
@@ -113,7 +96,20 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 trackTitle.setText(track.getName());
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
-                trackCreator.setText("By" + track.getCreatorName());
+                trackCreator.setText(track.getCreatorName());
+                trackCreator.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent userProfile ;
+                        if(track.getCreatorUid().equals(User.instance.getUid())){
+                            userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+                        } else {
+                            userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
+                        }
+                        userProfile.putExtra("userId", track.getCreatorUid());
+                        startActivity(userProfile);
+                    }
+                });
 
                 TextView trackDuration = findViewById(R.id.trackDurationID);
                 trackDuration.setText("Duration: " + df.format(tp.getAvgDuration()) + " minutes");
@@ -165,6 +161,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     }
                 });
 
+
                 // Share on Facebook
                 ImageButton fb = findViewById(R.id.fb_share_button);
                 fb.setOnClickListener( v -> {
@@ -183,19 +180,15 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 ImageButton twitter = findViewById(R.id.twitter_share_button);
                 twitter.setOnClickListener(v -> {
                     //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
-                    TweetComposer.Builder builder = null;
                     try {
-                        builder = new TweetComposer.Builder(getApplicationContext())
+                        tweetBuilder
                                 .text(String.format(getString(R.string.social_media_post_message), track.getName()))
                                 .url(new URL("https://github.com/somecookie/runPHARAA"));
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                    builder.show();
-
+                    tweetBuilder.show();
                 });
-
-
 
                 TextView trackTags = findViewById(R.id.trackTagsID);
                 trackTags.setText(createTagString(track));

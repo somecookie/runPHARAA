@@ -17,6 +17,8 @@
     <string name="no_tracks">Oops! There are no tracks nearby</string>
     <string name="no_follow">Try following someone!</string>
     <string name="no_favorite">Try adding a track to your favorite!</string>
+    <string name="no_created_self">Try creating a track!</string>
+    <string name="no_created_other">This user did not create a track yet!</string>
     <string name="add_photo">Photo</string>
     <string name="set_properties">Prop.</string>
     <string name="create_track">Create!</string>
@@ -94,5 +96,5 @@
         <string name="pref_title_clear_cache">Clear cache</string>
         <string name="pref_key_clear_cache" translatable="false">clear_cache</string>
 
-    <string name="social_media_post_message">Check out this awesome track on RunPharaa !\nIt\'s called \"%s\"\n #runPharaaWayFromTravis 😍😍🔥🔥</string>
+    <string name="social_media_post_message">Check out this awesome track on RunPharaa !\nIt\'s called \"%s\"\n #runPharaaWayFromTravis</string>
 </resources>

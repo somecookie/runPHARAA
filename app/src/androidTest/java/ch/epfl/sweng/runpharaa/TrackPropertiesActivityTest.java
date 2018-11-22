@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -32,6 +34,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -57,8 +60,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         //User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
-    /*
-
     @Test
     public void shareOnFacebook() {
         Track t1 = createTrack();
@@ -74,8 +75,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(2000);
         onView(withId(R.id.twitter_share_button)).perform(click());
     }
-*/
-
 
     @Test
     public void correctValuesDisplayedForTrack1() {
@@ -134,6 +133,14 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         launchWithExtras(t1);
         sleep(5_000);
         onView(withId(R.id.maps_test_text2)).check(matches(withText("ready")));
+    }
+
+    @Test
+    public void testButtonVisitProfile() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(5_000);
+        onView(withId(R.id.goToUserProfileButtonId)).perform(scrollTo(), click());
     }
 
     private Track createTrack() {

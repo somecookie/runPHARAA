@@ -16,14 +16,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.user.UserCardItem;
 
-public abstract class UpdatableCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    protected View v;
-    protected SwipeRefreshLayout swipeLayout;
+public abstract class UpdatableUserCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+    View v;
+    SwipeRefreshLayout swipeLayout;
     TextView emptyMessage;
 
     public interface OnItemClickListener {
-        void onItemClick(TrackCardItem item);
+        void onItemClick(UserCardItem item);
     }
 
     @Nullable
@@ -61,12 +62,12 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
 
     protected class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
         Context context;
-        List<TrackCardItem> listTrackCardItem;
+        List<UserCardItem> listUserCardItem;
         OnItemClickListener listener;
 
-        Adapter(Context context, List<TrackCardItem> listTrackCardItem, OnItemClickListener listener) {
+        Adapter(Context context, List<UserCardItem> listUserCardItem, OnItemClickListener listener) {
             this.context = context;
-            this.listTrackCardItem = listTrackCardItem;
+            this.listUserCardItem = listUserCardItem;
             this.listener = listener;
         }
 
@@ -74,38 +75,41 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         @Override
         public Adapter.viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View v = layoutInflater.inflate(R.layout.track_card_item, viewGroup, false);
+            View v = layoutInflater.inflate(R.layout.user_card_item, viewGroup, false);
             return new Adapter.viewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            viewHolder.name.setText(listTrackCardItem.get(position).getName());
+            viewHolder.name.setText(listUserCardItem.get(position).getName());
+            viewHolder.nbOfCreatedTracks.setText(String.valueOf(listUserCardItem.get(position).getNbCreatedTracks()));
 
-            ImageLoader.getLoader(getContext()).displayImage(listTrackCardItem.get(position).getImageURL(), viewHolder.background_img);
+            ImageLoader.getLoader(getContext()).displayImage(listUserCardItem.get(position).getImageURL(), viewHolder.profilePic);
 
-            viewHolder.bind(listTrackCardItem.get(position), listener);
+            viewHolder.bind(listUserCardItem.get(position), listener);
         }
 
         @Override
         public int getItemCount() {
-            return listTrackCardItem.size();
+            return listUserCardItem.size();
         }
 
         public class viewHolder extends RecyclerView.ViewHolder {
             // Buttons, images and texts on the cards will be created here
 
-            ImageView background_img;
+            ImageView profilePic;
             TextView name;
+            TextView nbOfCreatedTracks;
 
             public viewHolder(@NonNull View itemView) {
                 super(itemView);
-                background_img = itemView.findViewById(R.id.cardBackgroundId);
-                name = itemView.findViewById(R.id.nameID);
+                profilePic = itemView.findViewById(R.id.profilePicId);
+                name = itemView.findViewById(R.id.userNameId);
+                nbOfCreatedTracks = itemView.findViewById(R.id.nbTracksId);
             }
 
-            public void bind(final TrackCardItem item, final OnItemClickListener listener) {
+            public void bind(final UserCardItem item, final OnItemClickListener listener) {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

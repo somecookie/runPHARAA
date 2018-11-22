@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="83dp"
+        android:layout_height="150dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
@@ -23,7 +23,6 @@
         android:id="@+id/profile_picture"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="230dp"
         android:src="@drawable/unknown_person"
@@ -34,23 +33,12 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="-150dp"
-        android:layout_toEndOf="@+id/profile_picture"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="45dp"
         android:text="USER"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/sign_out_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/user_name"
-        android:layout_alignStart="@+id/user_name"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/signOut" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,12 +46,6 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="145dp"
         android:orientation="vertical">
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,45 +104,40 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabLayoutUser"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="6dp"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true">
-            </android.support.design.widget.TabLayout>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPagerUser"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
-
-                <TextView
-                    android:id="@+id/emptyMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/classic_margin"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/normal_text"
-                    android:visibility="gone" />
-            </android.support.v4.view.ViewPager>
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/hardwork_badge" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="FOLLOW" />
+
+        <TextView
+            android:id="@+id/emptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:padding="@dimen/classic_margin"
+            android:textSize="@dimen/normal_text"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/createdTracksCardListId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="visible" />
 
     </LinearLayout>
 

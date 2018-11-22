@@ -38,15 +38,6 @@ public class LoginActivityTest extends TestInitLocation {
     @Rule
     public final ActivityTestRule<LoginActivity> mActivityRule =
             new ActivityTestRule<>(LoginActivity.class);
-
-    @Test
-    public void connectWithoutGoogleTest() {
-        Intents.init();
-        onView(withId(R.id.sign_in_button)).perform(click());
-        intended(hasComponent(MainActivity.class.getName()));
-        Intents.release();
-    }
-
     /*
     @Test
     public void connectWithGoogleSuccess(){
