@@ -42,6 +42,7 @@ import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.utils.DownloadImageTask;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
@@ -156,7 +157,7 @@ public class UsersProfileActivity extends AppCompatActivity {
             });
         }
 
-        new DownloadImageTask((ImageView) findViewById(R.id.profile_picture))
+        new DownloadImageTask((ImageView) findViewById(R.id.profile_picture), getResources())
                 .execute(user.getPicture().toString());
 
         // Load User's createdTracks
@@ -281,36 +282,4 @@ public class UsersProfileActivity extends AppCompatActivity {
             });
     }
 
-    /**
-     * Private class to download Uri images and set the ImageView to the image downloaded
-     */
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        /**
-         * Set the ImageView to the bitmap result
-         *
-         * @param result
-         */
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 }

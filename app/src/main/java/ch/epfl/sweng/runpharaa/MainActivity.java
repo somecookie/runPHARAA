@@ -167,12 +167,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
 
         // Add the floating action button
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
-                startActivity(createTrack);
-            }
+        fab.setOnClickListener(v -> {
+            Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
+            startActivity(createTrack);
         });
     }
 

@@ -76,6 +76,8 @@
     <string name="no_track_found">%s n\'existe pas!</string>
     <string name="social_media_post_message">Matte-moi ce parcours de ouf trouvé sur RunPharaa !\nIl s\'appelle \"%s\" \n#runPharaaWayFromTravis</string>
     <string name="and">et</string>
+    <string name="comment_hint">Exprime toi en moins de %d caractères!</string>
+    <string name="comment_too_long">Ton commentaire est trop long!</string>
 
 
 </resources>

@@ -206,7 +206,7 @@ public class MainActivityTest extends TestInitLocation {
     /*@Test
     public void testOpenCreateTrackActivity() {
         onView(withId(R.id.fab)).perform(click());
-        intended(hasComponent(CreateTrackActivity.class.getName()));
+        intended(hasComponent(CreateTrackActivity.class.getCreatorID()));
     }*/
 
     @Test

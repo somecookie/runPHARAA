@@ -45,6 +45,8 @@
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
     <string name="and">and</string>
+    <string name="comment_hint">Write an awesome comment in less than %d characters!</string>
+    <string name="comment_too_long">"Your comment is too long!"</string>
 
     <string-array name="track_types">
         <item>City</item>

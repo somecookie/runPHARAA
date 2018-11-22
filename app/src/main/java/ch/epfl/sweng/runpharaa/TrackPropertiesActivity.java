@@ -9,13 +9,17 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.facebook.share.model.ShareHashtag;
@@ -36,12 +40,17 @@ import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.review.Comment;
+import ch.epfl.sweng.runpharaa.review.CommentAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -57,6 +66,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private LatLng[] points;
     private TextView testText;
     private ImageLoader imageLoader;
+    private List<Comment> comments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +168,53 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             startActivity(userProfile);
         });
 
+        initSocialMediaButtons(track);
+
+        initCommentButton();
+    }
+
+    private void initCommentButton() {
+        Button commentsButton = findViewById(R.id.commentsID);
+        commentsButton.setOnClickListener(v -> {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
+
+
+            final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
+            EditText tv = mView.findViewById(R.id.comments_editText);
+            tv.setHint(String.format(getResources().getString(R.string.comment_hint), Comment.MAX_LENGTH));
+
+            Button sendButton = mView.findViewById(R.id.post_button);
+            sendButton.setOnClickListener(v1 ->{
+                String comment = tv.getText().toString();
+
+                if(Comment.checkSizeComment(comment)){
+                    Date date = new Date();
+                    Comment com = new Comment(User.instance.getUid(), comment, date);
+                    comments.add(com);
+                    tv.setText("");
+                }else{
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
+                }
+
+            });
+
+            RecyclerView commentRv = mView.findViewById(R.id.comment_rv);
+            commentRv.setHasFixedSize(true);
+            commentRv.setLayoutManager(new LinearLayoutManager(this));
+
+            CommentAdapter commentAdapter;
+            commentAdapter = new CommentAdapter(this, comments);
+
+            commentRv.setAdapter(commentAdapter);
+
+
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.show();
+        });
+    }
+
+    private void initSocialMediaButtons(Track track) {
         // Share on Facebook
         ImageButton fb = findViewById(R.id.fb_share_button);
         fb.setOnClickListener(v -> {
@@ -184,20 +241,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 e.printStackTrace();
             }
             tweetBuilder.show();
-        });
-
-        Button comments = findViewById(R.id.commentsID);
-        comments.setOnClickListener(v -> {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
-
-
-            final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
-            TextView tv = mView.findViewById(R.id.textViewComments);
-            tv.setText("POST A COMMENT YO");
-
-            mBuilder.setView(mView);
-            AlertDialog dialog = mBuilder.create();
-            dialog.show();
         });
     }
 

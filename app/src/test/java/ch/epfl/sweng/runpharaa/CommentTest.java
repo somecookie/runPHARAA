@@ -2,7 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import org.junit.Test;
 
-public class ReviewTest {
+public class CommentTest {
 
     @Test
     public void constructor(){
