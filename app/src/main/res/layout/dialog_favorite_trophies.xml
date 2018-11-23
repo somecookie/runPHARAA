@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <TableLayout
         android:layout_width="match_parent"
@@ -26,18 +25,18 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/trophy_one_track"
+                    android:id="@+id/trophy_one_fav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:adjustViewBounds="false" />
 
                 <TextView
-                    android:id="@+id/textOneCreation"
+                    android:id="@+id/textOneFav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="One track"
+                    android:text="One Favorite"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -48,17 +47,16 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/trophy_two_tracks"
+                    android:id="@+id/trophy_two_fav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/lock" />
+                    android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/textTwoCreations"
+                    android:id="@+id/textTwoFav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Two tracks"
+                    android:text="Two favorites"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -69,17 +67,16 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/trophy_ten_tracks"
+                    android:id="@+id/trophy_ten_fav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/lock" />
+                    android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/textTenCreations"
+                    android:id="@+id/textTenFav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ten tracks"
+                    android:text="Ten favorites"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -96,11 +93,11 @@
 
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Create tracks"
+                android:text="Add some favorites"
                 android:textAlignment="center" />
         </TableRow>
 
@@ -111,4 +108,5 @@
 
 
     </TableLayout>
+
 </android.support.constraint.ConstraintLayout>

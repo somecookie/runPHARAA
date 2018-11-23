@@ -33,6 +33,26 @@ public class FragmentMyTrophies extends Fragment {
             }
         });
 
+        i = v.findViewById(R.id.trophies_like);
+        i.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = new DialogLike();
+                dialog.show(getFragmentManager(), "LikeDialog");
+                //((DialogCreation) dialog).updateImages();
+            }
+        });
+
+        i = v.findViewById(R.id.trophies_favorite);
+        i.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = new DialogFavorite();
+                dialog.show(getFragmentManager(), "FavoriteDialog");
+                //((DialogCreation) dialog).updateImages();
+            }
+        });
+
         updateImages();
         return v;
     }
@@ -47,17 +67,13 @@ public class FragmentMyTrophies extends Fragment {
             final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
             ImageView img= mView.findViewById(R.id.trophies_create);
             if(User.instance.getCreatedTracks().size() >= 1){
-                Log.i("WESHHHH", "More than 1");
-                img.setVisibility(View.INVISIBLE);
                 img.setImageResource(R.drawable.create_one_track_reward);
             } else {
-                Log.i("WESHHHH", "Less than 1");
                 img.setImageResource(R.drawable.lock);
             }
 
             final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
             ImageView i = vv.findViewById(R.id.trophy_one_track);
-            //i.setVisibility(View.INVISIBLE);
             i.setImageResource(R.drawable.create_one_track_reward);
     }
 }
