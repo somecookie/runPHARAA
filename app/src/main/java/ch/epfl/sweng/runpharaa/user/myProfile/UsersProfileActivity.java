@@ -48,12 +48,9 @@ public class UsersProfileActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayoutUser);
         viewPager = findViewById(R.id.viewPagerUser);
 
-        Fragment f = new FragmentMyTrophies();
-        updateImages();
-
         // Add fragments
         adapter.addFragment(new FragmentMyTracks());
-        adapter.addFragment(f);
+        adapter.addFragment(new FragmentMyTrophies());
 
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
@@ -70,7 +67,7 @@ public class UsersProfileActivity extends AppCompatActivity {
 
     @Override
     public void onResume(){
-        updateImages();
+        //updateImages();
         super.onResume();
     }
 

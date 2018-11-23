@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,5 +26,35 @@ public class DialogCreation extends DialogFragment {
         return builder.create();
     }
 
+    @Override
+    public void onResume() {
+        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
+        final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
+        ImageView img= mView.findViewById(R.id.trophies_create);
+        ImageView i = vv.findViewById(R.id.trophy_one_track);
+        img.invalidate();
+        i.invalidate();
+        updateImages();
+        super.onResume();
+    }
 
+    private void updateImages(){
+        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
+        final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
+
+
+        ImageView img= mView.findViewById(R.id.trophies_create);
+        ImageView i = vv.findViewById(R.id.trophy_one_track);
+        img.invalidate();
+        i.invalidate();
+        /*
+        if(User.instance.getCreatedTracks().size() >= 1){
+            img.setImageResource(R.drawable.create_one_track_reward);
+            i.setImageDrawable(getResources().getDrawable(R.drawable.create_one_track_reward));
+        } else {
+            img.setImageResource(R.drawable.lock);
+            i.setImageResource(R.drawable.lock);
+        }*/
+
+    }
 }
