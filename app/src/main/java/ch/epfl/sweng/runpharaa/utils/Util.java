@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -17,6 +18,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import ch.epfl.sweng.runpharaa.tracks.FiltersProperties;
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 
 public interface Util {
 
