@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
@@ -202,15 +203,31 @@ public class MainActivityTest extends TestInitLocation {
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
-*/
 /*
     @Test
-    public void testSuccessfulSearch(){
+    public void testUnsuccessfulTrackSearch(){
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        // click on the toggleButton
         sleep(1000);
-        onView(withId()).perform(click()); // see FragmentSearch.java
+        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"))
+                .perform(pressKey(KeyEvent.KEYCODE_ENTER))
+                .perform(closeSoftKeyboard());
+        sleep(2000);
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "Do I exist?");
+        onView(withText(expected))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+/*
+    @Test
+    public void testSuccessfulTrackSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        // click on the toggleButton
+        sleep(1000);
         onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"))
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER));
         sleep(2000);

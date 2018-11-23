@@ -27,24 +27,22 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
     private View v;
-    private boolean searchUsers;
     private ToggleButton searchToggle; // if false searches for tracks, if true searches for users
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        searchUsers = true;
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
         searchToggle = new ToggleButton(getContext());
         searchToggle.setTextOn("Currently search for: users");
         searchToggle.setTextOff("Currently search for: tracks");
         searchToggle.setChecked(true);
-        ((LinearLayout)v.findViewById(R.id.vertical_layout)).addView(searchToggle,0);
+        ((LinearLayout)v.findViewById(R.id.vertical_layout)).addView(searchToggle, 0);
         setHasOptionsMenu(true);
         searchToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchUsers = ! searchUsers;
+                searchToggle.setChecked(!searchToggle.isChecked());
             }
         });
         return v;
@@ -63,7 +61,7 @@ public class FragmentSearch extends Fragment {
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (!searchUsers) {
+                if (!searchToggle.isChecked()) {
                     TrackDatabaseManagement.findTrackUIDByName(query, new Callback<String>() {
                         @Override
                         public void onSuccess(String value) {
