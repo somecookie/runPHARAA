@@ -18,24 +18,35 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
     private View v;
+    private boolean searchUsers;
     private ToggleButton searchToggle; // if false searches for tracks, if true searches for users
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        searchUsers = true;
         v = inflater.inflate(R.layout.updatable_fragment, container, false);
         searchToggle = new ToggleButton(getContext());
-        searchToggle.setTextOn("Tracks");
-        searchToggle.setTextOff("Users");
+        searchToggle.setTextOn("Currently search for: users");
+        searchToggle.setTextOff("Currently search for: tracks");
         searchToggle.setChecked(true);
-        searchToggle.setChecked(false);
         ((LinearLayout)v.findViewById(R.id.vertical_layout)).addView(searchToggle,0);
         setHasOptionsMenu(true);
+        searchToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchUsers = ! searchUsers;
+            }
+        });
         return v;
     }
 
@@ -52,18 +63,33 @@ public class FragmentSearch extends Fragment {
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
-                    @Override
-                    public void onSuccess(String value) {
-                        if(value == null){
-                            Toast.makeText(getContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
-                        }else{
-                            Intent i = new Intent(getContext(),TrackPropertiesActivity.class);
-                            i.putExtra("TrackID", value);
-                            startActivity(i);
+                if (!searchUsers) {
+                    TrackDatabaseManagement.findTrackUIDByName(query, new Callback<String>() {
+                        @Override
+                        public void onSuccess(String value) {
+                            if (value == null) {
+                                Toast.makeText(getContext(), String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
+                            } else {
+                                Intent i = new Intent(getContext(), TrackPropertiesActivity.class);
+                                i.putExtra("TrackID", value);
+                                startActivity(i);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    UserDatabaseManagement.findUserUIDByName(query, new Callback<String>() {
+                        @Override
+                        public void onSuccess(String value) {
+                            if (value == null) {
+                                Toast.makeText(getContext(), String.format(getResources().getString(R.string.no_user_found), query), Toast.LENGTH_LONG).show();
+                            } else {
+                                Intent i = new Intent(getContext(), UsersProfileActivity.class);
+                                i.putExtra("userId", value);
+                                startActivity(i);
+                            }
+                        }
+                    });
+                }
                 return true;
             }
 
