@@ -44,6 +44,7 @@
     <string name="max_time_of">At most </string>
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
+    <string name="no_user_found">No user is called %s!</string>
 
     <string-array name="track_types">
         <item>City</item>
