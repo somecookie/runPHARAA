@@ -68,6 +68,12 @@ public class UsersProfileActivity extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
     }
 
+    @Override
+    public void onResume(){
+        updateImages();
+        super.onResume();
+    }
+
     protected void setEmptyMessage() {
         emptyMessage.setText(R.string.no_created_self);
         emptyMessage.setVisibility(View.VISIBLE);
@@ -126,23 +132,17 @@ public class UsersProfileActivity extends AppCompatActivity {
         final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
         ImageView img= mView.findViewById(R.id.trophies_create);
         if(User.instance.getCreatedTracks().size() >= 1){
-            Log.i("WESHHHH", "More than 1");
-            img.setVisibility(View.INVISIBLE);
             img.setImageResource(R.drawable.create_one_track_reward);
         } else {
-            Log.i("WESHHHH", "Less than 1");
             img.setImageResource(R.drawable.lock);
-
         }
 
-
-        Log.i("WESH", "VALOUUUUUU");
         final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
         ImageView i = vv.findViewById(R.id.trophy_one_track);
-        //i.setVisibility(View.INVISIBLE);
         i.setImageResource(R.drawable.create_one_track_reward);
 
 
     }
+
 
 }
