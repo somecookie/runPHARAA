@@ -3,13 +3,16 @@ package ch.epfl.sweng.runpharaa;
 import android.net.Uri;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.SeekBar;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -48,7 +51,10 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagKey;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
@@ -180,26 +186,47 @@ public class MainActivityTest extends TestInitLocation {
         assertFalse(MainActivity.timeIsFiltered);
         assertFalse(MainActivity.difficultyIsFiltered);
     }
-
+/*
     @Test
-    public void testUnsuccessfulSearch(){
-        onView(withId(R.id.searchIcon)).perform(click());
+    public void testUnsuccessfulUserSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(1000);
         onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"))
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER))
                 .perform(closeSoftKeyboard());
-        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "Do I exist?");
+        sleep(2000);
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
-
+*/
+/*
     @Test
     public void testSuccessfulSearch(){
-        onView(withId(R.id.searchIcon)).perform(click());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(1000);
+        onView(withId()).perform(click()); // see FragmentSearch.java
         onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"))
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER));
         sleep(2000);
         withId(R.id.trackTitleID).matches(withText("Cours forest !"));
+    }
+*/
+    @Test
+    public void testSuccessfulUserSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("FakeUser"))
+                .perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        sleep(2000);
+        withId(R.id.user_name).matches(withText("FakeUser"));
     }
 
 
