@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -21,6 +22,7 @@ import android.widget.ToggleButton;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,6 +60,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private LatLng[] points;
     private TextView testText;
     private ImageLoader imageLoader;
+    private Boolean isMapOpen;
 
     ShareDialog shareDialog;
     TweetComposer.Builder tweetBuilder;
@@ -85,8 +88,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         return sb.toString();
     }*/
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        isMapOpen = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
 
@@ -225,16 +230,20 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         // Get map
         if (map == null) {
             SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
-            mapFragment.getMapAsync(googleMap -> {
+            mapFragment.getMapAsync((GoogleMap googleMap) -> {
                 map = googleMap;
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
                 googleMap.setMyLocationEnabled(true);
                 googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 map.getUiSettings().setZoomControlsEnabled(true);
+                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        Intent fullMapIntent = new Intent(getBaseContext(), FullMapActivity.class);
+                        fullMapIntent.putExtra("points", points);
+                        startActivity(fullMapIntent);
+                    }
+                });
 
                 testText.setText("ready");
 
@@ -243,10 +252,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                         .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
             });
         }
-        /*
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.create_map_view2);
-        mapFragment.getMapAsync(this);*/
     }
 
     private String createTagString(Track track) {
@@ -309,15 +314,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
-    /*private Track getTrackByID(ArrayList<Track> tracks, String trackID) {
-        for (Track t : tracks) {
-            if (t.getTrackUid().equals(trackID)) {
-                return t;
-            }
-        }
-        return null;
-    }
-
+    /*
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
