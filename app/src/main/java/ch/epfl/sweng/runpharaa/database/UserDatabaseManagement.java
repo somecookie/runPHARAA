@@ -16,6 +16,8 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
+import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
+
 public class UserDatabaseManagement extends TrackDatabaseManagement {
     public final static String USERS = "users";
     private final static String NAME = "name";
@@ -203,24 +205,5 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                 Log.e("DatabaseError", databaseError.getDetails());
             }
         });
-    }
-
-    /**
-     * Remove the accents of the string and transform it to lower cas
-     *
-     * @param s the string we want to format
-     * @return the formatted string
-     */
-    private static String formatString(String s) {
-        Required.nonNull(s, "Cannot format null string");
-        if (s.isEmpty()) return "";
-
-        s = s.toLowerCase();
-        s = s.replaceAll("[èéêë]", "e");
-        s = s.replaceAll("[ûù]", "u");
-        s = s.replaceAll("[ïî]", "i");
-        s = s.replaceAll("[àâ]", "a");
-        s = s.replaceAll("Ô", "o");
-        return s;
     }
 }

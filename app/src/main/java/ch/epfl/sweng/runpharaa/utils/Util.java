@@ -92,8 +92,7 @@ public interface Util {
         return BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
     }
 
-    static Intent getTwitterIntent(Context ctx, String shareText)
-    {
+    static Intent getTwitterIntent(Context ctx, String shareText) {
         Intent shareIntent;
 
         PackageManager pm = ctx.getPackageManager();
@@ -121,5 +120,24 @@ public interface Util {
             shareIntent = new Intent(Intent.ACTION_VIEW, uri);
             return shareIntent;
         }
+    }
+
+    /**
+     * Remove the accents of the string and transform it to lower case
+     *
+     * @param s the string we want to format
+     * @return the formatted string
+     */
+    static String formatString(String s) {
+        Required.nonNull(s, "Cannot format null string");
+        if (s.isEmpty()) return "";
+
+        s = s.toLowerCase();
+        s = s.replaceAll("[èéêë]", "e");
+        s = s.replaceAll("[ûù]", "u");
+        s = s.replaceAll("[ïî]", "i");
+        s = s.replaceAll("[àâ]", "a");
+        s = s.replaceAll("Ô", "o");
+        return s;
     }
 }
