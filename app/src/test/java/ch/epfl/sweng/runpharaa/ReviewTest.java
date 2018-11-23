@@ -6,6 +6,5 @@ public class ReviewTest {
 
     @Test
     public void constructor(){
-        Review r = new Review();
     }
 }
