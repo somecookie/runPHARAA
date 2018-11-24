@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.UserInfo;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -25,12 +27,14 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.firebase.authentification.FirebaseAuth;
 import ch.epfl.sweng.runpharaa.firebase.authentification.FirebaseAuthMock;
 import ch.epfl.sweng.runpharaa.firebase.authentification.google.GoogleAuth;
 import ch.epfl.sweng.runpharaa.user.User;
 
+import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -41,15 +45,11 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class LoginActivityTest {
+public class LoginActivityTest extends TestInitLocation {
 
     @Rule
     public final ActivityTestRule<LoginActivity> mActivityRule =
             new ActivityTestRule<>(LoginActivity.class, false, false);
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @BeforeClass
     public static void setFakeUser() {
@@ -61,7 +61,7 @@ public class LoginActivityTest {
     public void connectWithFakeFirebaseUser() {
         FirebaseAuthMock.setFakeFireBaseUser(Toto);
         mActivityRule.launchActivity(null);
-        SystemClock.sleep(1000);
+        sleep(1000);
         assertEquals(User.instance.getName(), "Toto");
         assertEquals(User.instance.getUid(), "1");
     }
@@ -70,8 +70,11 @@ public class LoginActivityTest {
     public void connectWithNullUserFails() {
         FirebaseAuthMock.setFakeFireBaseUser(null);
         mActivityRule.launchActivity(null);
-        SystemClock.sleep(1000);
-        onView(withId(R.id.sign_in_button_google)).check(matches(isDisplayed()));
+        sleep(1000);
+        ViewInteraction v = onView(withId(R.id.sign_in_button_google)).check(matches(isDisplayed()));
+        FirebaseAuthMock.setFakeFireBaseUser(Toto);
+        v.perform(click());
+        sleep(10_000);
     }
 
     @AfterClass

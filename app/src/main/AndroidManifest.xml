@@ -86,6 +86,7 @@
         <activity
             android:name=".user.SettingsActivity"
             android:label="@string/settings" />
+        <activity android:name=".firebase.authentification.google.FakeGoogleSignInActivity" />
     </application>
 
 </manifest>

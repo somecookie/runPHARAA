@@ -11,6 +11,12 @@ import com.google.android.gms.common.api.GoogleApi;
 
 public class GoogleAuthMock implements GoogleAuthInterface {
 
+    Context context;
+
+    GoogleAuthMock(Context c) {
+        context = c;
+    }
+
     @Override
     public GoogleSignInClient getClient(Activity activity, GoogleSignInOptions googleSignInOptions) {
         return null;
@@ -18,7 +24,7 @@ public class GoogleAuthMock implements GoogleAuthInterface {
 
     @Override
     public Intent getSignInIntent() {
-        return new Intent();
+        return new Intent(context, FakeGoogleSignInActivity.class);
     }
 
 }

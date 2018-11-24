@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .requestEmail()
                 .build();
 
-        mGoogleAuth = GoogleAuth.getInstance();
+        mGoogleAuth = GoogleAuth.getInstance(this);
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
@@ -121,7 +121,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 updateUI(null);
             }
         }
-
     }
 
     /**
@@ -129,7 +128,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      *
      * @param currentUser
      */
-    @SuppressLint("StringFormatInvalid")
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             if (l != null) {
@@ -200,7 +198,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 try {
                     sleep(1000);
                     runOnUiThread(() -> {
-                        setLoadingText(String.format(getString(R.string.welcome), currentUser.getDisplayName()));
+                        setLoadingText(String.format(getString(R.string.welcome), User.instance.getName()));
                         findViewById(R.id.anim_view).setBackgroundResource(R.drawable.anim_standing);
                     });
                     sleep(1000);
@@ -215,22 +213,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(GoogleAuth.isTest ? "token" : acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         startLoadingAnimation();
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
-                        User.set(user.getDisplayName(), prefRadius, user.getPhotoUrl(), lastLocation, user.getUid());
                         updateUI(user);
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -1,15 +1,17 @@
 package ch.epfl.sweng.runpharaa.firebase.authentification.google;
 
-public abstract class GoogleAuth {
+import android.content.Context;
+
+public class GoogleAuth {
 
     public static boolean isTest = false;
 
     private static GoogleAuthInterface instance;
 
-    public static GoogleAuthInterface getInstance(){
+    public static GoogleAuthInterface getInstance(Context c) {
         if (instance == null) {
             if (isTest)
-                instance = new GoogleAuthMock();
+                instance = new GoogleAuthMock(c);
             else
                 instance = new GoogleAuthReal();
         }
