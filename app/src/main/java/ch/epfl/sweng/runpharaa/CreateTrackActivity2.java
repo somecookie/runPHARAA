@@ -1,7 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +11,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,10 +26,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -39,8 +40,6 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -51,6 +50,8 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
     public static final int IMAGE_GALLERY_REQUEST = 20;
+    public static final int REQ_WIDTH = 480;
+    public static final int REQ_HEIGHT = 200;
 
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;
@@ -234,9 +235,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
             try {
                 inputStream = getContentResolver().openInputStream(imageUri);
-
-                trackPhoto = Util.InputStreamToBitmap(inputStream);
-
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                Util.copyStream(inputStream, baos);
+                byte[] bytes = baos.toByteArray();
+                trackPhoto = Util.decodeSampledBitmap(bytes, REQ_WIDTH, REQ_HEIGHT);
                 //Add a preview of the photo
                 trackImage.setVisibility(View.VISIBLE);
                 trackImage.setImageBitmap(trackPhoto);

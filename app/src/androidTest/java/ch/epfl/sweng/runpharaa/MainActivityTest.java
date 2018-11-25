@@ -37,6 +37,7 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
@@ -47,7 +48,6 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -183,15 +183,27 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testUnsuccessfulSearch(){
+    public void testUnsuccessfulUserSearch(){
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        sleep(WAIT_TIME*2);
-        // TODO: click on toggle button to choose tracks
-        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"));
-        pressKey(KeyEvent.KEYCODE_ENTER);
-        closeSoftKeyboard();
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
+        onView(withText(expected))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testUnsuccessfulTrackSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        // click on the toggleButton
+        onView(withId(R.id.toggle_button)).perform(click());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "Do I exist?");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
@@ -199,16 +211,27 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testSuccessfulSearch(){
+    public void testSuccessfulTrackSearch(){
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        sleep(WAIT_TIME*2);
-        // TODO: click on toggle button to choose tracks
-        onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"));
-        pressKey(KeyEvent.KEYCODE_ENTER);
+        // click on the toggleButton
+        onView(withId(R.id.toggle_button)).perform(click());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"), pressKey(KeyEvent.KEYCODE_ENTER));
         sleep(2000);
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+    }
+
+    @Test
+    public void testSuccessfulUserSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("FakeUser"), pressKey(KeyEvent.KEYCODE_ENTER));
+        sleep(2000);
+        onView(withId(R.id.user_name)).check(matches(withText("FakeUser")));
     }
 
 

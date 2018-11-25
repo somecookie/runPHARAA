@@ -47,6 +47,8 @@
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
     <string name="no_user_found">No user is called %s!</string>
+    <string name="search_users">Currently search for: users</string>
+    <string name="search_tracks">Currently search for: tracks</string>
 
     <string-array name="track_types">
         <item>City</item>

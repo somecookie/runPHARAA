@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,13 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
@@ -27,26 +22,14 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
     private View v;
-    private boolean searchUsers;
     private ToggleButton searchToggle; // if false searches for tracks, if true searches for users
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        searchUsers = true;
-        v = inflater.inflate(R.layout.updatable_fragment, container, false);
-        searchToggle = new ToggleButton(getContext());
-        searchToggle.setTextOn("Currently search for: users");
-        searchToggle.setTextOff("Currently search for: tracks");
-        searchToggle.setChecked(true);
-        ((LinearLayout)v.findViewById(R.id.vertical_layout)).addView(searchToggle,0);
+        v = inflater.inflate(R.layout.search_fragment, container, false);
+        searchToggle = v.findViewById(R.id.toggle_button);
         setHasOptionsMenu(true);
-        searchToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchUsers = ! searchUsers;
-            }
-        });
         return v;
     }
 
@@ -63,7 +46,7 @@ public class FragmentSearch extends Fragment {
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (!searchUsers) {
+                if (searchToggle.isChecked()) {
                     TrackDatabaseManagement.findTrackUIDByName(query, new Callback<String>() {
                         @Override
                         public void onSuccess(String value) {

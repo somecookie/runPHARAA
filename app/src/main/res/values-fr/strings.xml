@@ -47,6 +47,8 @@
     <string name="duration">Durée: %.2f minutes</string>
     <string name="distance">Distance: %.2f mètres</string>
     <string name="difficulty">Difficulté: %.2f</string>
+    <string name="search_users">Recherche dans: utilisateurs</string>
+    <string name="search_tracks">Recherche dans: parcours</string>
 
     <!-- Strings related to Settings -->
 
