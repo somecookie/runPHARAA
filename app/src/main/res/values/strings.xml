@@ -11,7 +11,9 @@
     <string name="title_activity_login">Login</string>
     <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
-    <string name="welcome">Welcome</string>
+    <string name="loading_data">Loading user data …</string>
+    <string name="welcome">Welcome %s !</string>
+    <string name="almost_there">Almost there !</string>
     <string name="signOut">Sign Out</string>
     <string name="loggedOut">Logged out.</string>
     <string name="no_tracks">Oops! There are no tracks nearby</string>
@@ -44,6 +46,9 @@
     <string name="max_time_of">At most </string>
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
+    <string name="no_user_found">No user is called %s!</string>
+    <string name="search_users">Currently search for: users</string>
+    <string name="search_tracks">Currently search for: tracks</string>
 
     <string-array name="track_types">
         <item>City</item>

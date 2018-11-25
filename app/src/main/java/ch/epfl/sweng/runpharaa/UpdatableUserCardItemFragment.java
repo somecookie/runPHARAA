@@ -8,8 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +30,12 @@ public abstract class UpdatableUserCardItemFragment extends Fragment implements 
         void onItemClick(UserCardItem item);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.actionbar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,6 +43,7 @@ public abstract class UpdatableUserCardItemFragment extends Fragment implements 
 
         emptyMessage = v.findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
+        setHasOptionsMenu(true);
 
         // Setup for refresh on swipe
         swipeLayout = v.findViewById(R.id.refreshNearMe);
