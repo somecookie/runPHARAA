@@ -33,6 +33,7 @@ import static org.hamcrest.core.AllOf.allOf;
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
 
+    private static final int WAIT_TIME = 1000;
     @Rule
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =
             new ActivityTestRule<>(UsersProfileActivity.class, true, false);
@@ -52,7 +53,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void correctlyDisplaysNumberOfCreatedTracks() {
         User.instance.addToCreatedTracks("0");
         mActivityRule.launchActivity(new Intent());
-        sleep(500);
+        sleep(WAIT_TIME);
         onView(withId(R.id.nbTracks)).check(matches(withText("1")));
     }
 
@@ -61,7 +62,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         User.instance.addToFavorites("0");
         User.instance.addToFavorites("1");
         mActivityRule.launchActivity(new Intent());
-        sleep(500);
+        sleep(WAIT_TIME);
         onView(withId(R.id.nbFav)).check(matches(withText("2")));
     }
 
@@ -70,7 +71,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         User.instance.addToFavorites("0");
         User.instance.addToFavorites("0");
         mActivityRule.launchActivity(new Intent());
-        sleep(500);
+        sleep(WAIT_TIME);
         onView(withId(R.id.nbFav)).check(matches(withText("1")));
     }
 
@@ -90,7 +91,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void createdTracksAreClickableAndDisplay() {
         User.instance.addToCreatedTracks("0");
         mActivityRule.launchActivity(new Intent());
-        sleep(500);
+        sleep(WAIT_TIME);
         onView(allOf(withId(R.id.createdTracksCardListId), isDisplayed())).perform(
                 swipeDown());
         sleep(5000);

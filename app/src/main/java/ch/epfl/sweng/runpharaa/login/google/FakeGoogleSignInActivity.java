@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.firebase.authentification.google;
+package ch.epfl.sweng.runpharaa.login.google;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,6 @@ public class FakeGoogleSignInActivity extends Activity {
         Intent i = new Intent();
         i.putExtra("googleSignInStatus", Status.RESULT_SUCCESS);
         i.putExtra("googleSignInAccount", GoogleSignInAccount.createDefault());
-        GoogleSignInAccount account = GoogleSignInAccount.createDefault();
         setResult(Activity.RESULT_OK, i);
         finish();
     }

@@ -9,6 +9,8 @@ import org.junit.Rule;
 
 import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.firebase.Storage;
+import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
+import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
 
 
 public class TestInitLocation {
@@ -17,6 +19,8 @@ public class TestInitLocation {
     public static void setTestModeOn(){
         Database.isTest = true;
         Storage.isTest = true;
+        GoogleAuthentication.isTest = true;
+        FirebaseAuthentication.isTest = true;
     }
 
     @Rule
@@ -27,5 +31,7 @@ public class TestInitLocation {
     public static void setTestModeOff(){
         Database.isTest = false;
         Database.isTest = false;
+        GoogleAuthentication.isTest = false;
+        FirebaseAuthentication.isTest = false;
     }
 }

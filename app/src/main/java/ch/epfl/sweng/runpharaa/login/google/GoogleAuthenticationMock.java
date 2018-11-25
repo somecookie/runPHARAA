@@ -1,19 +1,17 @@
-package ch.epfl.sweng.runpharaa.firebase.authentification.google;
+package ch.epfl.sweng.runpharaa.login.google;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApi;
 
-public class GoogleAuthMock implements GoogleAuthInterface {
+public class GoogleAuthenticationMock extends GoogleAuthentication {
 
-    Context context;
+    private Context context;
 
-    GoogleAuthMock(Context c) {
+    GoogleAuthenticationMock(Context c) {
         context = c;
     }
 

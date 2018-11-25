@@ -15,7 +15,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 public final class FakeGpsService extends GpsService {
 
     public static FakeGpsService GOOGLE = new FakeGpsService(new LatLng(37.422, -122.084));
-    public static FakeGpsService SAT = new FakeGpsService(new LatLng(46.520566, 6.567820));
+    public static FakeGpsService SAT = new FakeGpsService(Util.locationFromLatLng(new LatLng(46.520566, 6.567820)));
 
     public FakeGpsService() {}
 
@@ -44,14 +44,16 @@ public final class FakeGpsService extends GpsService {
 
     @Override
     public void setNewLocation(Context context, Location location) {
-        User.instance.setLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+        if(User.instance != null)
+            User.instance.setLocation(new LatLng(location.getLatitude(), location.getLongitude()));
         currentLocation = location;
         context.sendBroadcast(new Intent("location_update"));
     }
 
     @Override
     protected void updateAndSendNewLocation(Location location) {
-        User.instance.setLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+        if(User.instance != null)
+            User.instance.setLocation(new LatLng(location.getLatitude(), location.getLongitude()));
         currentLocation = location;
         sendBroadcast(new Intent("location_update"));
     }

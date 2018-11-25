@@ -187,6 +187,9 @@ public class Database {
     @Mock
     private Task<Void> setValueLikeTask;
 
+    @Mock
+    private Task<Void> userTask;
+
 
     private Database() {
 
@@ -257,6 +260,35 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+
+        //---
+
+        when(drUserAnyChild.setValue(any(User.class))).thenReturn(userTask);
+
+        when(userTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+                if(shouldFail){
+                    l.onFailure(new IllegalStateException());
+                }
+                return userTask;
+            }
+        });
+
+        when(userTask.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                OnSuccessListener<Void> l = (OnSuccessListener<Void>) invocation.getArguments()[0];
+                if(!shouldFail){
+                    l.onSuccess(null);
+                }
+                return userTask;
+            }
+        });
+
+        //----
 
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);

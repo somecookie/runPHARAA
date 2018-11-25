@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,10 +33,8 @@ import java.util.Map;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.firebase.authentification.FirebaseAuth;
-import ch.epfl.sweng.runpharaa.firebase.authentification.FirebaseAuthInterface;
-import ch.epfl.sweng.runpharaa.firebase.authentification.google.GoogleAuth;
-import ch.epfl.sweng.runpharaa.firebase.authentification.google.GoogleAuthInterface;
+import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
+import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -49,12 +46,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
-    private final static int GPS_PERMISSIONS_REQUEST_CODE = 1;
+    private final static int GPS_PERMISSIONS_REQUEST_CODE = 69;
     private GoogleSignInClient mGoogleSignInClient;
-    private GoogleAuthInterface mGoogleAuth;
-    private FirebaseAuthInterface mAuth;
+    private GoogleAuthentication mGoogleAuth;
+    private FirebaseAuthentication mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
-    private Location l;
     private FirebaseUser currentUser;
     private AnimationDrawable anim;
 
@@ -73,12 +69,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .requestEmail()
                 .build();
 
-        mGoogleAuth = GoogleAuth.getInstance(this);
+        mGoogleAuth = GoogleAuthentication.getInstance(LoginActivity.this);
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuthentication.getInstance();
     }
 
     @Override
@@ -98,8 +94,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.sign_in_button_google:
                 signIn();
                 break;
-            default:
-                throw new AssertionError("This button does not exist.");
         }
     }
 
@@ -116,7 +110,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(getBaseContext(), "Google sign in failed.", Toast.LENGTH_SHORT).show();
                 updateUI(null);
             }
@@ -130,10 +123,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            if (l != null) {
+            setLoadingText(getText(R.string.loading_data).toString());
+            Location l = GpsService.getInstance().getCurrentLocation();
+            if(GpsService.getInstance().getCurrentLocation() != null) {
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
-            setLoadingText(getText(R.string.loading_data).toString());
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
             UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
@@ -149,7 +143,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onError(Exception e) {
                     // If sign in fails, display a message to the user.
-                    Log.e(TAG, "Impossible to send the user to the database: " + e.getMessage());
                     Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -188,7 +181,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Launch the main app
      */
     private void launchApp() {
-        startService(new Intent(getBaseContext(), GpsService.getInstance().getClass()));
         Intent launchIntent = new Intent(getBaseContext(), MainActivity.class);
         setLoadingText(getText(R.string.almost_there).toString());
         new Thread() {
@@ -213,7 +205,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(GoogleAuth.isTest ? "token" : acct.getIdToken(), null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(GoogleAuthentication.isTest ? "token" : acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -253,6 +245,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS_PERMISSIONS_REQUEST_CODE);
             return true;
         }
+        startService(new Intent(getBaseContext(), GpsService.getInstance().getClass()));
         return false;
     }
 }

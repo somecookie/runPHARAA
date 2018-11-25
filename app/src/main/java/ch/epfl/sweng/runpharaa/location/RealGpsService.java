@@ -83,7 +83,8 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
     @Override
     protected void updateAndSendNewLocation(Location location) {
         currentLocation = location;
-        User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+        if(User.instance != null)
+            User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
         sendBroadcast(new Intent("location_update"));
     }
 
