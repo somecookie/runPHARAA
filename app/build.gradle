@@ -81,33 +81,30 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     //dependencies for mockito
-    //implementation 'org.mockito:mockito-core:2.8.9'
     implementation 'org.mockito:mockito-core:2.12.0'
     androidTestImplementation 'org.mockito:mockito-android:2.12.0'
     //dependencies for round images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-    //dependency to mock google maps
-    //implementation 'com.google.maps.android:android-maps-utils:0.5+'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:support-vector-drawable:28.0.0'
-    //implementation 'testfairy:testfairy-android-sdk:1.+@aar'
+    // multidexing
     implementation 'com.android.support:multidex:1.0.3'
+    // room
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    // social media
     implementation 'com.facebook.android:facebook-android-sdk:4.38.1'
     implementation 'com.facebook.android:facebook-share:4.38.1'
+    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
+    implementation 'com.twitter.sdk.android:tweet-composer:3.1.1'
     // dependencies for testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
-    //androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
     androidTestImplementation 'junit:junit:4.12'
-    //androidTestImplementation 'org.junit.jupiter:junit-jupiter-api'
-    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
-    implementation 'com.twitter.sdk.android:tweet-composer:3.1.1'
 
     androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:3.0.2'){
         exclude group: 'com.android.support', module: 'appcompat'
@@ -116,17 +113,6 @@ dependencies {
     }
 
 }
-
-/*configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            details.useVersion '26.1.0'
-        }
-
-
-    }
-}*/
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true

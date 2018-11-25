@@ -14,6 +14,9 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Required;
+
+import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
 public class UserDatabaseManagement extends TrackDatabaseManagement {
     public final static String USERS = "users";
@@ -23,6 +26,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String CREATE = "createdTracks";
     private final static String FOLLOWING = "followedUsers";
     private final static String PICTURE = "picture";
+    private final static String ID = "uid";
 
     public static void writeNewUser(final User user, final Callback<User> callback) {
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
@@ -176,5 +180,30 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             }
         }
         return user;
+    }
+
+    public static void findUserUIDByName(final String name, Callback<String> callback) {
+        DatabaseReference ref = mDataBaseRef.child(USERS);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    String dataName = formatString(data.child(NAME).getValue(String.class));
+                    String formattedName = formatString(name);
+
+                    if (dataName.equals(formattedName)) {
+                        String id = data.child(ID).getValue(String.class);
+                        callback.onSuccess(id);
+                        return;
+                    }
+                }
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
     }
 }
