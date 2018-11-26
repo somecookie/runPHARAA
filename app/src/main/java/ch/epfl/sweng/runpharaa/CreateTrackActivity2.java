@@ -1,7 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +28,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -37,8 +37,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -49,6 +49,8 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
     public static final int IMAGE_GALLERY_REQUEST = 20;
+    public static final int REQ_WIDTH = 480;
+    public static final int REQ_HEIGHT = 200;
 
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;
@@ -87,32 +89,29 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         totalAltitudeText = findViewById(R.id.create_text_total_altitude);
         nameText = findViewById(R.id.create_text_name);
         Button createButton = findViewById(R.id.create_track_button);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        createButton.setOnClickListener(v -> {
 
-                // Create track
-                if (trackPhoto == null) {
-                    trackPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
-                }
+            // Create track
+            if (trackPhoto == null) {
+                trackPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
+            }
 
-                if (!propertiesSet) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_SHORT).show();
-                } else if (!typesSet) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_SHORT).show();
-                } else if (nameText.getText().toString().isEmpty()) {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
-                } else {
-                    trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
+            if (!propertiesSet) {
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_SHORT).show();
+            } else if (!typesSet) {
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_SHORT).show();
+            } else if (nameText.getText().toString().isEmpty()) {
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
+            } else {
+                trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
 
-                    FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties, new ArrayList<>());
-                    TrackDatabaseManagement.writeNewTrack(track);
+                FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties, new ArrayList<>());
+                TrackDatabaseManagement.writeNewTrack(track);
 
-                    finish();
-                }
+
+                finish();
             }
         });
-
         //Open Gallery view when we click on the button
         Button addPhotoFromGallery = findViewById(R.id.add_photo_from_gallery);
         addPhotoFromGallery.setOnClickListener(v -> {
@@ -170,12 +169,9 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 propertiesSet = true;
             });
 
-            mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    difficulty = 3;
-                    dialog.dismiss();
-                }
+            mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), (dialog, which) -> {
+                difficulty = 3;
+                dialog.dismiss();
             });
 
 
@@ -186,49 +182,35 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         });
 
         Button typeButton = findViewById(R.id.types);
-        typeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
-                mBuilder.setTitle(getResources().getString(R.string.choose_types));
-                mBuilder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        checkedTypes[which] = isChecked;
-                    }
-                });
+        typeButton.setOnClickListener(v -> {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
+            mBuilder.setTitle(getResources().getString(R.string.choose_types));
+            mBuilder.setMultiChoiceItems(listTypesStr, checkedTypes, (dialog, which, isChecked) -> checkedTypes[which] = isChecked);
 
-                mBuilder.setCancelable(false);
+            mBuilder.setCancelable(false);
 
-                mBuilder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            mBuilder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
 
-                        types.clear();
+                types.clear();
 
-                        for(int i = 0; i < checkedTypes.length; i++){
-                            if(checkedTypes[i]) types.add(TrackType.values()[i]);
-                        }
+                for (int i = 0; i < checkedTypes.length; i++) {
+                    if (checkedTypes[i]) types.add(TrackType.values()[i]);
+                }
 
-                        if (!types.isEmpty()) {
-                            typesSet = true;
-                        }
-                    }
-                });
+                if (!types.isEmpty()) {
+                    typesSet = true;
+                }
+            });
 
-                mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        types.clear();
-                        for (int i = 0; i < checkedTypes.length; i++) {
-                            checkedTypes[i] = false;
-                        }
-                        dialog.dismiss();
-                    }
-                });
+            mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), (dialog, which) -> {
+                types.clear();
+                for (int i = 0; i < checkedTypes.length; i++) {
+                    checkedTypes[i] = false;
+                }
+                dialog.dismiss();
+            });
 
-                mBuilder.create().show();
-            }
+            mBuilder.create().show();
         });
 
         trackImage = findViewById(R.id.track_photo);
@@ -252,9 +234,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
             try {
                 inputStream = getContentResolver().openInputStream(imageUri);
-
-                trackPhoto = Util.InputStreamToBitmap(inputStream);
-
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                Util.copyStream(inputStream, baos);
+                byte[] bytes = baos.toByteArray();
+                trackPhoto = Util.decodeSampledBitmap(bytes, REQ_WIDTH, REQ_HEIGHT);
                 //Add a preview of the photo
                 trackImage.setVisibility(View.VISIBLE);
                 trackImage.setImageBitmap(trackPhoto);
@@ -310,7 +293,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.35);
+            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.35);
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));

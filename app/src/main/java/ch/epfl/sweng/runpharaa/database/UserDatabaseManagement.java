@@ -15,6 +15,8 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
+import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
+
 public class UserDatabaseManagement extends TrackDatabaseManagement {
     public final static String USERS = "users";
     private final static String NAME = "name";
@@ -23,6 +25,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String CREATE = "createdTracks";
     private final static String FOLLOWING = "followedUsers";
     private final static String PICTURE = "picture";
+    private final static String ID = "uid";
 
     public static void writeNewUser(final User user, final Callback<User> callback) {
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
@@ -178,12 +181,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         return user;
     }
 
-    public static void getUserNameFromID(String UID, Callback<String> callback){
-        DatabaseReference nameRef =  mDataBaseRef.child(USERS).child(UID).child(NAME);
+    public static void getUserNameFromID(String UID, Callback<String> callback) {
+        DatabaseReference nameRef = mDataBaseRef.child(USERS).child(UID).child(NAME);
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     String name = dataSnapshot.getValue(String.class);
                     callback.onSuccess(name);
                     return;
@@ -199,17 +202,43 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-    public static void getUserPictureFromID(String UID, Callback<String> callback){
-        DatabaseReference pictureRef =  mDataBaseRef.child(USERS).child(UID).child(PICTURE);
+    public static void getUserPictureFromID(String UID, Callback<String> callback) {
+        DatabaseReference pictureRef = mDataBaseRef.child(USERS).child(UID).child(PICTURE);
         pictureRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     String picture = dataSnapshot.getValue(String.class);
                     callback.onSuccess(picture);
                     return;
                 }
 
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
+    }
+
+
+    public static void findUserUIDByName(final String name, Callback<String> callback) {
+        DatabaseReference ref = mDataBaseRef.child(USERS);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    String dataName = formatString(data.child(NAME).getValue(String.class));
+                    String formattedName = formatString(name);
+
+                    if (dataName.equals(formattedName)) {
+                        String id = data.child(ID).getValue(String.class);
+                        callback.onSuccess(id);
+                        return;
+                    }
+                }
                 callback.onSuccess(null);
             }
 

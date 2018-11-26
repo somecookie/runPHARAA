@@ -14,7 +14,9 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.DownloadImageTask;
 
@@ -52,7 +54,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                         holder.name.setOnClickListener(v -> {
                             Intent userProfile ;
-                            userProfile = new Intent(mContext, UsersProfileActivity.class);
+                            if(comment.getCreatorID().equals(User.instance.getUid())){
+                                userProfile = new Intent(mContext, UsersProfileActivity.class);
+                            } else {
+                                userProfile = new Intent(mContext, OtherUsersProfileActivity.class);
+                            }
+
                             userProfile.putExtra("userId", comment.getCreatorID());
                             startActivity(mContext, userProfile, null);
                         });

@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +58,10 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Callback;
+
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -82,7 +87,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
 
-        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot data) {
 
@@ -97,12 +103,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 setTextOfProperties(track, tp);
                 setButtonsOfProperties(trackID, track);
 
-
                 drawTrackOnMap();
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });
@@ -128,12 +133,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                         .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
             });
         }
-        /*
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.create_map_view2);
-        mapFragment.getMapAsync(this);*/
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setButtonsOfProperties(String trackID, Track track) {
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
@@ -160,21 +162,17 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
         });
 
-        Button goToUserProfile = findViewById(R.id.goToUserProfileButtonId);
-        goToUserProfile.setText("VISIT " + track.getCreatorName() + " PROFILE");
-        goToUserProfile.setOnClickListener(v -> {
-            Intent userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
-            userProfile.putExtra("userId", track.getCreatorUid());
-            startActivity(userProfile);
-        });
 
         initSocialMediaButtons(track);
 
         initCommentButton(track);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initCommentButton(Track track) {
         Button commentsButton = findViewById(R.id.commentsID);
+        TextView nbrComments = findViewById(R.id.trackCommentsID);
+        nbrComments.setText(String.format("%d", track.getComments().size()));
         commentsButton.setOnClickListener(v -> {
 
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
@@ -183,8 +181,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
             EditText tv = mView.findViewById(R.id.comments_editText);
             tv.setHint(String.format(getResources().getString(R.string.comment_hint), Comment.MAX_LENGTH));
-
             Button sendButton = mView.findViewById(R.id.post_button);
+
             sendButton.setOnClickListener(v1 -> {
                 String comment = tv.getText().toString();
 
@@ -192,6 +190,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     Date date = new Date();
                     Comment com = new Comment(User.instance.getUid(), comment, date);
                     track.addComment(com);
+                    nbrComments.setText(String.format("%d", track.getComments().size()));
                     TrackDatabaseManagement.updateComments(track);
                     tv.setText("");
                     hideKeyboardFrom(getBaseContext(), mView);
@@ -254,8 +253,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         TextView trackCreator = findViewById(R.id.trackCreatorID);
         trackCreator.setText(track.getCreatorName());
         trackCreator.setOnClickListener(v -> {
-            Intent userProfile;
-            userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+            Intent userProfile ;
+            if(track.getCreatorUid().equals(User.instance.getUid())){
+                userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+            } else {
+                userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
+            }
+
             userProfile.putExtra("userId", track.getCreatorUid());
             startActivity(userProfile);
         });

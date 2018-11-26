@@ -14,6 +14,7 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentFavourites extends UpdatableCardItemFragment {
 
@@ -35,7 +36,8 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
         emptyMessage.setVisibility(View.GONE);
         // Create a fresh recyclerView and listTrackCardItem
 
-        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -64,7 +66,7 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentFavourites.");
                 setEmptyMessage();
                 swipeLayout.setRefreshing(false);

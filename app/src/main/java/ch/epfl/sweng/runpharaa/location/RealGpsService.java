@@ -1,12 +1,10 @@
 package ch.epfl.sweng.runpharaa.location;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
@@ -24,10 +22,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 
-import static ch.epfl.sweng.runpharaa.user.SettingsActivity.getInt;
+import static ch.epfl.sweng.runpharaa.user.settings.SettingsActivity.getInt;
 
 public class RealGpsService extends GpsService implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -83,7 +81,8 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
     @Override
     protected void updateAndSendNewLocation(Location location) {
         currentLocation = location;
-        User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+        if(User.instance != null)
+            User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
         sendBroadcast(new Intent("location_update"));
     }
 
