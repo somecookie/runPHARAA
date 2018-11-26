@@ -157,26 +157,17 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_black_24dp);
-        
+
+
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
 
         // Add the floating action button
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
-                startActivity(createTrack);
-            }
+        fab.setOnClickListener(v -> {
+            Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
+            startActivity(createTrack);
         });
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_menu, menu);
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

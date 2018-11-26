@@ -10,12 +10,11 @@ import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -89,19 +88,37 @@ public interface Util {
         return res;
     }
 
-    static Bitmap InputStreamToBitmap(InputStream inputStream) {
-        //Resize and compress image
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
-        final int REQUIRED_SIZE = 100;
-        Bitmap trackPhotoTemp = BitmapFactory.decodeStream(inputStream, null, options);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        trackPhotoTemp.compress(Bitmap.CompressFormat.PNG, 75, out);
-        return BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+    static Bitmap decodeSampledBitmap(byte[] data, int reqWidth, int reqHeight) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(new ByteArrayInputStream(data), null, options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(new ByteArrayInputStream(data), null, options);
     }
 
-    static Intent getTwitterIntent(Context ctx, String shareText)
-    {
+    static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    static Intent getTwitterIntent(Context ctx, String shareText) {
         Intent shareIntent;
 
         PackageManager pm = ctx.getPackageManager();
@@ -113,21 +130,37 @@ public interface Util {
             installed = false;
         }
 
-        if(installed)
-        {
+        if (installed) {
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setClassName("com.twitter.android",
                     "com.twitter.android.PostActivity");
             shareIntent.setType("text/*");
             shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
             return shareIntent;
-        }
-        else
-        {
+        } else {
             String tweetUrl = "https://twitter.com/intent/tweet?text=" + shareText;
             Uri uri = Uri.parse(tweetUrl);
             shareIntent = new Intent(Intent.ACTION_VIEW, uri);
             return shareIntent;
         }
+    }
+
+    /**
+     * Remove the accents of the string and transform it to lower case
+     *
+     * @param s the string we want to format
+     * @return the formatted string
+     */
+    static String formatString(String s) {
+        Required.nonNull(s, "Cannot format null string");
+        if (s.isEmpty()) return "";
+
+        s = s.toLowerCase();
+        s = s.replaceAll("[èéêë]", "e");
+        s = s.replaceAll("[ûù]", "u");
+        s = s.replaceAll("[ïî]", "i");
+        s = s.replaceAll("[àâ]", "a");
+        s = s.replaceAll("Ô", "o");
+        return s;
     }
 }

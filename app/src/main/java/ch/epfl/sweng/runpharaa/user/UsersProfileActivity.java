@@ -270,15 +270,12 @@ public class UsersProfileActivity extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
-            new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
+                task -> {
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
                     Intent login = new Intent(getBaseContext(), LoginActivity.class);
                     startActivity(login);
                     finish();
-                }
-            });
+                });
     }
 
     /**

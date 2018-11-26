@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,9 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -29,6 +26,8 @@ import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.FiltersProperties;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
@@ -38,13 +37,8 @@ public class FragmentSearch extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.updatable_fragment, container, false);
-        searchToggle = new ToggleButton(getContext());
-        searchToggle.setTextOn("Tracks");
-        searchToggle.setTextOff("Users");
-        searchToggle.setChecked(true);
-        searchToggle.setChecked(false);
-        ((LinearLayout)v.findViewById(R.id.vertical_layout)).addView(searchToggle,0);
+        v = inflater.inflate(R.layout.search_fragment, container, false);
+        searchToggle = v.findViewById(R.id.toggle_button);
         setHasOptionsMenu(true);
         return v;
     }
@@ -105,13 +99,31 @@ public class FragmentSearch extends Fragment {
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
-                    @Override
-                    public void onSuccess(String value) {
-                        if(value == null) Toast.makeText(getContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
-                        else startTrackPropertiesWith(value);
-                    }
-                });
+                if (searchToggle.isChecked()) {
+                    TrackDatabaseManagement.findTrackUIDByName(query, new Callback<String>() {
+                        @Override
+                        public void onSuccess(String value) {
+                            if (value == null) {
+                                Toast.makeText(getContext(), String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
+                            } else {
+                                startTrackPropertiesWith(value);
+                            }
+                        }
+                    });
+                } else {
+                    UserDatabaseManagement.findUserUIDByName(query, new Callback<String>() {
+                        @Override
+                        public void onSuccess(String value) {
+                            if (value == null) {
+                                Toast.makeText(getContext(), String.format(getResources().getString(R.string.no_user_found), query), Toast.LENGTH_LONG).show();
+                            } else {
+                                Intent i = new Intent(getContext(), UsersProfileActivity.class);
+                                i.putExtra("userId", value);
+                                startActivity(i);
+                            }
+                        }
+                    });
+                }
                 return true;
             }
 
