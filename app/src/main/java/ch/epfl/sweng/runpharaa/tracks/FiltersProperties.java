@@ -40,7 +40,14 @@ public class FiltersProperties {
         }
     }
 
-    public void add(double length, int difficulty, double duration, Set<TrackType> types){
+    public void add(List<Track> tracks){
+        for (Track track : tracks){
+            add(track.getProperties().getLength(), track.getProperties().getAvgDifficulty(),
+                    track.getProperties().getAvgDuration(), track.getProperties().getType());
+        }
+    }
+
+    public void add(double length, double difficulty, double duration, Set<TrackType> types){
         Required.greaterOrEqualZero(length, "Length must be positive");
         Required.greaterOrEqualZero(difficulty, "Difficulty must be positive");
         Required.greaterOrEqualZero(duration, "Duration must be positive");

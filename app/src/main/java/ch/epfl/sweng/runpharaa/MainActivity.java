@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_black_24dp);
-
+        
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
 

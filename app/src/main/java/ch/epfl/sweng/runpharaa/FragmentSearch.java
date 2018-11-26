@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +19,16 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import java.util.List;
+import java.util.Random;
+
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.FiltersProperties;
+import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
@@ -46,6 +56,49 @@ public class FragmentSearch extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.luckyIcon){
+            FiltersProperties properties = new FiltersProperties();
+            TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+                @Override
+                public void onSuccess(DataSnapshot data) {
+                    List<Track> nearMe = TrackDatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
+                    if(nearMe.isEmpty()) {
+                        Toast.makeText(getContext(),R.string.no_tracks, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    List<Track> favorites = TrackDatabaseManagement.initFavouritesTracks(data);
+                    if(favorites.isEmpty()){
+                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(data);
+                        if(liked.isEmpty()) {
+                            Toast.makeText(getContext(),R.string.no_favorites_and_likes, Toast.LENGTH_LONG).show();
+                            Random r = new Random();
+                            startTrackPropertiesWith(nearMe.get(r.nextInt(nearMe.size())).getTrackUid());
+                        }
+                        else {
+                            properties.add(liked);
+                            startTrackPropertiesWith(properties.chooseLuckyTrack(nearMe).getTrackUid());
+                        }
+                    } else {
+                        properties.add(favorites);
+                        startTrackPropertiesWith(properties.chooseLuckyTrack(nearMe).getTrackUid());
+                    }
+                }
+
+                @Override
+                public void onFailed(DatabaseError databaseError) {}
+            });
+        }
+        return true;
+    }
+
+    private void startTrackPropertiesWith(String trackUID){
+        Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
+        intent.putExtra("TrackID", trackUID);
+        startActivity(intent);
+    }
+
     private void initSearch(Menu menu) {
         MenuItem item = menu.findItem(R.id.searchIcon);
         SearchView sv = (SearchView)item.getActionView();
@@ -55,13 +108,8 @@ public class FragmentSearch extends Fragment {
                 TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
                     @Override
                     public void onSuccess(String value) {
-                        if(value == null){
-                            Toast.makeText(getContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
-                        }else{
-                            Intent i = new Intent(getContext(),TrackPropertiesActivity.class);
-                            i.putExtra("TrackID", value);
-                            startActivity(i);
-                        }
+                        if(value == null) Toast.makeText(getContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
+                        else startTrackPropertiesWith(value);
                     }
                 });
                 return true;
@@ -76,5 +124,11 @@ public class FragmentSearch extends Fragment {
         sv.setFocusable(true);
         sv.setIconified(false);
         sv.requestFocusFromTouch();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d("testHugo", "change fragment");
+        super.onPause();
     }
 }
