@@ -42,11 +42,16 @@ public class DialogCreation extends DialogFragment {
         final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
         final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
 
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView img = mView.findViewById(R.id.trophies_create);
+                ImageView i = vv.findViewById(R.id.trophy_one_track);
+                img.postInvalidate();
+                i.postInvalidate();
+            }
+        });
 
-        ImageView img= mView.findViewById(R.id.trophies_create);
-        ImageView i = vv.findViewById(R.id.trophy_one_track);
-        img.invalidate();
-        i.invalidate();
         /*
         if(User.instance.getCreatedTracks().size() >= 1){
             img.setImageResource(R.drawable.create_one_track_reward);
