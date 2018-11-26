@@ -15,51 +15,53 @@ import ch.epfl.sweng.runpharaa.user.User;
 
 public class DialogCreation extends DialogFragment {
 
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_creation_trophies, null));
+        View v = inflater.inflate(R.layout.dialog_creation_trophies, null);
+        updateImages(v);
+        builder.setView(v);
         builder.setTitle("Creation Trophies");
         return builder.create();
     }
 
     @Override
     public void onResume() {
-        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
-        final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
-        ImageView img= mView.findViewById(R.id.trophies_create);
-        ImageView i = vv.findViewById(R.id.trophy_one_track);
-        img.invalidate();
-        i.invalidate();
-        updateImages();
+        final View view = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
+        updateImages(view);
         super.onResume();
     }
 
-    private void updateImages(){
-        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
-        final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
+    private void updateImages(View v) {
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ImageView img = mView.findViewById(R.id.trophies_create);
-                ImageView i = vv.findViewById(R.id.trophy_one_track);
-                img.postInvalidate();
-                i.postInvalidate();
-            }
-        });
+        ImageView one = v.findViewById(R.id.trophy_one_track);
+        ImageView two = v.findViewById(R.id.trophy_two_tracks);
+        ImageView ten = v.findViewById(R.id.trophy_ten_tracks);
 
-        /*
-        if(User.instance.getCreatedTracks().size() >= 1){
-            img.setImageResource(R.drawable.create_one_track_reward);
-            i.setImageDrawable(getResources().getDrawable(R.drawable.create_one_track_reward));
+        int nbCreated = User.instance.getCreatedTracks().size();
+
+        if (nbCreated >= 10) {
+            one.setImageResource(R.drawable.create_one_track_reward);
+            two.setImageResource(R.drawable.create_one_track_reward);
+            ten.setImageResource(R.drawable.create_one_track_reward);
+        } else if (nbCreated >= 2) {
+            one.setImageResource(R.drawable.create_one_track_reward);
+            two.setImageResource(R.drawable.create_one_track_reward);
+            ten.setImageResource(R.drawable.lock);
+        } else if (nbCreated >= 1) {
+            one.setImageResource(R.drawable.create_one_track_reward);
+            two.setImageResource(R.drawable.lock);
+            ten.setImageResource(R.drawable.lock);
         } else {
-            img.setImageResource(R.drawable.lock);
-            i.setImageResource(R.drawable.lock);
-        }*/
+            one.setImageResource(R.drawable.lock);
+            two.setImageResource(R.drawable.lock);
+            ten.setImageResource(R.drawable.lock);
+        }
 
     }
 }
+

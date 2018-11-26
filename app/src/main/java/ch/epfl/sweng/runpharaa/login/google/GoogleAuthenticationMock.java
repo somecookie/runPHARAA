@@ -1,24 +1,28 @@
-package ch.epfl.sweng.runpharaa.Firebase.Authentification.Google;
+package ch.epfl.sweng.runpharaa.login.google;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-public class GoogleAuthReal implements GoogleAuthInterface {
+public class GoogleAuthenticationMock extends GoogleAuthentication {
 
-    private GoogleSignInClient gs;
+    private Context context;
+
+    GoogleAuthenticationMock(Context c) {
+        context = c;
+    }
 
     @Override
     public GoogleSignInClient getClient(Activity activity, GoogleSignInOptions googleSignInOptions) {
-        gs = GoogleSignIn.getClient(activity, googleSignInOptions);
-        return gs;
+        return null;
     }
 
     @Override
     public Intent getSignInIntent() {
-        return  gs.getSignInIntent();
+        return new Intent(context, FakeGoogleSignInActivity.class);
     }
+
 }

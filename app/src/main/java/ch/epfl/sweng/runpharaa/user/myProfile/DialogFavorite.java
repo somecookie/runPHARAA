@@ -19,35 +19,45 @@ public class DialogFavorite extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_favorite_trophies, null));
-        builder.setTitle("Creation Trophies");
+        View v = inflater.inflate(R.layout.dialog_favorite_trophies, null);
+        updateImages(v);
+        builder.setView(v);
+        builder.setTitle("Favorite Trophies");
         return builder.create();
     }
 
     @Override
     public void onResume() {
-        updateImages();
+        final View view = getLayoutInflater().inflate(R.layout.dialog_favorite_trophies, null);
+        updateImages(view);
         super.onResume();
     }
 
-    private void updateImages(){
-        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
-        final View vv = getLayoutInflater().inflate(R.layout.dialog_favorite_trophies, null);
+    private void updateImages(View v) {
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ImageView img = mView.findViewById(R.id.trophies_favorite);
-                ImageView i = vv.findViewById(R.id.trophy_one_fav);
-                if(User.instance.getFavoriteTracks().size() >= 1){
-                    img.setImageResource(R.drawable.create_one_track_reward);
-                    i.setImageDrawable(getResources().getDrawable(R.drawable.create_one_track_reward));
-                } else {
-                    img.setImageResource(R.drawable.lock);
-                    i.setImageResource(R.drawable.lock);
-                }
-            }
-        });
+        ImageView one = v.findViewById(R.id.trophy_one_fav);
+        ImageView two = v.findViewById(R.id.trophy_two_fav);
+        ImageView ten = v.findViewById(R.id.trophy_ten_fav);
+
+        int nbFav = User.instance.getFavoriteTracks().size();
+
+        if (nbFav >= 10) {
+            one.setImageResource(R.drawable.favorite_one_track_reward);
+            two.setImageResource(R.drawable.favorite_one_track_reward);
+            ten.setImageResource(R.drawable.favorite_one_track_reward);
+        } else if (nbFav >= 2) {
+            one.setImageResource(R.drawable.favorite_one_track_reward);
+            two.setImageResource(R.drawable.favorite_one_track_reward);
+            ten.setImageResource(R.drawable.lock);
+        } else if (nbFav >= 1) {
+            one.setImageResource(R.drawable.favorite_one_track_reward);
+            two.setImageResource(R.drawable.lock);
+            ten.setImageResource(R.drawable.lock);
+        } else {
+            one.setImageResource(R.drawable.lock);
+            two.setImageResource(R.drawable.lock);
+            ten.setImageResource(R.drawable.lock);
+        }
 
     }
 }

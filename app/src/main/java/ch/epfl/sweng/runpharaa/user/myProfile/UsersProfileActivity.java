@@ -35,6 +35,7 @@ public class UsersProfileActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     TextView emptyMessage;
+    private ImageView picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class UsersProfileActivity extends AppCompatActivity {
 
     @Override
     public void onResume(){
-        //updateImages();
+        loadActivity(User.instance);
         super.onResume();
     }
 
@@ -79,9 +80,6 @@ public class UsersProfileActivity extends AppCompatActivity {
     private void loadActivity(User user) {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
-        emptyMessage.setVisibility(View.GONE);
-
-        Context context = this;
 
         TextView v = findViewById(R.id.user_name);
         v.setText(user.getName());
@@ -97,8 +95,8 @@ public class UsersProfileActivity extends AppCompatActivity {
         Button signOutButton = findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(v32 -> signOut());
 
-
-        ImageLoader.getLoader(this).displayImage(user.getPicture(), findViewById(R.id.profile_picture));
+        picture = findViewById(R.id.profile_picture);
+        ImageLoader.getLoader(this).displayImage(User.instance.getPicture(), picture);
     }
 
     private void signOut() {

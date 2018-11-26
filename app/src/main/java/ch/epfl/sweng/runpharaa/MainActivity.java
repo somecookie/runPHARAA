@@ -9,27 +9,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         //Initiate the Firebase Database with these tracks (delete them manually if already there).
         /*
         Log.d("Put Fake Track", "Test");
@@ -152,63 +147,26 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new FragmentNearMe());
         adapter.addFragment(new FragmentFollowing());
         adapter.addFragment(new FragmentFavourites());
+        adapter.addFragment(new FragmentSearch());
 
         // Link all
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
 
         // Set icons
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_near_me);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
 
         // Add the floating action button
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
-                startActivity(createTrack);
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_menu, menu);
-        initSearch(menu);
-        return true;
-    }
-
-    private void initSearch(Menu menu) {
-        MenuItem item = menu.findItem(R.id.searchIcon);
-        SearchView sv = (SearchView)item.getActionView();
-        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                TrackDatabaseManagement.findTrackUIDByName(query,  new Callback<String>() {
-                    @Override
-                    public void onSuccess(String value) {
-                        if(value == null){
-                            Toast.makeText(getBaseContext(),String.format(getResources().getString(R.string.no_track_found), query), Toast.LENGTH_LONG).show();
-                        }else{
-                            Intent i = new Intent(getBaseContext(),TrackPropertiesActivity.class);
-                            i.putExtra("TrackID", value);
-                            startActivity(i);
-                        }
-                    }
-                });
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
+        fab.setOnClickListener(v -> {
+            Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
+            startActivity(createTrack);
         });
     }
 

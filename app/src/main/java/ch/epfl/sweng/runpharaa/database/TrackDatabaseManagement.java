@@ -20,13 +20,15 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.Firebase.Database;
-import ch.epfl.sweng.runpharaa.Firebase.Storage;
+import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.firebase.Storage;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Required;
+
+import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
 public class TrackDatabaseManagement {
 
@@ -56,7 +58,7 @@ public class TrackDatabaseManagement {
         //Upload image
         Bitmap bitmap = track.getImage();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
@@ -217,25 +219,6 @@ public class TrackDatabaseManagement {
                 listener.onFailed(databaseError);
             }
         });
-    }
-
-    /**
-     * Remove the accents of the string and transform it to lower cas
-     *
-     * @param s the string we want to format
-     * @return the formatted string
-     */
-    private static String formatString(String s) {
-        Required.nonNull(s, "Cannot format null string");
-        if (s.isEmpty()) return "";
-
-        s = s.toLowerCase();
-        s = s.replaceAll("[èéêë]", "e");
-        s = s.replaceAll("[ûù]", "u");
-        s = s.replaceAll("[ïî]", "i");
-        s = s.replaceAll("[àâ]", "a");
-        s = s.replaceAll("Ô", "o");
-        return s;
     }
 
     /**
