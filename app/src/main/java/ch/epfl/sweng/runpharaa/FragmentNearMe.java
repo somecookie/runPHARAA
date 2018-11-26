@@ -15,12 +15,13 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FragmentNearMe extends UpdatableCardItemFragment {
 
 
-    public FragmentNearMe(){
+    public FragmentNearMe() {
     }
 
     protected void setEmptyMessage() {
@@ -39,17 +40,17 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
         // Create a fresh recyclerView and listCardItem
         String s = TrackDatabaseManagement.TRACKS_PATH;
 
-        TrackDatabaseManagement.OnGetDataListener d = new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(s, new Callback<DataSnapshot>() {
             @Override
-            public void onSuccess(DataSnapshot data) {
+            public void onSuccess(DataSnapshot value) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
                 List<TrackCardItem> listTrackCardItem = new ArrayList<>();
 
-                List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
+                List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(value, User.instance.getLocation());
 
                 for (Track t : tracks) {
 
-                    if(MainActivity.passFilters(t)){
+                    if (MainActivity.passFilters(t)) {
                         t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                         listTrackCardItem.add(t.getTrackCardItem());
                     }
@@ -72,14 +73,18 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
                 swipeLayout.setRefreshing(false);
             }
 
+
+
+
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentNearMe.");
                 setEmptyMessage();
                 swipeLayout.setRefreshing(false);
             }
-        };
 
-        TrackDatabaseManagement.mReadDataOnce(s, d);
+            ;
+
+        });
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".user.UsersProfileActivity">
+    tools:context=".user.myProfile.UsersProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

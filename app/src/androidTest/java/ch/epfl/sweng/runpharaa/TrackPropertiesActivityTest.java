@@ -3,16 +3,10 @@ package ch.epfl.sweng.runpharaa;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -23,8 +17,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -38,7 +32,6 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -140,7 +133,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         Track t1 = createTrack();
         launchWithExtras(t1);
         sleep(5_000);
-        onView(withId(R.id.goToUserProfileButtonId)).perform(scrollTo(), click());
+        onView(withId(R.id.trackCreatorID)).perform(click());
     }
 
     private Track createTrack() {

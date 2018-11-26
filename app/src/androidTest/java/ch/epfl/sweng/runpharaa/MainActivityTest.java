@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,19 +30,21 @@ import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -68,7 +71,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "BobUID");
     }
 
     private static ViewAction setProgress(final int progress) {
@@ -182,11 +185,29 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testUnsuccessfulSearch(){
-        onView(withId(R.id.searchIcon)).perform(click());
-        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"))
-                .perform(pressKey(KeyEvent.KEYCODE_ENTER))
-                .perform(closeSoftKeyboard());
+    public void testUnsuccessfulUserSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.toggle_button)).perform(click());
+        onView(withId(R.id.toggle_button)).perform(click());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
+        onView(withText(expected))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testUnsuccessfulTrackSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        // click on the toggleButton
+        onView(withId(R.id.toggle_button)).perform(click());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "Do I exist?");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
@@ -194,12 +215,27 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testSuccessfulSearch(){
-        onView(withId(R.id.searchIcon)).perform(click());
-        onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"))
-                .perform(pressKey(KeyEvent.KEYCODE_ENTER));
+    public void testSuccessfulTrackSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        // click on the toggleButton
+        onView(withId(R.id.toggle_button)).perform(click());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"), pressKey(KeyEvent.KEYCODE_ENTER));
         sleep(2000);
-        withId(R.id.trackTitleID).matches(withText("Cours forest !"));
+        onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+    }
+
+    @Test
+    public void testSuccessfulUserSearch(){
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        sleep(1000);
+        onView(withId(R.id.searchIcon)).perform(typeText("Bob"), pressKey(KeyEvent.KEYCODE_ENTER));
+        sleep(2000);
+        onView(withId(R.id.user_name)).check(matches(withText("Bob")));
     }
 
 
@@ -291,5 +327,20 @@ public class MainActivityTest extends TestInitLocation {
                 isDisplayed()))
                 .perform(click());
         sleep(WAIT_TIME);
+    }
+
+
+    @Test
+    public void createdTracksAreClickableAndDisplay() {
+        User.instance.addToCreatedTracks("0");
+
+        onView(withId(R.id.profileIcon)).perform(click());
+
+        sleep(1000);
+
+        onView(AllOf.allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+        intended(hasComponent(TrackPropertiesActivity.class.getName()));
+
     }
 }

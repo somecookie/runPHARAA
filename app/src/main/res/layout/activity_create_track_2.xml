@@ -85,7 +85,8 @@
             android:id="@+id/track_photo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/classic_margin"
             android:visibility="invisible" />
 
     </LinearLayout>

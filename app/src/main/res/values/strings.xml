@@ -11,7 +11,9 @@
     <string name="title_activity_login">Login</string>
     <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
-    <string name="welcome">Welcome</string>
+    <string name="loading_data">Loading user data …</string>
+    <string name="welcome">Welcome %s !</string>
+    <string name="almost_there">Almost there !</string>
     <string name="signOut">Sign Out</string>
     <string name="loggedOut">Logged out.</string>
     <string name="no_tracks">Oops! There are no tracks nearby</string>
@@ -44,6 +46,9 @@
     <string name="max_time_of">At most </string>
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
+    <string name="no_user_found">No user is called %s!</string>
+    <string name="search_users">Currently search for: users</string>
+    <string name="search_tracks">Currently search for: tracks</string>
 
     <string-array name="track_types">
         <item>City</item>
@@ -97,4 +102,27 @@
         <string name="pref_key_clear_cache" translatable="false">clear_cache</string>
 
     <string name="social_media_post_message">Check out this awesome track on RunPharaa !\nIt\'s called \"%s\"\n #runPharaaWayFromTravis</string>
+
+    <!-- Trophies in user -->
+    <string name="creation_trophies">Creation</string>
+    <string name="like_trophies">Liked</string>
+    <string name="fav_trophies">Favorite</string>
+
+    <!-- Trophies like dialog -->
+    <string name="one_like">One Like</string>
+    <string name="two_likes">Two likes</string>
+    <string name="ten_likes">Ten likes</string>
+    <string name="add_some_likes">Add some likes</string>
+
+    <!-- Trophies favorite dialog -->
+    <string name="add_some_favorites">Add some favorites</string>
+    <string name="ten_favorites">Ten favorites</string>
+    <string name="two_favorites">Two favorites</string>
+    <string name="one_favorite">One favorite</string>
+
+    <!-- Trophies creation dialog -->
+    <string name="one_track">One track</string>
+    <string name="two_tracks">Two tracks</string>
+    <string name="ten_tracks">Ten tracks</string>
+    <string name="create_tracks">Create tracks</string>
 </resources>

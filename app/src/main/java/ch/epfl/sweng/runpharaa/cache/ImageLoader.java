@@ -89,23 +89,7 @@ public class ImageLoader {
 
     private Bitmap decodeFile(File f) {
         try {
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            /*final int REQUIRED_SIZE = 70;
-            int tempWidth = o.outWidth, tempHeight = o.outHeight;
-            int scale = 1;
-
-            while(tempWidth / 2 < REQUIRED_SIZE || tempHeight / 2 < REQUIRED_SIZE) {
-                tempWidth/= 2;
-                tempHeight/= 2;
-                scale *= 2;
-            }*/
-
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = 1;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+            return BitmapFactory.decodeStream(new FileInputStream(f));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
