@@ -50,6 +50,7 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -76,7 +77,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
 
-        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 final String trackID = intent.getStringExtra("TrackID");
@@ -197,7 +198,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });

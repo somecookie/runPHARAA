@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,14 +16,13 @@ import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.TrackCardItem;
 import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
+public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<AdapterTracksToRecyclerViewItem.viewHolder> {
     List<TrackCardItem> createdTracks;
-    Adapter.OnItemClickListener listener;
+    AdapterTracksToRecyclerViewItem.OnItemClickListener listener;
     Context context;
 
-    public Adapter(Context context, List<TrackCardItem> createdTracks, Adapter.OnItemClickListener listener) {
+    public AdapterTracksToRecyclerViewItem(Context context, List<TrackCardItem> createdTracks, AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
         this.createdTracks = createdTracks;
         this.listener = listener;
         this.context = context;
@@ -36,20 +34,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
 
     @NonNull
     @Override
-    public Adapter.viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public AdapterTracksToRecyclerViewItem.viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         View v = layoutInflater.inflate(R.layout.track_card_item, viewGroup, false);
-        return new Adapter.viewHolder(v);
+        return new AdapterTracksToRecyclerViewItem.viewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull AdapterTracksToRecyclerViewItem.viewHolder viewHolder, int position) {
         // Set here the buttons, images and texts created in the viewHolder
         viewHolder.name.setText(createdTracks.get(position).getName());
 
         ImageLoader.getLoader(context).displayImage(createdTracks.get(position).getImageURL(), viewHolder.background_img);
 
-        viewHolder.bind(createdTracks.get(position), new Adapter.OnItemClickListener() {
+        viewHolder.bind(createdTracks.get(position), new AdapterTracksToRecyclerViewItem.OnItemClickListener() {
             @Override
             public void onItemClick(TrackCardItem item) {
                 Intent intent = new Intent(context, TrackPropertiesActivity.class);
@@ -76,7 +74,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
             name = itemView.findViewById(R.id.nameID);
         }
 
-        public void bind(final TrackCardItem item, final Adapter.OnItemClickListener listener) {
+        public void bind(final TrackCardItem item, final AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -24,8 +24,9 @@ import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.user.Adapter;
+import ch.epfl.sweng.runpharaa.user.AdapterTracksToRecyclerViewItem;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class OtherUsersProfileActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_other_user);
 
-        UserDatabaseManagement.mReadDataOnce(UserDatabaseManagement.USERS, new UserDatabaseManagement.OnGetDataListener() {
+        UserDatabaseManagement.mReadDataOnce(UserDatabaseManagement.USERS, new Callback<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 // Load and search which User we want to see the profile
@@ -52,7 +53,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read users from DB in UserProfileActivity.");
             }
         });
@@ -78,20 +79,19 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
     private void loadActivity(User user) {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
-        emptyMessage.setVisibility(View.GONE);
 
         Context context = this;
 
-        TextView v = findViewById(R.id.user_name);
-        v.setText(user.getName());
+        TextView user_name = findViewById(R.id.user_name);
+        user_name.setText(user.getName());
 
-        TextView v1 = findViewById(R.id.nbTracks);
+        TextView viewNbTracks = findViewById(R.id.nbTracks);
         int nbTracks = user.getCreatedTracks().size();
-        v1.setText(Integer.toString(nbTracks));
+        viewNbTracks.setText(Integer.toString(nbTracks));
 
-        TextView v2 = findViewById(R.id.nbFav);
+        TextView viewNbFav = findViewById(R.id.nbFav);
         int nbFav = user.getFavoriteTracks().size();
-        v2.setText(Integer.toString(nbFav));
+        viewNbFav.setText(Integer.toString(nbFav));
 
         User self = User.instance;
         Button followButton = findViewById(R.id.follow_button);
@@ -119,12 +119,12 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         ImageLoader.getLoader(this).displayImage(user.getPicture(), findViewById(R.id.profile_picture));
 
         // Load User's createdTracks
-        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = findViewById(R.id.createdTracksCardListId);
                 List<TrackCardItem> createdTracks = new ArrayList<>();
-                Adapter.OnItemClickListener listener = item -> {
+                AdapterTracksToRecyclerViewItem.OnItemClickListener listener = item -> {
                     Intent intent = new Intent(context, TrackPropertiesActivity.class);
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
@@ -134,7 +134,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());
                 }
-                Adapter adapter = new Adapter(context, createdTracks, (Adapter.OnItemClickListener) listener);
+                AdapterTracksToRecyclerViewItem adapter = new AdapterTracksToRecyclerViewItem(context, createdTracks, (AdapterTracksToRecyclerViewItem.OnItemClickListener) listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -143,7 +143,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in UserProfileActivity.");
                 setEmptyMessage();
             }

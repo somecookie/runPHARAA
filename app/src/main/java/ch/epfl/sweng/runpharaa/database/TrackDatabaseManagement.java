@@ -164,9 +164,7 @@ public class TrackDatabaseManagement {
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(user.getCreatedTracks() != null){
-                Log.i("weshh", "Valou" + c.getKey());
                 if(user.getCreatedTracks().contains(c.getKey())){
-                    Log.i("weshh", "VALOUUUUUUUUUUUUUUUUUUUU");
                     createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
@@ -208,7 +206,7 @@ public class TrackDatabaseManagement {
      * @param child
      * @param listener
      */
-    public static void mReadDataOnce(String child, final OnGetDataListener listener) {
+    public static void mReadDataOnce(String child, final Callback<DataSnapshot> listener) {
         DatabaseReference ref = mDataBaseRef.child(child);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -218,17 +216,8 @@ public class TrackDatabaseManagement {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                listener.onFailed(databaseError);
+                listener.onError(databaseError.toException());
             }
         });
-    }
-
-    /**
-     * Listener interface for the mReadDataOnce method.
-     */
-    public interface OnGetDataListener {
-        void onSuccess(DataSnapshot data);
-
-        void onFailed(DatabaseError databaseError);
     }
 }
