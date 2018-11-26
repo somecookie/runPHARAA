@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_near_me);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_following);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_black_24dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
 
 
         // Remove shadow from action bar
@@ -174,10 +174,6 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.filterIcon:
                 filterDialog();
-                return true;
-            case R.id.settingsIcon:
-                Intent settingsIntent = new Intent(getBaseContext(), SettingsActivity.class);
-                startActivity(settingsIntent);
                 return true;
             case R.id.profileIcon:
                 Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);

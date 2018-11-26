@@ -41,6 +41,14 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/ic_settings" />
+
     <Button
         android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"

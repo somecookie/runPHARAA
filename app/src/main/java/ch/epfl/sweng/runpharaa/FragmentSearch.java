@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.tracks.FiltersProperties;
+import ch.epfl.sweng.runpharaa.tracks.FilterProperties;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
@@ -53,7 +53,7 @@ public class FragmentSearch extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.luckyIcon){
-            FiltersProperties properties = new FiltersProperties();
+            FilterProperties properties = new FilterProperties();
             TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
                 @Override
                 public void onSuccess(DataSnapshot data) {

@@ -1,8 +1,6 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
-import android.util.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +8,13 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
-public class FiltersProperties {
+public class FilterProperties {
 
     //TODO Tweak it to find most stable parameters
-    private final int LENGTHCOEFF = 1;
-    private final int DIFFICULTYCOEFF = 1000;
-    private final int DURATIONCOEFF = 100;
-    private final int TYPECOEFF = 1000;
+    public static final int LENGTHCOEFF = 1;
+    public static final int DIFFICULTYCOEFF = 1000;
+    public static final int DURATIONCOEFF = 100;
+    public static final int TYPECOEFF = 1000;
 
 
     private double lengthTot;
@@ -27,7 +25,7 @@ public class FiltersProperties {
     private int nbDurations;
     private Map<TrackType, Integer> types;
 
-    public FiltersProperties() {
+    public FilterProperties() {
         this.lengthTot = 0;
         this.nblength = 0;
         this.difficultyTot = 0;
@@ -47,20 +45,20 @@ public class FiltersProperties {
         }
     }
 
-    public void add(double length, double difficulty, double duration, Set<TrackType> types){
+    public void add(double length, double difficulty, double duration, Set<TrackType> t){
         Required.greaterOrEqualZero(length, "Length must be positive");
         Required.greaterOrEqualZero(difficulty, "Difficulty must be positive");
         Required.greaterOrEqualZero(duration, "Duration must be positive");
-        Required.nonNull(types, "Types must be non mull");
+        Required.nonNull(t, "Types must be non mull");
         lengthTot += length;
         nblength++;
         difficultyTot += difficulty;
         nbDiffiulties++;
         durationTot += duration;
         nbDurations++;
-        for (TrackType trackType : types){
-            int prev = this.types.get(trackType);
-            this.types.put(trackType, prev++);
+        for (TrackType trackType : t){
+            int prev = types.get(trackType);
+            types.put(trackType, prev + 1);
         }
     }
 
@@ -68,7 +66,7 @@ public class FiltersProperties {
         return lengthTot / nblength;
     }
 
-    private double getPreferefDifficulty(){
+    private double getPreferedDifficulty(){
         return difficultyTot / nbDiffiulties;
     }
 
@@ -89,32 +87,27 @@ public class FiltersProperties {
     }
 
     public Track chooseLuckyTrack(List<Track> tracks){
-        List<Pair<Track, Double>> coeffed = new ArrayList<>();
-        for (Track track : tracks){
-            coeffed.add(computeCoeff(track));
-        }
-        return findBest(coeffed);
-    }
-
-    private Pair<Track, Double> computeCoeff(Track track){
-        double lengthDiff = Math.abs(track.getProperties().getLength() - getPreferedLength());
-        double difficultyDiff = Math.abs(track.getProperties().getAvgDifficulty() - getPreferefDifficulty());
-        double durationDiff = Math.abs(track.getProperties().getAvgDuration() - getPreferedDuration());
-        int typeDiff = track.getProperties().getType().contains(getPreferedTrackType()) ? 0 : 1;
-        double coeff = LENGTHCOEFF * lengthDiff + DIFFICULTYCOEFF * difficultyDiff + DURATIONCOEFF * durationDiff + TYPECOEFF * typeDiff;
-        return new Pair<>(track, coeff);
-    }
-
-    private Track findBest(List<Pair<Track, Double>> coeffed){
-        Track best = coeffed.get(0).first;
+        Track best = tracks.get(0);
         double min = Double.MAX_VALUE;
-        for (Pair<Track, Double> pair : coeffed){
-            if(pair.second < min){
-                min = pair.second;
-                best = pair.first;
+        for (Track track : tracks){
+            double coeff = computeCoeff(track);
+            if(coeff < min){
+                min = coeff;
+                best = track;
             }
         }
         return best;
     }
 
+    private Double computeCoeff(Track track){
+        double lengthDiff = Math.abs(track.getProperties().getLength() - getPreferedLength());
+        double difficultyDiff = Math.abs(track.getProperties().getAvgDifficulty() - getPreferedDifficulty());
+        double durationDiff = Math.abs(track.getProperties().getAvgDuration() - getPreferedDuration());
+        int typeDiff = 1;
+        if(track.getProperties().getType().contains(getPreferedTrackType())){
+            typeDiff = 0;
+        }
+        double coeff = (LENGTHCOEFF * lengthDiff) + (DIFFICULTYCOEFF * difficultyDiff) + (DURATIONCOEFF * durationDiff) + (TYPECOEFF * typeDiff);
+        return coeff;
+    }
 }
