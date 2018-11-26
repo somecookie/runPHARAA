@@ -50,6 +50,7 @@ public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCal
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setOnMarkerClickListener(marker -> true);
         map.setPadding(50, 150, 50, 50);
+        drawTrackOnMap();
         testText.setText("ready");
     }
 
