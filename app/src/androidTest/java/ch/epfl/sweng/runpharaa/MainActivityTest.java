@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;

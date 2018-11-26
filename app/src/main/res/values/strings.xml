@@ -102,4 +102,27 @@
         <string name="pref_key_clear_cache" translatable="false">clear_cache</string>
 
     <string name="social_media_post_message">Check out this awesome track on RunPharaa !\nIt\'s called \"%s\"\n #runPharaaWayFromTravis</string>
+
+    <!-- Trophies in user -->
+    <string name="creation_trophies">Creation</string>
+    <string name="like_trophies">Liked</string>
+    <string name="fav_trophies">Favorite</string>
+
+    <!-- Trophies like dialog -->
+    <string name="one_like">One Like</string>
+    <string name="two_likes">Two likes</string>
+    <string name="ten_likes">Ten likes</string>
+    <string name="add_some_likes">Add some likes</string>
+
+    <!-- Trophies favorite dialog -->
+    <string name="add_some_favorites">Add some favorites</string>
+    <string name="ten_favorites">Ten favorites</string>
+    <string name="two_favorites">Two favorites</string>
+    <string name="one_favorite">One favorite</string>
+
+    <!-- Trophies creation dialog -->
+    <string name="one_track">One track</string>
+    <string name="two_tracks">Two tracks</string>
+    <string name="ten_tracks">Ten tracks</string>
+    <string name="create_tracks">Create tracks</string>
 </resources>

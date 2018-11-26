@@ -1,13 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -18,26 +16,15 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.myProfile.DialogCreation;
-import ch.epfl.sweng.runpharaa.user.myProfile.DialogFavorite;
-import ch.epfl.sweng.runpharaa.user.myProfile.DialogLike;
-import ch.epfl.sweng.runpharaa.user.myProfile.FragmentMyTrophies;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {

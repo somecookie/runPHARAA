@@ -31,7 +31,7 @@
                 android:id="@+id/textOneCreation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="One track"
+                android:text="@string/one_track"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -52,7 +52,7 @@
                 android:id="@+id/textTwoCreations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Two tracks"
+                android:text="@string/two_tracks"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:id="@+id/textTenCreations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ten tracks"
+                android:text="@string/ten_tracks"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -82,7 +82,7 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create tracks"
+        android:text="@string/create_tracks"
         android:textAlignment="center" />
 
 

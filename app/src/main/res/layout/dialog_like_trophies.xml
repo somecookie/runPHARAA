@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="One Like"
+                    android:text="@string/one_like"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -55,7 +55,7 @@
                     android:id="@+id/textTwoLike"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Two likes"
+                    android:text="@string/two_likes"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -75,7 +75,7 @@
                     android:id="@+id/textTenLike"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ten likes"
+                    android:text="@string/ten_likes"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add some likes"
+                android:text="@string/add_some_likes"
                 android:textAlignment="center" />
         </TableRow>
 

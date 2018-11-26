@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="One Favorite"
+                    android:text="@string/one_favorite"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -56,7 +56,7 @@
                     android:id="@+id/textTwoFav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Two favorites"
+                    android:text="@string/two_favorites"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -76,7 +76,7 @@
                     android:id="@+id/textTenFav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ten favorites"
+                    android:text="@string/ten_favorites"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add some favorites"
+                android:text="@string/add_some_favorites"
                 android:textAlignment="center" />
         </TableRow>
 

@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Creation"
+                android:text="@string/creation_trophies"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -53,11 +53,11 @@
                 app:srcCompat="@drawable/lock" />
 
             <TextView
-                android:id="@+id/create_Track_Challenge2"
+                android:id="@+id/Like_Track_Challenge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Liked"
+                android:text="@string/like_trophies"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -77,11 +77,11 @@
                 app:srcCompat="@drawable/lock" />
 
             <TextView
-                android:id="@+id/create_Track_Challenge3"
+                android:id="@+id/fav_Track_Challenge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Favorite"
+                android:text="@string/fav_trophies"
                 android:textAlignment="center" />
         </LinearLayout>
     </TableRow>
