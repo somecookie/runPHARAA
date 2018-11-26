@@ -126,7 +126,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 TextView trackDifficulty = findViewById(R.id.track_difficulty);
                 trackDifficulty.setText("Difficulty: " + Double.toString(tp.getAvgDifficulty()) + " / 5.0");
 
-
                 TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
                 trackHeightDifference.setText("Height Difference: " + df.format(track.getHeightDifference()) + "m");
 

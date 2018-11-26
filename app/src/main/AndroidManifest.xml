@@ -71,7 +71,7 @@
         <activity
             android:name=".TrackPropertiesActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        
+
         <activity android:name=".FullMapActivity" />
 
         <activity android:name=".user.myProfile.UsersProfileActivity" />
