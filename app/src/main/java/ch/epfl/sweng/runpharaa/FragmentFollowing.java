@@ -16,6 +16,7 @@ import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UserCardItem;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentFollowing extends UpdatableUserCardItemFragment {
@@ -45,7 +46,12 @@ public class FragmentFollowing extends UpdatableUserCardItemFragment {
                 OnItemClickListener listener = new OnItemClickListener() {
                     @Override
                     public void onItemClick(UserCardItem item) {
-                        Intent intent = new Intent(getContext(), UsersProfileActivity.class);
+                        Intent intent;
+                        if (!item.getParentUserID().equals(User.instance.getUid())) {
+                            intent = new Intent(getContext(), OtherUsersProfileActivity.class);
+                        } else {
+                            intent = new Intent(getContext(), UsersProfileActivity.class);
+                        }
                         intent.putExtra("userId", item.getParentUserID());
                         startActivity(intent);
                     }

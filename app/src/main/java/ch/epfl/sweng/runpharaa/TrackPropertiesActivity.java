@@ -1,16 +1,13 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,7 +36,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
@@ -62,19 +58,21 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
-
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
+
     ShareDialog shareDialog;
     TweetComposer.Builder tweetBuilder;
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
-    private ImageLoader imageLoader;
+    private Boolean isMapOpen;
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        isMapOpen = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
 
@@ -84,7 +82,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         tweetBuilder = new TweetComposer.Builder(this);
 
         final Intent intent = getIntent();
-        imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
@@ -115,16 +112,17 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         // Get map
         if (map == null) {
             SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
-            mapFragment.getMapAsync(googleMap -> {
+            mapFragment.getMapAsync((GoogleMap googleMap) -> {
                 map = googleMap;
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
                 googleMap.setMyLocationEnabled(true);
                 googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 map.getUiSettings().setZoomControlsEnabled(true);
+                map.setOnMapClickListener(latLng -> {
+                    Intent fullMapIntent = new Intent(getBaseContext(), FullMapActivity.class);
+                    fullMapIntent.putExtra("points", points);
+                    startActivity(fullMapIntent);
+                });
 
                 testText.setText("ready");
 
@@ -253,8 +251,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         TextView trackCreator = findViewById(R.id.trackCreatorID);
         trackCreator.setText(track.getCreatorName());
         trackCreator.setOnClickListener(v -> {
-            Intent userProfile ;
-            if(track.getCreatorUid().equals(User.instance.getUid())){
+            Intent userProfile;
+            if (track.getCreatorUid().equals(User.instance.getUid())) {
                 userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
             } else {
                 userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
@@ -281,6 +279,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         TextView trackTags = findViewById(R.id.trackTagsID);
         trackTags.setText(createTagString(track));
+
     }
 
     private String createTagString(Track track) {
