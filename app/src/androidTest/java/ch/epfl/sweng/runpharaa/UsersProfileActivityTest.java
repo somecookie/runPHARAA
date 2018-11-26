@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.user.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
 
@@ -25,6 +26,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -41,6 +44,12 @@ public class UsersProfileActivityTest extends TestInitLocation {
     @Before
     public void initEmptyUser() {
         User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
+    }
+
+    @Test
+    public void testOpenSettings() {
+        onView(withId(R.id.settingsButton)).perform(click());
+        intended(hasComponent(SettingsActivity.class.getName()));
     }
 
     @Test
