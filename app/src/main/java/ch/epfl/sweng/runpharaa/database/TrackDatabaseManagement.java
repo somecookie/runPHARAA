@@ -164,7 +164,9 @@ public class TrackDatabaseManagement {
         List<Track> createdTracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
             if(user.getCreatedTracks() != null){
+                Log.i("weshh", "Valou" + c.getKey());
                 if(user.getCreatedTracks().contains(c.getKey())){
+                    Log.i("weshh", "VALOUUUUUUUUUUUUUUUUUUUU");
                     createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }

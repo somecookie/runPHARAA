@@ -133,7 +133,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         Track t1 = createTrack();
         launchWithExtras(t1);
         sleep(5_000);
-        onView(withId(R.id.goToUserProfileButtonId)).perform(scrollTo(), click());
+        onView(withId(R.id.trackCreatorID)).perform(click());
     }
 
     private Track createTrack() {

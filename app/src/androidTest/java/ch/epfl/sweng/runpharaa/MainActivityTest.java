@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
@@ -14,6 +15,7 @@ import android.widget.SeekBar;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,6 +45,7 @@ import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -69,7 +72,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "aa");
+        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "BobUID");
     }
 
     private static ViewAction setProgress(final int progress) {
@@ -187,6 +190,8 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.toggle_button)).perform(click());
+        onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
@@ -229,9 +234,9 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(1000);
-        onView(withId(R.id.searchIcon)).perform(typeText("FakeUser"), pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.searchIcon)).perform(typeText("Bob"), pressKey(KeyEvent.KEYCODE_ENTER));
         sleep(2000);
-        onView(withId(R.id.user_name)).check(matches(withText("FakeUser")));
+        onView(withId(R.id.user_name)).check(matches(withText("Bob")));
     }
 
 
@@ -323,5 +328,20 @@ public class MainActivityTest extends TestInitLocation {
                 isDisplayed()))
                 .perform(click());
         sleep(WAIT_TIME);
+    }
+
+
+    @Test
+    public void createdTracksAreClickableAndDisplay() {
+        User.instance.addToCreatedTracks("0");
+
+        onView(withId(R.id.profileIcon)).perform(click());
+
+        sleep(1000);
+
+        onView(AllOf.allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+        intended(hasComponent(TrackPropertiesActivity.class.getName()));
+
     }
 }

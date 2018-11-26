@@ -123,21 +123,4 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
 
-    private void updateImages(){
-        final View mView = getLayoutInflater().inflate(R.layout.trophies, null);
-        ImageView img= mView.findViewById(R.id.trophies_create);
-        if(User.instance.getCreatedTracks().size() >= 1){
-            img.setImageResource(R.drawable.create_one_track_reward);
-        } else {
-            img.setImageResource(R.drawable.lock);
-        }
-
-        final View vv = getLayoutInflater().inflate(R.layout.dialog_creation_trophies, null);
-        ImageView i = vv.findViewById(R.id.trophy_one_track);
-        i.setImageResource(R.drawable.create_one_track_reward);
-
-
-    }
-
-
 }
