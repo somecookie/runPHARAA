@@ -41,7 +41,13 @@ public class Storage {
     private UploadTask uploadTask;
 
     @Mock
+    private UploadTask uploadTaskSuccessful;
+
+    @Mock
     private Task<Uri> downloadUrlTask;
+
+    @Mock
+    private Task<Uri> downloadUrlTaskSuccessful;
 
     @Mock
     private Task<Uri> addTrackToStorageTask;
@@ -88,11 +94,14 @@ public class Storage {
             public Task answer(InvocationOnMock invocation) throws Throwable {
                 OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
                 if(!shouldFail){
-                    l.onComplete(uploadTask);
+                    l.onComplete(uploadTaskSuccessful);
                 }
                 return uploadTask;
             }
         });
+
+        when(uploadTaskSuccessful.isSuccessful()).thenReturn(true);
+
 
 
         when(rsTrackImageKey.getDownloadUrl()).thenReturn(downloadUrlTask);
@@ -111,10 +120,13 @@ public class Storage {
             @Override
             public Task answer(InvocationOnMock invocation) throws Throwable {
                 OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
-                l.onComplete(addTrackToStorageTask);
-                return downloadUrlTask;
+                l.onComplete(downloadUrlTaskSuccessful);
+                return downloadUrlTaskSuccessful;
             }
         });
+
+        when(downloadUrlTaskSuccessful.isSuccessful()).thenReturn(true);
+        when(downloadUrlTaskSuccessful.getResult()).thenReturn(Uri.parse(""));
 
 
 

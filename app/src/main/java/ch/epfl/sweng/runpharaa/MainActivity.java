@@ -21,9 +21,11 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Callback;
+
 
 public class MainActivity extends AppCompatActivity {
 

@@ -206,7 +206,7 @@ public class TrackDatabaseManagement {
      * @param child
      * @param listener
      */
-    public static void mReadDataOnce(String child, final OnGetDataListener listener) {
+    public static void mReadDataOnce(String child, final Callback<DataSnapshot> listener) {
         DatabaseReference ref = mDataBaseRef.child(child);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -216,17 +216,8 @@ public class TrackDatabaseManagement {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                listener.onFailed(databaseError);
+                listener.onError(databaseError.toException());
             }
         });
-    }
-
-    /**
-     * Listener interface for the mReadDataOnce method.
-     */
-    public interface OnGetDataListener {
-        void onSuccess(DataSnapshot data);
-
-        void onFailed(DatabaseError databaseError);
     }
 }

@@ -1,9 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -17,30 +16,27 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
 
-    private static final int WAIT_TIME = 1000;
+    private static final int WAIT_TIME = 2000;
     @Rule
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =
             new ActivityTestRule<>(UsersProfileActivity.class, true, false);
 
     @Before
     public void initEmptyUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "FakeUser");
+        User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "BobUID");
     }
 
     @Test
@@ -88,15 +84,69 @@ public class UsersProfileActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void createdTracksAreClickableAndDisplay() {
-        User.instance.addToCreatedTracks("0");
-        mActivityRule.launchActivity(new Intent());
-        sleep(WAIT_TIME);
-        onView(allOf(withId(R.id.createdTracksCardListId), isDisplayed())).perform(
-                swipeDown());
-        sleep(5000);
+    public void canClickOnDifferentTrophiesCategories(){
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
+        sleep(2000);
 
-        onView(allOf(withId(R.id.createdTracksCardListId), isDisplayed())).perform(
-                actionOnItemAtPosition(0, click()));
+        clickOnDifferenttrophies();
+    }
+
+    @Test
+    public void trophiesWithOneofEach(){
+        User.instance.addToCreatedTracks("0");
+        User.instance.like("track");
+        User.instance.addToFavorites("fav");
+
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
+        sleep(2000);
+
+        clickOnDifferenttrophies();
+    }
+
+    @Test
+    public void trophiesWithTwoofEach(){
+        User.instance.addToCreatedTracks("0");
+        User.instance.addToCreatedTracks("1");
+        User.instance.like("track");
+        User.instance.like("track2");
+        User.instance.addToFavorites("fav");
+        User.instance.addToFavorites("fav2");
+        mActivityRule.launchActivity(null);
+
+        onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
+        sleep(2000);
+
+
+        clickOnDifferenttrophies();
+    }
+
+    @Test
+    public void trophiesWithTenofEach(){
+        mActivityRule.launchActivity(null);
+        for(int i = 0; i < 13; i++){
+            User.instance.addToCreatedTracks(String.valueOf(i));
+            User.instance.like(String.valueOf(i));
+            User.instance.addToFavorites(String.valueOf(i));
+        }
+        mActivityRule.launchActivity(null);
+
+        onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
+        sleep(2000);
+
+        clickOnDifferenttrophies();
+    }
+
+    private void clickOnDifferenttrophies(){
+        onView(withId(R.id.trophies_create)).perform(click());
+        sleep(WAIT_TIME);
+        Espresso.pressBack();
+        onView(withId(R.id.trophies_like)).perform(click());
+        sleep(WAIT_TIME);
+        Espresso.pressBack();
+        onView(withId(R.id.trophies_favorite)).perform(click());
+        sleep(WAIT_TIME);
+        Espresso.pressBack();
     }
 }

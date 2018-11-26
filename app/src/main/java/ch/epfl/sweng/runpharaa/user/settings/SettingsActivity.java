@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.user;
+package ch.epfl.sweng.runpharaa.user.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.location.RealGpsService;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.user.User;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {

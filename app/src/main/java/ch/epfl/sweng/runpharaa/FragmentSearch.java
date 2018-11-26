@@ -17,7 +17,7 @@ import android.widget.ToggleButton;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
