@@ -48,10 +48,10 @@ import java.util.Date;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -176,6 +176,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private void initCommentButton(Track track) {
         Button commentsButton = findViewById(R.id.commentsID);
         commentsButton.setOnClickListener(v -> {
+
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
 
 
@@ -253,7 +254,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         TextView trackCreator = findViewById(R.id.trackCreatorID);
         trackCreator.setText(track.getCreatorName());
         trackCreator.setOnClickListener(v -> {
-            Intent userProfile ;
+            Intent userProfile;
             userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
             userProfile.putExtra("userId", track.getCreatorUid());
             startActivity(userProfile);

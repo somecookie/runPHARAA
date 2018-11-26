@@ -116,7 +116,7 @@ public class TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
 
-    public static void updateComments(Track track){
+    public static void updateComments(Track track) {
         DatabaseReference commentsRef = mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).child(COMMENTS);
         commentsRef.setValue(track.getComments()).addOnFailureListener(Throwable::printStackTrace);
     }
@@ -169,11 +169,11 @@ public class TrackDatabaseManagement {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
+    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user) {
         List<Track> createdTracks = new ArrayList<>();
-        for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(user.getCreatedTracks() != null){
-                if(user.getCreatedTracks().contains(c.getKey())){
+        for (DataSnapshot c : dataSnapshot.getChildren()) {
+            if (user.getCreatedTracks() != null) {
+                if (user.getCreatedTracks().contains(c.getKey())) {
                     createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
             }
