@@ -17,8 +17,11 @@ import android.widget.ToggleButton;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class FragmentSearch extends Fragment {
     private View v;
@@ -42,7 +45,7 @@ public class FragmentSearch extends Fragment {
 
     private void initSearch(Menu menu) {
         MenuItem item = menu.findItem(R.id.searchIcon);
-        SearchView sv = (SearchView)item.getActionView();
+        SearchView sv = (SearchView) item.getActionView();
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -60,18 +63,24 @@ public class FragmentSearch extends Fragment {
                         }
                     });
                 } else {
-                    UserDatabaseManagement.findUserUIDByName(query, new Callback<String>() {
-                        @Override
-                        public void onSuccess(String value) {
-                            if (value == null) {
-                                Toast.makeText(getContext(), String.format(getResources().getString(R.string.no_user_found), query), Toast.LENGTH_LONG).show();
-                            } else {
-                                Intent i = new Intent(getContext(), UsersProfileActivity.class);
-                                i.putExtra("userId", value);
-                                startActivity(i);
+                    // If user searches for himself, directly open his/hers profile
+                    if (Util.formatString(query).equals(Util.formatString(User.instance.getName()))) {
+                        Intent i = new Intent(getContext(), UsersProfileActivity.class);
+                        startActivity(i);
+                    } else {
+                        UserDatabaseManagement.findUserUIDByName(query, new Callback<String>() {
+                            @Override
+                            public void onSuccess(String value) {
+                                if (value == null) {
+                                    Toast.makeText(getContext(), String.format(getResources().getString(R.string.no_user_found), query), Toast.LENGTH_LONG).show();
+                                } else {
+                                    Intent i = new Intent(getContext(), OtherUsersProfileActivity.class);
+                                    i.putExtra("userId", value);
+                                    startActivity(i);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
                 return true;
             }
