@@ -112,6 +112,9 @@ public class Database {
     private DatabaseReference drUserAnyChildCreate;
 
     @Mock
+    private DataSnapshot snapInitUser;
+
+    @Mock
     private DatabaseReference drUserAnyChildFavoritesChild;
 
     @Mock
@@ -230,6 +233,10 @@ public class Database {
         when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
         when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitTrackChildren);
         when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
+
+        //changer le nom
+        when(snapInitTrackChildren.child("name")).thenReturn(snapInitUser);
+        when(snapInitUser.getValue()).thenReturn("1");
 
         when(snapInitTrackChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
         when(snapInitTrackChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
