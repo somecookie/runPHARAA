@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,10 +30,16 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -61,6 +69,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         onView(withId(R.id.fb_share_button)).perform(click());
     }
 
+    @Ignore
     @Test
     public void shareOnTwitter() {
         Track t1 = createTrack();
@@ -134,6 +143,36 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         launchWithExtras(t1);
         sleep(5_000);
         onView(withId(R.id.trackCreatorID)).perform(click());
+    }
+
+    @Test
+    public void testCommentTooLong(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(5_000);
+        onView(withId(R.id.commentsID)).perform(click());
+
+        sleep(2000);
+        //onView(withId(R.id.comments_editText)).perform(click());
+
+        onView(withId(R.id.comments_editText)).perform(replaceText("Mais, vous savez, moi je ne crois pas " +
+                "qu'il y ait de bonne ou de mauvaise situation. " +
+                "Moi, si je devais résumer ma vie aujourd'hui avec vous, " +
+                "je dirais que c'est d'abord des rencontres, " +
+                "Des gens qui m'ont tendu la main, " +
+                "peut-être à un moment où je ne pouvais pas, où j'étais seul chez moi. " +
+                "Et c'est assez curieux de se dire que les hasards, " +
+                "les rencontres forgent une destinée... "));
+
+        sleep(2000);
+
+        onView(withId(R.id.post_button)).perform(click());
+
+        Espresso.pressBack();
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.comment_too_long)))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
     }
 
     private Track createTrack() {
