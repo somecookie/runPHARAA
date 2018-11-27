@@ -19,6 +19,7 @@
     <string name="no_tracks">Oops! There are no tracks nearby</string>
     <string name="no_follow">Try following someone!</string>
     <string name="no_favorite">Try adding a track to your favorite!</string>
+    <string name="no_favorites_and_likes">Like some tracks and add them to your favorites for better guess!</string>
     <string name="no_created_self">Try creating a track!</string>
     <string name="no_created_other">This user did not create a track yet!</string>
     <string name="add_photo">Photo</string>

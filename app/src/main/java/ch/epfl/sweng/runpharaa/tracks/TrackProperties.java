@@ -13,7 +13,6 @@ public class TrackProperties {
     private AvgDifficulty avgDiff;
     private int likes;
     private int favorites;
-    @Exclude
     private Set<TrackType> trackType;
 
     //For Firebase
@@ -51,7 +50,6 @@ public class TrackProperties {
         this.trackType = trackType;
     }
 
-    @Exclude //TODO think about how to put it in database
     public double getAvgDifficulty(){
         return avgDiff.getAverage();
     }
@@ -61,7 +59,6 @@ public class TrackProperties {
     public int getAvgDifficultyTotal() { return avgDiff.getTotal();}
     public int getAvgDifficultyNbr() { return avgDiff.getNbr();}
 
-    @Exclude //TODO think about how to put it in database
     public double getAvgDuration(){
         return avgDur.getAverage();
     }
@@ -79,7 +76,6 @@ public class TrackProperties {
     public void removeFavorite(){ if(favorites > 0) favorites--; }
     public int getFavorites(){ return favorites; }
 
-    @Exclude //TODO exclude for now but make f(string) -> TrackType for database (@Hugo for more explications)
     public Set<TrackType> getType(){return trackType;}
 
     public double getLength() {

@@ -80,6 +80,7 @@
     <string name="no_track_found">%s n\'existe pas!</string>
     <string name="no_user_found">%s n\'existe pas!</string>
     <string name="social_media_post_message">Matte-moi ce parcours de ouf trouvé sur RunPharaa !\nIl s\'appelle \"%s\" \n#runPharaaWayFromTravis</string>
+    <string name="no_favorites_and_likes">Aimes quelque tracks et ajoutes les à tes favoris pour un meilleur supposition!</string>
 
     <string name="creation_trophies"> Création</string>
     <string name="like_trophies"> J\'aime</string>

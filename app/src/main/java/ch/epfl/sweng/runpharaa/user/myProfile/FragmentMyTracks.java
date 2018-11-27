@@ -48,7 +48,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(value, User.instance);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(value);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());
@@ -82,7 +82,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data, User.instance);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());
