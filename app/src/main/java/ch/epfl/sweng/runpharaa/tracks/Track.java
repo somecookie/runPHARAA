@@ -40,7 +40,7 @@ public class Track {
 
     public Track(){};
 
-    public Track(String trackUid, String creatorUid, String name, List<CustLatLng> path, TrackProperties properties) {
+    public Track(String trackUid, String creatorUid, String name, List<CustLatLng> path, List<Comment> comment, TrackProperties properties) {
 
         Required.nonNull(trackUid, "Track ID must be non-null.");
         Required.nonNull(creatorUid, "Creator ID must be non-null.");
@@ -56,6 +56,7 @@ public class Track {
         else this.path = path;
 
         startingPoint = path.get(0);
+        comments = comment;
         this.properties = properties;
     }
 
@@ -113,7 +114,7 @@ public class Track {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-        Track t = new Track("0", "Bobzer", "Cours forest !", Arrays.asList(coord0, coord1, coord2), p);
+        Track t = new Track("0", "Bobzer", "Cours forest !", Arrays.asList(coord0, coord1, coord2),new ArrayList<>(), p);
 
         ArrayList<Track> all = new ArrayList<>();
         all.add(t);

@@ -15,11 +15,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
@@ -175,6 +178,33 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testAddingCorrectComment(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(5_000);
+        onView(withId(R.id.commentsID)).perform(click());
+
+        sleep(2000);
+
+        onView(withId(R.id.comments_editText)).perform(replaceText("Hey, very nice track, love it!"));
+
+        sleep(2000);
+        Comment com = new Comment(User.instance.getUid(), "Hey, very nice track, love it!", new Date());
+        t1.addComment(com);
+        onView(withId(R.id.post_button)).perform(click());
+
+
+
+
+        sleep(3000);
+        //Espresso.pressBack();
+
+        //onView(withText(mActivityRule.getActivity().getResources().getString(R.string.comment_too_long)))
+        //       .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+        //        .check(matches(isDisplayed()));
+    }
+
     private Track createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
@@ -183,7 +213,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
 
-        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1), p);
+        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
 
 
         return track;

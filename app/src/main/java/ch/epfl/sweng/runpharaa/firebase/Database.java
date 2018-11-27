@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -46,6 +47,8 @@ public class Database {
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
+    public final static String COMMENTS = "comments";
+
 
     private final static String keyWriteTrack = "key";
 
@@ -104,6 +107,12 @@ public class Database {
     private DatabaseReference drUserAnyChildCreate;
 
     @Mock
+    private DatabaseReference drUserAnyChildName;
+
+    @Mock
+    private DatabaseReference drUserAnyChildPicture;
+
+    @Mock
     private DatabaseReference drUserAnyChildFavoritesChild;
 
     @Mock
@@ -111,6 +120,9 @@ public class Database {
 
     @Mock
     private DatabaseReference drUserAnyChildCreatesChild;
+
+    @Mock
+    private DatabaseReference drTracksUIDComment;
 
     @Mock
     private Task<Void> setValueTrack;
@@ -152,6 +164,12 @@ public class Database {
     private DataSnapshot snapInitTrack;
 
     @Mock
+    private DataSnapshot snapOnDataUserName;
+
+    @Mock
+    private DataSnapshot snapOnDataUserPicture;
+
+    @Mock
     private DataSnapshot snapInitTrackChildren;
 
     @Mock
@@ -171,6 +189,9 @@ public class Database {
 
     @Mock
     private Task<Void> setTask;
+
+    @Mock
+    private Task<Void> addComment;
 
     @Mock
     private Task<Void> setValueTask;
@@ -236,6 +257,14 @@ public class Database {
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
+
+        when(snapOnDataUserName.exists()).thenReturn(true);
+        when(snapOnDataUserName.getValue((String.class))).thenReturn("Bob");
+
+        when(snapOnDataUserPicture.exists()).thenReturn(true);
+        when(snapOnDataUserPicture.getValue((String.class))).thenReturn("");
+
+
     }
 
     private void instanciatedrUsers() {
@@ -287,6 +316,9 @@ public class Database {
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
+        when(drUserAnyChild.child("name")).thenReturn(drUserAnyChildName);
+        when(drUserAnyChild.child("picture")).thenReturn(drUserAnyChildPicture);
+
 
         when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer(new Answer<Task<Void>>() {
             @Override
@@ -360,6 +392,32 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataUserName);
+                }
+                return l;
+            }
+        }).when(drUserAnyChildName).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataUserPicture);
+                }
+                return l;
+            }
+        }).when(drUserAnyChildPicture).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
         when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
             @Override
@@ -441,6 +499,17 @@ public class Database {
                 t = track;
                 return null;
             }
+        });
+
+        when(drTracksUID.child(COMMENTS)).thenReturn(drTracksUIDComment);
+        when(drTracksUIDComment.setValue(any(List.class))).thenReturn(addComment);
+
+        when(addComment.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if(shouldFail){
+                l.onFailure(new IllegalStateException());
+            }
+            return addComment;
         });
 
         when(drTracks.child(keyWriteTrack)).thenReturn(drTracksKey);
