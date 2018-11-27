@@ -227,16 +227,16 @@ public class Database {
     }
 
     private FirebaseDatabase instanciateMock(){
-            MockitoAnnotations.initMocks(this);
-            createTrack();
-            instanciateDB();
-            instanciateDBRef();
-            instanciatedrTracks();
-            instanciatedrKeys();
-            instanciatedrUsers();
-            instanciateRead();
-            instanciateSnapshots();
-            return firebaseDatabaseMock;
+        MockitoAnnotations.initMocks(this);
+        createTrack();
+        instanciateDB();
+        instanciateDBRef();
+        instanciatedrTracks();
+        instanciatedrKeys();
+        instanciatedrUsers();
+        instanciateRead();
+        instanciateSnapshots();
+        return firebaseDatabaseMock;
     }
 
     private void instanciateDB() {
@@ -461,15 +461,15 @@ public class Database {
 
         when(drUserAnyChildLikesChild.removeValue())
                 .thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int likes = t.getLikes();
-                if(likes >= 1){
-                    //t.getProperties().setLikes(likes - 1);
-                }
-                return removeTask;
-            }
-        });
+                    @Override
+                    public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                        int likes = t.getLikes();
+                        if(likes >= 1){
+                            //t.getProperties().setLikes(likes - 1);
+                        }
+                        return removeTask;
+                    }
+                });
 
         when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
