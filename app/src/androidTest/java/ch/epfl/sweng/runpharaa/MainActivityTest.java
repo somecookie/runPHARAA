@@ -71,7 +71,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "BobUID");
+        User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "1");
     }
 
     private static ViewAction setProgress(final int progress) {
@@ -189,8 +189,6 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.toggle_button)).perform(click());
-        onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");

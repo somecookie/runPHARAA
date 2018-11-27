@@ -1,10 +1,9 @@
 package ch.epfl.sweng.runpharaa.firebase;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
+import android.renderscript.Sampler;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -22,21 +21,14 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
-import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -57,7 +49,7 @@ public class Database {
 
     private final static String keyWriteTrack = "key";
 
-    private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+    private final static User fake_user = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
     //Tracks already in the fakeDB
     private final static String trackUID = "TrackID";
@@ -112,6 +104,9 @@ public class Database {
     private DatabaseReference drUserAnyChildCreate;
 
     @Mock
+    private DatabaseReference drUserAnyChildFollow;
+
+    @Mock
     private DataSnapshot snapInitUser;
 
     @Mock
@@ -133,6 +128,21 @@ public class Database {
     private DataSnapshot snapOnDataChangeRead;
 
     @Mock
+    private DataSnapshot snapOnDataChangeReadUser;
+
+    @Mock
+    private DataSnapshot snapInitFollow;
+
+    @Mock
+    private DataSnapshot snapInitCurUser;
+
+    @Mock
+    private DataSnapshot snapInitChildrenUser;
+
+    @Mock
+    private DataSnapshot snapInitFollowChildrens;
+
+    @Mock
     private DataSnapshot snapOnDataChangeReadChildPath;
 
     @Mock
@@ -143,6 +153,9 @@ public class Database {
 
     @Mock
     private DatabaseError snapOnDataErrorRead;
+
+    @Mock
+    private DataSnapshot snapInitChildrenID;
 
     @Mock
     private DatabaseError snapOnDataErrorSet;
@@ -163,7 +176,7 @@ public class Database {
     private DataSnapshot snapInitTrack;
 
     @Mock
-    private DataSnapshot snapInitTrackChildren;
+    private DataSnapshot snapInitChildren;
 
     @Mock
     private FirebaseTrackAdapter track;
@@ -230,19 +243,30 @@ public class Database {
     private void instanciateSnapshots() {
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
 
-        when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
-        when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitTrackChildren);
-        when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
+        when(snapOnDataChangeReadUser.getChildren()).thenReturn(Collections.singletonList(snapInitChildrenUser));
+        when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitChildren));
+        when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitChildren);
+        when(snapOnDataChangeRead.child("0")).thenReturn(snapInitChildren);
+
+        when(snapOnDataChangeRead.child("1")).thenReturn(snapInitFollow);
+        when(snapInitFollow.getChildren()).thenReturn(Collections.singletonList(snapInitFollowChildrens));
+        when(snapInitFollowChildrens.getValue()).thenReturn(null);
 
         //changer le nom
-        when(snapInitTrackChildren.child("name")).thenReturn(snapInitUser);
-        when(snapInitUser.getValue()).thenReturn("1");
+        when(snapOnDataChangeReadUser.child("1")).thenReturn(snapInitCurUser);
+        when(snapInitCurUser.child("followedUsers")).thenReturn(snapInitUser);
+        when(snapInitChildrenUser.child("name")).thenReturn(snapInitUser);
+        when(snapInitUser.getValue((String.class))).thenReturn("Bob");
 
-        when(snapInitTrackChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
-        when(snapInitTrackChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
-        when(snapInitTrackChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
-        when(snapInitTrackChildren.child("trackUid")).thenReturn(snapOnDataChangedChildTrackUID);
-        when(snapInitTrackChildren.getKey()).thenReturn("0");
+        when(snapInitChildrenUser.child("uid")).thenReturn(snapInitChildrenID);
+        when(snapInitChildrenID.getValue((String.class))).thenReturn("1");
+
+
+        when(snapInitChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
+        when(snapInitChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
+        when(snapInitChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
+        when(snapInitChildren.child("trackUid")).thenReturn(snapOnDataChangedChildTrackUID);
+        when(snapInitChildren.getKey()).thenReturn("0");
 
         when(snapOnDataChangeReadChildPath.getValue((String.class))).thenReturn("Cours forest !");
         when(snapOnDataChangedChildTrackUID.getValue((String.class))).thenReturn(trackUID);
@@ -302,6 +326,8 @@ public class Database {
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
+
+        when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
 
         when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer(new Answer<Task<Void>>() {
             @Override
@@ -537,6 +563,34 @@ public class Database {
                 return l;
             }
         }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if(isCancelled){
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataChangeReadUser);
+                }
+                return null;
+            }
+        }).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if(isCancelled){
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataChangeReadUser);
+                }
+                return null;
+            }
+        }).when(drUserAnyChildFollow).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
     }
 

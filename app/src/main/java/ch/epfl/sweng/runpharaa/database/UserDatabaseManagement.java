@@ -192,7 +192,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                     String formattedName = formatString(name);
 
                     if (dataName.equals(formattedName)) {
+                        Log.i("Weshhhhhh", "1." + data.toString());
+                        Log.i("Weshhhhhh", "2." + data.toString() + " - " + data.child(ID).toString());
+                        Log.i("Weshhhhhh", "3." + data.toString() + " - " + data.child(ID).toString() + " - " + data.child(ID).getValue(String.class));
                         String id = data.child(ID).getValue(String.class);
+
                         callback.onSuccess(id);
                         return;
                     }
