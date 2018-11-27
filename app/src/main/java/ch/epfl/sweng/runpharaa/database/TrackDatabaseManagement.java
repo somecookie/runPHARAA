@@ -23,12 +23,11 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.firebase.Database;
-import ch.epfl.sweng.runpharaa.firebase.Storage;
+import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
-import ch.epfl.sweng.runpharaa.utils.Required;
 
 import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
@@ -164,6 +163,25 @@ public class TrackDatabaseManagement {
         return tracksNearMe;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private static List<Track> initTracksList(DataSnapshot dataSnapshot, List<String> tracksUID){
+        List<Track> tracks = new ArrayList<>();
+        for(DataSnapshot c : dataSnapshot.getChildren()){
+            if(tracksUID != null){
+                if(tracksUID.contains(c.getKey())){
+                    tracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
+                }
+            }
+        }
+        Collections.sort(tracks, (o1, o2) -> {
+            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+            return Double.compare(d1, d2);
+        });
+        return tracks;
+    }
+
     /**
      * Given a DataSnapshot from the Firebase Database, returns the list of created tracks.
      *
@@ -171,21 +189,8 @@ public class TrackDatabaseManagement {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user) {
-        List<Track> createdTracks = new ArrayList<>();
-        for (DataSnapshot c : dataSnapshot.getChildren()) {
-            if (user.getCreatedTracks() != null) {
-                if (user.getCreatedTracks().contains(c.getKey())) {
-                    createdTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
-                }
-            }
-        }
-        Collections.sort(createdTracks, (o1, o2) -> {
-            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            return Double.compare(d1, d2);
-        });
-        return createdTracks;
+    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
+        return initTracksList(dataSnapshot, User.instance.getCreatedTracks());
     }
 
     /**
@@ -196,20 +201,7 @@ public class TrackDatabaseManagement {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot) {
-        List<Track> favouriteTracks = new ArrayList<>();
-        for (DataSnapshot c : dataSnapshot.getChildren()) {
-            if (User.instance.getFavoriteTracks() != null) {
-                if (User.instance.getFavoriteTracks().contains(c.getKey())) {
-                    favouriteTracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
-                }
-            }
-        }
-        Collections.sort(favouriteTracks, (o1, o2) -> {
-            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            return Double.compare(d1, d2);
-        });
-        return favouriteTracks;
+        return initTracksList(dataSnapshot, User.instance.getFavoriteTracks());
     }
 
     /**

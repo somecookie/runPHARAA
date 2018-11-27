@@ -73,17 +73,12 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
                 swipeLayout.setRefreshing(false);
             }
 
-
-
-
             @Override
             public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in FragmentNearMe.");
                 setEmptyMessage();
                 swipeLayout.setRefreshing(false);
             }
-
-            ;
 
         });
     }

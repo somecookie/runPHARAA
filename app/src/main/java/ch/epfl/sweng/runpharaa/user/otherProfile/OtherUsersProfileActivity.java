@@ -129,12 +129,12 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data, user);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());
                 }
-                AdapterTracksToRecyclerViewItem adapter = new AdapterTracksToRecyclerViewItem(context, createdTracks, (AdapterTracksToRecyclerViewItem.OnItemClickListener) listener);
+                AdapterTracksToRecyclerViewItem adapter = new AdapterTracksToRecyclerViewItem(context, createdTracks, listener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 

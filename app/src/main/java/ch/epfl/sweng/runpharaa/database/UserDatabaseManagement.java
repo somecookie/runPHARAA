@@ -165,12 +165,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                 }
                 List<String> createdTracks = new ArrayList<>();
                 for (DataSnapshot c : u.child(CREATE).getChildren()) {
-                    createdTracks.add(c.getKey());
+                    createdTracks.add(c.getValue().toString());
                 }
                 user.setCreatedTracks(createdTracks);
                 List<String> favoriteTracks = new ArrayList<>();
                 for (DataSnapshot c : u.child(FAVORITE).getChildren()) {
-                    favoriteTracks.add(c.getKey());
+                    favoriteTracks.add(c.getValue().toString());
                 }
                 user.setFavoriteTracks(favoriteTracks);
                 if (u.child(PICTURE).exists()) {
@@ -235,6 +235,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
                     if (dataName.equals(formattedName)) {
                         String id = data.child(ID).getValue(String.class);
+
                         callback.onSuccess(id);
                         return;
                     }

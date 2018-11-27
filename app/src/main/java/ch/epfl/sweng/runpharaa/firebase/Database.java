@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa.firebase;
 
 import android.net.Uri;
+import android.renderscript.Sampler;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,9 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
-import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 
@@ -52,7 +51,7 @@ public class Database {
 
     private final static String keyWriteTrack = "key";
 
-    private final static User fake_user = new User("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+    private final static User fake_user = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
 
     //Tracks already in the fakeDB
     private final static String trackUID = "TrackID";
@@ -88,10 +87,6 @@ public class Database {
     private DatabaseReference drTracksUID;
 
     @Mock
-    private DataSnapshot drTrackName;
-
-
-    @Mock
     private DatabaseReference drTracksKey;
 
     @Mock
@@ -112,6 +107,10 @@ public class Database {
     @Mock
     private DatabaseReference drUserAnyChildPicture;
 
+
+    @Mock
+    private DataSnapshot snapInitUser;
+
     @Mock
     private DatabaseReference drUserAnyChildFavoritesChild;
 
@@ -128,10 +127,22 @@ public class Database {
     private Task<Void> setValueTrack;
 
     @Mock
-    private ValueEventListener valueEventListener;
+    private DataSnapshot snapOnDataChangeRead;
 
     @Mock
-    private DataSnapshot snapOnDataChangeRead;
+    private DataSnapshot snapOnDataChangeReadUser;
+
+    @Mock
+    private DataSnapshot snapInitFollow;
+
+    @Mock
+    private DataSnapshot snapInitCurUser;
+
+    @Mock
+    private DataSnapshot snapInitChildrenUser;
+
+    @Mock
+    private DataSnapshot snapInitFollowChildrens;
 
     @Mock
     private DataSnapshot snapOnDataChangeReadChildPath;
@@ -146,7 +157,7 @@ public class Database {
     private DatabaseError snapOnDataErrorRead;
 
     @Mock
-    private DatabaseError snapOnDataErrorSet;
+    private DataSnapshot snapInitChildrenID;
 
     @Mock
     private DataSnapshot snapOnDataChangeUser;
@@ -170,7 +181,7 @@ public class Database {
     private DataSnapshot snapOnDataUserPicture;
 
     @Mock
-    private DataSnapshot snapInitTrackChildren;
+    private DataSnapshot snapInitChildren;
 
     @Mock
     private FirebaseTrackAdapter track;
@@ -204,6 +215,7 @@ public class Database {
 
     @Mock
     private Task<Void> userTask;
+    private DatabaseReference drUserAnyChildFollow;
 
 
     private Database() {
@@ -240,15 +252,30 @@ public class Database {
     private void instanciateSnapshots() {
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
 
-        when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitTrackChildren));
-        when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitTrackChildren);
-        when(snapOnDataChangeRead.child("0")).thenReturn(snapInitTrackChildren);
+        when(snapOnDataChangeReadUser.getChildren()).thenReturn(Collections.singletonList(snapInitChildrenUser));
+        when(snapOnDataChangeRead.getChildren()).thenReturn(Collections.singletonList(snapInitChildren));
+        when(snapOnDataChangeRead.child(trackUID)).thenReturn(snapInitChildren);
+        when(snapOnDataChangeRead.child("0")).thenReturn(snapInitChildren);
 
-        when(snapInitTrackChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
-        when(snapInitTrackChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
-        when(snapInitTrackChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
-        when(snapInitTrackChildren.child("trackUid")).thenReturn(snapOnDataChangedChildTrackUID);
-        when(snapInitTrackChildren.getKey()).thenReturn("0");
+        when(snapOnDataChangeRead.child("1")).thenReturn(snapInitFollow);
+        when(snapInitFollow.getChildren()).thenReturn(Collections.singletonList(snapInitFollowChildrens));
+        when(snapInitFollowChildrens.getValue()).thenReturn(null);
+
+        //changer le nom
+        when(snapOnDataChangeReadUser.child("1")).thenReturn(snapInitCurUser);
+        when(snapInitCurUser.child("followedUsers")).thenReturn(snapInitUser);
+        when(snapInitChildrenUser.child("name")).thenReturn(snapInitUser);
+        when(snapInitUser.getValue((String.class))).thenReturn("Bob");
+
+        when(snapInitChildrenUser.child("uid")).thenReturn(snapInitChildrenID);
+        when(snapInitChildrenID.getValue((String.class))).thenReturn("1");
+
+
+        when(snapInitChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
+        when(snapInitChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
+        when(snapInitChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
+        when(snapInitChildren.child("trackUid")).thenReturn(snapOnDataChangedChildTrackUID);
+        when(snapInitChildren.getKey()).thenReturn("0");
 
         when(snapOnDataChangeReadChildPath.getValue((String.class))).thenReturn("Cours forest !");
         when(snapOnDataChangedChildTrackUID.getValue((String.class))).thenReturn(trackUID);
@@ -319,6 +346,8 @@ public class Database {
         when(drUserAnyChild.child("name")).thenReturn(drUserAnyChildName);
         when(drUserAnyChild.child("picture")).thenReturn(drUserAnyChildPicture);
 
+
+        when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
 
         when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer(new Answer<Task<Void>>() {
             @Override
@@ -591,6 +620,34 @@ public class Database {
                 return l;
             }
         }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if(isCancelled){
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataChangeReadUser);
+                }
+                return null;
+            }
+        }).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if(isCancelled){
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataChangeReadUser);
+                }
+                return null;
+            }
+        }).when(drUserAnyChildFollow).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
     }
 
