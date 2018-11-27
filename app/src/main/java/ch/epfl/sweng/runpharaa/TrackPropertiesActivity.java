@@ -249,7 +249,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         trackTitle.setText(track.getName());
 
         TextView trackCreator = findViewById(R.id.trackCreatorID);
-        trackCreator.setText(track.getCreatorName());
+        trackCreator.setText(String.format(getResources().getString(R.string.by), track.getCreatorName()));
         trackCreator.setOnClickListener(v -> {
             Intent userProfile;
             if (track.getCreatorUid().equals(User.instance.getUid())) {
