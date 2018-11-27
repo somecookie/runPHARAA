@@ -82,5 +82,20 @@
     <string name="social_media_post_message">Matte-moi ce parcours de ouf trouvé sur RunPharaa !\nIl s\'appelle \"%s\" \n#runPharaaWayFromTravis</string>
     <string name="no_favorites_and_likes">Aimes quelque tracks et ajoutes les à tes favoris pour un meilleur supposition!</string>
 
+    <string name="creation_trophies"> Création</string>
+    <string name="like_trophies"> J\'aime</string>
+    <string name="fav_trophies"> Favoris</string>
+    <string name="one_like">Un j\'aime</string>
+    <string name="two_likes">Deux j\'aime</string>
+    <string name="ten_likes">Dix j\'aime</string>
+    <string name="add_some_likes">Ajoutez des "j'aime"</string>
+    <string name="add_some_favorites">Ajoutez des favoris</string>
+    <string name="ten_favorites">Dix favoris</string>
+    <string name="two_favorites">Deux favoris</string>
+    <string name="one_favorite">Un favori</string>
+    <string name="one_track">Une course</string>
+    <string name="two_tracks">Deux courses</string>
+    <string name="ten_tracks">Dix courses</string>
+    <string name="create_tracks">Créez des courses</string>
 
 </resources>

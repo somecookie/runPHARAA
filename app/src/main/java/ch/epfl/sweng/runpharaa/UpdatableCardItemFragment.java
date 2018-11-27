@@ -21,8 +21,8 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 public abstract class UpdatableCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    View v;
-    SwipeRefreshLayout swipeLayout;
+    protected View v;
+    protected SwipeRefreshLayout swipeLayout;
     TextView emptyMessage;
 
     public interface OnItemClickListener {

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Parcel;
@@ -23,9 +24,11 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.UserInfo;
 
 import org.junit.BeforeClass;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +41,12 @@ import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthenticationMock;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
+
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 
 import static android.os.SystemClock.sleep;
+
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -50,6 +55,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest extends TestInitLocation {

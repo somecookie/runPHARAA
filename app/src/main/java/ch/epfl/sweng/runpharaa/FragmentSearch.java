@@ -27,7 +27,7 @@ import ch.epfl.sweng.runpharaa.tracks.FilterProperties;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentSearch extends Fragment {
@@ -54,17 +54,17 @@ public class FragmentSearch extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.luckyIcon){
             FilterProperties properties = new FilterProperties();
-            TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+            TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
                 @Override
-                public void onSuccess(DataSnapshot data) {
-                    List<Track> nearMe = TrackDatabaseManagement.initTracksNearLocation(data, User.instance.getLocation());
+                public void onSuccess(DataSnapshot value) {
+                    List<Track> nearMe = TrackDatabaseManagement.initTracksNearLocation(value, User.instance.getLocation());
                     if(nearMe.isEmpty()) {
                         Toast.makeText(getContext(),R.string.no_tracks, Toast.LENGTH_LONG).show();
                         return;
                     }
-                    List<Track> favorites = TrackDatabaseManagement.initFavouritesTracks(data);
+                    List<Track> favorites = TrackDatabaseManagement.initFavouritesTracks(value);
                     if(favorites.isEmpty()){
-                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(data);
+                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(value);
                         if(liked.isEmpty()) {
                             Toast.makeText(getContext(),R.string.no_favorites_and_likes, Toast.LENGTH_LONG).show();
                             Random r = new Random();
@@ -79,9 +79,6 @@ public class FragmentSearch extends Fragment {
                         startTrackPropertiesWith(properties.chooseLuckyTrack(nearMe).getTrackUid());
                     }
                 }
-
-                @Override
-                public void onFailed(DatabaseError databaseError) {}
             });
         }
         return true;
@@ -136,11 +133,5 @@ public class FragmentSearch extends Fragment {
         sv.setFocusable(true);
         sv.setIconified(false);
         sv.requestFocusFromTouch();
-    }
-
-    @Override
-    public void onPause() {
-        Log.d("testHugo", "change fragment");
-        super.onPause();
     }
 }

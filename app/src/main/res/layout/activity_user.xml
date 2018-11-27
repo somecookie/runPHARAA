@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".user.UsersProfileActivity">
+    tools:context=".user.myProfile.UsersProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="83dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
@@ -23,6 +23,7 @@
         android:id="@+id/profile_picture"
         android:layout_width="160dp"
         android:layout_height="160dp"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="230dp"
         android:src="@drawable/unknown_person"
@@ -34,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="-150dp"
+        android:layout_marginStart="-200dp"
         android:layout_toEndOf="@+id/profile_picture"
         android:text="USER"
         android:textAlignment="center"
@@ -55,7 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_name"
         android:layout_alignStart="@+id/user_name"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="30dp"
         android:text="@string/signOut" />
 
     <LinearLayout
@@ -64,6 +66,12 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="145dp"
         android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,30 +130,45 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="6dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                app:srcCompat="@drawable/hardwork_badge" />
-
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/emptyMessage"
+        <View
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:padding="@dimen/classic_margin"
-            android:textSize="@dimen/normal_text"
-            android:visibility="gone" />
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/createdTracksCardListId"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible" />
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayoutUser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true">
+            </android.support.design.widget.TabLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPagerUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/emptyMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/classic_margin"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/normal_text"
+                    android:visibility="gone" />
+            </android.support.v4.view.ViewPager>
+
+        </LinearLayout>
 
     </LinearLayout>
 

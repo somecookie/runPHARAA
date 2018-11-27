@@ -3,11 +3,14 @@ package ch.epfl.sweng.runpharaa;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +24,11 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.utils.Callback;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,39 +94,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Initiate the Firebase Database with these tracks (delete them manually if already there).
-        /*
-        Log.d("Put Fake Track", "Test");
-        CustLatLng coord0 = new CustLatLng(46.518577, 6.563165); //inm
-        CustLatLng coord1 = new CustLatLng(46.522735, 6.579772); //Banane
-        CustLatLng coord2 = new CustLatLng(46.519380, 6.580669); //centre sportif
-        CustLatLng coord3 = new CustLatLng(46.518475, 6.561960); //BC
-        CustLatLng coord4 = new CustLatLng(46.517563, 6.562350); //Innovation parc
-        CustLatLng coord5 = new CustLatLng(46.518447, 6.568238); //Rolex
-        CustLatLng coord6 = new CustLatLng(46.523206, 6.564945); //SwissTech
-        CustLatLng coord7 = new CustLatLng(46.520566, 6.567820); //Sat
-        CustLatLng coord8 = new CustLatLng(46.506279, 6.626111); //Ouchy
-        CustLatLng coord9 = new CustLatLng(46.517210, 6.630105); //Gare
-        CustLatLng coord10 = new CustLatLng(46.519531, 6.633149);// Saint-Francois
-        CustLatLng coord11 = new CustLatLng(46.522638, 6.634971); //Cathédrale
-        CustLatLng coord12 = new CustLatLng(46.521412, 6.627383); //Flon
-
-        TrackProperties p1 = new TrackProperties(1200, 10, 1, 1, null);
-        TrackProperties p2 = new TrackProperties(500, 3, 1, 1, null);
-        TrackProperties p3 = new TrackProperties(1050, 7, 1, 1, null);
-        TrackProperties p4 = new TrackProperties(900, 9, 1, 1, null);
-        TrackProperties p5 = new TrackProperties(1500, 23, 1, 1, null);
-        TrackProperties p6 = new TrackProperties(2000, 20, 1, 1, null);
-        DatabaseManagement.writeNewTrack(new Track("Banane -> Centre Sportif", BitmapFactory.decodeResource(getResources(), R.drawable.centre_sportif) , Arrays.asList(new CustLatLng(46.522735, 6.579772), new CustLatLng(46.519380, 6.580669)), p1));
-        DatabaseManagement.writeNewTrack(new Track("Innovation Parc -> BC",BitmapFactory.decodeResource(getResources(), R.drawable.innovation_park),Arrays.asList(new CustLatLng(46.517563, 6.562350), new CustLatLng(46.518475, 6.561960)), p2));
-        DatabaseManagement.writeNewTrack(new Track("Rolex -> Swisstech",BitmapFactory.decodeResource(getResources(),R.drawable.rolex), Arrays.asList(new CustLatLng(46.518447, 6.568238), new CustLatLng(46.523206, 6.564945)), p3));
-        DatabaseManagement.writeNewTrack(new Track("Sat -> INM",BitmapFactory.decodeResource(getResources(),R.drawable.rolex), Arrays.asList(new CustLatLng(46.520566, 6.567820), new CustLatLng(46.518577, 6.563165)), p4));
-        DatabaseManagement.writeNewTrack(new Track("Ouchy -> Gare",BitmapFactory.decodeResource(getResources(),R.drawable.ouchy), Arrays.asList(new CustLatLng(46.506279, 6.626111), new CustLatLng(46.517210, 6.630105)), p5));
-        DatabaseManagement.writeNewTrack(new Track("SF -> Cath -> Flon",BitmapFactory.decodeResource(getResources(),R.drawable.saint_francois), Arrays.asList(new CustLatLng(46.519531, 6.633149), new CustLatLng(46.522638, 6.634971), new CustLatLng(46.521412, 6.627383)), p6));
-        Log.d("Put Fake Track", "Test2");
-        */
-
-
         difficultyIsFiltered = false;
         timeIsFiltered = false;
         typesAreFiltered = false;

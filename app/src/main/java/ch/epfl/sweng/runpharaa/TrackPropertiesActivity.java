@@ -48,7 +48,8 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
@@ -61,29 +62,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     ShareDialog shareDialog;
     TweetComposer.Builder tweetBuilder;
-
-    /* //TODO: uncomment when u need this, it's f*cking up coverage rn
-    private String createTagString(Track track) {
-        Set<TrackType> typeSet = track.getProperties().getType();
-        int nbrTypes = typeSet.size();
-        String[] trackType = getResources().getStringArray(R.array.track_types);
-
-        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(start);
-
-        int i = 0;
-
-        for(TrackType tt : typeSet){
-
-            sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
-            if(i < nbrTypes - 1) sb.append(", ");
-
-            i++;
-        }
-        return sb.toString();
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +77,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
 
-        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 final String trackID = intent.getStringExtra("TrackID");
@@ -119,7 +97,20 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 trackTitle.setText(track.getName());
 
                 TextView trackCreator = findViewById(R.id.trackCreatorID);
-                trackCreator.setText("By" + track.getCreatorName());
+                trackCreator.setText(track.getCreatorName());
+                trackCreator.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent userProfile ;
+                        if(track.getCreatorUid().equals(User.instance.getUid())){
+                            userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+                        } else {
+                            userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
+                        }
+                        userProfile.putExtra("userId", track.getCreatorUid());
+                        startActivity(userProfile);
+                    }
+                });
 
                 TextView trackDuration = findViewById(R.id.trackDurationID);
                 trackDuration.setText("Duration: " + df.format(tp.getAvgDuration()) + " minutes");
@@ -171,16 +162,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     }
                 });
 
-                Button goToUserProfile = findViewById(R.id.goToUserProfileButtonId);
-                goToUserProfile.setText("VISIT " + track.getCreatorName() + " PROFILE");
-                goToUserProfile.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
-                        userProfile.putExtra("userId", track.getCreatorUid());
-                        startActivity(userProfile);
-                    }
-                });
 
                 // Share on Facebook
                 ImageButton fb = findViewById(R.id.fb_share_button);
@@ -217,7 +198,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });

@@ -33,6 +33,7 @@ import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
@@ -116,7 +117,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
         // Add a marker for each starting point inside the preferred radius
-        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new TrackDatabaseManagement.OnGetDataListener() {
+        TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(data, position);
@@ -138,7 +139,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
             }
 
             @Override
-            public void onFailed(DatabaseError databaseError) {
+            public void onError(Exception databaseError) {
                 Log.d("DB Read: ", "Failed to read data from DB in MapsActivity.");
             }
         });
