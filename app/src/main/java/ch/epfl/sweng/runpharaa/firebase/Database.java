@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.firebase;
+package ch.epfl.sweng.runpharaa.Firebase;
 
 import android.net.Uri;
 import android.renderscript.Sampler;

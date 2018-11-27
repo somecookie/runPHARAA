@@ -146,12 +146,6 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testOpenSettings() {
-        onView(withId(R.id.settingsIcon)).perform(click());
-        intended(hasComponent(SettingsActivity.class.getName()));
-    }
-
-    @Test
     public void testOpenFilters() {
         onView(withId(R.id.filterIcon)).perform(click());
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))

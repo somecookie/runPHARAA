@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="AlwaysShowAction">
 
+    <item android:id="@+id/luckyIcon"
+        android:icon="@drawable/ic_casino_black_24dp"
+        android:title="Lucky"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/searchIcon"
         android:icon="@drawable/ic_search"
@@ -14,4 +19,5 @@
         android:icon="@drawable/ic_filter"
         android:title="@string/filters"
         app:showAsAction="always" />
+
 </menu>

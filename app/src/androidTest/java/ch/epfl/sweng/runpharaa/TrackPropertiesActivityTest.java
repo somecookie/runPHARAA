@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
-import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.Firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;

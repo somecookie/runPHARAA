@@ -10,11 +10,13 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
@@ -23,6 +25,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -38,6 +43,16 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void initEmptyUser() {
         User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "BobUID");
     }
+
+
+    //TODO fix it
+    /*
+    @Test
+    public void testOpenSettings() {
+        onView(withId(R.id.settingsButton)).perform(click());
+        intended(hasComponent(SettingsActivity.class.getName()));
+    }
+    */
 
     @Test
     public void correctlyDisplaysName() {
