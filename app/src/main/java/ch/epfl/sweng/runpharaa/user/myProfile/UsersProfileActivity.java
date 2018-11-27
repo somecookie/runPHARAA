@@ -137,6 +137,7 @@ public class UsersProfileActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
                         Intent login = new Intent(getBaseContext(), LoginActivity.class);
+                        login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(login);
                         finish();
                     }
