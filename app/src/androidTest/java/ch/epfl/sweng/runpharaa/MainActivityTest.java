@@ -71,7 +71,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("FakeUser", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "BobUID");
+        User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "1");
     }
 
     private static ViewAction setProgress(final int progress) {
@@ -189,8 +189,6 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.toggle_button)).perform(click());
-        onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
@@ -200,18 +198,14 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testUnsuccessfulTrackSearch(){
+    public void testSuccessfulUserSearch(){
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        // click on the toggleButton
-        onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
-        onView(withId(R.id.searchIcon)).perform(typeText("Do I exist?"), pressKey(KeyEvent.KEYCODE_ENTER));
-        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "Do I exist?");
-        onView(withText(expected))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.searchIcon)).perform(typeText("Bob"), pressKey(KeyEvent.KEYCODE_ENTER));
+        sleep(2000);
+        onView(withId(R.id.user_name)).check(matches(withText("Bob")));
     }
 
     @Test
@@ -228,22 +222,19 @@ public class MainActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testSuccessfulUserSearch(){
+    public void testUnsuccessfulTrackSearch(){
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        // click on the toggleButton
+        onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
-        onView(withId(R.id.searchIcon)).perform(typeText("Bob"), pressKey(KeyEvent.KEYCODE_ENTER));
-        sleep(2000);
-        onView(withId(R.id.user_name)).check(matches(withText("Bob")));
+        onView(withId(R.id.searchIcon)).perform(typeText("GradleBuildRunning"), pressKey(KeyEvent.KEYCODE_ENTER));
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "GradleBuildRunning");
+        onView(withText(expected))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
     }
-
-
-    /*@Test
-    public void testOpenCreateTrackActivity() {
-        onView(withId(R.id.fab)).perform(click());
-        intended(hasComponent(CreateTrackActivity.class.getName()));
-    }*/
 
     @Test
     public void testMaxTimeFilter() {
