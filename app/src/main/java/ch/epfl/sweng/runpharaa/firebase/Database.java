@@ -27,6 +27,7 @@ import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -34,7 +35,6 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    public static boolean isTest = false;
     private static boolean shouldFail = false;
     private static boolean isCancelled = false;
     private static boolean userExists = false;
@@ -223,7 +223,7 @@ public class Database {
     }
 
     public static FirebaseDatabase getInstance(){
-        return (isTest) ? new Database().instanciateMock() :  FirebaseDatabase.getInstance();
+        return (Config.isTest) ? new Database().instanciateMock() :  FirebaseDatabase.getInstance();
     }
 
     private FirebaseDatabase instanciateMock(){

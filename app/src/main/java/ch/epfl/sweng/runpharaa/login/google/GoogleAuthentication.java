@@ -7,24 +7,22 @@ import android.content.Intent;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-public abstract class GoogleAuthentication {
+import ch.epfl.sweng.runpharaa.utils.Config;
 
-    public static boolean isTest = false;
+public abstract class GoogleAuthentication {
 
     private static GoogleAuthentication instance;
 
     public static GoogleAuthentication getInstance(Context c) {
         if (instance == null) {
-            if (isTest)
-                instance = new GoogleAuthenticationMock(c);
-            else
-                instance = new GoogleAuthenticationReal();
+            instance = Config.isTest ? new GoogleAuthenticationMock(c) : new GoogleAuthenticationReal();
         }
         return instance;
     }
 
     /**
      * Method the get the client if any
+     *
      * @param activity
      * @param googleSignInOptions
      * @return
@@ -33,6 +31,7 @@ public abstract class GoogleAuthentication {
 
     /**
      * Getter to get the intent
+     *
      * @return Intent
      */
     public abstract Intent getSignInIntent();

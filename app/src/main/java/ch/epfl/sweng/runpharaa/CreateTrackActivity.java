@@ -20,9 +20,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.location.RealGpsService;
-import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.utils.Util;
 
 public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
@@ -56,14 +53,14 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_track);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
         // Setup button
         createButton = findViewById(R.id.start_create_button);
         createButton.setOnClickListener(buttonOnClickListener);
         createButton.setText("START");
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
     }
 
     @SuppressLint("MissingPermission")
@@ -72,6 +69,8 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         this.googleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+
+        lines = new PolylineOptions();
 
         handleNewLocation();
     }
@@ -96,7 +95,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
             // Clear map
             googleMap.clear();
             // Draw path
-            lines = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
+            lines = lines.width(10).color(Color.BLUE).geodesic(true);
             lines.addAll(points);
             googleMap.addPolyline(lines);
         }

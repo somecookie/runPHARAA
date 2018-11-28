@@ -39,6 +39,7 @@ import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static java.lang.Thread.sleep;
 
@@ -205,7 +206,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(GoogleAuthentication.isTest ? "token" : acct.getIdToken(), null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(Config.isTest ? "token" : acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
