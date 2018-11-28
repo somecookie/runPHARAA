@@ -33,7 +33,7 @@ import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
 public class TrackDatabaseManagement {
 
-    public final static String TRACKS_PATH = "tracksRefractored";
+    public final static String TRACKS_PATH = "tracks";
     public final static String USERS_PATH = "users";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
     public final static String NAME_PATH = "name";

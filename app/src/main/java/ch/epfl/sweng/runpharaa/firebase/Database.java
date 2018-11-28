@@ -40,7 +40,7 @@ public class Database {
     private static boolean userExists = false;
 
 
-    private final static String s_tracks = "tracksRefractored";
+    private final static String s_tracks = "tracks";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
