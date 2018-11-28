@@ -51,7 +51,7 @@ public class CreateTrackActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "1");
         GpsService.initFakeGps(FakeGpsService.SAT);
     }
 

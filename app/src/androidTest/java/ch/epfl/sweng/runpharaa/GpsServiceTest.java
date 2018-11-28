@@ -42,7 +42,7 @@ public class GpsServiceTest extends TestInitLocation {
 
     @Before
     public void initUser() {
-        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
         c = getTargetContext();
     }
 
