@@ -86,17 +86,18 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withId(R.id.nbFav)).check(matches(withText("1")));
     }
 
-    @Test
+    //TODO: move this test to the correct place
+/*    @Test
     public void logoutButtonLogOut() {
         Intents.init();
         mActivityRule.launchActivity(new Intent());
         Intents.release();
         onView(withId(R.id.sign_out_button)).perform(click());
-        /*
+        *//*
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.loggedOut)))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));*/
-    }
+                .check(matches(isDisplayed()));*//*
+    }*/
 
     @Test
     public void canClickOnDifferentTrophiesCategories(){

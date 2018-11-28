@@ -42,14 +42,18 @@
     <string name="by">by %s</string>
     <string name="duration">Duration: %.2f minutes</string>
     <string name="distance">Distance: %.2f meters</string>
-    <string name="difficulty">Difficulty: %.2f</string>
+    <string name="difficulty">Difficulty: %.2f / 5.00</string>
     <string name="max_difficulty_of">At most a difficulty of </string>
     <string name="max_time_of">At most </string>
     <string name="no_time_limit">No time limitations</string>
     <string name="no_track_found">No track is called %s!</string>
+    <string name="and">and</string>
+    <string name="comment_hint">Write an awesome comment in less than %d characters!</string>
+    <string name="comment_too_long">"Your comment is too long!"</string>
     <string name="no_user_found">No user is called %s!</string>
     <string name="search_users">Currently search for: users</string>
     <string name="search_tracks">Currently search for: tracks</string>
+
 
     <string-array name="track_types">
         <item>City</item>

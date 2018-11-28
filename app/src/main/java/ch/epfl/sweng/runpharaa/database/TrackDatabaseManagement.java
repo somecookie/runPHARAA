@@ -1,7 +1,9 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -20,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.Firebase.Database;
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -31,11 +33,12 @@ import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
 public class TrackDatabaseManagement {
 
-    public final static String TRACKS_PATH = "tracksRefractored";
+    public final static String TRACKS_PATH = "tracks";
     public final static String USERS_PATH = "users";
     public final static String TRACK_IMAGE_PATH = "TrackImages";
     public final static String NAME_PATH = "name";
     public final static String ID_PATH = "trackUid";
+    public final static String COMMENTS = "comments";
 
     public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
@@ -114,6 +117,11 @@ public class TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
     }
 
+    public static void updateComments(Track track) {
+        DatabaseReference commentsRef = mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).child(COMMENTS);
+        commentsRef.setValue(track.getComments()).addOnFailureListener(Throwable::printStackTrace);
+    }
+
     /**
      * Given a DataSnapshot from the Firebase Database and a track key, return the corresponding track.
      *
@@ -121,6 +129,7 @@ public class TrackDatabaseManagement {
      * @param key
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static Track initTrack(DataSnapshot dataSnapshot, String key) {
         return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
@@ -131,6 +140,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location) {
         List<Track> tracksNearMe = new ArrayList<>();
         for (DataSnapshot c : dataSnapshot.getChildren()) {
@@ -153,6 +163,8 @@ public class TrackDatabaseManagement {
         return tracksNearMe;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private static List<Track> initTracksList(DataSnapshot dataSnapshot, List<String> tracksUID){
         List<Track> tracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
@@ -176,6 +188,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
         return initTracksList(dataSnapshot, User.instance.getCreatedTracks());
     }
@@ -186,6 +199,7 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot) {
         return initTracksList(dataSnapshot, User.instance.getFavoriteTracks());
     }

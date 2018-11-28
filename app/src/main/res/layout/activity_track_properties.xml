@@ -8,9 +8,13 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scrollID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollID">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,22 +48,11 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/trackCreatorIDBy"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:text="By"
-                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                        android:textStyle="italic"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/trackTitleID" />
 
                     <TextView
                         android:id="@+id/trackCreatorID"
                         android:layout_width="222dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
                         android:text="Track Creator"
                         android:textAllCaps="false"
                         android:textColor="@color/com_facebook_button_login_background_color"
@@ -68,6 +61,68 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/trackTitleID"
                         app:layout_constraintVertical_bias="0.0" />
+
+
+
+                </android.support.constraint.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/trackDurationID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Track Duration" />
+
+                <TextView
+                    android:id="@+id/trackLengthID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Track Length" />
+
+                <TextView
+                    android:id="@+id/track_difficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Difficulty" />
+
+                <TextView
+                    android:id="@+id/trackTagsID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="Tags" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp">
+
+                    <Button
+                        android:id="@+id/commentsID"
+                        android:layout_width="@dimen/large_text"
+                        android:layout_height="@dimen/large_text"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/ic_mode_comment_black_24dp"
+                        android:text=""
+                        android:textOff=""
+                        android:textOn=""
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/trackLikesID"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/trackCommentsID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/commentsID"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.538" />
 
                     <ToggleButton
                         android:id="@+id/buttonLikeID"
@@ -119,41 +174,8 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.538" />
 
+
                 </android.support.constraint.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/trackDurationID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Track Duration" />
-
-                <TextView
-                    android:id="@+id/trackLengthID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Track Length" />
-
-                <TextView
-                    android:id="@+id/track_difficulty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Difficulty" />
-
-                <TextView
-                    android:id="@+id/trackTagsID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Tags" />
-
-                <TextView
-                    android:id="@+id/trackHeightDiffID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin" />
 
                 <fragment
                     android:id="@+id/create_map_view2"

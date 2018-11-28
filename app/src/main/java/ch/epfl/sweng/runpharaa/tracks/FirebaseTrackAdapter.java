@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FirebaseTrackAdapter {
@@ -19,6 +20,7 @@ public class FirebaseTrackAdapter {
     private Bitmap image;
     private List<CustLatLng> path;
     private String imageStorageUri;
+    private List<Comment> comments;
 
     //Track properties
     private List<String> trackTypes;
@@ -31,18 +33,20 @@ public class FirebaseTrackAdapter {
     private int likes;
     private int favorites;
 
-    public FirebaseTrackAdapter(String name, String creatorId, String creatorName, Bitmap image, List<CustLatLng> path, TrackProperties properties){
+    public FirebaseTrackAdapter(String name, String creatorId, String creatorName, Bitmap image, List<CustLatLng> path, TrackProperties properties, List<Comment> comments){
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
         Required.nonNull(creatorName, "Track creator name send to database must be non null");
         Required.nonNull(path, "Track path sent to database must be non null");
         Required.nonNull(properties, "Track properties sent to database must must be non null");
+        Required.nonNull(comments, "Comments must be non-null");
 
         this.name = name;
         this.creatorId = creatorId;
         this.creatorName = creatorName;
         this.image = image;
         this.path = path;
+        this.comments = comments;
 
         //Initializing track properties
         List<String> types = new ArrayList<>();
@@ -88,11 +92,12 @@ public class FirebaseTrackAdapter {
         this.likes = track.getProperties().getLikes();
         this.favorites = track.getProperties().getFavorites();
         this.imageStorageUri = track.getImageStorageUri();
+        this.comments = track.getComments();
     }
 
     public FirebaseTrackAdapter(String name, String trackUid, String creatorId, String creatorName, List<CustLatLng> path,
                                 String imageStorageUri, List<String> trackTypes, double length, double heightDifference,
-                                int avgDiffTotal, int avgDiffNbr, double avgDurTotal, int avgDurNbr, int likes, int favorites) {
+                                int avgDiffTotal, int avgDiffNbr, double avgDurTotal, int avgDurNbr, int likes, int favorites, List<Comment> comments) {
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
         Required.nonNull(creatorName, "Track creator name send to database must be non null");
@@ -123,6 +128,7 @@ public class FirebaseTrackAdapter {
         this.avgDurNbr = avgDurNbr;
         this.likes = likes;
         this.favorites = favorites;
+        this.comments = comments;
     }
 
     //For Firebase
@@ -197,5 +203,13 @@ public class FirebaseTrackAdapter {
 
     public void setImageStorageUri(String imageStorageUri) {
         this.imageStorageUri = imageStorageUri;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

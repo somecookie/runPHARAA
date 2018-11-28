@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,17 +28,17 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -106,13 +105,13 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
             } else {
                 trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
 
-                FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties);
+                FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties, new ArrayList<>());
                 TrackDatabaseManagement.writeNewTrack(track);
+
 
                 finish();
             }
         });
-
         //Open Gallery view when we click on the button
         Button addPhotoFromGallery = findViewById(R.id.add_photo_from_gallery);
         addPhotoFromGallery.setOnClickListener(v -> {
@@ -194,8 +193,8 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
                 types.clear();
 
-                for(int i = 0; i < checkedTypes.length; i++){
-                    if(checkedTypes[i]) types.add(TrackType.values()[i]);
+                for (int i = 0; i < checkedTypes.length; i++) {
+                    if (checkedTypes[i]) types.add(TrackType.values()[i]);
                 }
 
                 if (!types.isEmpty()) {
@@ -294,7 +293,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.35);
+            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.35);
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));

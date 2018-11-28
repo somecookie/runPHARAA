@@ -1,30 +1,32 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,17 +35,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.DataSnapshot;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
-import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.comment.Comment;
+import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
@@ -57,14 +61,13 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private GoogleMap map;
-    private LatLng[] points;
-    private TextView testText;
-    private ImageLoader imageLoader;
-    private Boolean isMapOpen;
 
     ShareDialog shareDialog;
     TweetComposer.Builder tweetBuilder;
+    private GoogleMap map;
+    private LatLng[] points;
+    private TextView testText;
+    private Boolean isMapOpen;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -79,124 +82,23 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         tweetBuilder = new TweetComposer.Builder(this);
 
         final Intent intent = getIntent();
-        imageLoader = ImageLoader.getLoader(this);
         testText = findViewById(R.id.maps_test_text2);
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot data) {
+
                 final String trackID = intent.getStringExtra("TrackID");
                 final Track track = TrackDatabaseManagement.initTrack(data, trackID);
                 points = CustLatLng.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
 
                 TrackProperties tp = track.getProperties();
-
-                DecimalFormat df = new DecimalFormat("#.##");
-                df.setRoundingMode(RoundingMode.CEILING);
-
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
-
                 ImageLoader.getLoader(getBaseContext()).displayImage(track.getImageStorageUri(), trackBackground, false); // caching
 
-                TextView trackTitle = findViewById(R.id.trackTitleID);
-                trackTitle.setText(track.getName());
-
-                TextView trackCreator = findViewById(R.id.trackCreatorID);
-                trackCreator.setText(track.getCreatorName());
-                trackCreator.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent userProfile ;
-                        if(track.getCreatorUid().equals(User.instance.getUid())){
-                            userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
-                        } else {
-                            userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
-                        }
-                        userProfile.putExtra("userId", track.getCreatorUid());
-                        startActivity(userProfile);
-                    }
-                });
-
-                TextView trackDuration = findViewById(R.id.trackDurationID);
-                trackDuration.setText("Duration: " + df.format(tp.getAvgDuration()) + " minutes");
-
-                TextView trackLength = findViewById(R.id.trackLengthID);
-                trackLength.setText("Length: " + df.format(tp.getLength()) + " m");
-
-                TextView trackDifficulty = findViewById(R.id.track_difficulty);
-                trackDifficulty.setText("Difficulty: " + Double.toString(tp.getAvgDifficulty()) + " / 5.0");
-
-                TextView trackHeightDifference = findViewById(R.id.trackHeightDiffID);
-                trackHeightDifference.setText("Height Difference: " + df.format(track.getHeightDifference()) + "m");
-
-                TextView trackLikes = findViewById(R.id.trackLikesID);
-                trackLikes.setText("" + tp.getLikes());
-
-                TextView trackFavourites = findViewById(R.id.trackFavouritesID);
-                trackFavourites.setText("" + tp.getFavorites());
-
-                ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
-                ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
-
-                // Check if the user already liked this track and toggle the button accordingly
-                toggleLike.setChecked(User.instance.alreadyLiked(trackID));
-
-                toggleLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        if (isChecked) {
-                            updateLikes(track, trackID);
-                        } else {
-                            updateLikes(track, trackID);
-                        }
-                    }
-                });
-
-                // Check if the track already in favorites and toggle the button accordingly
-                toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
-
-                toggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        if (isChecked) {
-                            updateNbFavorites(track, trackID);
-                        } else {
-                            updateNbFavorites(track, trackID);
-                        }
-                    }
-                });
-
-
-                // Share on Facebook
-                ImageButton fb = findViewById(R.id.fb_share_button);
-                fb.setOnClickListener( v -> {
-                    if (ShareDialog.canShow(ShareLinkContent.class)) {
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
-                                .setShareHashtag(new ShareHashtag.Builder()
-                                        .setHashtag(String.format(getString(R.string.social_media_post_message), track.getName())).build())
-                                .build();
-                        shareDialog.show(content);
-                    }
-                });
-
-
-                // Share on Twitter
-                ImageButton twitter = findViewById(R.id.twitter_share_button);
-                twitter.setOnClickListener(v -> {
-                    //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
-                    try {
-                        tweetBuilder
-                                .text(String.format(getString(R.string.social_media_post_message), track.getName()))
-                                .url(new URL("https://github.com/somecookie/runPHARAA"));
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    tweetBuilder.show();
-                });
-
-                TextView trackTags = findViewById(R.id.trackTagsID);
-                trackTags.setText(createTagString(track));
+                setTextOfProperties(track, tp);
+                setButtonsOfProperties(trackID, track);
 
                 drawTrackOnMap();
             }
@@ -216,13 +118,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 map.getUiSettings().setZoomControlsEnabled(true);
-                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(LatLng latLng) {
-                        Intent fullMapIntent = new Intent(getBaseContext(), FullMapActivity.class);
-                        fullMapIntent.putExtra("points", points);
-                        startActivity(fullMapIntent);
-                    }
+                map.setOnMapClickListener(latLng -> {
+                    Intent fullMapIntent = new Intent(getBaseContext(), FullMapActivity.class);
+                    fullMapIntent.putExtra("points", points);
+                    startActivity(fullMapIntent);
                 });
 
                 testText.setText("ready");
@@ -234,22 +133,173 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setButtonsOfProperties(String trackID, Track track) {
+        ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
+        ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
+
+        // Check if the user already liked this track and toggle the button accordingly
+        toggleLike.setChecked(User.instance.alreadyLiked(trackID));
+
+        toggleLike.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                updateLikes(track, trackID);
+            } else {
+                updateLikes(track, trackID);
+            }
+        });
+
+        // Check if the track already in favorites and toggle the button accordingly
+        toggleFavorite.setChecked(User.instance.alreadyInFavorites(trackID));
+
+        toggleFavorite.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                updateNbFavorites(track, trackID);
+            } else {
+                updateNbFavorites(track, trackID);
+            }
+        });
+
+
+        initSocialMediaButtons(track);
+
+        initCommentButton(track);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initCommentButton(Track track) {
+        Button commentsButton = findViewById(R.id.commentsID);
+        TextView nbrComments = findViewById(R.id.trackCommentsID);
+        nbrComments.setText(String.format("%d", track.getComments().size()));
+        commentsButton.setOnClickListener(v -> {
+
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
+
+
+            final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
+            EditText tv = mView.findViewById(R.id.comments_editText);
+            tv.setHint(String.format(getResources().getString(R.string.comment_hint), Comment.MAX_LENGTH));
+            Button sendButton = mView.findViewById(R.id.post_button);
+
+            sendButton.setOnClickListener(v1 -> {
+                String comment = tv.getText().toString();
+
+                if (Comment.checkSizeComment(comment)) {
+                    Date date = new Date();
+                    Comment com = new Comment(User.instance.getUid(), comment, date);
+                    track.addComment(com);
+                    nbrComments.setText(String.format("%d", track.getComments().size()));
+                    TrackDatabaseManagement.updateComments(track);
+                    tv.setText("");
+                    hideKeyboardFrom(getBaseContext(), mView);
+                } else {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
+                }
+
+            });
+
+            RecyclerView commentRv = mView.findViewById(R.id.comment_rv);
+            commentRv.setHasFixedSize(true);
+            commentRv.setLayoutManager(new LinearLayoutManager(this));
+
+            CommentAdapter commentAdapter;
+            commentAdapter = new CommentAdapter(this, track.getComments());
+
+            commentRv.setAdapter(commentAdapter);
+
+
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.show();
+        });
+    }
+
+    private void initSocialMediaButtons(Track track) {
+        // Share on Facebook
+        ImageButton fb = findViewById(R.id.fb_share_button);
+        fb.setOnClickListener(v -> {
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse("https://github.com/somecookie/runPHARAA/"))
+                        .setShareHashtag(new ShareHashtag.Builder()
+                                .setHashtag(String.format(getString(R.string.social_media_post_message), track.getName())).build())
+                        .build();
+                shareDialog.show(content);
+            }
+        });
+
+
+        // Share on Twitter
+        ImageButton twitter = findViewById(R.id.twitter_share_button);
+        twitter.setOnClickListener(v -> {
+            //startActivity(Util.getTwitterIntent(getApplicationContext(), "Text that will be tweeted"));
+            try {
+                tweetBuilder
+                        .text(String.format(getString(R.string.social_media_post_message), track.getName()))
+                        .url(new URL("https://github.com/somecookie/runPHARAA"));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            tweetBuilder.show();
+        });
+    }
+
+    private void setTextOfProperties(Track track, TrackProperties tp) {
+        TextView trackTitle = findViewById(R.id.trackTitleID);
+        trackTitle.setText(track.getName());
+
+        TextView trackCreator = findViewById(R.id.trackCreatorID);
+        trackCreator.setText(String.format(getResources().getString(R.string.by), track.getCreatorName()));
+        trackCreator.setOnClickListener(v -> {
+            Intent userProfile;
+            if (track.getCreatorUid().equals(User.instance.getUid())) {
+                userProfile = new Intent(getBaseContext(), UsersProfileActivity.class);
+            } else {
+                userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
+            }
+
+            userProfile.putExtra("userId", track.getCreatorUid());
+            startActivity(userProfile);
+        });
+
+        TextView trackDuration = findViewById(R.id.trackDurationID);
+        trackDuration.setText(String.format(getResources().getString(R.string.duration), tp.getAvgDuration()));
+
+        TextView trackLength = findViewById(R.id.trackLengthID);
+        trackLength.setText(String.format(getResources().getString(R.string.distance), tp.getLength()));
+
+        TextView trackDifficulty = findViewById(R.id.track_difficulty);
+        trackDifficulty.setText(String.format(getResources().getString(R.string.difficulty), tp.getAvgDifficulty()));
+
+        TextView trackLikes = findViewById(R.id.trackLikesID);
+        trackLikes.setText(String.format("%d", tp.getLikes()));
+
+        TextView trackFavourites = findViewById(R.id.trackFavouritesID);
+        trackFavourites.setText(String.format("%d", tp.getFavorites()));
+
+        TextView trackTags = findViewById(R.id.trackTagsID);
+        trackTags.setText(createTagString(track));
+
+    }
+
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
         String[] trackType = getResources().getStringArray(R.array.track_types);
 
-        String start = (nbrTypes > 1)?"Tags: ":"Tag: ";
+        String start = (nbrTypes > 1) ? "Tags: " : "Tag: ";
 
         StringBuilder sb = new StringBuilder();
         sb.append(start);
 
         int i = 0;
 
-        for(TrackType tt : typeSet){
+        for (TrackType tt : typeSet) {
 
             sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
-            if(i < nbrTypes - 1) sb.append(", ");
+            if (i < nbrTypes - 2) sb.append(", ");
+            else if (i == nbrTypes - 2)
+                sb.append(" " + getResources().getString(R.string.and) + " ");
 
             i++;
         }
@@ -294,45 +344,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
-    /*
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-
-            Bitmap decoded = null;
-
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                mIcon11 = BitmapFactory.decodeStream(in, null, options);
-
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                mIcon11.compress(Bitmap.CompressFormat.PNG, 50, out);
-                decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return decoded;
-        }
-
-        /**
-         ** Set the ImageView to the bitmap result
-         * @param result
-         */
-        /*protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }*/
 
     @SuppressLint("MissingPermission")
     @Override
@@ -362,5 +373,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             map.addMarker(new MarkerOptions().position(points[0]).icon(defaultMarker(150)).alpha(0.8f));
             map.addMarker(new MarkerOptions().position(points[points.length - 1]).icon(defaultMarker(20)).alpha(0.8f));
         }
+    }
+
+    private void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

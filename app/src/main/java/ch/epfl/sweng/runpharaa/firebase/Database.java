@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Firebase;
+package ch.epfl.sweng.runpharaa.firebase;
 
 import android.net.Uri;
 import android.renderscript.Sampler;
@@ -40,12 +40,14 @@ public class Database {
     private static boolean userExists = false;
 
 
-    private final static String s_tracks = "tracksRefractored";
+    private final static String s_tracks = "tracks";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
+    public final static String COMMENTS = "comments";
+
 
     private final static String keyWriteTrack = "key";
 
@@ -85,10 +87,6 @@ public class Database {
     private DatabaseReference drTracksUID;
 
     @Mock
-    private DataSnapshot drTrackName;
-
-
-    @Mock
     private DatabaseReference drTracksKey;
 
     @Mock
@@ -104,7 +102,11 @@ public class Database {
     private DatabaseReference drUserAnyChildCreate;
 
     @Mock
-    private DatabaseReference drUserAnyChildFollow;
+    private DatabaseReference drUserAnyChildName;
+
+    @Mock
+    private DatabaseReference drUserAnyChildPicture;
+
 
     @Mock
     private DataSnapshot snapInitUser;
@@ -119,10 +121,10 @@ public class Database {
     private DatabaseReference drUserAnyChildCreatesChild;
 
     @Mock
-    private Task<Void> setValueTrack;
+    private DatabaseReference drTracksUIDComment;
 
     @Mock
-    private ValueEventListener valueEventListener;
+    private Task<Void> setValueTrack;
 
     @Mock
     private DataSnapshot snapOnDataChangeRead;
@@ -158,9 +160,6 @@ public class Database {
     private DataSnapshot snapInitChildrenID;
 
     @Mock
-    private DatabaseError snapOnDataErrorSet;
-
-    @Mock
     private DataSnapshot snapOnDataChangeUser;
 
     @Mock
@@ -174,6 +173,12 @@ public class Database {
 
     @Mock
     private DataSnapshot snapInitTrack;
+
+    @Mock
+    private DataSnapshot snapOnDataUserName;
+
+    @Mock
+    private DataSnapshot snapOnDataUserPicture;
 
     @Mock
     private DataSnapshot snapInitChildren;
@@ -197,6 +202,9 @@ public class Database {
     private Task<Void> setTask;
 
     @Mock
+    private Task<Void> addComment;
+
+    @Mock
     private Task<Void> setValueTask;
 
     @Mock
@@ -207,6 +215,7 @@ public class Database {
 
     @Mock
     private Task<Void> userTask;
+    private DatabaseReference drUserAnyChildFollow;
 
 
     private Database() {
@@ -218,16 +227,16 @@ public class Database {
     }
 
     private FirebaseDatabase instanciateMock(){
-            MockitoAnnotations.initMocks(this);
-            createTrack();
-            instanciateDB();
-            instanciateDBRef();
-            instanciatedrTracks();
-            instanciatedrKeys();
-            instanciatedrUsers();
-            instanciateRead();
-            instanciateSnapshots();
-            return firebaseDatabaseMock;
+        MockitoAnnotations.initMocks(this);
+        createTrack();
+        instanciateDB();
+        instanciateDBRef();
+        instanciatedrTracks();
+        instanciatedrKeys();
+        instanciatedrUsers();
+        instanciateRead();
+        instanciateSnapshots();
+        return firebaseDatabaseMock;
     }
 
     private void instanciateDB() {
@@ -275,6 +284,14 @@ public class Database {
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
+
+        when(snapOnDataUserName.exists()).thenReturn(true);
+        when(snapOnDataUserName.getValue((String.class))).thenReturn("Bob");
+
+        when(snapOnDataUserPicture.exists()).thenReturn(true);
+        when(snapOnDataUserPicture.getValue((String.class))).thenReturn("");
+
+
     }
 
     private void instanciatedrUsers() {
@@ -326,6 +343,9 @@ public class Database {
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
+        when(drUserAnyChild.child("name")).thenReturn(drUserAnyChildName);
+        when(drUserAnyChild.child("picture")).thenReturn(drUserAnyChildPicture);
+
 
         when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
 
@@ -402,6 +422,32 @@ public class Database {
             }
         }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataUserName);
+                }
+                return l;
+            }
+        }).when(drUserAnyChildName).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataUserPicture);
+                }
+                return l;
+            }
+        }).when(drUserAnyChildPicture).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
         when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
@@ -415,15 +461,15 @@ public class Database {
 
         when(drUserAnyChildLikesChild.removeValue())
                 .thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int likes = t.getLikes();
-                if(likes >= 1){
-                    //t.getProperties().setLikes(likes - 1);
-                }
-                return removeTask;
-            }
-        });
+                    @Override
+                    public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
+                        int likes = t.getLikes();
+                        if(likes >= 1){
+                            //t.getProperties().setLikes(likes - 1);
+                        }
+                        return removeTask;
+                    }
+                });
 
         when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
@@ -482,6 +528,17 @@ public class Database {
                 t = track;
                 return null;
             }
+        });
+
+        when(drTracksUID.child(COMMENTS)).thenReturn(drTracksUIDComment);
+        when(drTracksUIDComment.setValue(any(List.class))).thenReturn(addComment);
+
+        when(addComment.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if(shouldFail){
+                l.onFailure(new IllegalStateException());
+            }
+            return addComment;
         });
 
         when(drTracks.child(keyWriteTrack)).thenReturn(drTracksKey);
@@ -602,7 +659,7 @@ public class Database {
         int length = 100;
         int heigthDiff = 10;
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
-                types, length, heigthDiff, 1, 1, 1, 1, 0, 0);
+                types, length, heigthDiff, 1, 1, 1, 1, 0, 0, new ArrayList<>());
 
         t = track;
 

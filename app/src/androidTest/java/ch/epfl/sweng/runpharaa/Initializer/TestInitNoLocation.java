@@ -3,7 +3,7 @@ package ch.epfl.sweng.runpharaa.Initializer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import ch.epfl.sweng.runpharaa.Firebase.Database;
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.Firebase.Storage;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
