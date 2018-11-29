@@ -8,6 +8,7 @@ import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.rule.ServiceTestRule;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -47,20 +48,16 @@ public class CreateTrackActivityTest extends TestInitLocation {
     Context c;
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
+    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "aa");
+        User.set("FakeUser", 2, Uri.parse(""), new LatLng(21.23, 12.112), "1");
         GpsService.initFakeGps(FakeGpsService.SAT);
     }
 
     @Test
     public void createTrackWithTwoPoints() {
-        mActivityRule.launchActivity(null);
-        while(!mActivityRule.getActivity().hasWindowFocus()){
-            //Stay in test
-        }
         c = InstrumentationRegistry.getTargetContext();
         c.startService(new Intent(c, GpsService.getInstance().getClass()));
         onView(withId(R.id.fab)).perform(click());

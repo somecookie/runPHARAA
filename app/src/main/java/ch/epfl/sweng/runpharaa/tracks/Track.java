@@ -89,7 +89,7 @@ public class Track {
         this.comments = trackAdapter.getComments();
 
         if(comments == null) comments = new ArrayList<>();
-        else Collections.sort(comments, Comment::compareTo);
+        else Collections.sort(comments, (Comment::compareTo));
     }
 
     public static ArrayList<Track> allTracks;
@@ -149,11 +149,10 @@ public class Track {
         return comments;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addComment(Comment comment){
         if(!comments.contains(comment)){
             comments.add(comment);
-            comments.sort(Comment::compareTo);
+            Collections.sort(comments, (Comment::compareTo));
         }
     }
 }

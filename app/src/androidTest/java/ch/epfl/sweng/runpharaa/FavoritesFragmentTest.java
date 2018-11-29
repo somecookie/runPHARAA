@@ -38,7 +38,7 @@ public class FavoritesFragmentTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "1");
 
     }
 

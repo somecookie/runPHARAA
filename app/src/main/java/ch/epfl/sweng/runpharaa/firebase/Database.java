@@ -215,6 +215,8 @@ public class Database {
 
     @Mock
     private Task<Void> userTask;
+
+    @Mock
     private DatabaseReference drUserAnyChildFollow;
 
 
