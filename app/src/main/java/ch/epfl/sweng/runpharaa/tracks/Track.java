@@ -9,6 +9,7 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +62,6 @@ public class Track {
     }
 
     //For Firebase
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public Track(FirebaseTrackAdapter trackAdapter) {
         Required.nonNull(trackAdapter.getTrackUid(), "Track ID must be non-null.");
         Required.nonNull(trackAdapter.getCreatorId(), "Creator ID must be non-null.");
@@ -89,7 +89,7 @@ public class Track {
         this.comments = trackAdapter.getComments();
 
         if(comments == null) comments = new ArrayList<>();
-        else comments.sort(Comment::compareTo);
+        else Collections.sort(comments, Comment::compareTo);
     }
 
     public static ArrayList<Track> allTracks;

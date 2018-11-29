@@ -140,7 +140,6 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location) {
         List<Track> tracksNearMe = new ArrayList<>();
         for (DataSnapshot c : dataSnapshot.getChildren()) {

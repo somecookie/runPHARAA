@@ -51,7 +51,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - travis_retry ./gradlew connectedCheck jacocoTestReport --debug
+  - travis_retry ./gradlew connectedCheck jacocoTestReport --info
 
 after_script:
   # Report test coverage to Code Climate
