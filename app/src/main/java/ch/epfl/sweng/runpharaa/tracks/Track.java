@@ -9,6 +9,7 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,7 +90,7 @@ public class Track {
         this.comments = trackAdapter.getComments();
 
         if(comments == null) comments = new ArrayList<>();
-        else comments.sort(Comment::compareTo);
+        else Collections.sort(comments, (Comment::compareTo));
     }
 
     public static ArrayList<Track> allTracks;

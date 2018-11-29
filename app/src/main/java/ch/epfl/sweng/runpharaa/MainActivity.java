@@ -30,7 +30,7 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 
-public class MainActivity extends AppCompatActivity {
+public class    MainActivity extends AppCompatActivity {
 
     public static boolean difficultyIsFiltered;
     public static int difficultyFilter;
