@@ -260,12 +260,16 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
         Intent intent = new Intent(targetContext, CreateTrackActivity2.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Removes other Activities from stack
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("locations", locations);
         intent.putExtra("points", points);
         mActivityRule.launchActivity(intent);
         sleep(5_000);
+    }
+
+    @After
+    public void end(){
+        mActivityRule.getActivity().getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Removes other Activities from stack
+        mActivityRule.getActivity().getIntent().addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
 }
