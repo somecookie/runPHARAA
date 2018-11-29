@@ -150,11 +150,10 @@ public class Track {
         return comments;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addComment(Comment comment){
         if(!comments.contains(comment)){
             comments.add(comment);
-            comments.sort(Comment::compareTo);
+            Collections.sort(comments, (Comment::compareTo));
         }
     }
 }
