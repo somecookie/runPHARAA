@@ -23,8 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.UserInfo;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,6 +73,7 @@ public class LoginActivityTest extends TestInitLocation {
         assertTrue(GoogleAuthentication.getInstance(getTargetContext()) instanceof GoogleAuthenticationMock);
     }
 
+    @Ignore
     @Test
     public void connectWithFakeFirebaseUser() {
         FirebaseAuthenticationMock.setFakeFireBaseUser(FakeUser);
@@ -89,6 +92,11 @@ public class LoginActivityTest extends TestInitLocation {
         FirebaseAuthenticationMock.setFakeFireBaseUser(FakeUser);
         v.perform(click());
         sleep(3000);
+    }
+
+    @After
+    public void resetUser() {
+        FirebaseAuthenticationMock.setFakeFireBaseUser(null);
     }
 
     // --- FAKE COMPONENTS WE NEED ---

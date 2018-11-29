@@ -34,7 +34,7 @@ public class TrackTest {
         types.add(TrackType.BEACH);
         TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
         exception.expect(IllegalArgumentException.class);
-        new Track("testUID", "testCreator", "test", path, tp);
+        new Track("testUID", "testCreator", "test", path, new ArrayList<>(), tp);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class TrackTest {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.BEACH);
         TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
-        FirebaseTrackAdapter track = new FirebaseTrackAdapter("testUID", "testCreator", "test", null, path, tp, );
+        FirebaseTrackAdapter track = new FirebaseTrackAdapter("testUID", "testCreator", "test", null, path, tp, new ArrayList<>());
         track.setTrackUid("UID");
         exception.expect(IllegalArgumentException.class);
         new Track(track);

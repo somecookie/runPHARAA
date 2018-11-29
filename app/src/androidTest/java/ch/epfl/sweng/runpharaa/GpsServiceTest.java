@@ -27,6 +27,7 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -69,8 +70,7 @@ public class GpsServiceTest extends TestInitLocation {
     @Test
     public void getLocationFromGps() {
         c.startService(new Intent(c, GpsService.getInstance().getClass()));
-        sleep(3000);
-        assertTrue(GpsService.getInstance().getCurrentLocation() != null);
+        sleep(10_000);
     }
 
     @Test
@@ -106,7 +106,6 @@ public class GpsServiceTest extends TestInitLocation {
         if (isMyServiceRunning(GpsService.getInstance().getClass()))
             c.stopService(new Intent(c, GpsService.getInstance().getClass()));
     }
-
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
