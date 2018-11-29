@@ -266,10 +266,4 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         sleep(5_000);
     }
 
-    @After
-    public void end(){
-        mActivityRule.getActivity().getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Removes other Activities from stack
-        mActivityRule.getActivity().getIntent().addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    }
-
 }
