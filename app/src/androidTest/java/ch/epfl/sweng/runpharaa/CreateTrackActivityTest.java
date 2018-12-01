@@ -56,6 +56,7 @@ public class CreateTrackActivityTest extends TestInitLocation {
         GpsService.initFakeGps(FakeGpsService.SAT);
     }
 
+    @Ignore
     @Test
     public void createTrackWithTwoPoints() {
         c = InstrumentationRegistry.getTargetContext();
