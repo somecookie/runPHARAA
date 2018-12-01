@@ -10,6 +10,9 @@ public class TestInitNoLocation {
     @BeforeClass
     public static void setTestModeOn() {
         Config.isTest = true;
+        MapUtils.initCameraUpdateFactory();
+        MapUtils.initBitmapDescriptorFactory();
+        Config.setFakeMap(MapUtils.FAKE_MAP);
     }
 
     @AfterClass

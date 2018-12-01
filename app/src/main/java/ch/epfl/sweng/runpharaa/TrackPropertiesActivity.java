@@ -5,9 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,6 +55,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -78,6 +77,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         Twitter.initialize(this);
 
+        OnMapReadyCallback onMapReadyCallback = this;
+
         shareDialog = new ShareDialog(this);
         tweetBuilder = new TweetComposer.Builder(this);
 
@@ -85,7 +86,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         testText = findViewById(R.id.maps_test_text2);
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot data) {
 
@@ -100,7 +100,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 setTextOfProperties(track, tp);
                 setButtonsOfProperties(trackID, track);
 
-                drawTrackOnMap();
+                // Get fakeMap
+                SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
+                mapFragment.getMapAsync(onMapReadyCallback);
+                if(Config.isTest) {
+                    onMapReady(Config.getFakeMap());
+                }
             }
 
             @Override
@@ -108,32 +113,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });
-
-        // Get map
-        if (map == null) {
-            SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
-            mapFragment.getMapAsync((GoogleMap googleMap) -> {
-                map = googleMap;
-                googleMap.setMyLocationEnabled(true);
-                googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                map.getUiSettings().setZoomControlsEnabled(true);
-                map.setOnMapClickListener(latLng -> {
-                    Intent fullMapIntent = new Intent(getBaseContext(), FullMapActivity.class);
-                    fullMapIntent.putExtra("points", points);
-                    startActivity(fullMapIntent);
-                });
-
-                testText.setText("ready");
-
-                ScrollView mScrollView = findViewById(R.id.scrollID); //parent scrollview in xml, give your scrollview id value
-                ((CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2))
-                        .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
-            });
-        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setButtonsOfProperties(String trackID, Track track) {
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
@@ -166,7 +147,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         initCommentButton(track);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initCommentButton(Track track) {
         Button commentsButton = findViewById(R.id.commentsID);
         TextView nbrComments = findViewById(R.id.trackCommentsID);
@@ -349,16 +329,32 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.zoomTo(18));
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.getUiSettings().setZoomControlsEnabled(true);
         map.setOnMarkerClickListener(marker -> true);
-        map.setPadding(50, 150, 50, 50);
+        map.setOnMapClickListener(latLng -> {
+            Intent fullMapIntent = new Intent(getBaseContext(), FullMapActivity.class);
+            fullMapIntent.putExtra("points", points);
+            startActivity(fullMapIntent);
+        });
+
+        testText.setText("ready");
+
+        ScrollView mScrollView = findViewById(R.id.scrollID); //parent scrollview in xml, give your scrollview id value
+        ((CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2))
+                .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
+
+        drawTrackOnMap();
     }
 
     /**
-     * Draws the full track and markers on the map
+     * Draws the full track and markers on the fakeMap
      */
     private void drawTrackOnMap() {
         if (map != null && points != null) {
-            Log.i("Create Map : ", "Drawing on map in TrackPropertiesActivity.");
+            Log.i("Create Map : ", "Drawing on fakeMap in TrackPropertiesActivity.");
             // Get correct zoom
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
             for (LatLng point : points)

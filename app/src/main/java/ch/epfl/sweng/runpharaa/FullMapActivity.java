@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -18,6 +17,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Arrays;
+
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -38,14 +39,17 @@ public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view3);
         mapFragment.getMapAsync(this);
+        if(Config.isTest){
+            onMapReady(Config.getFakeMap());
+        }
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.zoomTo(18));
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setOnMarkerClickListener(marker -> true);
@@ -56,7 +60,7 @@ public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCal
 
     private void drawTrackOnMap() {
         if (map != null && points != null) {
-            Log.i("Create Map : ", "Drawing on map in FullMapActivity.");
+            Log.i("Create Map : ", "Drawing on fakeMap in FullMapActivity.");
             // Get correct zoom
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
             for (LatLng point : points)

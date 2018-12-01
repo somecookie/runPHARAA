@@ -57,7 +57,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         createButton = findViewById(R.id.start_create_button);
         createButton.setOnClickListener(buttonOnClickListener);
         createButton.setText("START");
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the fakeMap is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
@@ -92,7 +92,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
             locations.add(location);
             // Add new point
             points.add(current);
-            // Clear map
+            // Clear fakeMap
             googleMap.clear();
             // Draw path
             lines = lines.width(10).color(Color.BLUE).geodesic(true);

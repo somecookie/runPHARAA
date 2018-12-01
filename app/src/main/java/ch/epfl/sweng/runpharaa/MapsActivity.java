@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -34,6 +33,7 @@ import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 public final class MapsActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
@@ -52,16 +52,19 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         setContentView(R.layout.activity_maps);
         testText = findViewById(R.id.maps_test_text);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the fakeMap is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         markers = new ArrayList<>();
+        if(Config.isTest){
+            onMapReady(Config.getFakeMap());
+        }
     }
 
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
+     * Manipulates the fakeMap once available.
+     * This callback is triggered when the fakeMap is ready to be used.
      */
     @SuppressLint("MissingPermission")
     @Override
@@ -127,7 +130,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                             .title(t.getName()));
                     m.setTag(t.getTrackUid());
 
-                    markerToTP.put(m.getTag().toString(), t.getProperties());
+                    markerToTP.put((Config.isTest) ? "0" : m.getTag().toString(), t.getProperties());
 
                     // If a marker had its infoWindow opened, reopen it
                     if (trackUidInfoWindow != null && trackUidInfoWindow.equals(t.getTrackUid())) {
@@ -160,7 +163,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     }
 
     /**
-     * Check if any present marker on the google map has its infoWindow opened and return the
+     * Check if any present marker on the google fakeMap has its infoWindow opened and return the
      * track ID associated to it
      *
      * @return a String, the trackUid associated to the marker
@@ -201,7 +204,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         }
 
         /**
-         * Handle the windows that display the properties of the track in the map
+         * Handle the windows that display the properties of the track in the fakeMap
          * @param marker
          * @return
          */
