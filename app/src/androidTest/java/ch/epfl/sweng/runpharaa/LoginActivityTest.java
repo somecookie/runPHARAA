@@ -73,6 +73,7 @@ public class LoginActivityTest extends TestInitLocation {
         assertTrue(GoogleAuthentication.getInstance(getTargetContext()) instanceof GoogleAuthenticationMock);
     }
 
+    @Ignore
     @Test
     public void connectWithFakeFirebaseUser() {
         FirebaseAuthenticationMock.setFakeFireBaseUser(FakeUser);

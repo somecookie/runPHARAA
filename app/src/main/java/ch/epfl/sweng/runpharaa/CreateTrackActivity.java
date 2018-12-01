@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.runpharaa.location.GpsService;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
@@ -27,7 +28,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     private ArrayList<LatLng> points = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
     private boolean creating;
-    private GoogleMap googleMap;
+    private GoogleMap map;
     private Button createButton;
 
     /**
@@ -61,14 +62,17 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+            if(Config.isTest) {
+                onMapReady(Config.getFakeMap());
+            }
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        map = googleMap;
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.zoomTo(18));
 
         lines = new PolylineOptions();
 
@@ -86,18 +90,18 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
 
         // Move camera
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+        map.moveCamera(CameraUpdateFactory.newLatLng(current));
         if (creating) {
             // Store new location
             locations.add(location);
             // Add new point
             points.add(current);
             // Clear fakeMap
-            googleMap.clear();
+            map.clear();
             // Draw path
             lines = lines.width(10).color(Color.BLUE).geodesic(true);
             lines.addAll(points);
-            googleMap.addPolyline(lines);
+            map.addPolyline(lines);
         }
     }
 

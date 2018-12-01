@@ -1026,17 +1026,17 @@ public interface MapUtils {
         CameraUpdateFactory.zza(new ICameraUpdateFactoryDelegate() {
             @Override
             public IObjectWrapper zoomIn() throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
             public IObjectWrapper zoomOut() throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
             public IObjectWrapper scrollBy(float v, float v1) throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
@@ -1046,17 +1046,17 @@ public interface MapUtils {
 
             @Override
             public IObjectWrapper zoomBy(float v) throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
             public IObjectWrapper zoomByWithFocus(float v, int i, int i1) throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
             public IObjectWrapper newCameraPosition(CameraPosition cameraPosition) throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
@@ -1071,7 +1071,7 @@ public interface MapUtils {
 
             @Override
             public IObjectWrapper newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException {
-                return null;
+                return () -> null;
             }
 
             @Override
