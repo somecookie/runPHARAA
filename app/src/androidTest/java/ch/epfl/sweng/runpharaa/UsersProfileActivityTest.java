@@ -38,22 +38,18 @@ public class UsersProfileActivityTest extends TestInitLocation {
     private static final int WAIT_TIME = 2000;
     @Rule
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =
-            new ActivityTestRule<>(UsersProfileActivity.class, true, false);
+            new ActivityTestRule<>(UsersProfileActivity.class, false, false);
 
     @Before
     public void initEmptyUser() {
         User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
     }
 
-
-    //TODO fix it
-    /*
     @Test
     public void testOpenSettings() {
-        onView(withId(R.id.settingsButton)).perform(click());
+        onView(withId(R.id.settingsIcon)).perform(click());
         intended(hasComponent(SettingsActivity.class.getName()));
     }
-    */
 
     @Test
     public void correctlyDisplaysName() {

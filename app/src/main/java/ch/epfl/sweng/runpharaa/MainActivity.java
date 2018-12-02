@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     public static int timeFilter;
     public static Set<TrackType> typesFilter;
     public static boolean typesAreFiltered;
-    public static User main;
     private static String[] listTypesStr;
     private static boolean[] checkedTypes;
     private TabLayout tabLayout;

@@ -60,6 +60,11 @@ public final class User implements Serializable {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
 
+    public static void
+    set(User u) {
+        instance = u;
+    }
+
     @Exclude
     public int getPreferredRadius() {
         return preferredRadius;
