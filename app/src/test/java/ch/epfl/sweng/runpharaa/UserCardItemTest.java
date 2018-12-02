@@ -6,8 +6,7 @@ import android.graphics.Color;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UserCardItem;
+import ch.epfl.sweng.runpharaa.gui.UserCardItem;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class UserCardItemTest {

@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.gui.UserCardItem;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public final class User implements Serializable {

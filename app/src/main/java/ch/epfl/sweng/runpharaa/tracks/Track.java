@@ -1,10 +1,7 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 
@@ -15,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.TrackCardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.comment.Comment;

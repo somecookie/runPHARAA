@@ -1,16 +1,12 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +18,11 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
-import ch.epfl.sweng.runpharaa.utils.Callback;
 
 
 public class    MainActivity extends AppCompatActivity {

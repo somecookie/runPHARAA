@@ -7,12 +7,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.gui.CardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
@@ -34,19 +35,19 @@ public class FragmentFavourites extends UpdatableCardItemFragment {
     @Override
     protected void loadData() {
         emptyMessage.setVisibility(View.GONE);
-        // Create a fresh recyclerView and listTrackCardItem
+        // Create a fresh recyclerView and listCardItem
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
 
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-                List<TrackCardItem> listTrackCardItem = new ArrayList<>();
+                List<CardItem> listTrackCardItem = new ArrayList<>();
                 OnItemClickListener listener = new OnItemClickListener() {
                     @Override
-                    public void onItemClick(TrackCardItem item) {
+                    public void onItemClick(CardItem item) {
                         Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                        intent.putExtra("TrackID", item.getParentTrackID());
+                        intent.putExtra("TrackID", ((TrackCardItem)item).getParentTrackID());
                         startActivity(intent);
                     }
                 };

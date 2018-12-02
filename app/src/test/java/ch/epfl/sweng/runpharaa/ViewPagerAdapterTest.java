@@ -1,8 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.support.v4.app.FragmentManager;
-
 import org.junit.Test;
+
+import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
 
 public class ViewPagerAdapterTest {
 

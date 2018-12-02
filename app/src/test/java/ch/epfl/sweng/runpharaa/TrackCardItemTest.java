@@ -6,6 +6,7 @@ import android.graphics.Color;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class TrackCardItemTest {
