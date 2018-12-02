@@ -25,7 +25,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 
-public class    MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static boolean difficultyIsFiltered;
     public static int difficultyFilter;
@@ -43,48 +43,31 @@ public class    MainActivity extends AppCompatActivity {
     private FirebaseUser user;
 
     public static boolean passFilters(Track t) {
-        if (timeIsFiltered) {
-            if (difficultyIsFiltered) {
-                if (typesAreFiltered) {
-                    Log.d("Filters", "time , diff, types");
-                    return filterTime(t) && filterDifficulty(t) && filterTypes(t);
-                }
-                Log.d("Filters", "time , diff");
-                return filterTime(t) && filterDifficulty(t);
-            }
-            if (typesAreFiltered) {
-                Log.d("Filters", "time , types");
-                return filterTime(t) && filterTypes(t);
-            }
-            Log.d("Filters", "time");
-            return filterTime(t);
-        }
-        if (difficultyIsFiltered) {
-            if (typesAreFiltered) {
-                Log.d("Filters", "diff , types");
-                return filterDifficulty(t) && filterTypes(t);
-            }
-            Log.d("Filters", "diff");
-            return filterDifficulty(t);
-        }
-        if (typesAreFiltered) {
-            Log.d("Filters", "types");
-            return filterTypes(t);
-        }
-        Log.d("Filters", "no filters");
-        return true;
+        return filterTime(t) && filterDifficulty(t) && filterTypes(t);
     }
 
     private static boolean filterTime(Track t) {
-        return t.getProperties().getAvgDuration() <= timeFilter;
+        if(timeIsFiltered){
+            return t.getProperties().getAvgDuration() <= timeFilter;
+        } else {
+            return true;
+        }
     }
 
     private static boolean filterDifficulty(Track t) {
-        return t.getProperties().getAvgDifficulty() <= difficultyFilter;
+        if(difficultyIsFiltered){
+            return t.getProperties().getAvgDifficulty() <= difficultyFilter;
+        } else {
+            return true;
+        }
     }
 
     private static boolean filterTypes(Track t) {
-        return t.getProperties().getType().containsAll(typesFilter);
+        if(typesAreFiltered){
+            return t.getProperties().getType().containsAll(typesFilter);
+        } else {
+            return true;
+        }
     }
 
     @Override
