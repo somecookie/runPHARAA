@@ -5,6 +5,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.util.Log;
 
 import org.junit.BeforeClass;
 
@@ -15,11 +16,15 @@ public abstract class Authorizations {
 
 
     @BeforeClass
-    public static void clickAllowPermission() throws UiObjectNotFoundException {
+    public static void clickAllowPermission(){
         UiObject allowBtn = mDevice.findObject(new UiSelector()
                 .text("OK")
                 .className(ANDROIDBTN));
 
-        allowBtn.click();
+        try{
+            allowBtn.click();
+        } catch (UiObjectNotFoundException e) {
+            Log.i("Button", "Button not found");
+        }
     }
 }
