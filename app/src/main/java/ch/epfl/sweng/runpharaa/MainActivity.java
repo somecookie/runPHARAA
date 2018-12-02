@@ -64,7 +64,7 @@ public class    MainActivity extends AppCompatActivity {
             Log.d("Filters", "time");
             return filterTime(t);
         }
-        if (difficultyIsFiltered) {
+        else if (difficultyIsFiltered) {
             if (typesAreFiltered) {
                 Log.d("Filters", "diff , types");
                 return filterDifficulty(t) && filterTypes(t);
@@ -72,12 +72,14 @@ public class    MainActivity extends AppCompatActivity {
             Log.d("Filters", "diff");
             return filterDifficulty(t);
         }
-        if (typesAreFiltered) {
+        else if (typesAreFiltered) {
             Log.d("Filters", "types");
             return filterTypes(t);
         }
-        Log.d("Filters", "no filters");
-        return true;
+        else {
+            Log.d("Filters", "no filters");
+            return true;
+        }
     }
 
     private static boolean filterTime(Track t) {
