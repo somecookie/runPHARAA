@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
@@ -18,10 +19,11 @@ import ch.epfl.sweng.runpharaa.TrackCardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.comment.Comment;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Required;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
-public class Track {
+public class Track implements Comparable<Track> {
     //Track identifiers
     private String trackUid;
     private String creatorUid;
@@ -154,5 +156,14 @@ public class Track {
             comments.add(comment);
             Collections.sort(comments, (Comment::compareTo));
         }
+    }
+
+    @Override
+    public int compareTo(@NonNull Track o) {
+        if(User.instance.getLocation() == null)
+            return 0;
+        double d1 = this.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+        double d2 = o.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+        return Double.compare(d1, d2);
     }
 }

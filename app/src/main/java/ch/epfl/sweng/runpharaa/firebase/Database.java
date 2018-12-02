@@ -329,16 +329,7 @@ public class Database {
             }
         });
 
-        when(userTask.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnSuccessListener<Void> l = (OnSuccessListener<Void>) invocation.getArguments()[0];
-                if(!shouldFail){
-                    l.onSuccess(null);
-                }
-                return userTask;
-            }
-        });
+        respondToAddSuccessListener(userTask);
 
         //----
 
@@ -535,36 +526,35 @@ public class Database {
         when(drTracksUID.child(COMMENTS)).thenReturn(drTracksUIDComment);
         when(drTracksUIDComment.setValue(any(List.class))).thenReturn(addComment);
 
-        when(addComment.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
-            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-            if(shouldFail){
-                l.onFailure(new IllegalStateException());
-            }
-            return addComment;
-        });
+        respondToAddFailureListener(addComment);
 
         when(drTracks.child(keyWriteTrack)).thenReturn(drTracksKey);
         when(drTracksKey.setValue(any(FirebaseTrackAdapter.class))).thenReturn(setTask);
 
-        when(setTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+        respondToAddFailureListener(setTask);
+
+        respondToAddSuccessListener(setTask);
+
+    }
+
+    private void respondToAddFailureListener(Task task) {
+        when(task.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
             if(shouldFail){
                 l.onFailure(new IllegalStateException());
             }
-            return setTask;
+            return task;
         });
+    }
 
-        when(setTask.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnSuccessListener<Void> l = (OnSuccessListener<Void>) invocation.getArguments()[0];
-                if(!shouldFail){
-                    l.onSuccess(null);
-                }
-                return setTask;
+    private void respondToAddSuccessListener(Task task) {
+        when(task.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnSuccessListener<Void> l = (OnSuccessListener<Void>) invocation.getArguments()[0];
+            if(!shouldFail){
+                l.onSuccess(null);
             }
+            return task;
         });
-
     }
 
     private void instanciatedrKeys() {
@@ -610,48 +600,33 @@ public class Database {
         }).when(drTracks).addValueEventListener(any(ValueEventListener.class));
 
         //Read tracks from drKey
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataChangeRead);
-                }
-                return l;
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataChangeRead);
             }
+            return l;
         }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
 
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if(isCancelled){
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataChangeReadUser);
-                }
-                return null;
-            }
-        }).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        doAnswer(snapOnDataChangedAnswer).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
 
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if(isCancelled){
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataChangeReadUser);
-                }
-                return null;
-            }
-        }).when(drUserAnyChildFollow).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        doAnswer(snapOnDataChangedAnswer).when(drUserAnyChildFollow).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
     }
+
+    private Answer snapOnDataChangedAnswer = invocation -> {
+        ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+        if(isCancelled){
+            l.onCancelled(snapOnDataErrorRead);
+        } else {
+            l.onDataChange(snapOnDataChangeReadUser);
+        }
+        return null;
+    };
 
     private void createTrack() {
         List<String> types = new ArrayList<>();

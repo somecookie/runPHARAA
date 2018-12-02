@@ -217,38 +217,27 @@ public class    MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                checkedTypes[which] = isChecked;
-            }
-        });
+        builder.setMultiChoiceItems(listTypesStr, checkedTypes, (dialog, which, isChecked) -> checkedTypes[which] = isChecked);
 
         builder.setCancelable(false);
-        builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                typesFilter.clear();
-                for (int i = 0; i < checkedTypes.length; i++) {
-                    if (checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
-                }
-                typesAreFiltered = !typesFilter.isEmpty();
+        builder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
+            typesFilter.clear();
+            for (int i = 0; i < checkedTypes.length; i++) {
+                if (checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
             }
+            typesAreFiltered = !typesFilter.isEmpty();
         });
 
-        builder.setNegativeButton(getResources().getText(R.string.noFilter), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                timeIsFiltered = false;
-                difficultyIsFiltered = false;
-                typesAreFiltered = false;
-                for (int i = 0; i < checkedTypes.length; i++) {
-                    checkedTypes[i] = false;
-                }
-                timeFilter = 60;
-                difficultyFilter = 3;
-                dialog.dismiss();
+        builder.setNegativeButton(getResources().getText(R.string.noFilter), (dialog, which) -> {
+            timeIsFiltered = false;
+            difficultyIsFiltered = false;
+            typesAreFiltered = false;
+            for (int i = 0; i < checkedTypes.length; i++) {
+                checkedTypes[i] = false;
             }
+            timeFilter = 60;
+            difficultyFilter = 3;
+            dialog.dismiss();
         });
 
         builder.setView(mView);
