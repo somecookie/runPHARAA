@@ -10,7 +10,7 @@ import org.junit.Rule;
 import ch.epfl.sweng.runpharaa.utils.Config;
 
 
-public class TestInitLocation {
+public class TestInitLocation extends Authorizations{
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(

@@ -5,7 +5,7 @@ import org.junit.BeforeClass;
 
 import ch.epfl.sweng.runpharaa.utils.Config;
 
-public class TestInitNoLocation {
+public class TestInitNoLocation extends Authorizations{
 
     @BeforeClass
     public static void setTestModeOn() {
