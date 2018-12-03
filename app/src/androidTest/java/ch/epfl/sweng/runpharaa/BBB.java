@@ -16,11 +16,11 @@ import static android.os.SystemClock.sleep;
 import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class AAA extends TestInitLocation {
+public class BBB extends TestInitLocation {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, false, false);
 
     @BeforeClass
     public static void initUser() {
@@ -28,7 +28,8 @@ public class AAA extends TestInitLocation {
     }
 
     @Test
-    public void heeeeeyBrotheeeeer() {
+    public void heeeeeySisteeeeeer() {
+        mActivityRule.launchActivity(null);
         sleep(2000);
         assertTrue(true);
     }

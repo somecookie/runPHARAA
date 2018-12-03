@@ -573,30 +573,24 @@ public class Database {
 
     private void instanciateRead() {
         //Read tracks from drTracks
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataChangeRead);
-                }
-                return l;
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataChangeRead);
             }
+            return l;
         }).when(drTracks).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataChangeRead);
-                }
-                return l;
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataChangeRead);
             }
+            return l;
         }).when(drTracks).addValueEventListener(any(ValueEventListener.class));
 
         //Read tracks from drKey
