@@ -45,6 +45,7 @@ public class FavoritesFragmentTest extends TestInitLocation {
 
     private Track t;
 
+    @Ignore
     @Test
     public void testNoFavorites(){
         Context targetContext = InstrumentationRegistry.getInstrumentation()
