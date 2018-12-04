@@ -21,6 +21,7 @@ import ch.epfl.sweng.runpharaa.UpdatableCardItemFragment;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.AdapterTracksToRecyclerViewItem;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public final class FragmentMyTracks extends UpdatableCardItemFragment {
