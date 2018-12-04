@@ -2,7 +2,9 @@ package ch.epfl.sweng.runpharaa.user.otherProfile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +51,6 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
                 // Load the corresponding activity
                 if (user != null)
                     loadActivity(user);
-
             }
 
             @Override
@@ -58,7 +59,6 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private String userProfileUid() {
         Intent i = getIntent();
@@ -115,11 +115,11 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
             }
         });
 
-
         ImageLoader.getLoader(this).displayImage(user.getPicture(), findViewById(R.id.profile_picture));
 
         // Load User's createdTracks
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = findViewById(R.id.createdTracksCardListId);
@@ -129,7 +129,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data, user);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());

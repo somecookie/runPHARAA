@@ -213,7 +213,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
 
-        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
+        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1), new ArrayList<>(), p);
 
 
         return track;

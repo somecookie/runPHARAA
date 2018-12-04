@@ -1,6 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,6 +43,7 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
         String s = TrackDatabaseManagement.TRACKS_PATH;
 
         TrackDatabaseManagement.mReadDataOnce(s, new Callback<DataSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot value) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);

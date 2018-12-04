@@ -1,6 +1,8 @@
 package ch.epfl.sweng.runpharaa.user.myProfile;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +41,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
     protected void loadData() {
         // Load User's createdTracks
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot value) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -48,7 +51,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(value);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(value, User.instance);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());
@@ -73,6 +76,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
 
 
         TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(DataSnapshot data) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -82,7 +86,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
                     intent.putExtra("TrackID", item.getParentTrackID());
                     startActivity(intent);
                 };
-                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data);
+                List<Track> tracks = TrackDatabaseManagement.initCreatedTracks(data, User.instance);
                 for (Track t : tracks) {
                     t.setTrackCardItem(new TrackCardItem(t.getName(), t.getTrackUid(), t.getImageStorageUri()));
                     createdTracks.add(t.getTrackCardItem());

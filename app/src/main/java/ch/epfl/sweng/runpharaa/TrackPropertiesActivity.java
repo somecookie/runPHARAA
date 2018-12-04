@@ -257,7 +257,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             } else {
                 userProfile = new Intent(getBaseContext(), OtherUsersProfileActivity.class);
             }
-
             userProfile.putExtra("userId", track.getCreatorUid());
             startActivity(userProfile);
         });
@@ -343,7 +342,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
 
     }
-
 
     @SuppressLint("MissingPermission")
     @Override

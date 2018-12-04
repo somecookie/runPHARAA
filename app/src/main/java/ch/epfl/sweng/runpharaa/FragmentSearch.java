@@ -1,9 +1,11 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,6 +60,7 @@ public class FragmentSearch extends Fragment {
         if(item.getItemId() == R.id.luckyIcon){
             FilterProperties properties = new FilterProperties();
             TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onSuccess(DataSnapshot value) {
                     List<Track> nearMe = TrackDatabaseManagement.initTracksNearLocation(value, User.instance.getLocation());
@@ -67,7 +70,7 @@ public class FragmentSearch extends Fragment {
                     }
                     List<Track> favorites = TrackDatabaseManagement.initFavouritesTracks(value);
                     if(favorites.isEmpty()){
-                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(value);
+                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(value, User.instance);
                         if(liked.isEmpty()) {
                             Toast.makeText(getContext(),R.string.no_favorites_and_likes, Toast.LENGTH_LONG).show();
                             Random r = new Random();

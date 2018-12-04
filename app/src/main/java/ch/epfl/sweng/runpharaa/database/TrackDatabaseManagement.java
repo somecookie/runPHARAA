@@ -189,8 +189,8 @@ public class TrackDatabaseManagement {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
-        return initTracksList(dataSnapshot, User.instance.getCreatedTracks());
+    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
+        return initTracksList(dataSnapshot, user.getCreatedTracks());
     }
 
     /**
