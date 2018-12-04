@@ -11,6 +11,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.internal.firebase_auth.zzap;
+import com.google.android.gms.internal.firebase_auth.zzcz;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -138,13 +139,13 @@ public class LoginActivityTest extends TestInitLocation {
         }
 
         @Override
-        public FirebaseUser zzp() {
+        public FirebaseUser zzce() {
             return null;
         }
 
         @NonNull
         @Override
-        public FirebaseApp zzq() {
+        public FirebaseApp zzcc() {
             return null;
         }
 
@@ -172,27 +173,33 @@ public class LoginActivityTest extends TestInitLocation {
             return "0788008080";
         }
 
-        @NonNull
+        @Nullable
         @Override
-        public zzap zzr() {
-            return zzap.zzs("");
-        }
-
-        @Override
-        public void zza(@NonNull zzap zzap) {
-
+        public String zzcf() {
+            return null;
         }
 
         @NonNull
         @Override
-        public String zzs() {
-            return "zzs";
+        public zzcz zzcg() {
+            return null;
+        }
+
+        @Override
+        public void zza(@NonNull zzcz zzcz) {
+
         }
 
         @NonNull
         @Override
-        public String zzt() {
-            return "zzt";
+        public String zzch() {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public String zzci() {
+            return null;
         }
 
         @Nullable
