@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -61,6 +62,7 @@ public class FavoritesFragmentTest extends TestInitLocation {
         onView(allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(targetContext.getResources().getString(R.string.no_favorite))));
     }
 
+    @Ignore
     @Test
     public void testFavoritesAppears() {
         sleep(2000);
