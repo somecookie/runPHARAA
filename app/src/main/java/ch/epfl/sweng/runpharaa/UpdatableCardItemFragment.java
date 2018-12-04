@@ -50,7 +50,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
         // Load initial data
-        loadData();
+        //loadData();
 
         return v;
     }
