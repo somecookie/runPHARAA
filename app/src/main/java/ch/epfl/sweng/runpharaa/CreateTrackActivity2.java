@@ -45,6 +45,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Config;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
+import static ch.epfl.sweng.runpharaa.utils.Util.addTypes;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
@@ -193,9 +194,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
                 types.clear();
 
-                for (int i = 0; i < checkedTypes.length; i++) {
-                    if (checkedTypes[i]) types.add(TrackType.values()[i]);
-                }
+                types = addTypes(checkedTypes);
 
                 if (!types.isEmpty()) {
                     typesSet = true;

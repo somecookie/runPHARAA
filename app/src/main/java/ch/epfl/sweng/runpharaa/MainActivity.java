@@ -24,6 +24,8 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
+import static ch.epfl.sweng.runpharaa.utils.Util.addTypes;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -199,9 +201,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setCancelable(false);
         builder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
             typesFilter.clear();
-            for (int i = 0; i < checkedTypes.length; i++) {
-                if (checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
-            }
+            typesFilter = addTypes(checkedTypes);
             typesAreFiltered = !typesFilter.isEmpty();
         });
 

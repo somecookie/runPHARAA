@@ -16,6 +16,10 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Set;
+
+import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 public interface Util {
 
@@ -154,5 +158,13 @@ public interface Util {
         s = s.replaceAll("[àâ]", "a");
         s = s.replaceAll("Ô", "o");
         return s;
+    }
+
+    static Set<TrackType> addTypes(boolean[] checkedTypes) {
+        Set<TrackType> types = new HashSet<>();
+        for (int i = 0; i < checkedTypes.length; i++) {
+            if (checkedTypes[i]) types.add(TrackType.values()[i]);
+        }
+        return types;
     }
 }

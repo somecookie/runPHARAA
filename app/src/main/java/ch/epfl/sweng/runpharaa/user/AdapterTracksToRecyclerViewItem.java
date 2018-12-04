@@ -43,9 +43,9 @@ public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<Adapte
     @Override
     public void onBindViewHolder(@NonNull AdapterTracksToRecyclerViewItem.viewHolder viewHolder, int position) {
         // Set here the buttons, images and texts created in the viewHolder
-        viewHolder.name_text.setText(createdTracks.get(position).getName());
+        viewHolder.name.setText(createdTracks.get(position).getName());
 
-        ImageLoader.getLoader(context).displayImage(createdTracks.get(position).getImageURL(), viewHolder.background);
+        ImageLoader.getLoader(context).displayImage(createdTracks.get(position).getImageURL(), viewHolder.background_img);
 
         viewHolder.bind(createdTracks.get(position), new AdapterTracksToRecyclerViewItem.OnItemClickListener() {
             @Override
@@ -65,13 +65,13 @@ public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<Adapte
     protected class viewHolder extends RecyclerView.ViewHolder {
         // Buttons, images and texts on the cards will be created here
 
-        ImageView background;
-        TextView name_text;
+        ImageView background_img;
+        TextView name;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
-            background = itemView.findViewById(R.id.cardBackgroundId);
-            name_text = itemView.findViewById(R.id.nameID);
+            background_img = itemView.findViewById(R.id.cardBackgroundId);
+            name = itemView.findViewById(R.id.nameID);
         }
 
         public void bind(final TrackCardItem item, final AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
