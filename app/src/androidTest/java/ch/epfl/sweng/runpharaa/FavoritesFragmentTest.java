@@ -53,10 +53,13 @@ public class FavoritesFragmentTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(2000);
 
+        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                swipeDown());
+
+        sleep(2000);
+
         onView(allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(targetContext.getResources().getString(R.string.no_favorite))));
     }
-
-
 
     @Test
     public void testFavoritesAppears() {

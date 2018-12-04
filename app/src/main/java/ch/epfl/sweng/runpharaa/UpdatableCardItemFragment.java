@@ -20,6 +20,7 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.gui.CardItem;
 import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 public abstract class UpdatableCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     protected View v;
@@ -50,7 +51,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
 
         // Load initial data
-        loadData();
+        if(!Config.isTest) loadData();
 
         return v;
     }
