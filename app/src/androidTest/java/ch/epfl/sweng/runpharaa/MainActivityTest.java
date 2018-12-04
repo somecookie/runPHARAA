@@ -313,19 +313,4 @@ public class MainActivityTest extends TestInitLocation {
                 .perform(click());
         sleep(WAIT_TIME);
     }
-
-
-    @Test
-    public void createdTracksAreClickableAndDisplay() {
-        User.instance.addToCreatedTracks("0");
-
-        onView(withId(R.id.profileIcon)).perform(click());
-
-        sleep(1000);
-
-        onView(AllOf.allOf(withId(R.id.cardListId), isDisplayed())).perform(
-                actionOnItemAtPosition(0, click()));
-        intended(hasComponent(TrackPropertiesActivity.class.getName()));
-
-    }
 }
