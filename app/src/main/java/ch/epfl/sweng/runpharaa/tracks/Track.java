@@ -1,26 +1,26 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.TrackCardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.comment.Comment;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Required;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
-public class Track {
+public class Track implements Comparable<Track> {
     //Track identifiers
     private String trackUid;
     private String creatorUid;
@@ -61,7 +61,6 @@ public class Track {
     }
 
     //For Firebase
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public Track(FirebaseTrackAdapter trackAdapter) {
         Required.nonNull(trackAdapter.getTrackUid(), "Track ID must be non-null.");
         Required.nonNull(trackAdapter.getCreatorId(), "Creator ID must be non-null.");
@@ -89,7 +88,7 @@ public class Track {
         this.comments = trackAdapter.getComments();
 
         if(comments == null) comments = new ArrayList<>();
-        else comments.sort(Comment::compareTo);
+        else Collections.sort(comments, (Comment::compareTo));
     }
 
     public static ArrayList<Track> allTracks;
@@ -149,11 +148,19 @@ public class Track {
         return comments;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addComment(Comment comment){
         if(!comments.contains(comment)){
             comments.add(comment);
-            comments.sort(Comment::compareTo);
+            Collections.sort(comments, (Comment::compareTo));
         }
+    }
+
+    @Override
+    public int compareTo(@NonNull Track o) {
+        if(User.instance.getLocation() == null)
+            return 0;
+        double d1 = this.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+        double d2 = o.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
+        return Double.compare(d1, d2);
     }
 }

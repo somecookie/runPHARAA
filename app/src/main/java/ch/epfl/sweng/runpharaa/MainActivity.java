@@ -1,16 +1,12 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +18,11 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
-import ch.epfl.sweng.runpharaa.utils.Callback;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     public static int timeFilter;
     public static Set<TrackType> typesFilter;
     public static boolean typesAreFiltered;
-    public static User main;
     private static String[] listTypesStr;
     private static boolean[] checkedTypes;
     private TabLayout tabLayout;
@@ -48,48 +42,31 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
 
     public static boolean passFilters(Track t) {
-        if (timeIsFiltered) {
-            if (difficultyIsFiltered) {
-                if (typesAreFiltered) {
-                    Log.d("Filters", "time , diff, types");
-                    return filterTime(t) && filterDifficulty(t) && filterTypes(t);
-                }
-                Log.d("Filters", "time , diff");
-                return filterTime(t) && filterDifficulty(t);
-            }
-            if (typesAreFiltered) {
-                Log.d("Filters", "time , types");
-                return filterTime(t) && filterTypes(t);
-            }
-            Log.d("Filters", "time");
-            return filterTime(t);
-        }
-        if (difficultyIsFiltered) {
-            if (typesAreFiltered) {
-                Log.d("Filters", "diff , types");
-                return filterDifficulty(t) && filterTypes(t);
-            }
-            Log.d("Filters", "diff");
-            return filterDifficulty(t);
-        }
-        if (typesAreFiltered) {
-            Log.d("Filters", "types");
-            return filterTypes(t);
-        }
-        Log.d("Filters", "no filters");
-        return true;
+        return filterTime(t) && filterDifficulty(t) && filterTypes(t);
     }
 
     private static boolean filterTime(Track t) {
-        return t.getProperties().getAvgDuration() <= timeFilter;
+        if(timeIsFiltered){
+            return t.getProperties().getAvgDuration() <= timeFilter;
+        } else {
+            return true;
+        }
     }
 
     private static boolean filterDifficulty(Track t) {
-        return t.getProperties().getAvgDifficulty() <= difficultyFilter;
+        if(difficultyIsFiltered){
+            return t.getProperties().getAvgDifficulty() <= difficultyFilter;
+        } else {
+            return true;
+        }
     }
 
     private static boolean filterTypes(Track t) {
-        return t.getProperties().getType().containsAll(typesFilter);
+        if(typesAreFiltered){
+            return t.getProperties().getType().containsAll(typesFilter);
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -217,38 +194,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setMultiChoiceItems(listTypesStr, checkedTypes, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                checkedTypes[which] = isChecked;
-            }
-        });
+        builder.setMultiChoiceItems(listTypesStr, checkedTypes, (dialog, which, isChecked) -> checkedTypes[which] = isChecked);
 
         builder.setCancelable(false);
-        builder.setPositiveButton(getResources().getText(R.string.OK), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                typesFilter.clear();
-                for (int i = 0; i < checkedTypes.length; i++) {
-                    if (checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
-                }
-                typesAreFiltered = !typesFilter.isEmpty();
+        builder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
+            typesFilter.clear();
+            for (int i = 0; i < checkedTypes.length; i++) {
+                if (checkedTypes[i]) typesFilter.add(TrackType.values()[i]);
             }
+            typesAreFiltered = !typesFilter.isEmpty();
         });
 
-        builder.setNegativeButton(getResources().getText(R.string.noFilter), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                timeIsFiltered = false;
-                difficultyIsFiltered = false;
-                typesAreFiltered = false;
-                for (int i = 0; i < checkedTypes.length; i++) {
-                    checkedTypes[i] = false;
-                }
-                timeFilter = 60;
-                difficultyFilter = 3;
-                dialog.dismiss();
+        builder.setNegativeButton(getResources().getText(R.string.noFilter), (dialog, which) -> {
+            timeIsFiltered = false;
+            difficultyIsFiltered = false;
+            typesAreFiltered = false;
+            for (int i = 0; i < checkedTypes.length; i++) {
+                checkedTypes[i] = false;
             }
+            timeFilter = 60;
+            difficultyFilter = 3;
+            dialog.dismiss();
         });
 
         builder.setView(mView);

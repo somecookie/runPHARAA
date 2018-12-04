@@ -110,7 +110,7 @@ public interface Util {
         return inSampleSize;
     }
 
-    static Intent getTwitterIntent(Context ctx, String shareText) {
+    /*static Intent getTwitterIntent(Context ctx, String shareText) {
         Intent shareIntent;
 
         PackageManager pm = ctx.getPackageManager();
@@ -135,7 +135,7 @@ public interface Util {
             shareIntent = new Intent(Intent.ACTION_VIEW, uri);
             return shareIntent;
         }
-    }
+    }*/
 
     /**
      * Remove the accents of the string and transform it to lower case

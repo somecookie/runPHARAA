@@ -10,19 +10,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.TrackCardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.UpdatableCardItemFragment;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.AdapterTracksToRecyclerViewItem;
-import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public final class FragmentMyTracks extends UpdatableCardItemFragment {

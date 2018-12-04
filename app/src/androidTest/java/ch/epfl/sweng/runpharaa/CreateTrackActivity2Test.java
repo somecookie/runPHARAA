@@ -100,7 +100,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         GpsService.initFakeGps(FakeGpsService.GOOGLE);
     }
 
-    @Ignore
     @Test
     public void correctValuesDisplayedForInmBananeCs() {
         LatLng[] points = {inm, banane, cs};
@@ -264,7 +263,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         intent.putExtra("locations", locations);
         intent.putExtra("points", points);
         mActivityRule.launchActivity(intent);
-        sleep(5_000);
+        sleep(WAIT_TIME);
     }
 
 }

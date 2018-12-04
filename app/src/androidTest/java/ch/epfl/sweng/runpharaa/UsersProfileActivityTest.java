@@ -9,8 +9,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,33 +39,32 @@ public class UsersProfileActivityTest extends TestInitLocation {
     private static final int WAIT_TIME = 2000;
     @Rule
     public final ActivityTestRule<UsersProfileActivity> mActivityRule =
-            new ActivityTestRule<>(UsersProfileActivity.class, true, false);
+            new ActivityTestRule<>(UsersProfileActivity.class, false, false);
 
     @Before
     public void initEmptyUser() {
-        User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "BobUID");
+        User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+        Intents.init();
     }
 
-
-    //TODO fix it
-    /*
     @Test
     public void testOpenSettings() {
-        onView(withId(R.id.settingsButton)).perform(click());
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.settingsIcon)).perform(click());
+        sleep(WAIT_TIME);
         intended(hasComponent(SettingsActivity.class.getName()));
     }
-    */
 
     @Test
     public void correctlyDisplaysName() {
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.user_name)).check(matches(withText(User.instance.getName())));
     }
 
     @Test
     public void correctlyDisplaysNumberOfCreatedTracks() {
         User.instance.addToCreatedTracks("0");
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(null);
         sleep(WAIT_TIME);
         onView(withId(R.id.nbTracks)).check(matches(withText("1")));
     }
@@ -72,7 +73,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void correctlyDisplaysNumberOfFavorites() {
         User.instance.addToFavorites("0");
         User.instance.addToFavorites("1");
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(null);
         sleep(WAIT_TIME);
         onView(withId(R.id.nbFav)).check(matches(withText("2")));
     }
@@ -81,7 +82,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void handlesSameFavoriteAddedTwice() {
         User.instance.addToFavorites("0");
         User.instance.addToFavorites("0");
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(null);
         sleep(WAIT_TIME);
         onView(withId(R.id.nbFav)).check(matches(withText("1")));
     }
@@ -138,6 +139,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         clickOnDifferenttrophies();
     }
 
+    @Ignore
     @Test
     public void trophiesWithTenofEach(){
         mActivityRule.launchActivity(null);
@@ -152,6 +154,11 @@ public class UsersProfileActivityTest extends TestInitLocation {
         sleep(2000);
 
         clickOnDifferenttrophies();
+    }
+
+    @After
+    public void releaseIntetnts() {
+        Intents.release();
     }
 
     private void clickOnDifferenttrophies(){

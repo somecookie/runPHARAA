@@ -12,13 +12,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.gui.CardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 
 public abstract class UpdatableCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     protected View v;
@@ -26,7 +27,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     TextView emptyMessage;
 
     public interface OnItemClickListener {
-        void onItemClick(TrackCardItem item);
+        void onItemClick(CardItem item);
     }
 
     @Override
@@ -70,12 +71,12 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
 
     protected class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
         Context context;
-        List<TrackCardItem> listTrackCardItem;
+        List<CardItem> listCardItem;
         OnItemClickListener listener;
 
-        Adapter(Context context, List<TrackCardItem> listTrackCardItem, OnItemClickListener listener) {
+        Adapter(Context context, List<CardItem> listTrackCardItem, OnItemClickListener listener) {
             this.context = context;
-            this.listTrackCardItem = listTrackCardItem;
+            this.listCardItem = listTrackCardItem;
             this.listener = listener;
         }
 
@@ -90,37 +91,32 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         @Override
         public void onBindViewHolder(@NonNull Adapter.viewHolder viewHolder, int position) {
             // Set here the buttons, images and texts created in the viewHolder
-            viewHolder.name.setText(listTrackCardItem.get(position).getName());
+            viewHolder.name.setText(listCardItem.get(position).getName());
 
-            ImageLoader.getLoader(getContext()).displayImage(listTrackCardItem.get(position).getImageURL(), viewHolder.background_img);
+            ImageLoader.getLoader(getContext()).displayImage(listCardItem.get(position).getImageURL(), viewHolder.background_img);
 
-            viewHolder.bind(listTrackCardItem.get(position), listener);
+            viewHolder.bind(listCardItem.get(position), listener);
         }
 
         @Override
         public int getItemCount() {
-            return listTrackCardItem.size();
+            return listCardItem.size();
         }
 
-        public class viewHolder extends RecyclerView.ViewHolder {
+        class viewHolder extends RecyclerView.ViewHolder {
             // Buttons, images and texts on the cards will be created here
 
             ImageView background_img;
             TextView name;
 
-            public viewHolder(@NonNull View itemView) {
+            viewHolder(@NonNull View itemView) {
                 super(itemView);
                 background_img = itemView.findViewById(R.id.cardBackgroundId);
                 name = itemView.findViewById(R.id.nameID);
             }
 
-            public void bind(final TrackCardItem item, final OnItemClickListener listener) {
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listener.onItemClick(item);
-                    }
-                });
+            void bind(final CardItem item, final OnItemClickListener listener) {
+                itemView.setOnClickListener(v -> listener.onItemClick(item));
             }
         }
     }

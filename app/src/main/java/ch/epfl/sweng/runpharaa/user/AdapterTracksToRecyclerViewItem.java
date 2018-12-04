@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.TrackCardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 

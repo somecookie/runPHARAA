@@ -50,8 +50,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.instance = Database.getUser();
-        //User.set(Database.getUser());
-        //InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("adb install ~/facebook-android-sdk-3.5/bin/FBAndroid-28.apk");
     }
 
     @Rule
@@ -72,7 +70,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         onView(withId(R.id.fb_share_button)).perform(click());
     }
 
-    @Ignore
     @Test
     public void shareOnTwitter() {
         Track t1 = createTrack();
@@ -213,10 +210,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
 
-        Track track = new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1), new ArrayList<>(), p);
-
-
-        return track;
+        return new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
     }
 
     private void launchWithExtras(Track t) {

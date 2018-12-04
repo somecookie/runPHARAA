@@ -3,9 +3,12 @@ package ch.epfl.sweng.runpharaa;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
 
+@RunWith(JUnit4.class)
 public class RequiredTest {
 
     @Rule

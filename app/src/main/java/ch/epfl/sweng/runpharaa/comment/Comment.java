@@ -96,6 +96,6 @@ public class Comment implements Comparable<Comment>{
 
     @Override
     public String toString() {
-        return getComment();
+        return getComment()+getDateStamp();
     }
 }

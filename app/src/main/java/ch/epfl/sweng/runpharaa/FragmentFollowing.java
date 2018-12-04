@@ -7,14 +7,14 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.gui.CardItem;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.user.UserCardItem;
+import ch.epfl.sweng.runpharaa.gui.UserCardItem;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -36,7 +36,7 @@ public class FragmentFollowing extends UpdatableUserCardItemFragment {
     @Override
     protected void loadData() {
         emptyMessage.setVisibility(View.GONE);
-        // Create a fresh recyclerView and listTrackCardItem
+        // Create a fresh recyclerView and listCardItem
 
         UserDatabaseManagement.mReadDataOnce(UserDatabaseManagement.USERS, new Callback<DataSnapshot>() {
             @Override
@@ -45,14 +45,14 @@ public class FragmentFollowing extends UpdatableUserCardItemFragment {
                 List<UserCardItem> listUserCardItem = new ArrayList<>();
                 OnItemClickListener listener = new OnItemClickListener() {
                     @Override
-                    public void onItemClick(UserCardItem item) {
+                    public void onItemClick(CardItem item) {
                         Intent intent;
-                        if (!item.getParentUserID().equals(User.instance.getUid())) {
+                        if (!((UserCardItem)item).getParentUserID().equals(User.instance.getUid())) {
                             intent = new Intent(getContext(), OtherUsersProfileActivity.class);
                         } else {
                             intent = new Intent(getContext(), UsersProfileActivity.class);
                         }
-                        intent.putExtra("userId", item.getParentUserID());
+                        intent.putExtra("userId", ((UserCardItem)item).getParentUserID());
                         startActivity(intent);
                     }
                 };

@@ -6,32 +6,24 @@ import android.support.test.rule.GrantPermissionRule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
-import ch.epfl.sweng.runpharaa.firebase.Database;
-import ch.epfl.sweng.runpharaa.firebase.Storage;
-import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
-import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
-
-
-public class TestInitLocation {
-
-    @BeforeClass
-    public static void setTestModeOn(){
-        Database.isTest = true;
-        Storage.isTest = true;
-        GoogleAuthentication.isTest = true;
-        FirebaseAuthentication.isTest = true;
-    }
+public class TestInitLocation extends Authorizations{
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
+    @BeforeClass
+    public static void setTestModeOn() {
+        Config.isTest = true;
+        MapUtils.initCameraUpdateFactory();
+        MapUtils.initBitmapDescriptorFactory();
+        Config.setFakeMap(MapUtils.FAKE_MAP);
+    }
+
     @AfterClass
-    public static void setTestModeOff(){
-        Database.isTest = false;
-        Database.isTest = false;
-        GoogleAuthentication.isTest = false;
-        FirebaseAuthentication.isTest = false;
+    public static void setTestModeOff() {
+        Config.isTest = false;
     }
 }

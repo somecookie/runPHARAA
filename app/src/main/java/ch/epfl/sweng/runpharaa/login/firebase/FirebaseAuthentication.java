@@ -5,18 +5,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
-public abstract class FirebaseAuthentication {
+import ch.epfl.sweng.runpharaa.utils.Config;
 
-    public static boolean isTest = false;
+public abstract class FirebaseAuthentication {
 
     private static FirebaseAuthentication instance;
 
-    public static FirebaseAuthentication getInstance(){
-        if(instance == null) {
-            if (isTest)
-                instance = new FirebaseAuthenticationMock();
-            else
-                instance = new FirebaseAuthenticationReal();
+    public static FirebaseAuthentication getInstance() {
+        if (instance == null) {
+            instance = Config.isTest ? new FirebaseAuthenticationMock() : new FirebaseAuthenticationReal();
         }
         return instance;
     }

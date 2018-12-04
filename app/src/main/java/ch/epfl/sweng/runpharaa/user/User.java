@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.gui.UserCardItem;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public final class User implements Serializable {
@@ -57,6 +58,11 @@ public final class User implements Serializable {
     public static void
     set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
+    }
+
+    public static void
+    set(User u) {
+        instance = u;
     }
 
     @Exclude

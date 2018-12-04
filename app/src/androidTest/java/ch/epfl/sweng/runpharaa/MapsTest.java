@@ -52,12 +52,12 @@ public class MapsTest extends TestInitLocation {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, true, false);
+            new ActivityTestRule<>(MainActivity.class, false, false);
 
     @BeforeClass
     public static void initUser() {
         GpsService.initFakeGps(FakeGpsService.GOOGLE);
-        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
+        User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "1");
     }
 
 
@@ -69,7 +69,7 @@ public class MapsTest extends TestInitLocation {
         onView(withId(R.id.maps_test_text)).check(matches(withText("ready")));
     }
 
-
+    @Ignore
     @Test
     public void clickOnMarkerWorks() {
         mActivityRule.launchActivity(null);
@@ -95,6 +95,7 @@ public class MapsTest extends TestInitLocation {
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
     }
 
+    @Ignore
     @Test
     public void changeMapLocation(){
         mActivityRule.launchActivity(null);

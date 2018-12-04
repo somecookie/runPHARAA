@@ -1,35 +1,26 @@
-package ch.epfl.sweng.runpharaa.user;
+package ch.epfl.sweng.runpharaa.gui;
 
 import android.graphics.Bitmap;
 
-public class UserCardItem {
+public class UserCardItem extends CardItem{
     private Bitmap profilePic; //TODO: Keep for Image caching.
-    private String name;
     private String parentUserID;
-    private String imageURL;
     private int nbCreatedTracks;
 
     public UserCardItem() { }
 
     public UserCardItem(/*Bitmap profilePic,*/ String userName, String parentUserID, String imageURL, int nbCreatedTracks) {
         //this.background = background;
-        this.name = userName;
+        super(userName, imageURL);
         this.parentUserID = parentUserID;
-        this.imageURL = imageURL;
         this.nbCreatedTracks = nbCreatedTracks;
     }
 
     public Bitmap getBackground() { return profilePic; }
 
-    public String getName() { return name; }
-
     public String getParentUserID() { return parentUserID; }
 
-    public String getImageURL() { return this.imageURL; }
-
     public int getNbCreatedTracks() { return this.nbCreatedTracks; }
-
-    public void setName(String name) { this.name = name; }
 
     public void setParentUserID(String parentUserID) { this.parentUserID = parentUserID; }
 

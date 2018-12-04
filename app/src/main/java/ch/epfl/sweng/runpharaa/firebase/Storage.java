@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -15,11 +14,12 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import ch.epfl.sweng.runpharaa.utils.Config;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class Storage {
-    public static Boolean isTest = false;
     private static Boolean shouldFail = false;
     private static Boolean shouldNotComplete = false;
     private final static String key = "key";
@@ -53,11 +53,11 @@ public class Storage {
     private Task<Uri> addTrackToStorageTask;
 
     public static FirebaseStorage getInstance(){
-        return (isTest)? new Storage().instanciateMock() : FirebaseStorage.getInstance();
+        return (Config.isTest)? new Storage().instanciateMock() : FirebaseStorage.getInstance();
     }
 
     private FirebaseStorage instanciateMock(){
-        if(isTest){
+        if(Config.isTest){
             MockitoAnnotations.initMocks(this);
             instanciateStorage();
             instanciateTrackImage();

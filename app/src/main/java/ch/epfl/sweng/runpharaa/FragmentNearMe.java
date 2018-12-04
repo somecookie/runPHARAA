@@ -9,16 +9,16 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.gui.CardItem;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
-import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FragmentNearMe extends UpdatableCardItemFragment {
 
@@ -47,7 +47,7 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
             @Override
             public void onSuccess(DataSnapshot value) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
-                List<TrackCardItem> listTrackCardItem = new ArrayList<>();
+                List<CardItem> listTrackCardItem = new ArrayList<>();
 
                 List<Track> tracks = TrackDatabaseManagement.initTracksNearLocation(value, User.instance.getLocation());
 
@@ -60,7 +60,7 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
                 }
                 OnItemClickListener listener = item -> {
                     Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                    intent.putExtra("TrackID", item.getParentTrackID());
+                    intent.putExtra("TrackID", ((TrackCardItem)item).getParentTrackID());
                     startActivity(intent);
                 };
 

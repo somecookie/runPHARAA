@@ -56,40 +56,29 @@ public class FragmentMyTrophies extends Fragment {
 
         int nbCreated = User.instance.getCreatedTracks().size();
 
-        if (nbCreated >= 10) {
-            create.setImageResource(R.drawable.create_one_track_reward);
-        } else if (nbCreated >= 2) {
-            create.setImageResource(R.drawable.create_one_track_reward);
-        } else if (nbCreated >= 1) {
-            create.setImageResource(R.drawable.create_one_track_reward);
-        } else {
-            create.setImageResource(R.drawable.lock);
-        }
+        setImages(nbCreated,R.drawable.create_one_track_reward,create);
 
         int nbLike = User.instance.getLikedTracks().size();
 
-        if (nbLike >= 10) {
-            like.setImageResource(R.drawable.like_one_track_reward);
-        } else if (nbLike >= 2) {
-            like.setImageResource(R.drawable.like_one_track_reward);
-        } else if (nbLike >= 1) {
-            like.setImageResource(R.drawable.like_one_track_reward);
-        } else {
-            like.setImageResource(R.drawable.lock);
-        }
+        setImages(nbLike,R.drawable.like_one_track_reward,like);
 
         int nbFav = User.instance.getLikedTracks().size();
 
-        if (nbFav >= 10) {
-            fav.setImageResource(R.drawable.favorite_one_track_reward);
-        } else if (nbFav >= 2) {
-            fav.setImageResource(R.drawable.favorite_one_track_reward);
-        } else if (nbFav >= 1) {
-            fav.setImageResource(R.drawable.favorite_one_track_reward);
-        } else {
-            fav.setImageResource(R.drawable.lock);
-        }
+        setImages(nbFav,R.drawable.favorite_one_track_reward,fav);
 
+    }
+
+
+    private void setImages(int param, int image, ImageView v){
+        if (param >= 10) {
+            v.setImageResource(image);
+        } else if (param >= 2) {
+            v.setImageResource(image);
+        } else if (param >= 1) {
+            v.setImageResource(image);
+        } else {
+            v.setImageResource(image);
+        }
     }
 }
 

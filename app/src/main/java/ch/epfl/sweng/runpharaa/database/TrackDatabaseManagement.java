@@ -129,7 +129,6 @@ public class TrackDatabaseManagement {
      * @param key
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static Track initTrack(DataSnapshot dataSnapshot, String key) {
         return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
@@ -140,7 +139,6 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location) {
         List<Track> tracksNearMe = new ArrayList<>();
         for (DataSnapshot c : dataSnapshot.getChildren()) {
@@ -155,16 +153,11 @@ public class TrackDatabaseManagement {
             }
         }
 
-        Collections.sort(tracksNearMe, (o1, o2) -> {
-            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            return Double.compare(d1, d2);
-        });
+        Collections.sort(tracksNearMe);
         return tracksNearMe;
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private static List<Track> initTracksList(DataSnapshot dataSnapshot, List<String> tracksUID){
         List<Track> tracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
@@ -174,11 +167,7 @@ public class TrackDatabaseManagement {
                 }
             }
         }
-        Collections.sort(tracks, (o1, o2) -> {
-            double d1 = o1.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            double d2 = o2.getStartingPoint().distance(CustLatLng.LatLngToCustLatLng(User.instance.getLocation()));
-            return Double.compare(d1, d2);
-        });
+        Collections.sort(tracks);
         return tracks;
     }
 
@@ -188,7 +177,6 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
         return initTracksList(dataSnapshot, user.getCreatedTracks());
     }
@@ -199,7 +187,6 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Track> initFavouritesTracks(DataSnapshot dataSnapshot) {
         return initTracksList(dataSnapshot, User.instance.getFavoriteTracks());
     }

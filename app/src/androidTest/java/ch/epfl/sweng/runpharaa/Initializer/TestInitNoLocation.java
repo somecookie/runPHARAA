@@ -2,27 +2,20 @@ package ch.epfl.sweng.runpharaa.Initializer;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
-import ch.epfl.sweng.runpharaa.firebase.Database;
-import ch.epfl.sweng.runpharaa.firebase.Storage;
-import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
-import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
-
-public class TestInitNoLocation {
+public class TestInitNoLocation extends Authorizations{
 
     @BeforeClass
     public static void setTestModeOn() {
-        Database.isTest = true;
-        Storage.isTest = true;
-        GoogleAuthentication.isTest = true;
-        FirebaseAuthentication.isTest = true;
+        Config.isTest = true;
+        MapUtils.initCameraUpdateFactory();
+        MapUtils.initBitmapDescriptorFactory();
+        Config.setFakeMap(MapUtils.FAKE_MAP);
     }
 
     @AfterClass
     public static void setTestModeOff() {
-        Database.isTest = false;
-        Database.isTest = false;
-        GoogleAuthentication.isTest = false;
-        FirebaseAuthentication.isTest = false;
+        Config.isTest = false;
     }
 }
