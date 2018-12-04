@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.test.ActivityInstrumentationTestCase;
 
 import org.junit.BeforeClass;
 import org.junit.Rule;

@@ -3,6 +3,8 @@ package ch.epfl.sweng.runpharaa;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(JUnit4.class)
 public class TrackTest {
 
     @Rule

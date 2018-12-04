@@ -25,6 +25,7 @@ public class AAA extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.set(Database.getUser());
+        sleep(45000);
     }
 
     @Test

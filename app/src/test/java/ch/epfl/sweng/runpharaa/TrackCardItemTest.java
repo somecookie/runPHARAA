@@ -5,10 +5,13 @@ import android.graphics.Color;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
+@RunWith(JUnit4.class)
 public class TrackCardItemTest {
 
     private static Bitmap bg = Util.createImage(200, 100, Color.BLACK);
