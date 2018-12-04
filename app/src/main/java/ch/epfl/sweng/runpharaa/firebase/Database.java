@@ -30,6 +30,7 @@ import ch.epfl.sweng.runpharaa.user.User;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 public class Database {
@@ -635,7 +636,6 @@ public class Database {
             }
         }).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
-
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -645,10 +645,9 @@ public class Database {
                 } else {
                     l.onDataChange(snapOnDataChangeReadUser);
                 }
-                return null;
+                return l;
             }
         }).when(drUserAnyChildFollow).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
     }
 
     private void createTrack() {
