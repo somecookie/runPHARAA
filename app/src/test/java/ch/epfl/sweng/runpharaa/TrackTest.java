@@ -1,61 +1,55 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.google.android.gms.maps.model.LatLng;
-
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
+import static org.junit.Assert.assertNotNull;
+
+@RunWith(JUnit4.class)
 public class TrackTest {
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-    private Bitmap b;
-    private Set<TrackType> types;
-    private TrackProperties p;
-    private LatLng coord0;
-    private LatLng coord1;
-    private LatLng[] path;
-    private Track legalTestTrack;
 
-    @Before
-    public void init() {
-        b = Bitmap.createBitmap(200, 100, Bitmap.Config.ARGB_8888);
-        types = new HashSet<>();
-        types.add(TrackType.FOREST);
-        p = new TrackProperties(100, 10, 1, 1, types);
-
-        coord0 = new LatLng(46.518577, 6.563165);
-        coord1 = new LatLng(46.522735, 6.579772);
-
-        path = new LatLng[]{coord0, coord1};
-
-        legalTestTrack = new Track("7864", "Bob", b, "test", path , p);
+    @Test
+    public void teststandardDatabaseConstructor(){
+        assertNotNull(new Track());
     }
 
     @Test
-    public void PathWithLessThan2PointsThrowsException() {
-
-        LatLng[] path = {coord0};
-
+    public void testExeptionOnFireBaseConstructor(){
+        List<CustLatLng> path = new ArrayList<>();
+        path.add(new CustLatLng(1.0, 1.0));
+        Set<TrackType> types = new HashSet<>();
+        types.add(TrackType.BEACH);
+        TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
         exception.expect(IllegalArgumentException.class);
-        new Track("8498", "Bob", b, "test", path, p);
-
+        new Track("testUID", "testCreator", "test", path, new ArrayList<>(), tp);
     }
 
     @Test
-    public void startingPositionIsCorrect(){
-        assert legalTestTrack.getStartingPoint().equals(coord0);
+    public void testExeptionOnTrackAdapterConstructor(){
+        List<CustLatLng> path = new ArrayList<>();
+        path.add(new CustLatLng(1.0, 1.0));
+        Set<TrackType> types = new HashSet<>();
+        types.add(TrackType.BEACH);
+        TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
+        FirebaseTrackAdapter track = new FirebaseTrackAdapter("testUID", "testCreator", "test", null, path, tp, new ArrayList<>());
+        track.setTrackUid("UID");
+        exception.expect(IllegalArgumentException.class);
+        new Track(track);
     }
 }

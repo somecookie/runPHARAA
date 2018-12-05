@@ -9,19 +9,33 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"
-		     tools:ignore="MockLocation,ProtectedPermissions" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider2002032346519478"
+            android:exported="true" />
+
+
         <activity android:name=".MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -42,31 +56,39 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.runpharaa.MainActivity" />
         </activity>
-        <activity android:name=".CreateTrackActivity"
-            android:exported="true"
-            />
+        <activity
+            android:name=".CreateTrackActivity"
+            android:exported="true" />
         <activity android:name=".CreateTrackActivity2" />
 
-        <service android:name=".GpsService" />
-		
+        <service android:name=".location.RealGpsService" />
+        <service android:name=".location.FakeGpsService" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".TrackPropertiesActivity" />
+        <activity
+            android:name=".TrackPropertiesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".user.UsersProfileActivity" />
+        <activity android:name=".FullMapActivity" />
+
+        <activity android:name=".user.myProfile.UsersProfileActivity" />
 
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".user.settings.SettingsActivity"
+            android:label="@string/settings" />
+        <activity android:name=".user.otherProfile.OtherUsersProfileActivity" />
+        <activity android:name=".login.google.FakeGoogleSignInActivity" />
     </application>
 
 </manifest>

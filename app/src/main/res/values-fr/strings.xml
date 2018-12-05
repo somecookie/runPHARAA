@@ -2,16 +2,21 @@
 <resources>
     <string name="app_name">RunPHARAA</string>
     <string name="settings">Paramètres</string>
+    <string name="filters">filters</string>
     <string name="title_activity_maps">Proche</string>
     <string name="password">Mot de passe</string>
     <string name="map">Carte</string>
     <string name="title_activity_login">Connexion</string>
-    <string name="welcome">Bonjour</string>
+    <string name="loading_data">Téléchargement des données en cours …</string>
+    <string name="welcome">Bienvenue %s !</string>
+    <string name="almost_there">On y est presque !</string>
     <string name="signOut">Se déconnecter</string>
     <string name="loggedOut">Déconnecté(e)</string>
     <string name="no_tracks">Oops! Il n\'y a pas de parcours dans les parages</string>
     <string name="no_follow">Essaie de suivre quelqu\'un!</string>
     <string name="no_favorite">Ajoute un parcours en favoris!</string>
+    <string name="no_created_self">Essaie de créer un parcours!</string>
+    <string name="no_created_other">Cet utilisateur n\'a pas créé de parcours!</string>
     <string name="add_photo">Photo</string>
     <string name="set_properties">Prop</string>
     <string name="create_track">Créer!</string>
@@ -26,6 +31,9 @@
     <string name="types_not_set">Les types doivent être configurés</string>
     <string name="default_time">Temps de course choisi par défaut</string>
     <string name="dismiss">Annuler</string>
+    <string name="max_time_of">Au plus </string>
+    <string name="no_time_limit">Pas de limites de temps</string>
+    <string name="noFilter">Ne pas filtrer</string>
     <string name="OK">OK</string>
     <string-array name="track_types">
         <item>Ville</item>
@@ -38,6 +46,62 @@
     <string name="by">par %s</string>
     <string name="duration">Durée: %.2f minutes</string>
     <string name="distance">Distance: %.2f mètres</string>
-    <string name="difficulty">Difficulté: %.2f</string>
+    <string name="difficulty">Difficulté: %.2f / 5.00</string>
+    <string name="search_users">Recherche dans: utilisateurs</string>
+    <string name="search_tracks">Recherche dans: parcours</string>
+
+
+    <!-- Strings related to Settings -->
+
+    <!-- Near me -->
+    <string name="pref_section_near_me">Proche</string>
+
+    <string name="pref_title_radius">Rayon</string>
+
+    <!-- Location -->
+    <string name="pref_section_location">Mises à jour localisation</string>
+
+    <string name="pref_title_min_time_interval">Intervale minimal</string>
+
+    <string name="pref_title_time_interval">Intervale classique</string>
+
+    <string name="pref_title_min_distance_interval">Différence de déplacement minimale</string>
+
+    <!-- Tracks -->
+    <string name="pref_section_track">Course</string>
+
+    <string name="pref_title_track_types">Types de course</string>
+
+    <!-- Reset -->
+    <string name="pref_section_other">Autre</string>
+
+    <string name="pref_title_reset_prefs">Paramètres par défaut</string>
+    <string name="pref_title_clear_cache">Vider cache</string>
+    <string name="max_difficulty_of">Une difficulté d\'au plus</string>
+    <string name="no_track_found">%s n\'existe pas!</string>
+    <string name="no_user_found">%s n\'existe pas!</string>
+    <string name="social_media_post_message">Matte-moi ce parcours de ouf trouvé sur RunPharaa !\nIl s\'appelle \"%s\" \n#runPharaaWayFromTravis</string>
+
+    <string name="and">et</string>
+    <string name="comment_hint">Exprime toi en moins de %d caractères!</string>
+    <string name="comment_too_long">Ton commentaire est trop long!</string>
+    <string name="no_favorites_and_likes">Aimes quelque tracks et ajoutes les à tes favoris pour un meilleur supposition!</string>
+
+
+    <string name="creation_trophies"> Création</string>
+    <string name="like_trophies"> J\'aime</string>
+    <string name="fav_trophies"> Favoris</string>
+    <string name="one_like">Un j\'aime</string>
+    <string name="two_likes">Deux j\'aime</string>
+    <string name="ten_likes">Dix j\'aime</string>
+    <string name="add_some_likes">Ajoutez des "j'aime"</string>
+    <string name="add_some_favorites">Ajoutez des favoris</string>
+    <string name="ten_favorites">Dix favoris</string>
+    <string name="two_favorites">Deux favoris</string>
+    <string name="one_favorite">Un favori</string>
+    <string name="one_track">Une course</string>
+    <string name="two_tracks">Deux courses</string>
+    <string name="ten_tracks">Dix courses</string>
+    <string name="create_tracks">Créez des courses</string>
 
 </resources>

@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,32 +19,33 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.location.GpsService;
+import ch.epfl.sweng.runpharaa.utils.Config;
+
 public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
     private PolylineOptions lines;
     private ArrayList<LatLng> points = new ArrayList<>();
     private ArrayList<Location> locations = new ArrayList<>();
     private boolean creating;
-    private GoogleMap googleMap;
+    private GoogleMap map;
     private Button createButton;
+
     /**
      * The listener used for the main button
      */
-    private View.OnClickListener buttonOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!creating) {
-                creating = true;
-                createButton.setText("STOP");
-                handleNewLocation();
+    private View.OnClickListener buttonOnClickListener = (v) -> {
+        if (!creating) {
+            creating = true;
+            createButton.setText("STOP");
+            handleNewLocation();
+        } else {
+            if (points.size() < 2) {
+                Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
             } else {
-                if (points.size() < 2) {
-                    Toast.makeText(getBaseContext(), "You need at least 2 points to create a track !", Toast.LENGTH_LONG).show();
-                } else {
-                    creating = false;
-                    createButton.setText("PROCESSING");
-                    launchSecondPart();
-                }
+                creating = false;
+                createButton.setText("PROCESSING");
+                launchSecondPart();
             }
         }
     };
@@ -54,46 +54,54 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_track);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
         // Setup button
         createButton = findViewById(R.id.start_create_button);
         createButton.setOnClickListener(buttonOnClickListener);
         createButton.setText("START");
+        // Obtain the SupportMapFragment and get notified when the fakeMap is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            if(Config.isTest) {
+                onMapReady(Config.getFakeMap());
+            }
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        map = googleMap;
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.zoomTo(18));
+
+        lines = new PolylineOptions();
+
+        handleNewLocation();
     }
 
     @Override
     protected void handleNewLocation() {
+        // Get new location
+        Location location = GpsService.getInstance().getCurrentLocation();
+
+        if (location == null)
+            return;
+
+        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+
         // Move camera
-        LatLng current;
-        try {
-            current = new LatLng(location.getLatitude(), location.getLongitude());
-        }catch (NullPointerException e){
-            Log.e("ERROR", "location was null");
-            current = new LatLng(0,0);
-        }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+        map.moveCamera(CameraUpdateFactory.newLatLng(current));
         if (creating) {
             // Store new location
             locations.add(location);
             // Add new point
             points.add(current);
-            // Clear map
-            googleMap.clear();
+            // Clear fakeMap
+            map.clear();
             // Draw path
-            lines = new PolylineOptions().width(10).color(Color.BLUE).geodesic(true);
+            lines = lines.width(10).color(Color.BLUE).geodesic(true);
             lines.addAll(points);
-            googleMap.addPolyline(lines);
+            map.addPolyline(lines);
         }
     }
 

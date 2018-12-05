@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">HXra47fS2HdHPsO9R1eEOr9Cw</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">QCTEmH1thakZZZSR7MtHhR6sh2hZ2a9drR2F2K7q1T5SMkByIx</string>
+</resources>

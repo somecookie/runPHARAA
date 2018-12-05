@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +13,7 @@ import java.util.Set;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
+@RunWith(JUnit4.class)
 public class TrackPropertiesTest {
 
     TrackProperties tp;
@@ -80,6 +83,14 @@ public class TrackPropertiesTest {
     @Test
     public void testGetHeihtDiff(){
         assert tp.getHeightDifference() == 200.0;
+    }
+
+    @Test
+    public void testSetters(){
+        tp.setFavorites(1);
+        tp.setHeightDifference(10);
+        tp.setLength(300);
+        tp.setLikes(3);
     }
 
 }

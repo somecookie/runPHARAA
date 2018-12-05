@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="AlwaysShowAction">
 
+    <item android:id="@+id/filterIcon"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/filters"
+        app:showAsAction="always" />
+
     <item android:id="@+id/profileIcon"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile"
-        app:showAsAction="always" />
-
-    <item android:id="@+id/settingsIcon"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/settings"
         app:showAsAction="always" />
 
     <item android:id="@+id/mapIcon"
