@@ -106,7 +106,6 @@ public class TrackDatabaseManagement {
         });
     }
 
-
     /**
      * Given a track, updates the corresponding entry in the Firebase Database..
      *
@@ -157,7 +156,6 @@ public class TrackDatabaseManagement {
         return tracksNearMe;
     }
 
-
     private static List<Track> initTracksList(DataSnapshot dataSnapshot, List<String> tracksUID){
         List<Track> tracks = new ArrayList<>();
         for(DataSnapshot c : dataSnapshot.getChildren()){
@@ -177,8 +175,8 @@ public class TrackDatabaseManagement {
      * @param dataSnapshot
      * @return
      */
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot){
-        return initTracksList(dataSnapshot, User.instance.getCreatedTracks());
+    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
+        return initTracksList(dataSnapshot, user.getCreatedTracks());
     }
 
     /**
