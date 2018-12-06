@@ -54,7 +54,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
     @Rule
     public ActivityTestRule<TrackPropertiesActivity> mActivityRule =
-            new ActivityTestRule<>(TrackPropertiesActivity.class, true, false);
+            new ActivityTestRule<>(TrackPropertiesActivity.class, false, false);
 
     @Before
     public void initUserAndTracks() {
