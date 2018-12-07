@@ -10,7 +10,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,10 +32,7 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -59,7 +55,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @Before
     public void initUserAndTracks() {
         User.instance = Database.getUser();
-        //User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "aa");
     }
 
     @Test
@@ -153,7 +148,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         onView(withId(R.id.commentsID)).perform(click());
 
         sleep(2000);
-        //onView(withId(R.id.comments_editText)).perform(click());
 
         onView(withId(R.id.comments_editText)).perform(replaceText("Mais, vous savez, moi je ne crois pas " +
                 "qu'il y ait de bonne ou de mauvaise situation. " +
@@ -191,15 +185,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         t1.addComment(com);
         onView(withId(R.id.post_button)).perform(click());
 
-
-
-
         sleep(3000);
-        //Espresso.pressBack();
-
-        //onView(withText(mActivityRule.getActivity().getResources().getString(R.string.comment_too_long)))
-        //       .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-        //        .check(matches(isDisplayed()));
     }
 
     private Track createTrack() {
