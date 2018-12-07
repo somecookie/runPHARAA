@@ -7,6 +7,7 @@ import org.junit.Test;
 import ch.epfl.sweng.runpharaa.cache.MemoryCache;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class MemoryCacheTest {
     private MemoryCache cache = new MemoryCache();
@@ -64,6 +65,6 @@ public class MemoryCacheTest {
     public void returnsNullWhenNotPresent() {
         cache.clear();
         Bitmap b = cache.get("b4");
-        assertEquals(null, b);
+        assertNull(b);
     }
 }
