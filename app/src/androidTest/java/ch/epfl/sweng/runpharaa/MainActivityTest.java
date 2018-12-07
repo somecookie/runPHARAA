@@ -1,14 +1,10 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.net.Uri;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.SearchView;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -31,9 +28,7 @@ import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -62,7 +57,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(46.518577, 6.563165), "1");
+        User.instance = Database.getUser();
     }
 
     @Before
@@ -134,9 +129,9 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(1000);
-        searchFor("Do I exist ?", true);
-        sleep(1000);
-        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
+        searchFor("travis scott", true);
+        sleep(500);
+        String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "travis scott");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
@@ -175,7 +170,7 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         searchFor("GradleBuildRunning", true);
-        sleep(1000);
+        sleep(500);
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "GradleBuildRunning");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
