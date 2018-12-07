@@ -135,6 +135,7 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         sleep(1000);
         searchFor("Do I exist ?", true);
+        sleep(1000);
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_user_found), "Do I exist?");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
@@ -161,7 +162,6 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         searchFor("Cours forest !", true);
-        //onView(withId(R.id.searchIcon)).perform(typeText("Cours forest !"), pressKey(KeyEvent.KEYCODE_ENTER));
         sleep(4000);
         onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
     }
@@ -175,6 +175,7 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         searchFor("GradleBuildRunning", true);
+        sleep(1000);
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "GradleBuildRunning");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
