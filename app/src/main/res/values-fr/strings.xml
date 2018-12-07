@@ -103,5 +103,9 @@
     <string name="two_tracks">Deux courses</string>
     <string name="ten_tracks">Dix courses</string>
     <string name="create_tracks">Créez des courses</string>
+    <string name="delete">Supprimer</string>
+    <string name="want_to_delete_this_track">Voulez-vous supprimer ce parcours ?</string>
+    <string name="cancel">Annuler</string>
+    <string name="deleted_track">Désolé ce parcours a été supprimé</string>
 
 </resources>
