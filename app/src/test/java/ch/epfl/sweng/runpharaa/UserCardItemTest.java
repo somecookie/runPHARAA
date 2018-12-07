@@ -38,6 +38,5 @@ public class UserCardItemTest {
         Assert.assertEquals("0", c.getParentUserID());
         Assert.assertEquals(1, c.getNbCreatedTracks());
         Assert.assertEquals(imageURL, c.getImageURL());
-        Assert.assertNull(c.getBackground());
     }
 }

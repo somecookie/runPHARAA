@@ -67,7 +67,7 @@ public class FragmentSearch extends Fragment {
                     }
                     List<Track> favorites = TrackDatabaseManagement.initFavouritesTracks(value);
                     if(favorites.isEmpty()){
-                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(value);
+                        List<Track> liked = TrackDatabaseManagement.initCreatedTracks(value, User.instance);
                         if(liked.isEmpty()) {
                             Toast.makeText(getContext(),R.string.no_favorites_and_likes, Toast.LENGTH_LONG).show();
                             Random r = new Random();
