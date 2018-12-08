@@ -32,7 +32,6 @@ public class UsersProfileActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
-    TextView emptyMessage;
     private ImageView picture;
 
     @Override
@@ -77,11 +76,6 @@ public class UsersProfileActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    protected void setEmptyMessage() {
-        emptyMessage.setText(R.string.no_created_self);
-        emptyMessage.setVisibility(View.VISIBLE);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -97,8 +91,6 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     private void loadActivity(User user) {
-        emptyMessage = findViewById(R.id.emptyMessage);
-        emptyMessage.setVisibility(View.GONE);
 
         TextView v = findViewById(R.id.user_name);
         v.setText(user.getName());
@@ -127,15 +119,12 @@ public class UsersProfileActivity extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
-                        Intent login = new Intent(getBaseContext(), LoginActivity.class);
-                        login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(login);
-                        finish();
-                    }
+                task -> {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
+                    Intent login = new Intent(getBaseContext(), LoginActivity.class);
+                    login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(login);
+                    finish();
                 });
     }
 
