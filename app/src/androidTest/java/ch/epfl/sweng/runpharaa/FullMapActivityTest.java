@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
+import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;

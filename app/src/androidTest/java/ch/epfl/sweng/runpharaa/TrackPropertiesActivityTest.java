@@ -20,13 +20,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
