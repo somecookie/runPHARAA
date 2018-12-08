@@ -109,7 +109,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void logoutButtonLogOut() {
         mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.signOutIcon)).perform(click());
-        sleep(5000);
+        sleep(WAIT_TIME);
         intended(hasComponent(LoginActivity.class.getName()));
     }
 

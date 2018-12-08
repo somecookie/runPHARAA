@@ -2,13 +2,11 @@ package ch.epfl.sweng.runpharaa.user.myProfile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,16 +14,15 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
@@ -71,18 +68,18 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         loadActivity(User.instance);
         super.onResume();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.settingsIcon :
+        switch (item.getItemId()) {
+            case R.id.settingsIcon:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
-            case R.id.signOutIcon :
+            case R.id.signOutIcon:
                 signOut();
                 return true;
         }
@@ -108,25 +105,23 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     private void signOut() {
+        if(Config.isTest) {
+            goToLogin();
+            return;
+        }
         FirebaseAuth.getInstance().signOut();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         // Build a GoogleSignInClient with the options specified by gso.
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                task -> {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
-                    Intent login = new Intent(getBaseContext(), LoginActivity.class);
-                    login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(login);
-                    finish();
-                });
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> goToLogin());
     }
 
+    private void goToLogin() {
+        Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
+        Intent login = new Intent(getBaseContext(), LoginActivity.class);
+        login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(login);
+        finish();
+    }
 
 }
