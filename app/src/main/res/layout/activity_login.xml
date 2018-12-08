@@ -19,7 +19,6 @@
         android:id="@+id/textViewLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/sign_in_button_google"
         app:layout_constraintEnd_toEndOf="parent"

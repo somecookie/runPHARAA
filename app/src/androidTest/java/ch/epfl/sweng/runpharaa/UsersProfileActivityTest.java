@@ -2,7 +2,6 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
@@ -12,8 +11,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,19 +24,20 @@ import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
 import static android.os.SystemClock.sleep;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
+import static ch.epfl.sweng.runpharaa.util.ViewUtils.onPreferenceRow;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -70,6 +68,8 @@ public class UsersProfileActivityTest extends TestInitLocation {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.settingsIcon)).perform(click());
         sleep(WAIT_TIME);
+        // can't access intent if the view isn't initialized, so we wait until we see the preferences
+        onPreferenceRow(withKey(getTargetContext().getResources().getString(R.string.pref_key_radius))).check(matches(isDisplayed()));
         intended(hasComponent(SettingsActivity.class.getName()));
     }
 
@@ -107,9 +107,11 @@ public class UsersProfileActivityTest extends TestInitLocation {
 
     @Test
     public void logoutButtonLogOut() {
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.signOutIcon)).perform(click());
         sleep(WAIT_TIME);
+        // can't access intent if the view isn't initialized, so we wait until we see the sign in button
+        onView(withId(R.id.sign_in_button_google)).check(matches(isDisplayed()));
         intended(hasComponent(LoginActivity.class.getName()));
     }
 

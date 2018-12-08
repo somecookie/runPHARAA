@@ -8,17 +8,11 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.DataInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.text.TextUtils;
-import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -30,7 +24,6 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -38,8 +31,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static org.hamcrest.CoreMatchers.not;
+import static ch.epfl.sweng.runpharaa.util.ViewUtils.onPreferenceRow;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 
@@ -55,32 +47,6 @@ public class SettingsActivityTest extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.set("FakeUser", 2000, Uri.parse(""), new LatLng(37.422, -122.084), "1");
-    }
-
-    private static Matcher<View> withResName(final String resName) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with res-name: " + resName);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                int identifier = view.getResources().getIdentifier(resName, "id", "android");
-                return !TextUtils.isEmpty(resName) && (view.getId() == identifier);
-            }
-        };
-    }
-
-    private static DataInteraction onPreferenceRow(Matcher<? extends Object> datamatcher) {
-
-        DataInteraction interaction = onData(datamatcher);
-
-        return interaction
-                .inAdapterView(allOf(
-                        withId(android.R.id.list),
-                        not(withParent(withResName("headers")))));
     }
 
     @Before
