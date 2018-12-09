@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Map;
 
@@ -76,6 +78,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuthentication.getInstance();
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(aVoid -> Log.i("WESHHHHHHHHH", aVoid.getToken()));
     }
 
     @Override

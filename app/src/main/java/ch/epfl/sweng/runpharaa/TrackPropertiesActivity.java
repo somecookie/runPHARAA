@@ -37,6 +37,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
+import org.json.JSONException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -48,6 +50,7 @@ import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.notification.FireMessage;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -287,6 +290,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
     private void updateLikes(Track track1, String trackID) {
+
+        sentToNotification(track1.getCreatorUid(), "LIKE ALERT", "The user ... liked one of your track");
+
+
         final Track track = track1;
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
@@ -374,5 +381,23 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+    public void sentToNotification(String key, String title, String message) {
+
+        FireMessage f = null;
+        try {
+            f = new FireMessage(title, message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String fireBaseToken="e_DMknIKz9Y:APA91bFhWO-BvR0Zu8dCzXy_XUEUTanq0k48M3Ot7NEvVShhAQmxNLpKQ78MvGJvbysDxd_BFVRzO5gvRQqg7DXNGLU5lWqWvjWyKD0Z1tPVTvGhmTaP-g8-EgOqeW3yAwQHwVMEgJgR";
+        try {
+            f.sendToToken(fireBaseToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            }
     }
 }

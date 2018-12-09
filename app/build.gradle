@@ -17,6 +17,11 @@ android {
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
 
     // This enables long timeouts required on slow environments, e.g. Travis
@@ -105,6 +110,9 @@ dependencies {
     implementation 'com.facebook.android:facebook-share:4.38.1'
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
     implementation 'com.twitter.sdk.android:tweet-composer:3.1.1'
+    //notification
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
     // dependencies for testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
