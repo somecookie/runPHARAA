@@ -25,6 +25,7 @@ import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
@@ -67,10 +68,11 @@ public class UsersProfileActivityTest extends TestInitLocation {
     @Test
     public void testOpenSettings() {
         mActivityRule.launchActivity(null);
-        onView(withId(R.id.settingsIcon)).perform(click());
         sleep(WAIT_TIME);
+        onView(withId(R.id.settingsIcon)).perform(click());
+        sleep(5*WAIT_TIME);
         // can't access intent if the view isn't initialized, so we wait until we see the preferences
-        onView(isRoot()).check(matches(isDisplayed()));
+        onData(isRoot()).check(matches(isDisplayed()));
         intended(hasComponent(SettingsActivity.class.getName()));
     }
 
