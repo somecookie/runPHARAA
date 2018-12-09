@@ -72,7 +72,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withId(R.id.settingsIcon)).perform(click());
         sleep(5*WAIT_TIME);
         // can't access intent if the view isn't initialized, so we wait until we see the preferences
-        onData(isRoot()).check(matches(isDisplayed()));
+        onView(isRoot()).check(matches(isDisplayed()));
         intended(hasComponent(SettingsActivity.class.getName()));
     }
 
