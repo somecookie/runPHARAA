@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -12,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 
 /**
  * Class that handle the received notification
@@ -26,6 +28,8 @@ public class FirebaseNotification extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        Log.i("WESHHHHHHHHHHHHHHHHHH", "Received Message");
 
         // Create Notification
         Intent intent = new Intent(this, MainActivity.class);
@@ -55,7 +59,7 @@ public class FirebaseNotification extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(String token){
-        //TODO:Update db
+        UserDatabaseManagement.writeNotificationKey(token);
     }
 }
 

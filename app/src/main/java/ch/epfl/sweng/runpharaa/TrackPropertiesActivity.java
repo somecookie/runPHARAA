@@ -291,8 +291,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     private void updateLikes(Track track1, String trackID) {
 
-        sentToNotification(track1.getCreatorUid(), "LIKE ALERT", "The user ... liked one of your track");
-
 
         final Track track = track1;
         if (User.instance.alreadyLiked(trackID)) {
@@ -300,6 +298,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             User.instance.unlike(trackID);
             UserDatabaseManagement.removeLikedTrack(trackID);
         } else {
+            UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
+                @Override
+                public void onSuccess(String value) {
+                    sentToNotification(value, "LIKE ALERT", "The user " + track.getCreatorName() + " liked your track " + track.getName());
+                }
+            });
+
             track.getProperties().addLike();
             User.instance.like(trackID);
             UserDatabaseManagement.updateLikedTracks(User.instance);
@@ -318,6 +323,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             User.instance.removeFromFavorites(trackID);
             UserDatabaseManagement.removeFavoriteTrack(trackID);
         } else {
+            UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
+                @Override
+                public void onSuccess(String value) {
+                    sentToNotification(value, "FAV ALERT", "The user " + track.getCreatorName() + " added one track ( " + track.getName() + " ) to his favorite");
+                }
+            });
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }
@@ -393,9 +404,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             e.printStackTrace();
         }
 
-        String fireBaseToken="e_DMknIKz9Y:APA91bFhWO-BvR0Zu8dCzXy_XUEUTanq0k48M3Ot7NEvVShhAQmxNLpKQ78MvGJvbysDxd_BFVRzO5gvRQqg7DXNGLU5lWqWvjWyKD0Z1tPVTvGhmTaP-g8-EgOqeW3yAwQHwVMEgJgR";
         try {
-            f.sendToToken(fireBaseToken);
+            f.sendToToken(key);
         } catch (Exception e) {
             e.printStackTrace();
             }

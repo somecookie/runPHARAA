@@ -79,7 +79,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mAuth = FirebaseAuthentication.getInstance();
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(aVoid -> Log.i("WESHHHHHHHHH", aVoid.getToken()));
     }
 
     @Override
@@ -142,6 +141,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     User.instance.setCreatedTracks(value.getCreatedTracks());
                     User.instance.setLikedTracks(value.getLikedTracks());
                     User.instance.setFollowedUsers(value.getFollowedUsers());
+
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(t -> {
+                        String key = t.getToken();
+                        User.instance.setNotificationKey(key);
+                        UserDatabaseManagement.writeNotificationKey(key);
+                    });
                     launchApp();
                 }
 

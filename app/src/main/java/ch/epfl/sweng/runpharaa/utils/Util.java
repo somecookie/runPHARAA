@@ -110,32 +110,7 @@ public interface Util {
         return inSampleSize;
     }
 
-    /*static Intent getTwitterIntent(Context ctx, String shareText) {
-        Intent shareIntent;
 
-        PackageManager pm = ctx.getPackageManager();
-        boolean installed;
-        try {
-            pm.getPackageInfo("com.twitter.android", PackageManager.GET_ACTIVITIES);
-            installed = true;
-        } catch (PackageManager.NameNotFoundException e) {
-            installed = false;
-        }
-
-        if (installed) {
-            shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setClassName("com.twitter.android",
-                    "com.twitter.android.PostActivity");
-            shareIntent.setType("text/*");
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
-            return shareIntent;
-        } else {
-            String tweetUrl = "https://twitter.com/intent/tweet?text=" + shareText;
-            Uri uri = Uri.parse(tweetUrl);
-            shareIntent = new Intent(Intent.ACTION_VIEW, uri);
-            return shareIntent;
-        }
-    }*/
 
     /**
      * Remove the accents of the string and transform it to lower case
