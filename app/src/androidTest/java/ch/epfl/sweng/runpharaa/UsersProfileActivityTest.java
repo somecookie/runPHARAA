@@ -9,6 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,6 +31,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
@@ -57,7 +59,19 @@ public class UsersProfileActivityTest extends TestInitLocation {
 
     @Test
     public void showsCreatedTracks() throws Throwable {
-        User.instance = Database.getUser();
+        User.instance.addToCreatedTracks("0");
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        runOnUiThread(() ->((FragmentMyTracks)mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
+        sleep(WAIT_TIME);
+        onView(AllOf.allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+        sleep(WAIT_TIME);
+        onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+    }
+
+    @Test
+    public void showsEmptyMessageWhenNoTracks() throws Throwable {
         mActivityRule.launchActivity(null);
         sleep(WAIT_TIME);
         runOnUiThread(() ->((FragmentMyTracks)mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
