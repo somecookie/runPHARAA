@@ -28,11 +28,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.Map;
-
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
 import ch.epfl.sweng.runpharaa.location.GpsService;
@@ -48,21 +47,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 69;
-    private GoogleSignInClient mGoogleSignInClient;
     private GoogleAuthentication mGoogleAuth;
     private FirebaseAuthentication mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
-    private FirebaseUser currentUser;
-    private AnimationDrawable anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startLoadingAnimation();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        for (Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())
-            System.out.println(e.getKey() + " " + e.getValue());
-
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -73,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mGoogleAuth = GoogleAuthentication.getInstance(LoginActivity.this);
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
+        GoogleSignInClient mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuthentication.getInstance();
     }
@@ -84,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         if(!requestPermissions()) {
-            currentUser = mAuth.getCurrentUser();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             updateUI(currentUser);
         }
     }
@@ -131,13 +124,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
-            UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
+            if (!Config.isTest) UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                 @Override
                 public void onSuccess(User value) {
-                    User.instance.setFavoriteTracks(value.getFavoriteTracks());
-                    User.instance.setCreatedTracks(value.getCreatedTracks());
-                    User.instance.setLikedTracks(value.getLikedTracks());
-                    User.instance.setFollowedUsers(value.getFollowedUsers());
+                    User.setLoadedData(value);
                     launchApp();
                 }
 
@@ -147,6 +137,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                 }
             });
+            else {
+                User.setLoadedData(Database.getUser());
+                launchApp();
+            }
+
         } else {
             setContentView(R.layout.activity_login);
             TextView tv = findViewById(R.id.textViewLogin);
@@ -166,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.loading_screen);
         ImageView imageView = findViewById(R.id.anim_view);
         imageView.setBackgroundResource(R.drawable.animation);
-        anim = ((AnimationDrawable)imageView.getBackground());
+        AnimationDrawable anim = ((AnimationDrawable) imageView.getBackground());
         anim.start();
     }
 
