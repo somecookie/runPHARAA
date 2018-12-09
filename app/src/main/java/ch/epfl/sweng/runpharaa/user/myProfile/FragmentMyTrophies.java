@@ -68,7 +68,6 @@ public class FragmentMyTrophies extends Fragment {
 
     }
 
-
     private void setImages(int param, int image, ImageView v){
         if (param >= 10) {
             v.setImageResource(image);

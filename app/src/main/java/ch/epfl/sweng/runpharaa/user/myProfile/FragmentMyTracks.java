@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
 
@@ -26,7 +27,8 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
 
     @Override
     protected void setEmptyMessage() {
-
+        emptyMessage.setText(R.string.no_created_self);
+        emptyMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
