@@ -29,8 +29,6 @@ public class FirebaseNotification extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Log.i("WESHHHHHHHHHHHHHHHHHH", "Received Message");
-
         // Create Notification
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
