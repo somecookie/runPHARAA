@@ -33,6 +33,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
@@ -67,9 +68,9 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void testOpenSettings() {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.settingsIcon)).perform(click());
-        sleep(2*WAIT_TIME);
+        sleep(WAIT_TIME);
         // can't access intent if the view isn't initialized, so we wait until we see the preferences
-        onPreferenceRow(withKey(getTargetContext().getResources().getString(R.string.pref_key_radius))).check(matches(isDisplayed()));
+        onView(isRoot()).check(matches(isDisplayed()));
         intended(hasComponent(SettingsActivity.class.getName()));
     }
 
