@@ -67,7 +67,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void testOpenSettings() {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.settingsIcon)).perform(click());
-        sleep(WAIT_TIME);
+        sleep(2*WAIT_TIME);
         // can't access intent if the view isn't initialized, so we wait until we see the preferences
         onPreferenceRow(withKey(getTargetContext().getResources().getString(R.string.pref_key_radius))).check(matches(isDisplayed()));
         intended(hasComponent(SettingsActivity.class.getName()));

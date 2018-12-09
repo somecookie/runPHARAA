@@ -22,6 +22,9 @@ import static org.hamcrest.CoreMatchers.not;
 
 public interface ViewUtils {
 
+    /**
+     * Sets progress on a progress bar
+     */
     static ViewAction setProgress(final int progress) {
         return new ViewAction() {
             @Override
@@ -42,6 +45,9 @@ public interface ViewUtils {
         };
     }
 
+    /**
+     * Sets a visible component to GONE
+     */
     static ViewAction setGone() {
         return new ViewAction() {
 
@@ -62,6 +68,9 @@ public interface ViewUtils {
         };
     }
 
+    /**
+     * Used for testing preferences, taken from <a href="https://stackoverflow.com/a/44262604">this stackoverflow post</a>.
+     */
     static DataInteraction onPreferenceRow(Matcher<? extends Object> datamatcher) {
 
         DataInteraction interaction = onData(datamatcher);
@@ -72,6 +81,9 @@ public interface ViewUtils {
                         not(withParent(withResName("headers")))));
     }
 
+    /**
+     * Custom matcher to use when searching for predefined android components such as positive / negative buttons, headers, etc.
+     */
     static Matcher<View> withResName(final String resName) {
 
         return new TypeSafeMatcher<View>() {
