@@ -84,7 +84,6 @@ public class SettingsActivityTest extends TestInitLocation {
     public void resetsPreferences() {
         onPreferenceRow(
                 withKey(r.getString(R.string.pref_key_reset_prefs)))
-                /*withTitle(R.string.pref_title_radius)))*/
                 .perform(click());
     }
 
@@ -92,14 +91,12 @@ public class SettingsActivityTest extends TestInitLocation {
     public void clearCache() {
         onPreferenceRow(
                 withKey(r.getString(R.string.pref_key_clear_cache)))
-                /*withTitle(R.string.pref_title_radius)))*/
                 .perform(click());
     }
 
     private void setValueToPref(int keyId, String value) {
         onPreferenceRow(
                 withKey(r.getString(keyId)))
-                /*withTitle(R.string.pref_title_radius)))*/
                 .perform(scrollTo(), click());
 
         onView(allOf(withId(android.R.id.edit),

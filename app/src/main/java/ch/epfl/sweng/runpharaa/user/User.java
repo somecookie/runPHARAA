@@ -61,6 +61,13 @@ public final class User implements Serializable {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
 
+    public static void setLoadedData(User otherUser) {
+        instance.setCreatedTracks(otherUser.createdTracks);
+        instance.setFavoriteTracks(otherUser.favoriteTracks);
+        instance.setLikedTracks(otherUser.likedTracks);
+        instance.setFollowedUsers(otherUser.followedUsers);
+    }
+
     public static void
     set(User u) {
         instance = u;

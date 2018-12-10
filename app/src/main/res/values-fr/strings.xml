@@ -103,5 +103,6 @@
     <string name="two_tracks">Deux courses</string>
     <string name="ten_tracks">Dix courses</string>
     <string name="create_tracks">Créez des courses</string>
+    <string name="logout">Log out</string>
 
 </resources>
