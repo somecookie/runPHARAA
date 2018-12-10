@@ -28,6 +28,8 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO: remove me
+
     public static boolean difficultyIsFiltered;
     public static int difficultyFilter;
     public static boolean timeIsFiltered;
