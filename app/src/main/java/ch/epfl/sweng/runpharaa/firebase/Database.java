@@ -40,7 +40,6 @@ public class Database {
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
-    public final static String COMMENTS = "comments";
     public final static String s_notification_key = "NotificationKey";
 
 
