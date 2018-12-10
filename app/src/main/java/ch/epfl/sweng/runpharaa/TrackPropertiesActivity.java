@@ -56,6 +56,7 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -103,7 +104,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 // Get fakeMap
                 SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
                 mapFragment.getMapAsync(onMapReadyCallback);
-                if(Config.isTest) {
+                if (Config.isTest) {
                     onMapReady(Config.getFakeMap());
                 }
             }
@@ -145,6 +146,26 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         initSocialMediaButtons(track);
 
         initCommentButton(track);
+
+        Button propertiesButton = findViewById(R.id.feedbackButton);
+        propertiesButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
+            @Override
+            public void onSuccess(PropertiesOnClickListener value) {
+
+                if (!value.isPropertiesSet()) {
+                    Toast.makeText(getBaseContext(), "Missing properties, try again!", Toast.LENGTH_LONG).show();
+                } else if (User.instance.getFeedbackTracks().contains(trackID)) {
+                    Toast.makeText(getBaseContext(), "You've already given a feedback", Toast.LENGTH_LONG).show();
+                } else {
+                    TrackProperties tp = track.getProperties();
+                    tp.addNewDuration(value.getTime());
+                    tp.addNewDifficulty(value.getDifficulty());
+                    TrackDatabaseManagement.updateTrack(track);
+                    UserDatabaseManagement.updateFeedBackTracks(User.instance);
+                }
+            }
+        }));
+
     }
 
     private void initCommentButton(Track track) {

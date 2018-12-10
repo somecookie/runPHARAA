@@ -53,6 +53,8 @@
     <string name="no_user_found">No user is called %s!</string>
     <string name="search_users">Currently search for: users</string>
     <string name="search_tracks">Currently search for: tracks</string>
+    <string name="prop_miss">Missing properties, try again!</string>
+    <string name="feedback_exists">You\'ve already given a feedback</string>
 
 
     <string-array name="track_types">

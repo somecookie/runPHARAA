@@ -73,6 +73,8 @@ public class TrackDatabaseManagement {
                         track.setTrackUid(key);
                         mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(e -> Log.e("Database", "Failed to upload new track :" + e.getMessage())).addOnSuccessListener(aVoid -> {
                             User.instance.addToCreatedTracks(key);
+                            User.instance.addNewFeedBack(key);
+                            UserDatabaseManagement.updateFeedBackTracks(User.instance);
                             UserDatabaseManagement.updateCreatedTracks(User.instance);
                         });
                     }

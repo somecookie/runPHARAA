@@ -19,7 +19,7 @@ public class PropertiesOnClickListener implements View.OnClickListener {
 
     private boolean propertiesSet;
     private double time;
-    private int difficulty;
+    private int difficulty = 3;
     private double totalDistance;
 
     public PropertiesOnClickListener(Activity activity, boolean hasDefaultTime) {

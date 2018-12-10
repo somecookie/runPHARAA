@@ -33,10 +33,12 @@ public final class User implements Serializable {
     private String uid;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
+    private List<String> feedbackTracks;
     private transient List<String> likedTracks;
     private transient List<String> followedUsers;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String name, int preferredRadius, Uri picture, LatLng location, String uid) {
         Required.nonNull(name, "The name of an user cannot be null");
@@ -51,6 +53,7 @@ public final class User implements Serializable {
         this.favoriteTracks = new ArrayList<>();
         this.likedTracks = new ArrayList<>();
         this.followedUsers = new ArrayList<>();
+        this.feedbackTracks = new ArrayList<>();
         this.location = location;
         this.uid = uid;
     }
@@ -63,6 +66,18 @@ public final class User implements Serializable {
     public static void
     set(User u) {
         instance = u;
+    }
+
+    public static User deserialize(String s) {
+        try {
+            byte b[] = Base64.decode(s.getBytes(), 0);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            return (User) objectInputStream.readObject();
+        } catch (Exception e) {
+            Log.d("Deserialization Error", e.toString());
+            return null;
+        }
     }
 
     @Exclude
@@ -119,7 +134,10 @@ public final class User implements Serializable {
      *
      * @param trackId the track's id
      */
-    public void addToFavorites(String trackId) { if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId); }
+    public void addToFavorites(String trackId) {
+        if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId);
+    }
+
     /**
      * Add a Track id in the set of created tracks.
      *
@@ -179,6 +197,12 @@ public final class User implements Serializable {
         }
     }
 
+    public void addNewFeedBack(String trackID){
+        if(!feedbackTracks.contains(trackID)){
+            feedbackTracks.add(trackID);
+        }
+    }
+
     /**
      * Getter for the user's location
      *
@@ -235,7 +259,9 @@ public final class User implements Serializable {
         return favoriteTracks;
     }
 
-    public void setFavoriteTracks(List<String> favoriteTracks) { this.favoriteTracks = favoriteTracks; }
+    public void setFavoriteTracks(List<String> favoriteTracks) {
+        this.favoriteTracks = favoriteTracks;
+    }
 
     public List<String> getLikedTracks() {
         return likedTracks;
@@ -253,6 +279,13 @@ public final class User implements Serializable {
         this.followedUsers = followedUsers;
     }
 
+    public List<String> getFeedbackTracks() {
+        return feedbackTracks;
+    }
+
+    public void setFeedbackTracks(List<String> feedbackTracks) {
+        this.feedbackTracks = feedbackTracks;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -276,7 +309,7 @@ public final class User implements Serializable {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(this);
             objectOutputStream.flush();
-            serialized =  new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
+            serialized = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
         } catch (Exception e) {
             Log.d("Serialization Error", e.toString());
         }
@@ -284,21 +317,13 @@ public final class User implements Serializable {
         return serialized;
     }
 
-    public static User deserialize(String s) {
-        try {
-            byte b[] = Base64.decode(s.getBytes(), 0);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            return (User) objectInputStream.readObject();
-        } catch (Exception e) {
-            Log.d("Deserialization Error", e.toString());
-            return null;
-        }
+    @Exclude
+    public UserCardItem getUserCardItem() {
+        return userCardItem;
     }
 
-    @Exclude
-    public UserCardItem getUserCardItem() { return userCardItem; }
-
-    public void setUserCardItem(UserCardItem userCardItem) { this.userCardItem = userCardItem; }
+    public void setUserCardItem(UserCardItem userCardItem) {
+        this.userCardItem = userCardItem;
+    }
 
 }
