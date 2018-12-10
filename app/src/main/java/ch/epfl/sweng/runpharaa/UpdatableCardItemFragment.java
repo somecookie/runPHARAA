@@ -25,7 +25,7 @@ import ch.epfl.sweng.runpharaa.utils.Config;
 public abstract class UpdatableCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     protected View v;
     protected SwipeRefreshLayout swipeLayout;
-    TextView emptyMessage;
+    protected TextView emptyMessage;
 
     public interface OnItemClickListener {
         void onItemClick(CardItem item);
@@ -49,7 +49,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         swipeLayout = v.findViewById(R.id.refreshNearMe);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
-
         // Load initial data
         if(!Config.isTest) loadData();
 

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.Initializer;
+package ch.epfl.sweng.runpharaa.util;
 
 import android.graphics.Bitmap;
 import android.location.Location;

@@ -20,7 +20,6 @@ public class ImageLoaderTest {
     Context context;
     String url1 = "https://picsum.photos/200";
     String url2 = "https://picsum.photos/200/300";
-    String small = "https://picsum.photos/64";
 
     @Before
     public void init() {
@@ -46,10 +45,4 @@ public class ImageLoaderTest {
         ImageLoader.getLoader(context).displayImage(url1, view);
         ImageLoader.getLoader(context).displayImage(url2, view);
     }
-
-    @Test
-    public void smallImageRescaled() {
-        ImageLoader.getLoader(context).displayImage(small, view);
-    }
-
 }

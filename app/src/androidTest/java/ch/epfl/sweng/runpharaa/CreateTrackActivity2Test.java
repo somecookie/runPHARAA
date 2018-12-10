@@ -6,31 +6,24 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.SeekBar;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.runpharaa.Initializer.TestInitLocation;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
@@ -47,6 +40,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -61,6 +55,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     @Rule
     public ActivityTestRule<CreateTrackActivity2> mActivityRule =
             new ActivityTestRule<>(CreateTrackActivity2.class, true, false);
+
     // ------------- COORDS --------------
     private LatLng inm = new LatLng(46.518577, 6.563165); //inm
     private LatLng banane = new LatLng(46.522735, 6.579772); //Banane
@@ -71,26 +66,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     private LatLng localPub = new LatLng(51.499248, -0.136834);
     private LatLng marina = new LatLng(1.283536, 103.860319);
     private LatLng esplaTheatre = new LatLng(1.288845, 103.855491);
-
-    private static ViewAction setProgress(final int progress) {
-        return new ViewAction() {
-            @Override
-            public void perform(UiController uiController, View view) {
-                SeekBar seekBar = (SeekBar) view;
-                seekBar.setProgress(progress);
-            }
-
-            @Override
-            public String getDescription() {
-                return "Set a progress on a SeekBar";
-            }
-
-            @Override
-            public Matcher<View> getConstraints() {
-                return ViewMatchers.isAssignableFrom(SeekBar.class);
-            }
-        };
-    }
 
     // ------------- TESTS ---------------
 
