@@ -31,16 +31,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
-import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
-
-import static java.lang.Thread.sleep;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -76,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        if(!requestPermissions()) {
+        if (!requestPermissions()) {
             FirebaseUser currentUser = mAuth.getCurrentUser();
             updateUI(currentUser);
         }
@@ -119,29 +116,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (currentUser != null) {
             setLoadingText(getText(R.string.loading_data).toString());
             Location l = GpsService.getInstance().getCurrentLocation();
-            if(GpsService.getInstance().getCurrentLocation() != null) {
+            if (GpsService.getInstance().getCurrentLocation() != null) {
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
-            if (!Config.isTest) UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
-                @Override
-                public void onSuccess(User value) {
-                    User.setLoadedData(value);
-                    launchApp();
-                }
+            new Thread(() -> {
+                UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
+                    @Override
+                    public void onSuccess(User value) {
+                        User.setLoadedData(value);
+                        launchApp();
+                    }
 
-                @Override
-                public void onError(Exception e) {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onError(Exception e) {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
-            else {
-                User.setLoadedData(Database.getUser());
-                launchApp();
-            }
-
         } else {
             setContentView(R.layout.activity_login);
             TextView tv = findViewById(R.id.textViewLogin);
