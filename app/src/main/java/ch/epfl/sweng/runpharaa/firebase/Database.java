@@ -47,6 +47,7 @@ public class Database {
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
     public final static String COMMENTS = "comments";
+    public final static String s_notification_key = "NotificationKey";
 
 
     private final static String keyWriteTrack = "key";
@@ -107,6 +108,9 @@ public class Database {
     @Mock
     private DatabaseReference drUserAnyChildPicture;
 
+    @Mock
+    private DatabaseReference drUserAnyChildKey;
+
 
     @Mock
     private DataSnapshot snapInitUser;
@@ -158,6 +162,9 @@ public class Database {
 
     @Mock
     private DataSnapshot snapInitChildrenID;
+
+    @Mock
+    private DataSnapshot snapOnDataUserKey;
 
     @Mock
     private DataSnapshot snapOnDataChangeUser;
@@ -272,6 +279,9 @@ public class Database {
         when(snapInitChildrenUser.child("uid")).thenReturn(snapInitChildrenID);
         when(snapInitChildrenID.getValue((String.class))).thenReturn("1");
 
+        when(snapOnDataUserKey.exists()).thenReturn(Boolean.TRUE);
+        when(snapOnDataUserKey.getValue((String.class))).thenReturn("NOTIFICATIONKEY");
+
 
         when(snapInitChildren.child(trackName)).thenReturn(snapOnDataChangeReadChildPath);
         when(snapInitChildren.getValue(FirebaseTrackAdapter.class)).thenReturn(t);
@@ -338,6 +348,7 @@ public class Database {
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
         when(drUserAnyChild.child("name")).thenReturn(drUserAnyChildName);
         when(drUserAnyChild.child("picture")).thenReturn(drUserAnyChildPicture);
+        when(drUserAnyChild.child(s_notification_key)).thenReturn(drUserAnyChildKey);
 
 
         when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
@@ -354,6 +365,14 @@ public class Database {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) {
                 fake_user.setLikedTracks(userLikesList);
+                return null;
+            }
+        });
+
+        when(drUserAnyChildKey.setValue(userLikesList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation) {
+                fake_user.setNotificationKey("NOTIFICATIONKEY");
                 return null;
             }
         });
@@ -427,6 +446,19 @@ public class Database {
                 return l;
             }
         }).when(drUserAnyChildName).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer(new Answer<ValueEventListener>() {
+            @Override
+            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+                if (isCancelled) {
+                    l.onCancelled(snapOnDataErrorRead);
+                } else {
+                    l.onDataChange(snapOnDataUserKey);
+                }
+                return l;
+            }
+        }).when(drUserAnyChildKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
         doAnswer(new Answer<ValueEventListener>() {
             @Override
