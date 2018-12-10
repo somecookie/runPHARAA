@@ -1,7 +1,6 @@
 package ch.epfl.sweng.runpharaa.firebase;
 
 import android.net.Uri;
-import android.renderscript.Sampler;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -15,7 +14,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
@@ -35,28 +33,21 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    private static boolean shouldFail = false;
-    private static boolean isCancelled = false;
-    private static boolean userExists = false;
-
-
+    public final static String COMMENTS = "comments";
     private final static String s_tracks = "tracks";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
-    public final static String COMMENTS = "comments";
-
-
     private final static String keyWriteTrack = "key";
-
     private final static User fake_user = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
-
     //Tracks already in the fakeDB
     private final static String trackUID = "TrackID";
     private final static String trackName = "name";
-
+    private static boolean shouldFail = false;
+    private static boolean isCancelled = false;
+    private static boolean userExists = false;
     private FirebaseTrackAdapter t = new FirebaseTrackAdapter();
 
     //For all mocked objects
@@ -218,17 +209,41 @@ public class Database {
 
     @Mock
     private DatabaseReference drUserAnyChildFollow;
-
+    private Answer snapOnDataChangedAnswer = invocation -> {
+        ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+        if (isCancelled) {
+            l.onCancelled(snapOnDataErrorRead);
+        } else {
+            l.onDataChange(snapOnDataChangeReadUser);
+        }
+        return null;
+    };
 
     private Database() {
 
     }
 
-    public static FirebaseDatabase getInstance(){
-        return (Config.isTest) ? new Database().instanciateMock() :  FirebaseDatabase.getInstance();
+    public static FirebaseDatabase getInstance() {
+        return (Config.isTest) ? new Database().instanciateMock() : FirebaseDatabase.getInstance();
     }
 
-    private FirebaseDatabase instanciateMock(){
+    public static void setShouldFail(boolean shouldFail) {
+        Database.shouldFail = shouldFail;
+    }
+
+    public static void setIsCancelled(boolean isCancelled) {
+        Database.isCancelled = isCancelled;
+    }
+
+    public static void setUserExists(boolean userExists) {
+        Database.userExists = userExists;
+    }
+
+    public static User getUser() {
+        return fake_user;
+    }
+
+    private FirebaseDatabase instanciateMock() {
         MockitoAnnotations.initMocks(this);
         createTrack();
         instanciateDB();
@@ -300,33 +315,26 @@ public class Database {
         when(drUser.child(any(String.class))).thenReturn(drUserAnyChild);
 
         //write new user
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorUser);
-                } else {
-                    l.onDataChange(snapOnDataChangeUser);
-                }
-                return l;
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorUser);
+            } else {
+                l.onDataChange(snapOnDataChangeUser);
             }
+            return l;
         }).when(drUserAnyChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
 
         //---
 
         when(drUserAnyChild.setValue(any(User.class))).thenReturn(userTask);
 
-        when(userTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail){
-                    l.onFailure(new IllegalStateException());
-                }
-                return userTask;
+        when(userTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if (shouldFail) {
+                l.onFailure(new IllegalStateException());
             }
+            return userTask;
         });
 
         respondToAddSuccessListener(userTask);
@@ -342,29 +350,7 @@ public class Database {
 
         when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
 
-        when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) {
-                fake_user.setFavoriteTracks(userFavoritesList);
-                return null;
-            }
-        });
-
-        when(drUserAnyChildLikes.setValue(userLikesList)).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) {
-                fake_user.setLikedTracks(userLikesList);
-                return null;
-            }
-        });
-
-        when(drUserAnyChildLikes.setValue(userCreatesList)).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) {
-                fake_user.setCreatedTracks(userCreatesList);
-                return null;
-            }
-        });
+        instatntiateSetTrackListToUser();
 
         when(drUserAnyChildFavorites.child(any(String.class))).thenReturn(drUserAnyChildFavoritesChild);
         when(drUserAnyChildLikes.child(any(String.class))).thenReturn(drUserAnyChildLikesChild);
@@ -376,93 +362,11 @@ public class Database {
         when(drUserAnyChildFavorites.setValue(any(Object.class))).thenReturn(setValueFavoriteTask);
         when(drUserAnyChildLikes.setValue(any(Object.class))).thenReturn(setValueLikeTask);
 
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    fake_user.addToFavorites("0");
-                }
-                return l;
-            }
-        }).when(drUserAnyChildFavoritesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        instantiateListenersForSingleValueEvent();
 
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    fake_user.addToCreatedTracks("0");
-                }
-                return l;
-            }
-        }).when(drUserAnyChildCreatesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer((Answer<Task<Void>>) invocation -> removeTask);
 
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    fake_user.like("0");
-                }
-                return l;
-            }
-        }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataUserName);
-                }
-                return l;
-            }
-        }).when(drUserAnyChildName).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
-        doAnswer(new Answer<ValueEventListener>() {
-            @Override
-            public ValueEventListener answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-                if (isCancelled) {
-                    l.onCancelled(snapOnDataErrorRead);
-                } else {
-                    l.onDataChange(snapOnDataUserPicture);
-                }
-                return l;
-            }
-        }).when(drUserAnyChildPicture).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
-        when(drUserAnyChildFavoritesChild.removeValue()).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                int fav = t.getFavorites();
-                if(fav >= 1){
-                    //t.setFavorites(fav - 1);
-                }
-                return removeTask;
-            }
-        });
-
-        when(drUserAnyChildLikesChild.removeValue())
-                .thenAnswer(new Answer<Task<Void>>() {
-                    @Override
-                    public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                        int likes = t.getLikes();
-                        if(likes >= 1){
-                            //t.getProperties().setLikes(likes - 1);
-                        }
-                        return removeTask;
-                    }
-                });
+        when(drUserAnyChildLikesChild.removeValue()).thenAnswer((Answer<Task<Void>>) invocation -> removeTask);
 
         when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
@@ -471,43 +375,108 @@ public class Database {
         when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(drUserAnyChildLikesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(drUserAnyChildFavoritesChild.setValue(any(String.class))).thenReturn(setValueTask);
-        when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail){
-                    l.onFailure(new IllegalStateException("Cant set value"));
-                }
-                return setValueTrack;
+
+        instantiateUserOnFailureListeners();
+    }
+
+    private void instantiateUserOnFailureListeners() {
+        when(setValueTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if (shouldFail) {
+                l.onFailure(new IllegalStateException("Cant set value"));
             }
+            return setValueTrack;
         });
 
 
-        when(setValueFavoriteTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail){
-                    l.onFailure(new IllegalStateException("Cant set value"));
-                }
-                return setValueFavoriteTask;
+        when(setValueFavoriteTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if (shouldFail) {
+                l.onFailure(new IllegalStateException("Cant set value"));
             }
+            return setValueFavoriteTask;
         });
 
-        when(setValueLikeTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if(shouldFail){
-                    l.onFailure(new IllegalStateException("Cant set value"));
-                }
-                return setValueLikeTask;
+        when(setValueLikeTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if (shouldFail) {
+                l.onFailure(new IllegalStateException("Cant set value"));
             }
+            return setValueLikeTask;
+        });
+    }
+
+    private void instantiateListenersForSingleValueEvent() {
+        instantiateUserOperationsOnSinlgeTrack();
+
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataUserPicture);
+            }
+            return l;
+        }).when(drUserAnyChildPicture).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataUserName);
+            }
+            return l;
+        }).when(drUserAnyChildName).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+    private void instantiateUserOperationsOnSinlgeTrack() {
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                fake_user.addToFavorites("0");
+            }
+            return l;
+        }).when(drUserAnyChildFavoritesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                fake_user.addToCreatedTracks("0");
+            }
+            return l;
+        }).when(drUserAnyChildCreatesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                fake_user.like("0");
+            }
+            return l;
+        }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+    private void instatntiateSetTrackListToUser() {
+        when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer((Answer<Task<Void>>) invocation -> {
+            fake_user.setFavoriteTracks(userFavoritesList);
+            return null;
         });
 
+        when(drUserAnyChildLikes.setValue(userLikesList)).thenAnswer((Answer<Task<Void>>) invocation -> {
+            fake_user.setLikedTracks(userLikesList);
+            return null;
+        });
 
-        //when(drUserAnyChildLikeChild.removeValue())
-
+        when(drUserAnyChildLikes.setValue(userCreatesList)).thenAnswer((Answer<Task<Void>>) invocation -> {
+            fake_user.setCreatedTracks(userCreatesList);
+            return null;
+        });
     }
 
     private void instanciatedrTracks() {
@@ -515,12 +484,9 @@ public class Database {
         when(drTracksPush.getKey()).thenReturn(keyWriteTrack);
 
         when(drTracks.child(trackUID)).thenReturn(drTracksUID);
-        when(drTracksUID.setValue(track)).then(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) {
-                t = track;
-                return null;
-            }
+        when(drTracksUID.setValue(track)).then((Answer<Task<Void>>) invocation -> {
+            t = track;
+            return null;
         });
 
         when(drTracksUID.child(COMMENTS)).thenReturn(drTracksUIDComment);
@@ -540,7 +506,7 @@ public class Database {
     private void respondToAddFailureListener(Task task) {
         when(task.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-            if(shouldFail){
+            if (shouldFail) {
                 l.onFailure(new IllegalStateException());
             }
             return task;
@@ -550,7 +516,7 @@ public class Database {
     private void respondToAddSuccessListener(Task task) {
         when(task.addOnSuccessListener(any(OnSuccessListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnSuccessListener<Void> l = (OnSuccessListener<Void>) invocation.getArguments()[0];
-            if(!shouldFail){
+            if (!shouldFail) {
                 l.onSuccess(null);
             }
             return task;
@@ -559,15 +525,12 @@ public class Database {
 
     private void instanciatedrKeys() {
         when(drKey.setValue(track)).thenReturn(setValueTrack);
-        when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
-            @Override
-            public Task<Void> answer(InvocationOnMock invocation) throws Throwable {
-                OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
-                if (shouldFail) {
-                    l.onFailure(new IllegalStateException("Could not add track to DB"));
-                }
-                return setValueTrack;
+        when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+            OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
+            if (shouldFail) {
+                l.onFailure(new IllegalStateException("Could not add track to DB"));
             }
+            return setValueTrack;
         });
     }
 
@@ -612,16 +575,6 @@ public class Database {
 
     }
 
-    private Answer snapOnDataChangedAnswer = invocation -> {
-        ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
-        if(isCancelled){
-            l.onCancelled(snapOnDataErrorRead);
-        } else {
-            l.onDataChange(snapOnDataChangeReadUser);
-        }
-        return null;
-    };
-
     private void createTrack() {
         List<String> types = new ArrayList<>();
         types.add(TrackType.FOREST.toString());
@@ -629,27 +582,11 @@ public class Database {
         CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         int length = 100;
         int heigthDiff = 10;
-        FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
-                types, length, heigthDiff, 1, 1, 1, 1, 0, 0, new ArrayList<>());
 
-        t = track;
+        t = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID",
+                "Bob", Arrays.asList(coord0, coord1), "imageUri",
+                types, length, heigthDiff, 1, 1, 1, 1,
+                0, 0, new ArrayList<>());
 
-    }
-
-
-    public static void setShouldFail(boolean shouldFail) {
-        Database.shouldFail = shouldFail;
-    }
-
-    public static void setIsCancelled(boolean isCancelled) {
-        Database.isCancelled = isCancelled;
-    }
-
-    public static void setUserExists(boolean userExists) {
-        Database.userExists = userExists;
-    }
-
-    public static User getUser(){
-        return fake_user;
     }
 }
