@@ -144,7 +144,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
     private void deleteTrack(Track track){
-        TrackDatabaseManagement.deleteTrack(track);
+        TrackDatabaseManagement.deleteTrack(track.getTrackUid());
         finish();
     }
 
@@ -156,20 +156,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 .setMessage(R.string.want_to_delete_this_track)
                 .setIcon(R.drawable.ic_delete)
 
-                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        deleteTrack(track);
-                        dialog.dismiss();
-                    }
-
+                .setPositiveButton(R.string.delete, (dialog, whichButton) -> {
+                    deleteTrack(track);
+                    dialog.dismiss();
                 })
 
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .create();
         return deleteTrackDialogBox;
 

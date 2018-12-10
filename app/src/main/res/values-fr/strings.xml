@@ -107,5 +107,6 @@
     <string name="want_to_delete_this_track">Voulez-vous supprimer ce parcours ?</string>
     <string name="cancel">Annuler</string>
     <string name="deleted_track">Désolé ce parcours a été supprimé</string>
+    <string name="want_to_delete_your_account">Voulez-vous supprimer votre compte ?</string>
 
 </resources>

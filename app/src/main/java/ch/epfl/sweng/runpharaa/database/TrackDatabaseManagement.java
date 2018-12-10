@@ -20,6 +20,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.security.cert.PKIXRevocationChecker;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -117,8 +118,21 @@ public class TrackDatabaseManagement {
      * @param track
      */
     public static void updateTrack(Track track) {
-        FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track, false);
-        mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
+        mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).child(IS_DELETED).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Boolean isDeleted = dataSnapshot.getValue(Boolean.class);
+                    FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track, isDeleted);
+                    mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public static void updateComments(Track track) {
@@ -200,6 +214,19 @@ public class TrackDatabaseManagement {
         return p.getFirst();
     }
 
+    public static List<String> deleteDeletedTrackFromList(DataSnapshot dataSnapshot, List<String> list){
+        if(list != null){
+            for(DataSnapshot c : dataSnapshot.getChildren()){
+                if(list.contains(c.getKey())){
+                    if(c.child(IS_DELETED).getValue(Boolean.class)){
+                        list.remove(c.getKey());
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
     /**
      * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
      *
@@ -215,13 +242,12 @@ public class TrackDatabaseManagement {
         return p.getFirst();
     }
 
-    public static void deleteTrack(Track track){
-        FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track, true);
+    public static void deleteTrack(String trackUID){
         List<String> createdTracks = User.instance.getCreatedTracks();
-        createdTracks.remove(track.getTrackUid());
+        createdTracks.remove(trackUID);
         User.instance.setCreatedTracks(createdTracks);
         UserDatabaseManagement.updateCreatedTracks(User.instance);
-        mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
+        mDataBaseRef.child(TRACKS_PATH).child(trackUID).child(IS_DELETED).setValue(true);
     }
 
     /**

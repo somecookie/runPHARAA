@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
@@ -64,9 +65,22 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         DatabaseReference favRef = mDataBaseRef.child(USERS);
         DatabaseReference favRef2 = favRef.child(user.getUid());
         DatabaseReference favRef3 = favRef2.child(FAVORITE);
-        Task<Void> t = favRef3.setValue(user.getFavoriteTracks());
+        mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    user.setFavoriteTracks(TrackDatabaseManagement.deleteDeletedTrackFromList(dataSnapshot, user.getFavoriteTracks()));
+                    Task<Void> t = favRef3.setValue(user.getFavoriteTracks());
+                    t.addOnFailureListener(Throwable::printStackTrace);
+                }
+            }
 
-        t.addOnFailureListener(Throwable::printStackTrace);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
+
     }
 
     public static void removeFavoriteTrack(final String trackID) {
@@ -87,7 +101,20 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
     public static void updateLikedTracks(final User user) {
         DatabaseReference likedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(LIKES);
-        likedRef.setValue(user.getLikedTracks()).addOnFailureListener(Throwable::printStackTrace);
+        mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    user.setLikedTracks(TrackDatabaseManagement.deleteDeletedTrackFromList(dataSnapshot, user.getLikedTracks()));
+                    likedRef.setValue(user.getLikedTracks()).addOnFailureListener(Throwable::printStackTrace);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
     }
 
     public static void removeLikedTrack(final String trackID) {
@@ -108,7 +135,21 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
     public static void updateCreatedTracks(final User user) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE);
-        createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
+        mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    user.setCreatedTracks(TrackDatabaseManagement.deleteDeletedTrackFromList(dataSnapshot, user.getCreatedTracks()));
+                    createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
+
     }
 
     public static void updateFollowedUsers(final User user) {
@@ -147,9 +188,16 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         DataSnapshot followed = data.child(User.instance.getUid()).child(FOLLOWING);
         for (DataSnapshot f : followed.getChildren()) {
             if (f.getValue() != null) {
-                users.add(User.deserialize(f.getValue().toString()));
+                User user = User.deserialize(f.getValue().toString());
+                if(!data.child(user.getUid()).exists()){
+                    User.instance.removeFromFollowed(user);
+                }
+                else{
+                    users.add(User.deserialize(f.getValue().toString()));
+                }
             }
         }
+        UserDatabaseManagement.updateFollowedUsers(User.instance);
 
         return users;
     }
@@ -248,5 +296,14 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                 Log.e("DatabaseError", databaseError.getDetails());
             }
         });
+    }
+
+    public static void deleteUser(User user){
+        //Delete all created tracks
+        for (String trackUID : user.getCreatedTracks()){
+            TrackDatabaseManagement.deleteTrack(trackUID);
+        }
+        //Set track to deleted
+        mDataBaseRef.child(USERS).child(user.getUid()).removeValue();
     }
 }
