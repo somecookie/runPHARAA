@@ -15,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -22,6 +23,7 @@ import ch.epfl.sweng.runpharaa.user.myProfile.FragmentMyTracks;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -38,6 +40,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.onPreferenceRow;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -183,5 +186,18 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withId(R.id.trophies_favorite)).perform(click());
         sleep(WAIT_TIME);
         Espresso.pressBack();
+    }
+
+    @Test
+    public void testWriteUser(){
+        User u = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+        Callback<User> callback = new Callback<User>() {
+            @Override
+            public void onSuccess(User value) {
+                assertTrue(u.equals(value));
+            }
+        };
+
+        UserDatabaseManagement.writeNewUser(u, callback);
     }
 }

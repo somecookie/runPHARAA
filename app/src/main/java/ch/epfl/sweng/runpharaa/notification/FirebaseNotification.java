@@ -41,6 +41,8 @@ public class FirebaseNotification extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, idRequest,
                 intent, PendingIntent.FLAG_ONE_SHOT);
 
+        System.out.print(remoteMessage.getData());
+
         NotificationCompat.Builder notificationBuilder = new
                 NotificationCompat.Builder(this, "notification")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
