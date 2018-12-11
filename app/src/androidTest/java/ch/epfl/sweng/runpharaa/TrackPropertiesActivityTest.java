@@ -188,6 +188,12 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(3000);
     }
 
+    @Test
+    public void testDeletedButtonVisibility(){
+
+        
+    }
+
     private Track createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();

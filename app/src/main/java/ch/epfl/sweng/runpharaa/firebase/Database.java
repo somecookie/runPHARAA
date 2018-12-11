@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.CustLatLng;
+import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
@@ -85,6 +86,9 @@ public class Database {
 
     @Mock
     private DatabaseReference drTracksUID;
+
+    @Mock
+    private DatabaseReference drTracksUIDISDELETED;
 
     @Mock
     private DatabaseReference drTracksKey;
@@ -166,6 +170,9 @@ public class Database {
     private DataSnapshot snapOnDataChangeUserChild;
 
     @Mock
+    private DataSnapshot snapOnDataChangeReadChildIsDeleted;
+
+    @Mock
     private DatabaseError snapOnDataErrorUser;
 
     @Mock
@@ -188,6 +195,9 @@ public class Database {
 
     @Mock
     private List<String> userFavoritesList;
+
+    @Mock
+    private List<String> userFollowedList;
 
     @Mock
     private List<String> userLikesList;
@@ -278,11 +288,13 @@ public class Database {
         when(snapInitChildren.child("path")).thenReturn(snapOnDataChangeReadChildPath);
         when(snapInitChildren.child("trackUid")).thenReturn(snapOnDataChangedChildTrackUID);
         when(snapInitChildren.getKey()).thenReturn("0");
+        when(snapInitChildren.child("isDeleted")).thenReturn(snapOnDataChangeReadChildIsDeleted);
 
         when(snapOnDataChangeReadChildPath.getValue((String.class))).thenReturn("Cours forest !");
         when(snapOnDataChangedChildTrackUID.getValue((String.class))).thenReturn(trackUID);
         when(snapOnDataChangeReadChildPath.child("0")).thenReturn(snapOnDataChangeReadChildPath0);
         when(snapOnDataChangeReadChildPath0.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
+        when(snapOnDataChangeReadChildIsDeleted.getValue(Boolean.class)).thenReturn(false);
 
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
         when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
@@ -342,6 +354,15 @@ public class Database {
 
         when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
 
+
+        when(drUserAnyChildFollow.setValue(userFollowedList)).thenAnswer(new Answer<Task<Void>>() {
+            @Override
+            public Task<Void> answer(InvocationOnMock invocation){
+                fake_user.setFollowedUsers(userFollowedList);
+                return null;
+            }
+        });
+
         when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer(new Answer<Task<Void>>() {
             @Override
             public Task<Void> answer(InvocationOnMock invocation) {
@@ -375,6 +396,7 @@ public class Database {
 
         when(drUserAnyChildFavorites.setValue(any(Object.class))).thenReturn(setValueFavoriteTask);
         when(drUserAnyChildLikes.setValue(any(Object.class))).thenReturn(setValueLikeTask);
+        when(drUserAnyChildFollow.setValue(any(Object.class))).thenReturn(setValueTask);
 
         doAnswer(new Answer<ValueEventListener>() {
             @Override
@@ -523,10 +545,22 @@ public class Database {
             }
         });
 
+
         when(drTracksUID.child(COMMENTS)).thenReturn(drTracksUIDComment);
         when(drTracksUIDComment.setValue(any(List.class))).thenReturn(addComment);
 
         respondToAddFailureListener(addComment);
+
+        when(drTracksUID.child(TrackDatabaseManagement.IS_DELETED)).thenReturn(drTracksUIDISDELETED);
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataChangeRead);
+            }
+            return l;
+        }).when(drTracksUIDISDELETED).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
         when(drTracks.child(keyWriteTrack)).thenReturn(drTracksKey);
         when(drTracksKey.setValue(any(FirebaseTrackAdapter.class))).thenReturn(setTask);
