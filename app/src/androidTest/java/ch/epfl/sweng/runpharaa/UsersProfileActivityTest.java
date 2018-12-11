@@ -186,7 +186,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         Intents.release();
     }
 
-    private void clickOnDifferenttrophies(){
+    private void clickOnDifferenttrophies() {
         onView(withId(R.id.trophies_create)).perform(click());
         sleep(WAIT_TIME);
         Espresso.pressBack();
@@ -196,18 +196,5 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withId(R.id.trophies_favorite)).perform(click());
         sleep(WAIT_TIME);
         Espresso.pressBack();
-    }
-
-    @Test
-    public void testWriteUser(){
-        User u = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
-        Callback<User> callback = new Callback<User>() {
-            @Override
-            public void onSuccess(User value) {
-                assertTrue(u.equals(value));
-            }
-        };
-
-        UserDatabaseManagement.writeNewUser(u, callback);
     }
 }
