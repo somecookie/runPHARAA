@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
-            });
+            }).start();
         } else {
             setContentView(R.layout.activity_login);
             TextView tv = findViewById(R.id.textViewLogin);
