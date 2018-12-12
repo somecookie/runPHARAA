@@ -27,6 +27,8 @@ public final class User implements Serializable {
     private transient LatLng location;
     @Exclude
     private UserCardItem userCardItem;
+    @Exclude
+    private StreakManager streakManager;
 
     private String name;
     private String picture;
@@ -36,7 +38,8 @@ public final class User implements Serializable {
     private transient List<String> likedTracks;
     private transient List<String> followedUsers;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String name, int preferredRadius, Uri picture, LatLng location, String uid) {
         Required.nonNull(name, "The name of an user cannot be null");
@@ -55,8 +58,7 @@ public final class User implements Serializable {
         this.uid = uid;
     }
 
-    public static void
-    set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
+    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
 
@@ -67,9 +69,29 @@ public final class User implements Serializable {
         instance.setFollowedUsers(otherUser.followedUsers);
     }
 
-    public static void
-    set(User u) {
+    public static void setStreakManager(StreakManager streakManager) {
+        Required.nonNull(streakManager, "The streak manager can't be null");
+        User.instance.streakManager = streakManager;
+    }
+
+    public static StreakManager getStreakManager() {
+        return User.instance.streakManager;
+    }
+
+    public static void set(User u) {
         instance = u;
+    }
+
+    public static User deserialize(String s) {
+        try {
+            byte b[] = Base64.decode(s.getBytes(), 0);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            return (User) objectInputStream.readObject();
+        } catch (Exception e) {
+            Log.d("Deserialization Error", e.toString());
+            return null;
+        }
     }
 
     @Exclude
@@ -126,7 +148,10 @@ public final class User implements Serializable {
      *
      * @param trackId the track's id
      */
-    public void addToFavorites(String trackId) { if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId); }
+    public void addToFavorites(String trackId) {
+        if (!alreadyInFavorites(trackId)) favoriteTracks.add(trackId);
+    }
+
     /**
      * Add a Track id in the set of created tracks.
      *
@@ -242,7 +267,9 @@ public final class User implements Serializable {
         return favoriteTracks;
     }
 
-    public void setFavoriteTracks(List<String> favoriteTracks) { this.favoriteTracks = favoriteTracks; }
+    public void setFavoriteTracks(List<String> favoriteTracks) {
+        this.favoriteTracks = favoriteTracks;
+    }
 
     public List<String> getLikedTracks() {
         return likedTracks;
@@ -259,7 +286,6 @@ public final class User implements Serializable {
     public void setFollowedUsers(List<String> followedUsers) {
         this.followedUsers = followedUsers;
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -283,7 +309,7 @@ public final class User implements Serializable {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(this);
             objectOutputStream.flush();
-            serialized =  new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
+            serialized = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
         } catch (Exception e) {
             Log.d("Serialization Error", e.toString());
         }
@@ -291,21 +317,13 @@ public final class User implements Serializable {
         return serialized;
     }
 
-    public static User deserialize(String s) {
-        try {
-            byte b[] = Base64.decode(s.getBytes(), 0);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            return (User) objectInputStream.readObject();
-        } catch (Exception e) {
-            Log.d("Deserialization Error", e.toString());
-            return null;
-        }
+    @Exclude
+    public UserCardItem getUserCardItem() {
+        return userCardItem;
     }
 
-    @Exclude
-    public UserCardItem getUserCardItem() { return userCardItem; }
-
-    public void setUserCardItem(UserCardItem userCardItem) { this.userCardItem = userCardItem; }
+    public void setUserCardItem(UserCardItem userCardItem) {
+        this.userCardItem = userCardItem;
+    }
 
 }

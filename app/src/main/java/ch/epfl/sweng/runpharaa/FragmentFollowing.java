@@ -59,6 +59,7 @@ public class FragmentFollowing extends UpdatableUserCardItemFragment {
 
                 List<User> users = UserDatabaseManagement.initFollowingFragment(data);
                 for (User u : users) {
+                    if(u == null) continue; //TODO: this check should not be necessary, please check why deserialized users are null
                     u.setUserCardItem(new UserCardItem(u.getName(), u.getUid(), u.getPicture(), u.getCreatedTracks().size()));
                     listUserCardItem.add(u.getUserCardItem());
                 }
