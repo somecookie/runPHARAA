@@ -33,6 +33,7 @@ public final class User implements Serializable {
     private String name;
     private String picture;
     private String uid;
+    private String notificationKey;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
     private transient List<String> likedTracks;
@@ -253,6 +254,14 @@ public final class User implements Serializable {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getNotificationKey(){
+        return notificationKey;
+    }
+
+    public void setNotificationKey(String key){
+        notificationKey = key;
     }
 
     public List<String> getCreatedTracks() {

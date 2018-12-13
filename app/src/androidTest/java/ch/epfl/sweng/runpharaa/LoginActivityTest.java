@@ -11,6 +11,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.internal.firebase_auth.zzcz;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.UserInfo;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -37,6 +39,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
@@ -47,6 +50,7 @@ import ch.epfl.sweng.runpharaa.login.google.GoogleAuthenticationMock;
 import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -93,6 +97,19 @@ public class LoginActivityTest extends TestInitLocation {
         FirebaseAuthenticationMock.setFakeFireBaseUser(FakeUser);
         v.perform(click());
         sleep(3000);
+    }
+
+    @Test
+    public void testWriteUser(){
+        User u = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+        Callback<User> callback = new Callback<User>() {
+            @Override
+            public void onSuccess(User value) {
+                Assert.assertTrue(u.equals(value));
+            }
+        };
+
+        UserDatabaseManagement.writeNewUser(u, callback);
     }
 
     @After
