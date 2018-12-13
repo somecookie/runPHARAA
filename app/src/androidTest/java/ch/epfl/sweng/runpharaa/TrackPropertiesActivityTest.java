@@ -91,6 +91,8 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         withId(R.id.trackLikesID).matches(withText("1"));
         sleep(3000);
 
+        onView(withId(R.id.buttonLikeID)).perform(click());
+        sleep(3000);
     }
 
     @Test
@@ -188,6 +190,14 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         onView(withId(R.id.post_button)).perform(click());
 
         sleep(3000);
+    }
+
+    @Test
+    public void testNotificationDoInBackground(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+
+
     }
 
     private Track createTrack() {
