@@ -440,6 +440,16 @@ public class Database {
             }
             return l;
         }).when(drUserAnyChildName).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorRead);
+            } else {
+                l.onDataChange(snapOnDataUserKey);
+            }
+            return l;
+        }).when(drUserAnyChildKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     private void instantiateUserOperationsOnSinlgeTrack() {
