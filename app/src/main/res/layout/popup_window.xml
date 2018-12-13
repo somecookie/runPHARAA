@@ -11,6 +11,7 @@
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
         android:textSize="22sp"
-        android:text="@string/explanation_popup"/>
+        android:text="@string/explanation_popup"
+        android:contentDescription="@string/popup_description"/>
 
 </RelativeLayout>

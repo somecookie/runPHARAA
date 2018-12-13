@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         final PopupWindow popupWindowGuide = new PopupWindow(popupView, width, height, focusable);
         popupWindowGuide.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         popupWindowGuide.showAtLocation(view, Gravity.CENTER, 0, 0);
-        
+
         // dismiss the popup on click
         popupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
