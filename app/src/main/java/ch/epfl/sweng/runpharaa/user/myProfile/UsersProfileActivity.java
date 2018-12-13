@@ -123,5 +123,4 @@ public class UsersProfileActivity extends AppCompatActivity {
         startActivity(login);
         finish();
     }
-
 }

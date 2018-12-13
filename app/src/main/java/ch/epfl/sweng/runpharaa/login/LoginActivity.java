@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
@@ -66,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         GoogleSignInClient mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuthentication.getInstance();
+
     }
 
     @Override
@@ -125,6 +128,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                     @Override
                     public void onSuccess(User value) {
+                      FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(t -> {
+                        String key = t.getToken();
+                        User.instance.setNotificationKey(key);
+                        UserDatabaseManagement.writeNotificationKey(key);
+                         });
                         User.setLoadedData(value);
                         launchApp();
                     }
