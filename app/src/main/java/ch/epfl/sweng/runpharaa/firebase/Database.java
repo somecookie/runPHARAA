@@ -46,6 +46,7 @@ public class Database {
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
+    private final static String s_feedback = "feedback";
     public final static String COMMENTS = "comments";
 
 
@@ -106,6 +107,9 @@ public class Database {
 
     @Mock
     private DatabaseReference drUserAnyChildPicture;
+
+    @Mock
+    private DatabaseReference drUserAnyChildFeedback;
 
 
     @Mock
@@ -336,6 +340,7 @@ public class Database {
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
+        when(drUserAnyChild.child(s_feedback)).thenReturn(drUserAnyChildFeedback);
         when(drUserAnyChild.child("name")).thenReturn(drUserAnyChildName);
         when(drUserAnyChild.child("picture")).thenReturn(drUserAnyChildPicture);
 
@@ -467,6 +472,7 @@ public class Database {
         when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildCreate.setValue(any(List.class))).thenReturn(setValueTask);
+        when(drUserAnyChildFeedback.setValue(any(List.class))).thenReturn(setValueTask);
 
         when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(drUserAnyChildLikesChild.setValue(any(String.class))).thenReturn(setValueTask);

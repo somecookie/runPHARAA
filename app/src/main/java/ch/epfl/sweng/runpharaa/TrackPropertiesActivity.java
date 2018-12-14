@@ -69,11 +69,15 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private TextView testText;
     private Boolean isMapOpen;
 
+    private Intent startIntent;
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isMapOpen = false;
         super.onCreate(savedInstanceState);
+
+        startIntent = getIntent();
+        isMapOpen = false;
         setContentView(R.layout.activity_track_properties);
 
         Twitter.initialize(this);
@@ -153,19 +157,25 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             public void onSuccess(PropertiesOnClickListener value) {
 
                 if (!value.isPropertiesSet()) {
-                    Toast.makeText(getBaseContext(), "Missing properties, try again!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.prop_miss), Toast.LENGTH_LONG).show();
                 } else if (User.instance.getFeedbackTracks().contains(trackID)) {
-                    Toast.makeText(getBaseContext(), "You've already given a feedback", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.feedback_exists), Toast.LENGTH_LONG).show();
                 } else {
                     TrackProperties tp = track.getProperties();
                     tp.addNewDuration(value.getTime());
                     tp.addNewDifficulty(value.getDifficulty());
                     TrackDatabaseManagement.updateTrack(track);
                     UserDatabaseManagement.updateFeedBackTracks(User.instance);
+                    relaunchActivity();
                 }
             }
         }));
 
+    }
+
+    private void relaunchActivity() {
+        finish();
+        startActivity(startIntent);
     }
 
     private void initCommentButton(Track track) {

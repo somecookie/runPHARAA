@@ -179,6 +179,7 @@
                         android:layout_width="@dimen/large_text"
                         android:layout_height="@dimen/large_text"
                         android:background="@drawable/ic_tune_black"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:layout_editor_absoluteY="0dp" />
 

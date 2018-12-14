@@ -7,6 +7,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.KeyEvent;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,13 +33,20 @@ import ch.epfl.sweng.runpharaa.utils.Util;
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressBack;
+import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -55,6 +63,33 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @Before
     public void initUserAndTracks() {
         User.instance = Database.getUser();
+    }
+
+
+    @Test
+    public void giveFeedBack(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.feedbackButton)).perform(click());
+
+        onView(withId(R.id.time)).perform(typeText("10.00"))
+                .perform(pressKey(KeyEvent.KEYCODE_ENTER))
+                .perform(closeSoftKeyboard());
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        sleep(2000);
+
+        String difficulty = mActivityRule.getActivity().getResources().getString(R.string.difficulty);
+        String time = mActivityRule.getActivity().getResources().getString(R.string.duration);
+
+        withId(R.id.trackDurationID).matches(withText(String.format(time, 5.50)));
+        withId(R.id.track_difficulty).matches(withText(String.format(difficulty, 2.00)));
+
     }
 
     @Test
