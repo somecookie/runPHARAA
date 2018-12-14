@@ -62,6 +62,7 @@ public class UserTest {
         u.setCreatedTracks(favs);
         u.setName("name");
         u.setPicture("pic");
+        u.setNotificationKey("key");
         assertEquals(u.getUid(), "0");
         assertEquals(u.getName(), "name");
         assertEquals(u.getCreatedTracks(), favs);
@@ -69,5 +70,6 @@ public class UserTest {
         assertEquals(u.getFollowedUsers(), followed);
         assertEquals(u.getLikedTracks(), favs);
         assertEquals(u.getPicture(), "pic");
+        assertEquals(u.getNotificationKey(), "key");
     }
 }
