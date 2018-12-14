@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -10,18 +11,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
+import ch.epfl.sweng.runpharaa.notification.FirebaseNotification;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 
@@ -107,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
 
+        removeStrictMode();
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
@@ -116,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
             Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
             startActivity(createTrack);
         });
+
     }
 
     @Override
@@ -220,5 +230,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(mView);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Method to change the thread policy that sometimes block the json send
+     */
+    private void removeStrictMode(){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 }

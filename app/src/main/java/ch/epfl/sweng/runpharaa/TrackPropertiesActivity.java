@@ -37,6 +37,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
+import org.json.JSONException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -48,6 +50,7 @@ import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.notification.FireMessage;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
@@ -287,12 +290,21 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
     private void updateLikes(Track track1, String trackID) {
+
+
         final Track track = track1;
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
             User.instance.unlike(trackID);
             UserDatabaseManagement.removeLikedTrack(trackID);
         } else {
+            UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
+                @Override
+                public void onSuccess(String value) {
+                    sentToNotification(value, "LIKE ALERT", "The user " + User.instance.getName() + " liked your track " + track.getName());
+                }
+            });
+
             track.getProperties().addLike();
             User.instance.like(trackID);
             UserDatabaseManagement.updateLikedTracks(User.instance);
@@ -311,6 +323,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             User.instance.removeFromFavorites(trackID);
             UserDatabaseManagement.removeFavoriteTrack(trackID);
         } else {
+            UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
+                @Override
+                public void onSuccess(String value) {
+                    sentToNotification(value, "FAV ALERT", "The user " + User.instance.getName() + " added one track ( " + track.getName() + " ) to his favorite");
+                }
+            });
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }
@@ -374,5 +392,22 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+    public void sentToNotification(String key, String title, String message) {
+
+        FireMessage f = null;
+        try {
+            f = new FireMessage(title, message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            f.sendToToken(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            }
     }
 }

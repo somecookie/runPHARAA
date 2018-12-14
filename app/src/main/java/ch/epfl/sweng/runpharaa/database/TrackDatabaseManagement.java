@@ -40,10 +40,10 @@ public class TrackDatabaseManagement {
     public final static String ID_PATH = "trackUid";
     public final static String COMMENTS = "comments";
 
-    public static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
-    public static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
-    public static FirebaseStorage mFirebaseStorage = Storage.getInstance();
-    public static StorageReference mStorageRef = mFirebaseStorage.getReference();
+    private static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
+    static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
+    private static FirebaseStorage mFirebaseStorage = Storage.getInstance();
+    private static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
     public TrackDatabaseManagement() {
     }

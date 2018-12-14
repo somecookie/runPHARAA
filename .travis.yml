@@ -25,7 +25,7 @@ before_install:
 - chmod +x gradlew
 
 before_script:
-  # Emulator Management: Create, Start and Wait: put the android version you chose for emulator and make sure you put the right abi (google_apis/armeabi-v7a)
+  # Emulator Management: Create, Start and Wait: put the android version you chose for the emulator
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
