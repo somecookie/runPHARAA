@@ -115,6 +115,9 @@ public class MainActivityTest extends TestInitLocation {
         onView(withId(R.id.helpIcon)).perform(click());
         onView(withContentDescription(R.string.popup_description))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        onView(withContentDescription(R.string.popup_description))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .perform(click());
     }
 
