@@ -141,22 +141,23 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.filterIcon:
                 filterDialog();
-                return true;
+                break;
             case R.id.profileIcon:
                 Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);
                 profileIntent.putExtra("selfProfile", true);
                 startActivity(profileIntent);
-                return true;
+                break;
             case R.id.mapIcon:
                 Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
                 startActivity(mapIntent);
-                return true;
+                break;
             case R.id.helpIcon:
                 showPopup(viewPager);
-                return true;
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
     private void filterDialog() {
