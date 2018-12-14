@@ -110,6 +110,9 @@ public class FavoritesFragmentTest extends TestInitLocation {
         //Tried to get the string but it did not work, put a hardcoded string for now
         onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_favorite)));
 
+        //For further tests
+        Database.setIsCancelled(false);
+
     }
 
 }
