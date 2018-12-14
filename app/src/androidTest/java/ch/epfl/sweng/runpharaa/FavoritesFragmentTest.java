@@ -8,6 +8,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.hamcrest.core.AllOf;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
@@ -93,4 +95,21 @@ public class FavoritesFragmentTest extends TestInitLocation {
         onView(withId(R.id.buttonFavoriteID)).perform(click());
 
     }
+
+
+    @Test
+    public void databaseErrorFavorite() throws Throwable {
+
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+
+        Database.setIsCancelled(true);
+
+        runOnUiThread(() ->((FragmentFavourites)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(2)).onRefresh());
+
+        //Tried to get the string but it did not work, put a hardcoded string for now
+        onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_favorite)));
+
+    }
+
 }

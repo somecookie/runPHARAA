@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -242,6 +243,17 @@ public class MainActivityTest extends TestInitLocation {
         MainActivity.difficultyIsFiltered = false;
         MainActivity.typesAreFiltered = true;
         assertFalse(MainActivity.passFilters(t));
+    }
+
+    @Test
+    public void databaseErrorNearMe() throws Throwable {
+        Database.setIsCancelled(true);
+
+        runOnUiThread(() ->((FragmentNearMe)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
+
+        //Tried to get the string but it did not work, put a hardcoded string for now
+        onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_tracks)));
+
     }
 
     private void selectAllTypes(boolean pressOk) {
