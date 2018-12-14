@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <Button
+        style="@style/ButtonStyle"
         android:id="@+id/return_to_location"
         android:layout_width="219dp"
         android:layout_height="51dp"
