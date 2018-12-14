@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
                 showPopup(viewPager);
                 return true;
             default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void filterDialog() {
