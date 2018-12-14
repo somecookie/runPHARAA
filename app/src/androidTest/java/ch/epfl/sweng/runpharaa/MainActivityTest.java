@@ -113,7 +113,7 @@ public class MainActivityTest extends TestInitLocation {
     @Test
     public void testOpenAndCloseHelp() {
         onView(withId(R.id.helpIcon)).perform(click());
-        onView(withContentDescription(R.string.popup_description))
+        onView(withText(R.string.help))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
         onView(withContentDescription(R.string.popup_description))
