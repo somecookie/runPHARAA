@@ -14,6 +14,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +63,9 @@ public class MainActivityTest extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.instance = Database.getUser();
+        Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
+        StreakManager.setFakeCalendar(fakeCalendar);
+        User.setStreakManager(new StreakManager());
     }
 
     @Before

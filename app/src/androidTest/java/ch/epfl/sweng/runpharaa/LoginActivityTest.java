@@ -33,6 +33,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
@@ -45,6 +47,7 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthenticationMock;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthenticationMock;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -72,6 +75,7 @@ public class LoginActivityTest extends TestInitLocation {
         FirebaseAuthenticationMock.setFakeTask(task);
         GpsService.initFakeGps(FakeGpsService.SAT);
         assertTrue(GoogleAuthentication.getInstance(getTargetContext()) instanceof GoogleAuthenticationMock);
+        StreakManager.setFakeCalendar(new GregorianCalendar(2018, Calendar.APRIL, 1));
     }
 
     @Test

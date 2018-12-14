@@ -36,6 +36,7 @@ import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -124,6 +125,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
+            StreakManager sm = StreakManager.loadStreakManager(this);
+            sm.update();
+            sm.saveStreakManager(this);
+            User.setStreakManager(sm);
             new Thread(() -> {
                 UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                     @Override
