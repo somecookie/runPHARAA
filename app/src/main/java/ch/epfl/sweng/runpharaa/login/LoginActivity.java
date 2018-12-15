@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
@@ -34,6 +36,7 @@ import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -66,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         GoogleSignInClient mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuthentication.getInstance();
+
     }
 
     @Override
@@ -121,10 +125,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
+            StreakManager sm = StreakManager.loadStreakManager(this);
+            sm.update();
+            sm.saveStreakManager(this);
+            User.setStreakManager(sm);
             new Thread(() -> {
                 UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                     @Override
                     public void onSuccess(User value) {
+                      FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(t -> {
+                        String key = t.getToken();
+                        User.instance.setNotificationKey(key);
+                        UserDatabaseManagement.writeNotificationKey(key);
+                         });
                         User.setLoadedData(value);
                         launchApp();
                     }
@@ -135,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
-            });
+            }).start();
         } else {
             setContentView(R.layout.activity_login);
             TextView tv = findViewById(R.id.textViewLogin);

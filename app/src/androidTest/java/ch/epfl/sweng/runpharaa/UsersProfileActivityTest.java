@@ -15,11 +15,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.FragmentMyTracks;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -35,6 +42,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -48,6 +56,33 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void initEmptyUser() {
         User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
         Intents.init();
+        Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
+        StreakManager.setFakeCalendar(fakeCalendar);
+        User.setStreakManager(new StreakManager());
+    }
+
+    @Test
+    public void showsCorrectInitialStreakValue() {
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        onView(withId(R.id.current_streak)).check(matches(withText("1")));
+    }
+
+    @Test
+    public void showsCorrectStreakValueForMultipleDays() {
+        Calendar myFakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
+        StreakManager.setFakeCalendar(myFakeCalendar);
+        StreakManager sm = new StreakManager();
+        User.setStreakManager(sm);
+        myFakeCalendar.set(2018, Calendar.DECEMBER, 25);
+        sm.update();
+        myFakeCalendar.set(2018, Calendar.DECEMBER, 26);
+        sm.update();
+        myFakeCalendar.set(2018, Calendar.DECEMBER, 27);
+        sm.update();
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        onView(withId(R.id.current_streak)).check(matches(withText("4")));
     }
 
     @Test
@@ -182,7 +217,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         Intents.release();
     }
 
-    private void clickOnDifferenttrophies(){
+    private void clickOnDifferenttrophies() {
         onView(withId(R.id.trophies_create)).perform(click());
         sleep(WAIT_TIME);
         Espresso.pressBack();

@@ -56,7 +56,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("DatabaseError", databaseError.getDetails());
+                //TODO:Don't forget to change back -> try for Travis
+                //Log.e("DatabaseError", databaseError.getDetails());
+                Log.e("DatabaseError", "error");
             }
         });
     }
@@ -298,12 +300,40 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-    public static void deleteUser(User user){
+
+    public static void deleteUser(User user) {
         //Delete all created tracks
-        for (String trackUID : user.getCreatedTracks()){
+        for (String trackUID : user.getCreatedTracks()) {
             TrackDatabaseManagement.deleteTrack(trackUID);
         }
         //Set track to deleted
         mDataBaseRef.child(USERS).child(user.getUid()).removeValue();
+    }
+
+    public static void writeNotificationKey(String key){
+        DatabaseReference keyRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child("NotificationKey");
+        keyRef.setValue(key).addOnFailureListener(Throwable::printStackTrace);
+
+    }
+
+    public static void getNotificationKeyFromUID(String uid, Callback<String> callback){
+        DatabaseReference nameRef = mDataBaseRef.child(USERS).child(uid).child("NotificationKey");
+        nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String name = dataSnapshot.getValue(String.class);
+                    callback.onSuccess(name);
+                    return;
+                }
+
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("DatabaseError", databaseError.getDetails());
+            }
+        });
     }
 }
