@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -422,13 +423,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private void initReportButton() {
         Button reportButton = findViewById(R.id.reportID);
         reportButton.setOnClickListener(v -> {
-            //showReportPopup(v);
+            showReportPopup(v);
         });
     }
-    /*
+
     public void showReportPopup(View view) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+        View popupView = layoutInflater.inflate(R.layout.report_window, null);
 
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -445,5 +446,5 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 return true;
             }
         });
-    }*/
+    }
 }
