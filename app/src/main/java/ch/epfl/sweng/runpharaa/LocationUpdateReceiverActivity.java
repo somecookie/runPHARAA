@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentActivity;
 
 public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
 
-    protected BroadcastReceiver receiver;
+    private BroadcastReceiver receiver;
 
     protected abstract void handleNewLocation();
 
@@ -40,7 +40,7 @@ public abstract class LocationUpdateReceiverActivity extends FragmentActivity {
     /**
      * Initializes the broadcast receiver to receive updates on the location
      */
-    protected void initReceiver() {
+    private void initReceiver() {
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
                 @Override

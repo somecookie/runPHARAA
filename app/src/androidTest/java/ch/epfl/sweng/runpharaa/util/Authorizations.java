@@ -9,7 +9,7 @@ import android.util.Log;
 
 import org.junit.BeforeClass;
 
-public abstract class Authorizations {
+abstract class Authorizations {
 
     private static UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     private final static String ANDROIDBTN = "android.widget.Button";

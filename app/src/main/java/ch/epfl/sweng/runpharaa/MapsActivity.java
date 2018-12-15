@@ -180,7 +180,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     /**
      * Private class that applies the customized info window layout
      */
-    public class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
+    class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
         private Context context;
 

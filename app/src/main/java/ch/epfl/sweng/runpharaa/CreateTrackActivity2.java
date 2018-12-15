@@ -50,9 +50,9 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final int IMAGE_GALLERY_REQUEST = 20;
-    public static final int REQ_WIDTH = 480;
-    public static final int REQ_HEIGHT = 200;
+    private static final int IMAGE_GALLERY_REQUEST = 20;
+    private static final int REQ_WIDTH = 480;
+    private static final int REQ_HEIGHT = 200;
 
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;

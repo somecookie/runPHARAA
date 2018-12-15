@@ -21,16 +21,16 @@ import static org.junit.Assert.assertNotEquals;
 @RunWith(JUnit4.class)
 public class CommentTest {
 
-    Date d = new Date();
-    Comment c1 = new Comment("Bob", "This is a comment.", d);
-    Comment c2 = new Comment("Bob", "This is a 2nd comment.", d);
-    Comment c3 = new Comment("Amanda", "This is a comment.", d);
-    Comment c4 = new Comment("Bob", "This is a comment.", new Date(d.getTime()+1));
+    private Date d = new Date();
+    private Comment c1 = new Comment("Bob", "This is a comment.", d);
+    private Comment c2 = new Comment("Bob", "This is a 2nd comment.", d);
+    private Comment c3 = new Comment("Amanda", "This is a comment.", d);
+    private Comment c4 = new Comment("Bob", "This is a comment.", new Date(d.getTime()+1));
 
-    Comment c5 = new Comment("Bob", "First", d);
-    Comment c6 = new Comment("Bob", "Second", new Date(d.getTime()+1));
-    Comment c7 = new Comment("Bob", "Third", new Date(d.getTime()+2));
-    Comment c8 = new Comment("Bob", "Last", new Date(d.getTime()+3));
+    private Comment c5 = new Comment("Bob", "First", d);
+    private Comment c6 = new Comment("Bob", "Second", new Date(d.getTime()+1));
+    private Comment c7 = new Comment("Bob", "Third", new Date(d.getTime()+2));
+    private Comment c8 = new Comment("Bob", "Last", new Date(d.getTime()+3));
 
     @Test
     public void equalsWorksOnSelf() {

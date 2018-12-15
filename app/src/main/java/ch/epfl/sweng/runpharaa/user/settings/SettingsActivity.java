@@ -28,8 +28,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_TIME_INTERVAL = "time_interval";
     public static final String PREF_KEY_MIN_TIME_INTERVAL = "min_time_interval";
     public static final String PREF_KEY_MIN_DISTANCE = "min_distance_interval";
-    public static final String PREF_KEY_RESET_PREFS = "reset_prefs";
-    public static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
+    private static final String PREF_KEY_RESET_PREFS = "reset_prefs";
+    private static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

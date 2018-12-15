@@ -42,7 +42,7 @@ public class SettingsActivityTest extends TestInitLocation {
     public final ActivityTestRule<SettingsActivity> mActivityRule =
             new ActivityTestRule<>(SettingsActivity.class);
 
-    Resources r;
+    private Resources r;
 
     @BeforeClass
     public static void initUser() {

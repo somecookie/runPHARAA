@@ -60,7 +60,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import java.util.List;
 
-public interface MapUtils {
+interface MapUtils {
 
     GoogleMap FAKE_MAP =
 

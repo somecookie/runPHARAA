@@ -30,7 +30,7 @@ public abstract class GpsService extends Service {
             instance = s;
     }
 
-    protected static Location currentLocation;
+    static Location currentLocation;
 
     public abstract Location getCurrentLocation();
     public abstract void setNewLocation(Context context, Location location);

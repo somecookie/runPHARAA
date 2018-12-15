@@ -11,10 +11,10 @@ import ch.epfl.sweng.runpharaa.utils.Required;
 public class FilterProperties {
 
     //TODO Tweak it to find most stable parameters
-    public static final int LENGTHCOEFF = 1;
-    public static final int DIFFICULTYCOEFF = 1000;
-    public static final int DURATIONCOEFF = 100;
-    public static final int TYPECOEFF = 1000;
+    private static final int LENGTHCOEFF = 1;
+    private static final int DIFFICULTYCOEFF = 1000;
+    private static final int DURATIONCOEFF = 100;
+    private static final int TYPECOEFF = 1000;
 
 
     private double lengthTot;
@@ -107,7 +107,6 @@ public class FilterProperties {
         if(track.getProperties().getType().contains(getPreferedTrackType())){
             typeDiff = 0;
         }
-        double coeff = (LENGTHCOEFF * lengthDiff) + (DIFFICULTYCOEFF * difficultyDiff) + (DURATIONCOEFF * durationDiff) + (TYPECOEFF * typeDiff);
-        return coeff;
+        return (LENGTHCOEFF * lengthDiff) + (DIFFICULTYCOEFF * difficultyDiff) + (DURATIONCOEFF * durationDiff) + (TYPECOEFF * typeDiff);
     }
 }

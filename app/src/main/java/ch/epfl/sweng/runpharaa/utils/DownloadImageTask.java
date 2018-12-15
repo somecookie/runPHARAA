@@ -12,8 +12,8 @@ import java.io.InputStream;
 import ch.epfl.sweng.runpharaa.R;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
-    Resources res;
+    private ImageView bmImage;
+    private Resources res;
 
     public DownloadImageTask(ImageView bmImage, Resources res) {
         this.bmImage = bmImage;
