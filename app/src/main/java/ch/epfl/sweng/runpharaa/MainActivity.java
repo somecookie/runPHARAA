@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         listTypesStr = getResources().getStringArray(R.array.track_types);
         checkedTypes = new boolean[listTypesStr.length];
-        
+
         setContentView(R.layout.activity_main);
 
         tabLayout = findViewById(R.id.tabLayoutId);
@@ -131,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
             Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
             startActivity(createTrack);
         });
+
+        super.onCreate(savedInstanceState);
 
     }
 
