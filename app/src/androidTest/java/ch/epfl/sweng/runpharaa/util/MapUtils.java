@@ -62,7 +62,7 @@ import java.util.List;
 
 public interface MapUtils {
 
-    static final GoogleMap FAKE_MAP =
+    GoogleMap FAKE_MAP =
 
             new GoogleMap(new IGoogleMapDelegate() {
                 @Override

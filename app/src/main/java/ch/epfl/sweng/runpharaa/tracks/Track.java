@@ -38,7 +38,7 @@ public class Track implements Comparable<Track> {
 
     private TrackProperties properties;
 
-    public Track(){};
+    public Track(){}
 
     public Track(String trackUid, String creatorUid, String name, List<CustLatLng> path, List<Comment> comment, TrackProperties properties) {
 
