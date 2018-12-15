@@ -112,13 +112,15 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void testOpenAndCloseHelp() {
+        // display the popup
         onView(withId(R.id.helpIcon)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.help)))
-                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        // dismiss the popup by clicking on it
         onView(withContentDescription(R.string.popup_description))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .perform(click());
+        // check that the main activity is visible by checking that its button and tabs are displayed
+        onView(withId(R.id.profileIcon)).check(matches(isDisplayed()));
+        onView(withId(R.id.tabLayoutId)).check(matches(isDisplayed()));
     }
 
     @Test
