@@ -84,6 +84,18 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
+    public void deletedTrackTest(){
+        Set<TrackType> types = new HashSet<>();
+        types.add(TrackType.FOREST);
+        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
+        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
+        TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
+
+        Track t1 = new Track("0", "1","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
+
+    }
+
+    @Test
     public void testLike() {
         Track t1 = createTrack();
         launchWithExtras(t1);
@@ -199,7 +211,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     private Track createTrack() {
-        Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
