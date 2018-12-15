@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         difficultyIsFiltered = false;
         timeIsFiltered = false;
         typesAreFiltered = false;
@@ -131,9 +132,6 @@ public class MainActivity extends AppCompatActivity {
             Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
             startActivity(createTrack);
         });
-
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
