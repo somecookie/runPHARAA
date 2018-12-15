@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,12 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,6 +154,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         initSocialMediaButtons(track);
 
         initCommentButton(track);
+
+        initReportButton();
     }
 
     private void initCommentButton(Track track) {
@@ -410,4 +418,32 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             e.printStackTrace();
             }
     }
+
+    private void initReportButton() {
+        Button reportButton = findViewById(R.id.reportID);
+        reportButton.setOnClickListener(v -> {
+            //showReportPopup(v);
+        });
+    }
+    /*
+    public void showReportPopup(View view) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // click outside the popup dismiss it
+        final PopupWindow popupWindowGuide = new PopupWindow(popupView, width, height, focusable);
+        popupWindowGuide.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        popupWindowGuide.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        // dismiss the popup on click
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindowGuide.dismiss();
+                return true;
+            }
+        });
+    }*/
 }
