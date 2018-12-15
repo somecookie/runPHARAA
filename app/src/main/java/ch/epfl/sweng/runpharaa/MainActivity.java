@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private FloatingActionButton fab;
-    private FirebaseUser user;
 
     public static boolean passFilters(Track t) {
         return filterTime(t) && filterDifficulty(t) && filterTypes(t);
