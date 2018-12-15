@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -152,6 +153,9 @@ public class Database {
 
     @Mock
     private DatabaseError snapOnDataErrorRead;
+
+    @Mock
+    private DatabaseException dbExceptionReadTrack;
 
     @Mock
     private DataSnapshot snapInitChildrenID;
@@ -595,6 +599,10 @@ public class Database {
 
         doAnswer(snapOnDataChangedAnswer).when(drUserAnyChildFollow).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
+    }
+
+    private void instanciateError(){
+        when(snapOnDataErrorRead.toException()).thenReturn(dbExceptionReadTrack);
     }
 
     private void createTrack() {
