@@ -17,4 +17,10 @@
         android:icon="@drawable/ic_map"
         android:title="@string/map"
         app:showAsAction="always" />
+
+    <item android:id="@+id/helpIcon"
+        android:icon="@drawable/ic_help_black_24dp"
+        android:title="@string/help"
+        app:showAsAction="always" />
+
 </menu>
