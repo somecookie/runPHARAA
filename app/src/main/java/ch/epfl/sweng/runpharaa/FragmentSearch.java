@@ -34,14 +34,13 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class FragmentSearch extends Fragment {
-    private View v;
     private ToggleButton searchToggle; // if false searches for tracks, if true searches for users
     private Menu menu;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.search_fragment, container, false);
+        View v = inflater.inflate(R.layout.search_fragment, container, false);
         searchToggle = v.findViewById(R.id.toggle_button);
         setHasOptionsMenu(true);
         return v;

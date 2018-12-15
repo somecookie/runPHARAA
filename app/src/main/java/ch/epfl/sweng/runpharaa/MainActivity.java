@@ -51,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean typesAreFiltered;
     private static String[] listTypesStr;
     private static boolean[] checkedTypes;
-    private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
-    private FloatingActionButton fab;
     private FirebaseUser user;
 
     public static boolean passFilters(Track t) {
@@ -101,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tabLayout = findViewById(R.id.tabLayoutId);
+        TabLayout tabLayout = findViewById(R.id.tabLayoutId);
         viewPager = findViewById(R.id.viewPagerId);
-        fab = findViewById(R.id.fab);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        FloatingActionButton fab = findViewById(R.id.fab);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Add fragments
         adapter.addFragment(new FragmentNearMe());

@@ -69,12 +69,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
-    private Boolean isMapOpen;
 
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isMapOpen = false;
+        Boolean isMapOpen = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
 

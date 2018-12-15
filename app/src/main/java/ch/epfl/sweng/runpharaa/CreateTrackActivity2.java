@@ -63,7 +63,6 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
     private SeekBar mSeekBar;
     private TextView mDiffText;
 
-    private Location[] locations;
     private LatLng[] points;
     private Bitmap trackPhoto;
     private int difficulty = 3;
@@ -260,7 +259,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             Parcelable[] a = bundle.getParcelableArray("locations");
-            locations = Arrays.copyOf(a, a.length, Location[].class);
+            Location[] locations = Arrays.copyOf(a, a.length, Location[].class);
             a = bundle.getParcelableArray("points");
             points = Arrays.copyOf(a, a.length, LatLng[].class);
 
