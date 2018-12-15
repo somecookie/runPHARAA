@@ -1,25 +1,19 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.graphics.Picture;
-import android.net.Uri;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
-import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -37,10 +31,10 @@ public class UserTest {
         User u2 = new User();
         u1.setUid("0");
         u2.setUid("0");
-        assertTrue(u1.equals(u2));
+        assertEquals(u1, u2);
         u2.setUid("1");
-        assertFalse(u1.equals(u2));
-        assertFalse(u1.equals(new Track()));
+        assertNotEquals(u1, u2);
+        assertNotEquals(u1, new Track());
     }
 
     @Test
@@ -54,9 +48,9 @@ public class UserTest {
     public void testSettersGetters(){
         User u = new User();
         u.setUid("0");
-        List<String> favs = Arrays.asList("1234");
+        List<String> favs = Collections.singletonList("1234");
         u.setFavoriteTracks(favs);
-        List<String> followed = Arrays.asList("0");
+        List<String> followed = Collections.singletonList("0");
         u.setFollowedUsers(followed);
         u.setLikedTracks(favs);
         u.setCreatedTracks(favs);

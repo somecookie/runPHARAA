@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 import static android.os.SystemClock.sleep;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ImageLoaderTest {

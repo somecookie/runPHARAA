@@ -73,7 +73,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Boolean isMapOpen = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
 
@@ -281,7 +280,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
             if (i < nbrTypes - 2) sb.append(", ");
             else if (i == nbrTypes - 2)
-                sb.append(" " + getResources().getString(R.string.and) + " ");
+                sb.append(" ").append(getResources().getString(R.string.and)).append(" ");
 
             i++;
         }

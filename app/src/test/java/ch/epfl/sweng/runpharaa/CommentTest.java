@@ -14,7 +14,6 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.comment.Comment;
 
-import static android.os.SystemClock.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 

@@ -1,7 +1,5 @@
 package ch.epfl.sweng.runpharaa.gui;
 
-import android.graphics.Bitmap;
-
 public class UserCardItem extends CardItem {
     private String parentUserID;
     private int nbCreatedTracks;

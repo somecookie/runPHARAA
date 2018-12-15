@@ -94,8 +94,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     protected void handleNewLocation() {
         final LatLng position = (userFocused) ? User.instance.getLocation() : longClickLocation;
 
-        Context context = this;
-
         final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
 
         mMap.clear();

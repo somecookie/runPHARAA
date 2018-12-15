@@ -1,7 +1,5 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
-import com.google.firebase.database.Exclude;
-
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.utils.Required;

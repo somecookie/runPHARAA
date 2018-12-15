@@ -27,7 +27,6 @@ import com.google.firebase.auth.UserInfo;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -107,7 +106,7 @@ public class LoginActivityTest extends TestInitLocation {
         Callback<User> callback = new Callback<User>() {
             @Override
             public void onSuccess(User value) {
-                Assert.assertTrue(u.equals(value));
+                Assert.assertEquals(u, value);
             }
         };
 

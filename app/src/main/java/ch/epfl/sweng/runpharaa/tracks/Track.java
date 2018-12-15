@@ -136,8 +136,6 @@ public class Track implements Comparable<Track> {
 
     public String getCreatorName() { return creatorName; }
 
-    public Double getHeightDifference() {return properties.getHeightDifference();}
-
     public List<CustLatLng> getPath() { return path; }
 
     public String getImageStorageUri() { return imageStorageUri; }
