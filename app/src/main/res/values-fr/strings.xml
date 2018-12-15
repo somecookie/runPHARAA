@@ -109,5 +109,6 @@
     <string name="deleted_track">Désolé ce parcours a été supprimé</string>
     <string name="want_to_delete_your_account">Voulez-vous supprimer votre compte ?</string>
     <string name="logout">Log out</string>
+    <string name="delete_track">Supprimer ?</string>
 
 </resources>

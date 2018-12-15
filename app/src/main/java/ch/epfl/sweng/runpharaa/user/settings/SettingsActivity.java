@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     {
         AlertDialog deleteUserDialogBox =new AlertDialog.Builder(this)
                 //set message, title, and icon
-                .setTitle(R.string.delete)
+                .setTitle(R.string.delete_track)
                 .setMessage(R.string.want_to_delete_your_account)
                 .setIcon(R.drawable.ic_delete)
 

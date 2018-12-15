@@ -31,6 +31,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.onPreferenceRow;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
@@ -55,6 +56,16 @@ public class SettingsActivityTest extends TestInitLocation {
         c.startService(new Intent(c, GpsService.getInstance().getClass()));
         resetSharedPreferences();
         r = InstrumentationRegistry.getTargetContext().getResources();
+    }
+
+    @Test
+    public void deleteUserTest(){
+        onView(withId(R.id.delete_account)).perform(click());
+        onView(withText(R.string.cancel)).perform(click());
+
+        onView(withId(R.id.delete_account))
+                .perform(click());
+        onView(withText(R.string.delete)).perform(click());
     }
 
     @Test

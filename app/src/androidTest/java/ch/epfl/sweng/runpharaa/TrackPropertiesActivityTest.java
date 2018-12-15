@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +8,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.google.android.gms.auth.api.credentials.CredentialRequestResponse;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -85,14 +88,19 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
     @Test
     public void deletedTrackTest(){
-        Set<TrackType> types = new HashSet<>();
-        types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
-        TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
+        Track t1 = createTrack();
+        String s = User.instance.getUid();
+        User.instance.setUid("BobUID");
+        launchWithExtras(t1);
+        onView(withId(R.id.deleteButton))
+                .perform(click());
+        onView(withText(R.string.cancel)).perform(click());
 
-        Track t1 = new Track("0", "1","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
+        onView(withId(R.id.deleteButton))
+                .perform(click());
+        onView(withText(R.string.delete)).perform(click());
 
+        User.instance.setUid(s);
     }
 
     @Test

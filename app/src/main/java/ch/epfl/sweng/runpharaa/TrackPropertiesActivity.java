@@ -141,6 +141,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             });
         }
         else {
+            Log.d("TestHugo", "not here pls");
             deleteButton.setVisibility(Button.INVISIBLE);
             deleteButton.setClickable(false);
         }
@@ -155,7 +156,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     {
         AlertDialog deleteTrackDialogBox =new AlertDialog.Builder(this)
                 //set message, title, and icon
-                .setTitle(R.string.delete)
+                .setTitle(R.string.delete_track)
                 .setMessage(R.string.want_to_delete_this_track)
                 .setIcon(R.drawable.ic_delete)
 
