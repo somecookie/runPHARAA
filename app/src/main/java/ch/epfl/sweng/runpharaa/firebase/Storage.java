@@ -52,21 +52,21 @@ public class Storage {
     private Task<Uri> addTrackToStorageTask;
 
     public static FirebaseStorage getInstance(){
-        return (Config.isTest)? new Storage().instanciateMock() : FirebaseStorage.getInstance();
+        return (Config.isTest)? new Storage().instantiateMock() : FirebaseStorage.getInstance();
     }
 
-    private FirebaseStorage instanciateMock(){
+    private FirebaseStorage instantiateMock(){
         if(Config.isTest){
             MockitoAnnotations.initMocks(this);
-            instanciateStorage();
-            instanciateTrackImage();
+            instantiateStorage();
+            instantiateTrackImage();
             return firebaseStorageMock;
         } else {
             return FirebaseStorage.getInstance();
         }
     }
 
-    private void instanciateStorage(){
+    private void instantiateStorage(){
         //First layer
         when(firebaseStorageMock.getReference()).thenReturn(referenceStorageMock);
 
@@ -75,7 +75,7 @@ public class Storage {
 
     }
 
-    private void instanciateTrackImage(){
+    private void instantiateTrackImage(){
         when(rsTrackImage.child(key)).thenReturn(rsTrackImageKey);
         when(rsTrackImageKey.putBytes(any(byte[].class))).thenReturn(uploadTask);
         when(uploadTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {

@@ -81,7 +81,7 @@ public class TrackPropertiesTest {
         assert tp.getLength() == 5.0;
     }
     @Test
-    public void testGetHeihtDiff(){
+    public void testGetHeightDiff(){
         assert tp.getHeightDifference() == 200.0;
     }
 

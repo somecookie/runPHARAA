@@ -40,7 +40,7 @@ public class ImageLoaderTest {
     }
 
     @Test
-    public void downloadSeperateImages() {
+    public void downloadSeparateImages() {
         ImageLoader.getLoader(context).displayImage(url1, view);
         ImageLoader.getLoader(context).displayImage(url2, view);
     }
