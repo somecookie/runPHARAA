@@ -96,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         listTypesStr = getResources().getStringArray(R.array.track_types);
         checkedTypes = new boolean[listTypesStr.length];
-
-        super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.activity_main);
 
         tabLayout = findViewById(R.id.tabLayoutId);
