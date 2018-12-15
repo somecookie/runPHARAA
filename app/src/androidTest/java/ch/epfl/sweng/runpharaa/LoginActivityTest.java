@@ -312,7 +312,7 @@ public class LoginActivityTest extends TestInitLocation {
         public Task<AuthResult> addOnCompleteListener(@NonNull Activity activity, @NonNull OnCompleteListener<AuthResult> onCompleteListener) {
             return Tasks.call(new Callable<AuthResult>() {
                 @Override
-                public AuthResult call() throws Exception {
+                public AuthResult call() {
                     return new AuthResult() {
                         @Override
                         public FirebaseUser getUser() {

@@ -60,11 +60,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         loadData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     protected abstract void setEmptyMessage();
 
     protected abstract void loadData();

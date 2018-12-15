@@ -19,12 +19,11 @@ import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<AdapterTracksToRecyclerViewItem.viewHolder> {
     private List<TrackCardItem> createdTracks;
-    private AdapterTracksToRecyclerViewItem.OnItemClickListener listener;
     private Context context;
 
     public AdapterTracksToRecyclerViewItem(Context context, List<TrackCardItem> createdTracks, AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
         this.createdTracks = createdTracks;
-        this.listener = listener;
+        OnItemClickListener listener1 = listener;
         this.context = context;
     }
 

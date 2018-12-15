@@ -81,7 +81,7 @@ public class Storage {
         when(rsTrackImageKey.putBytes(any(byte[].class))).thenReturn(uploadTask);
         when(uploadTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
                 if(shouldFail){
                     l.onFailure(new IllegalStateException("Failed to upload image"));
@@ -91,7 +91,7 @@ public class Storage {
         });
         when(uploadTask.addOnCompleteListener(any(OnCompleteListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
                 if(!shouldFail){
                     l.onComplete(uploadTaskSuccessful);
@@ -107,7 +107,7 @@ public class Storage {
         when(rsTrackImageKey.getDownloadUrl()).thenReturn(downloadUrlTask);
         when(downloadUrlTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
                 if(shouldFail){
                     l.onFailure(new IllegalStateException("Failed to download URL"));
@@ -118,7 +118,7 @@ public class Storage {
 
         when(downloadUrlTask.addOnCompleteListener(any(OnCompleteListener.class))).thenAnswer(new Answer<Task>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
                 l.onComplete(downloadUrlTaskSuccessful);
                 return downloadUrlTaskSuccessful;

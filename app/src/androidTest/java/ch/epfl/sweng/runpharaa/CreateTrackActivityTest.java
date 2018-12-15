@@ -25,8 +25,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class CreateTrackActivityTest extends TestInitLocation {
 
-    private Context c;
-
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -38,7 +36,7 @@ public class CreateTrackActivityTest extends TestInitLocation {
 
     @Test
     public void createTrackWithTwoPoints() {
-        c = InstrumentationRegistry.getTargetContext();
+        Context c = InstrumentationRegistry.getTargetContext();
         c.startService(new Intent(c, GpsService.getInstance().getClass()));
         onView(withId(R.id.fab)).perform(click());
         sleep(3000);
