@@ -64,17 +64,15 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ShareDialog shareDialog;
-    TweetComposer.Builder tweetBuilder;
+    private ShareDialog shareDialog;
+    private TweetComposer.Builder tweetBuilder;
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
-    private Boolean isMapOpen;
 
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isMapOpen = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
 
@@ -282,7 +280,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
             if (i < nbrTypes - 2) sb.append(", ");
             else if (i == nbrTypes - 2)
-                sb.append(" " + getResources().getString(R.string.and) + " ");
+                sb.append(" ").append(getResources().getString(R.string.and)).append(" ");
 
             i++;
         }
@@ -395,7 +393,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
 
-    public void sentToNotification(String key, String title, String message) {
+    private void sentToNotification(String key, String title, String message) {
 
         FireMessage f = null;
         try {

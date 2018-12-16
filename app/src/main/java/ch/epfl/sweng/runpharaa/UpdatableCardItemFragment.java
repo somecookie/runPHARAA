@@ -19,7 +19,6 @@ import java.util.List;
 
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.gui.CardItem;
-import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.utils.Config;
 
 public abstract class UpdatableCardItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -58,11 +57,6 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
     @Override
     public void onRefresh() {
         loadData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     protected abstract void setEmptyMessage();

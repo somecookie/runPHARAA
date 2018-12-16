@@ -1,7 +1,5 @@
 package ch.epfl.sweng.runpharaa.tracks;
 
-import com.google.firebase.database.Exclude;
-
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.utils.Required;
@@ -113,7 +111,7 @@ public class TrackProperties {
          * Create an average difficulty for a track (To use when creating a new track)
          * @param firstDiff
          */
-        public AvgDifficulty(int firstDiff){
+        AvgDifficulty(int firstDiff){
             if(firstDiff < 0 || firstDiff > 5) throw new IllegalArgumentException("AvgDifficulty must be in the range [0,5]");
             total = firstDiff;
             nbr = 1;
@@ -124,7 +122,7 @@ public class TrackProperties {
          * @param total the summed durations
          * @param nbr the number of durations
          */
-        public AvgDifficulty(int total, int nbr){
+        AvgDifficulty(int total, int nbr){
             if(total < 0) throw new IllegalArgumentException("Total difficulty must be positive");
             if(nbr <= 0) throw new IllegalArgumentException("Number of difficulties must be greater than zero");
             this.total = total;
@@ -135,20 +133,20 @@ public class TrackProperties {
          * Add a new difficulty to the average
          * @param newDiff
          */
-        public void add(int newDiff){
+        void add(int newDiff){
             if(newDiff < 0 || newDiff > 5) throw new IllegalArgumentException("AvgDifficulty must be in the range [0,5]");
             total += newDiff;
             nbr++;
         }
 
-        public double getAverage(){
+        double getAverage(){
             return (double)total/nbr;
         }
 
 
-        public int getTotal() { return total;}
+        int getTotal() { return total;}
 
-        public int getNbr() { return nbr; }
+        int getNbr() { return nbr; }
     }
 
     /**
@@ -162,7 +160,7 @@ public class TrackProperties {
          * Create an average duration for a track (To use when creating a new track)
          * @param firstDuration
          */
-        public AvgDuration(double firstDuration){
+        AvgDuration(double firstDuration){
             if(firstDuration < 0) throw new IllegalArgumentException("Duration for a track must be positive");
             nbr = 1;
             total = firstDuration;
@@ -173,7 +171,7 @@ public class TrackProperties {
          * @param total the summed durations
          * @param nbr the number of durations
          */
-        public AvgDuration(double total, int nbr){
+        AvgDuration(double total, int nbr){
             if(total < 0) throw new IllegalArgumentException("Total duration must be positive");
             if(nbr <= 0) throw new IllegalArgumentException("Number of durations must be greater than zero");
             this.total = total;
@@ -184,18 +182,18 @@ public class TrackProperties {
          * Add a new duration to the average
          * @param newDuration
          */
-        public void add(double newDuration){
+        void add(double newDuration){
             if(newDuration < 0) throw new IllegalArgumentException("Duration for a track must be positive");
             nbr++;
             total += newDuration;
         }
 
-        public double getAverage(){
+        double getAverage(){
             return total/nbr;
         }
 
-        public double getTotal() { return total; }
+        double getTotal() { return total; }
 
-        public int getNbr() { return nbr; }
+        int getNbr() { return nbr; }
     }
 }
