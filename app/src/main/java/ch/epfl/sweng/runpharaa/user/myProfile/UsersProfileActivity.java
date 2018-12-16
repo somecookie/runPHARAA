@@ -24,12 +24,15 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Util.prepareHomeButton(this);
 
         setContentView(R.layout.activity_user);
         loadActivity(User.instance);
@@ -78,6 +81,9 @@ public class UsersProfileActivity extends AppCompatActivity {
             case R.id.signOutIcon:
                 signOut();
                 return true;
+            case android.R.id.home:
+                Util.goHome(this);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -103,7 +109,7 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        if(Config.isTest) {
+        if (Config.isTest) {
             goToLogin();
             return;
         }
