@@ -141,7 +141,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             });
         }
         else {
-            Log.d("TestHugo", "not here pls");
             deleteButton.setVisibility(Button.INVISIBLE);
             deleteButton.setClickable(false);
         }

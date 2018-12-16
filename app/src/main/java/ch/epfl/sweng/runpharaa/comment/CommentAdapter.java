@@ -46,6 +46,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         UserDatabaseManagement.getUserNameFromID(comment.getCreatorID(), new Callback<String>() {
             @Override
             public void onSuccess(String name) {
+                if(name == null) return;
                 UserDatabaseManagement.getUserPictureFromID(comment.getCreatorID(), new Callback<String>() {
                     @Override
                     public void onSuccess(String picture) {
