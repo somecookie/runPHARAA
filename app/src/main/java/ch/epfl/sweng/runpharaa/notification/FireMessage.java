@@ -10,6 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class FireMessage {
+    //Server key found in firebase
+    private final String SERVER_KEY = "AAAArozt-xs:APA91bEN2m2cVZVUlJ6GMRgacY42W7KF9f3Orpm1bcEKF0WbugfgDfwcKLZ1qmgs4d4EmD7iCgkB3qH6oXfjEk0vQEg2oodWioeYzve__QeCJr2PPgLI4qmHi71L5_EuxL87y1TJNlpX";
+    private final String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
     private JSONObject root;
 
     public FireMessage(String title, String message) throws JSONException {
@@ -35,7 +38,6 @@ public class FireMessage {
      * @throws Exception
      */
     private String sendPushNotification() throws Exception {
-        String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
         URL url = new URL(API_URL_FCM);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -46,8 +48,6 @@ public class FireMessage {
 
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
-        //Server key found in firebase
-        String SERVER_KEY = "AAAArozt-xs:APA91bEN2m2cVZVUlJ6GMRgacY42W7KF9f3Orpm1bcEKF0WbugfgDfwcKLZ1qmgs4d4EmD7iCgkB3qH6oXfjEk0vQEg2oodWioeYzve__QeCJr2PPgLI4qmHi71L5_EuxL87y1TJNlpX";
         conn.setRequestProperty("Authorization", "key=" + SERVER_KEY);
 
         try {

@@ -53,7 +53,7 @@ public class FollowingFragmentTests extends TestInitLocation {
     }
 
     @Test
-    public void databaseErrorFavorite() throws Throwable {
+    public void databaseErrorFollowing() throws Throwable {
 
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
 
