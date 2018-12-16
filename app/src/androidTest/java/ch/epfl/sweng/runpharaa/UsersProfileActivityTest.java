@@ -29,6 +29,7 @@ import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static android.os.SystemClock.sleep;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
@@ -38,6 +39,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
@@ -59,6 +61,16 @@ public class UsersProfileActivityTest extends TestInitLocation {
         Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
         StreakManager.setFakeCalendar(fakeCalendar);
         User.setStreakManager(new StreakManager());
+    }
+
+    @Test
+    public void clickOnHomeButton(){
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        //The description only works if the app is in english, there could be an issue if not
+        onView(withContentDescription("Navigate up")).perform(click());
+        sleep(WAIT_TIME);
+        intended(hasComponent(MainActivity.class.getName()));
     }
 
     @Test
