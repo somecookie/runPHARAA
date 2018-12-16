@@ -90,20 +90,11 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         }
     };
 
-    @BeforeClass
-    public static void initUser() {
-        User.instance = Database.getUser();
-        User.instance.setStreakManager(new StreakManager(1, 1, 1));
-    }
 
     @Before
     public void init() {
-        Intents.init();
-    }
-
-    @Before
-    public void initUserAndTracks() {
         User.instance = Database.getUser();
+        User.instance.setStreakManager(new StreakManager(1, 1, 1));
         Intents.init();
     }
 
