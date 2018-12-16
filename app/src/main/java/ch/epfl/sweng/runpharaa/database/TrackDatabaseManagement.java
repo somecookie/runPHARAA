@@ -1,9 +1,7 @@
 package ch.epfl.sweng.runpharaa.database;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -34,18 +32,17 @@ import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 public class TrackDatabaseManagement {
 
     public final static String TRACKS_PATH = "tracks";
-    public final static String USERS_PATH = "users";
-    public final static String TRACK_IMAGE_PATH = "TrackImages";
-    public final static String NAME_PATH = "name";
-    public final static String ID_PATH = "trackUid";
-    public final static String COMMENTS = "comments";
+    private final static String TRACK_IMAGE_PATH = "TrackImages";
+    private final static String NAME_PATH = "name";
+    private final static String ID_PATH = "trackUid";
+    private final static String COMMENTS = "comments";
 
     private static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
     static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
     private static FirebaseStorage mFirebaseStorage = Storage.getInstance();
     private static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
-    public TrackDatabaseManagement() {
+    TrackDatabaseManagement() {
     }
 
     /**

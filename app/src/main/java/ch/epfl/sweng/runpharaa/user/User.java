@@ -178,6 +178,7 @@ public final class User implements Serializable {
      *
      * @param u
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean alreadyInFollowed(User u) {
         for (String serializedUser : followedUsers) {
             User user = deserialize(serializedUser);

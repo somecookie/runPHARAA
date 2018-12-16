@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,16 +49,15 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultM
 
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final int IMAGE_GALLERY_REQUEST = 20;
-    public static final int REQ_WIDTH = 480;
-    public static final int REQ_HEIGHT = 200;
+    private static final int IMAGE_GALLERY_REQUEST = 20;
+    private static final int REQ_WIDTH = 480;
+    private static final int REQ_HEIGHT = 200;
 
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;
     private EditText nameText;
     private ImageView trackImage;
 
-    private Location[] locations;
     private LatLng[] points;
     private Bitmap trackPhoto;
 
@@ -214,7 +212,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             Parcelable[] a = bundle.getParcelableArray("locations");
-            locations = Arrays.copyOf(a, a.length, Location[].class);
+            Location[] locations = Arrays.copyOf(a, a.length, Location[].class);
             a = bundle.getParcelableArray("points");
             points = Arrays.copyOf(a, a.length, LatLng[].class);
 

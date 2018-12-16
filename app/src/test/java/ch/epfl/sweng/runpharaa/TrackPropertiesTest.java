@@ -16,8 +16,8 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 @RunWith(JUnit4.class)
 public class TrackPropertiesTest {
 
-    TrackProperties tp;
-    Set<TrackType> types;
+    private TrackProperties tp;
+    private Set<TrackType> types;
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -81,7 +81,7 @@ public class TrackPropertiesTest {
         assert tp.getLength() == 5.0;
     }
     @Test
-    public void testGetHeihtDiff(){
+    public void testGetHeightDiff(){
         assert tp.getHeightDifference() == 200.0;
     }
 

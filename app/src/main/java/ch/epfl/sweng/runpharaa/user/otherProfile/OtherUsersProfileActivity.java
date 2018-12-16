@@ -29,7 +29,7 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class OtherUsersProfileActivity extends AppCompatActivity {
 
-    TextView emptyMessage;
+    private TextView emptyMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         return profileUserId;
     }
 
-    protected void setEmptyMessage() {
+    private void setEmptyMessage() {
         emptyMessage.setText(R.string.no_created_other);
         emptyMessage.setVisibility(View.VISIBLE);
     }
