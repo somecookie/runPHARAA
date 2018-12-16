@@ -1,28 +1,43 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
+import ch.epfl.sweng.runpharaa.notification.FirebaseNotification;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
-import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 
@@ -110,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
 
+        removeStrictMode();
 
         // Remove shadow from action bar
         getSupportActionBar().setElevation(0);
@@ -119,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
             startActivity(createTrack);
         });
+
     }
 
     @Override
@@ -126,19 +143,23 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.filterIcon:
                 filterDialog();
-                return true;
+                break;
             case R.id.profileIcon:
                 Intent profileIntent = new Intent(getBaseContext(), UsersProfileActivity.class);
                 profileIntent.putExtra("selfProfile", true);
                 startActivity(profileIntent);
-                return true;
+                break;
             case R.id.mapIcon:
                 Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
                 startActivity(mapIntent);
-                return true;
+                break;
+            case R.id.helpIcon:
+                showPopup(viewPager);
+                break;
             default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void filterDialog() {
@@ -223,5 +244,34 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(mView);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Method to change the thread policy that sometimes block the json send
+     */
+    private void removeStrictMode(){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }
+
+    public void showPopup(View view) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // click outside the popup dismiss it
+        final PopupWindow popupWindowGuide = new PopupWindow(popupView, width, height, focusable);
+        popupWindowGuide.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        popupWindowGuide.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        // dismiss the popup on click
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindowGuide.dismiss();
+                return true;
+            }
+        });
     }
 }

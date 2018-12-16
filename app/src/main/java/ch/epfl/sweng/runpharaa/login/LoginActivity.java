@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,42 +28,34 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Map;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;
-import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
-
-import static java.lang.Thread.sleep;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private final static int GPS_PERMISSIONS_REQUEST_CODE = 69;
-    private GoogleSignInClient mGoogleSignInClient;
     private GoogleAuthentication mGoogleAuth;
     private FirebaseAuthentication mAuth;
     private LatLng lastLocation = new LatLng(46.520566, 6.567820);
-    private FirebaseUser currentUser;
-    private AnimationDrawable anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startLoadingAnimation();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        for (Map.Entry e : PreferenceManager.getDefaultSharedPreferences(this).getAll().entrySet())
-            System.out.println(e.getKey() + " " + e.getValue());
-
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -73,9 +66,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mGoogleAuth = GoogleAuthentication.getInstance(LoginActivity.this);
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
+        GoogleSignInClient mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuthentication.getInstance();
+
     }
 
     @Override
@@ -83,8 +77,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        if(!requestPermissions()) {
-            currentUser = mAuth.getCurrentUser();
+        if (!requestPermissions()) {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             updateUI(currentUser);
         }
     }
@@ -126,27 +120,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (currentUser != null) {
             setLoadingText(getText(R.string.loading_data).toString());
             Location l = GpsService.getInstance().getCurrentLocation();
-            if(GpsService.getInstance().getCurrentLocation() != null) {
+            if (GpsService.getInstance().getCurrentLocation() != null) {
                 lastLocation = new LatLng(l.getLatitude(), l.getLongitude());
             }
             float prefRadius = SettingsActivity.getFloat(PreferenceManager.getDefaultSharedPreferences(this), SettingsActivity.PREF_KEY_RADIUS, 2f);
             User.set(currentUser.getDisplayName(), prefRadius, currentUser.getPhotoUrl(), lastLocation, currentUser.getUid());
-            UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
-                @Override
-                public void onSuccess(User value) {
-                    User.instance.setFavoriteTracks(value.getFavoriteTracks());
-                    User.instance.setCreatedTracks(value.getCreatedTracks());
-                    User.instance.setLikedTracks(value.getLikedTracks());
-                    User.instance.setFollowedUsers(value.getFollowedUsers());
-                    launchApp();
-                }
+            StreakManager sm = StreakManager.loadStreakManager(this);
+            sm.update();
+            sm.saveStreakManager(this);
+            User.setStreakManager(sm);
+            new Thread(() -> {
+                UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
+                    @Override
+                    public void onSuccess(User value) {
+                      FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(t -> {
+                        String key = t.getToken();
+                        User.instance.setNotificationKey(key);
+                        UserDatabaseManagement.writeNotificationKey(key);
+                         });
+                        User.setLoadedData(value);
+                        launchApp();
+                    }
 
-                @Override
-                public void onError(Exception e) {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onError(Exception e) {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(getBaseContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
         } else {
             setContentView(R.layout.activity_login);
             TextView tv = findViewById(R.id.textViewLogin);
@@ -166,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.loading_screen);
         ImageView imageView = findViewById(R.id.anim_view);
         imageView.setBackgroundResource(R.drawable.animation);
-        anim = ((AnimationDrawable)imageView.getBackground());
+        AnimationDrawable anim = ((AnimationDrawable) imageView.getBackground());
         anim.start();
     }
 

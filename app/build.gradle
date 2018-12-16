@@ -7,7 +7,7 @@ jacoco {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "ch.epfl.sweng.runpharaa"
         minSdkVersion 18
@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.firebaseui:firebase-ui-storage:3.3.1'
     //dependencies for Google's authentication
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     //dependencies for mockito
     implementation 'org.mockito:mockito-core:2.12.0'
@@ -105,6 +105,9 @@ dependencies {
     implementation 'com.facebook.android:facebook-share:4.38.1'
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
     implementation 'com.twitter.sdk.android:tweet-composer:3.1.1'
+    //notification
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
     // dependencies for testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'

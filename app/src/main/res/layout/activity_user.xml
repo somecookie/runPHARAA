@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme.NoActionBar"
+    android:orientation="vertical"
     tools:context=".user.myProfile.UsersProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="83dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="@drawable/half_background"
         android:orientation="horizontal">
 
+        <RelativeLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="@dimen/classic_margin">
+
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/unknown_person" />
+
+            <TextView
+                android:id="@+id/current_streak"
+                android:background="@drawable/ic_signal_cellular_4_bar_black_24dp"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:drawableEnd="@drawable/ic_flame"
+                android:paddingBottom="30dp"
+                android:textAlignment="viewEnd"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="USER"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_picture"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="230dp"
-        android:src="@drawable/unknown_person"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="0dp" />
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="-200dp"
-        android:layout_toEndOf="@+id/profile_picture"
-        android:text="USER"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="@dimen/classic_margin"
         android:orientation="vertical">
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="81dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="48dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/nbTracks"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/small_margin"
                     android:text="TextView"
+                    android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -82,25 +82,24 @@
                     android:id="@+id/textView134"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Number of tracks created" />
+                    android:text="Number of tracks created"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="53dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/nbFav"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/small_margin"
                     android:text="TextView"
+                    android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -108,44 +107,33 @@
                     android:id="@+id/textView10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Number of favorite tracks" />
+                    android:text="Number of favorite tracks"
+                    android:textAlignment="center" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/small_margin"
             android:orientation="vertical">
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabLayoutUser"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true">
-            </android.support.design.widget.TabLayout>
+                android:layout_height="match_parent" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPagerUser"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/emptyMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:padding="@dimen/classic_margin"
                     android:textAlignment="center"
                     android:textSize="@dimen/normal_text"
@@ -157,4 +145,4 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

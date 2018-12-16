@@ -1,6 +1,5 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
@@ -9,35 +8,41 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.FragmentMyTracks;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
-import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static android.os.SystemClock.sleep;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
-import static ch.epfl.sweng.runpharaa.util.ViewUtils.onPreferenceRow;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -51,11 +56,50 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void initEmptyUser() {
         User.instance = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
         Intents.init();
+        Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
+        StreakManager.setFakeCalendar(fakeCalendar);
+        User.setStreakManager(new StreakManager());
+    }
+
+    @Test
+    public void showsCorrectInitialStreakValue() {
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        onView(withId(R.id.current_streak)).check(matches(withText("1")));
+    }
+
+    @Test
+    public void showsCorrectStreakValueForMultipleDays() {
+        Calendar myFakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
+        StreakManager.setFakeCalendar(myFakeCalendar);
+        StreakManager sm = new StreakManager();
+        User.setStreakManager(sm);
+        myFakeCalendar.set(2018, Calendar.DECEMBER, 25);
+        sm.update();
+        myFakeCalendar.set(2018, Calendar.DECEMBER, 26);
+        sm.update();
+        myFakeCalendar.set(2018, Calendar.DECEMBER, 27);
+        sm.update();
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        onView(withId(R.id.current_streak)).check(matches(withText("4")));
     }
 
     @Test
     public void showsCreatedTracks() throws Throwable {
-        User.instance = Database.getUser();
+        User.instance.addToCreatedTracks("0");
+        mActivityRule.launchActivity(null);
+        sleep(WAIT_TIME);
+        runOnUiThread(() ->((FragmentMyTracks)mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
+        sleep(WAIT_TIME);
+        onView(AllOf.allOf(withId(R.id.cardListId), isDisplayed())).perform(
+                actionOnItemAtPosition(0, click()));
+        sleep(WAIT_TIME);
+        onView(withId(R.id.trackTitleID)).check(matches(withText("Cours forest !")));
+    }
+
+    @Test
+    public void showsEmptyMessageWhenNoTracks() throws Throwable {
         mActivityRule.launchActivity(null);
         sleep(WAIT_TIME);
         runOnUiThread(() ->((FragmentMyTracks)mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
@@ -67,10 +111,10 @@ public class UsersProfileActivityTest extends TestInitLocation {
     public void testOpenSettings() {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.settingsIcon)).perform(click());
-        sleep(2*WAIT_TIME);
+        sleep(WAIT_TIME);
         // can't access intent if the view isn't initialized, so we wait until we see the preferences
-        onPreferenceRow(withKey(getTargetContext().getResources().getString(R.string.pref_key_radius))).check(matches(isDisplayed()));
-        intended(hasComponent(SettingsActivity.class.getName()));
+        onView(isRoot()).check(matches(isDisplayed()));
+        //intended(hasComponent(SettingsActivity.class.getName()));
     }
 
     @Test
@@ -173,7 +217,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         Intents.release();
     }
 
-    private void clickOnDifferenttrophies(){
+    private void clickOnDifferenttrophies() {
         onView(withId(R.id.trophies_create)).perform(click());
         sleep(WAIT_TIME);
         Espresso.pressBack();

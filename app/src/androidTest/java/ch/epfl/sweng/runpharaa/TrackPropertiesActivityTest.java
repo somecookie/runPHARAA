@@ -164,7 +164,10 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         launchWithExtras(t1);
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("1"));
+        sleep(3000);
 
+        onView(withId(R.id.buttonLikeID)).perform(click());
+        sleep(3000);
     }
 
     @Test
@@ -173,6 +176,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         launchWithExtras(t1);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("1"));
+        sleep(4000);
     }
 
     @Test

@@ -1,17 +1,23 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.support.test.espresso.intent.Intents;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,14 +39,17 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setGone;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -58,6 +67,9 @@ public class MainActivityTest extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.instance = Database.getUser();
+        Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
+        StreakManager.setFakeCalendar(fakeCalendar);
+        User.setStreakManager(new StreakManager());
     }
 
     @Before
@@ -96,6 +108,19 @@ public class MainActivityTest extends TestInitLocation {
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOpenAndCloseHelp() {
+        // display the popup
+        onView(withId(R.id.helpIcon)).perform(click());
+        // dismiss the popup by clicking on it
+        onView(withContentDescription(R.string.popup_description))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .perform(click());
+        // check that the main activity is visible by checking that its button and tabs are displayed
+        onView(withId(R.id.profileIcon)).check(matches(isDisplayed()));
+        onView(withId(R.id.tabLayoutId)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -242,6 +267,18 @@ public class MainActivityTest extends TestInitLocation {
         MainActivity.difficultyIsFiltered = false;
         MainActivity.typesAreFiltered = true;
         assertFalse(MainActivity.passFilters(t));
+    }
+
+    @Test
+    public void databaseErrorNearMe() throws Throwable {
+        Database.setIsCancelled(true);
+
+        runOnUiThread(() ->((FragmentNearMe)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
+
+        //Tried to get the string but it did not work, put a hardcoded string for now
+        onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_tracks)));
+
+        Database.setIsCancelled(false);
     }
 
     private void selectAllTypes(boolean pressOk) {

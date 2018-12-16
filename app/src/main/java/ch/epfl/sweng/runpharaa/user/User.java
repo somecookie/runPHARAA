@@ -27,10 +27,13 @@ public final class User implements Serializable {
     private transient LatLng location;
     @Exclude
     private UserCardItem userCardItem;
+    @Exclude
+    private StreakManager streakManager;
 
     private String name;
     private String picture;
     private String uid;
+    private String notificationKey;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
     private List<String> feedbackTracks;
@@ -58,13 +61,27 @@ public final class User implements Serializable {
         this.uid = uid;
     }
 
-    public static void
-    set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
+    public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
 
-    public static void
-    set(User u) {
+    public static void setLoadedData(User otherUser) {
+        instance.setCreatedTracks(otherUser.createdTracks);
+        instance.setFavoriteTracks(otherUser.favoriteTracks);
+        instance.setLikedTracks(otherUser.likedTracks);
+        instance.setFollowedUsers(otherUser.followedUsers);
+    }
+
+    public static void setStreakManager(StreakManager streakManager) {
+        Required.nonNull(streakManager, "The streak manager can't be null");
+        User.instance.streakManager = streakManager;
+    }
+
+    public static StreakManager getStreakManager() {
+        return User.instance.streakManager;
+    }
+
+    public static void set(User u) {
         instance = u;
     }
 
@@ -247,6 +264,14 @@ public final class User implements Serializable {
         this.uid = uid;
     }
 
+    public String getNotificationKey(){
+        return notificationKey;
+    }
+
+    public void setNotificationKey(String key){
+        notificationKey = key;
+    }
+
     public List<String> getCreatedTracks() {
         return createdTracks;
     }
@@ -278,6 +303,7 @@ public final class User implements Serializable {
     public void setFollowedUsers(List<String> followedUsers) {
         this.followedUsers = followedUsers;
     }
+
 
     public List<String> getFeedbackTracks() {
         return feedbackTracks;

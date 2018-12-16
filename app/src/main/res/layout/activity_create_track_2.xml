@@ -52,30 +52,36 @@
             android:rowCount="2">
 
             <Button
+                style="@style/ButtonStyleCreateTrack"
                 android:id="@+id/create_track_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/create_track" />
 
             <Button
+                style="@style/ButtonStyle"
                 android:id="@+id/add_photo_from_gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/add_photo"
                 app:layout_constraintStart_toEndOf="@+id/create_track_button" />
 
             <Button
+                style="@style/ButtonStyle"
                 android:id="@+id/set_properties"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/set_properties" />
 
             <Button
+                style="@style/ButtonStyle"
                 android:id="@+id/types"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
+                android:layout_margin="2dp"
                 android:text="@string/types" />
 
         </GridLayout>

@@ -1,6 +1,9 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.graphics.Picture;
+import android.net.Uri;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -10,8 +13,10 @@ import org.junit.runners.JUnit4;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -57,6 +62,7 @@ public class UserTest {
         u.setCreatedTracks(favs);
         u.setName("name");
         u.setPicture("pic");
+        u.setNotificationKey("key");
         assertEquals(u.getUid(), "0");
         assertEquals(u.getName(), "name");
         assertEquals(u.getCreatedTracks(), favs);
@@ -64,5 +70,6 @@ public class UserTest {
         assertEquals(u.getFollowedUsers(), followed);
         assertEquals(u.getLikedTracks(), favs);
         assertEquals(u.getPicture(), "pic");
+        assertEquals(u.getNotificationKey(), "key");
     }
 }
