@@ -42,6 +42,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -99,6 +100,8 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         onView(withId(R.id.deleteButton))
                 .perform(click());
         onView(withText(R.string.delete)).perform(click());
+
+        assertTrue(mActivityRule.getActivity().isFinishing());
 
         User.instance.setUid(s);
     }

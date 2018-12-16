@@ -115,4 +115,5 @@
     <string name="help">Aide</string>
     <string name="popup_description">help_popup</string>
     <string name="get_me_to_my_location">Me ramener à ma location</string>
+    <string name="track_deleted">Supprimé</string>
 </resources>

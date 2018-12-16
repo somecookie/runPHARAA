@@ -33,8 +33,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.onPreferenceRow;
+import static android.os.SystemClock.sleep;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsActivityTest extends TestInitLocation {
@@ -66,6 +68,7 @@ public class SettingsActivityTest extends TestInitLocation {
         onView(withId(R.id.delete_account))
                 .perform(click());
         onView(withText(R.string.delete)).perform(click());
+        
     }
 
     @Test

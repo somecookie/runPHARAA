@@ -146,6 +146,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     private void deleteTrack(Track track){
         TrackDatabaseManagement.deleteTrack(track.getTrackUid());
+        Toast t = Toast.makeText(this, R.string.track_deleted, Toast.LENGTH_LONG);
+        t.show();
         finish();
     }
 
