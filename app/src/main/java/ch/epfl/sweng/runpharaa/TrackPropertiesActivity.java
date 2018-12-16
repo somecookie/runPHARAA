@@ -79,7 +79,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         super.onCreate(savedInstanceState);
 
         startIntent = getIntent();
-        isMapOpen = false;
         setContentView(R.layout.activity_track_properties);
 
         Twitter.initialize(this);
