@@ -60,7 +60,7 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
 
     @Override
     public void onResume() {
-        loadData();
+        if(!Config.isTest) loadData();
         super.onResume();
     }
 
