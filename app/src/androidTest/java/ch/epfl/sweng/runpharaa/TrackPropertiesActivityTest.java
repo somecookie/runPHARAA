@@ -14,7 +14,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,6 +39,7 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
+import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
@@ -47,7 +47,6 @@ import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -60,26 +59,42 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
 
-    @BeforeClass
-    public static void initUser() {
-        User.instance = Database.getUser();
-        User.instance.setStreakManager(new StreakManager(1,1,1));
-    }
-
     @Rule
     public ActivityTestRule<TrackPropertiesActivity> mActivityRule =
             new ActivityTestRule<>(TrackPropertiesActivity.class, false, false);
+    ;
+    private ViewAction clickOnName = new ViewAction() {
+        @Override
+        public Matcher<View> getConstraints() {
+            return null;
+        }
+
+        @Override
+        public String getDescription() {
+            return "Click on inside button";
+        }
+
+        @Override
+        public void perform(UiController uiController, View view) {
+            AppCompatTextView name = view.findViewById(R.id.comment_name);
+            name.performClick();
+        }
+    };
+
+    @BeforeClass
+    public static void initUser() {
+        User.instance = Database.getUser();
+        User.instance.setStreakManager(new StreakManager(1, 1, 1));
+    }
 
     @Before
-    public void init(){
+    public void init() {
         Intents.init();
     }
 
@@ -90,7 +105,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
 
     @Test
-    public void giveFeedBack(){
+    public void giveFeedBack() {
         Track t1 = createTrack();
         launchWithExtras(t1);
         sleep(2000);
@@ -116,7 +131,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void cannotGiveFeedbackTwice(){
+    public void cannotGiveFeedbackTwice() {
         Track t1 = createTrack();
         User.instance.addNewFeedBack(t1.getTrackUid());
         launchWithExtras(t1);
@@ -138,7 +153,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void cannotGiveFeedbackWithoutSettingTime(){
+    public void cannotGiveFeedbackWithoutSettingTime() {
         Track t1 = createTrack();
         User.instance.addNewFeedBack(t1.getTrackUid());
         launchWithExtras(t1);
@@ -243,7 +258,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testCommentTooLong(){
+    public void testCommentTooLong() {
         Track t1 = createTrack();
         launchWithExtras(t1);
         sleep(5_000);
@@ -272,26 +287,37 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testAddingCorrectComment(){
-        Track t1 = createTrack();
-        launchWithExtras(t1);
-        sleep(5_000);
-        onView(withId(R.id.commentsID)).perform(click());
-
-        sleep(2000);
-
-        onView(withId(R.id.comments_editText)).perform(replaceText("Hey, very nice track, love it!"));
-
-        sleep(2000);
-        Comment com = new Comment(User.instance.getUid(), "Hey, very nice track, love it!", new Date());
-        t1.addComment(com);
-        onView(withId(R.id.post_button)).perform(click());
-
-        sleep(3000);
+    public void testAddingCorrectComment() {
+        postComment();
+        withId(R.id.commentsID).matches(withText("1"));
     }
 
     @Test
-    public void goToAnotherProfilFromComment(){
+    public void goToYourProfileFromComment() {
+        postComment();
+        onView(withId(R.id.commentsID)).perform(click());
+        sleep(2000);
+        onView(allOf(withId(R.id.comment_rv), isDisplayed())).perform(
+                actionOnItemAtPosition(0, clickOnName));
+        sleep(2000);
+        intended(hasComponent(UsersProfileActivity.class.getName()));
+    }
+
+    @Test
+    public void goToOtherProfileFromComment() {
+        postComment();
+        onView(withId(R.id.commentsID)).perform(click());
+        sleep(2000);
+        User.instance = new User("Alice", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "2");
+        User.instance.setStreakManager(new StreakManager(1, 1, 1));
+        sleep(2000);
+        onView(allOf(withId(R.id.comment_rv), isDisplayed())).perform(
+                actionOnItemAtPosition(0, clickOnName));
+        sleep(2000);
+        intended(hasComponent(OtherUsersProfileActivity.class.getName()));
+    }
+
+    private void postComment() {
         Track t1 = createTrack();
         launchWithExtras(t1);
         sleep(2000);
@@ -303,31 +329,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         t1.addComment(com);
         onView(withId(R.id.post_button)).perform(click());
         sleep(2000);
-        onView(withId(R.id.commentsID)).perform(click());
-        sleep(2000);
-        onView(allOf(withId(R.id.comment_rv), isDisplayed())).perform(
-                actionOnItemAtPosition(0, new ViewAction() {
-                    @Override
-                    public Matcher<View> getConstraints() {
-                        return null;
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return "Click on inside button";
-                    }
-
-                    @Override
-                    public void perform(UiController uiController, View view) {
-                        AppCompatTextView name = view.findViewById(R.id.comment_name);
-                        name.performClick();
-                    }
-                }));
-        sleep(2000);
-
-        intended(hasComponent(UsersProfileActivity.class.getName()));
-
-
     }
 
     private Track createTrack() {
@@ -338,7 +339,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
 
-        return new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
+        return new Track("0", "Bob", "Cours forest !", Arrays.asList(coord0, coord1), new ArrayList<>(), p);
     }
 
     private void launchWithExtras(Track t) {
