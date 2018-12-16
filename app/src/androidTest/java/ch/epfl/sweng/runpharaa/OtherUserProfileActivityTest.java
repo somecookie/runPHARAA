@@ -19,6 +19,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.core.AllOf.allOf;
 
@@ -42,6 +43,11 @@ public class OtherUserProfileActivityTest extends TestInitLocation {
                 actionOnItemAtPosition(0, click()));
         onView(withId(R.id.trackCreatorID)).perform(click());
 
-        onView(withId(R.id.follow_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.follow_button)).check(matches(withText("FOLLOW")));
+        onView(withId(R.id.follow_button)).perform(click());
+        sleep(1000);
+        onView(withId(R.id.follow_button)).check(matches(withText("UNFOLLOW")));
+        onView(withId(R.id.follow_button)).perform(click());
+        onView(withId(R.id.follow_button)).check(matches(withText("FOLLOW")));
     }
 }

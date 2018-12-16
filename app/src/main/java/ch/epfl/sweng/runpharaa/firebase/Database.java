@@ -142,6 +142,9 @@ public class Database {
     private DataSnapshot snapInitCurUser;
 
     @Mock
+    private DataSnapshot snapInitCurUserName;
+
+    @Mock
     private DataSnapshot snapInitChildrenUser;
 
     @Mock
@@ -303,11 +306,17 @@ public class Database {
         when(snapInitFollowChildrens.getValue()).thenReturn(null);
 
         //changer le nom
-        when(snapOnDataChangeReadUser.child("1")).thenReturn(snapInitCurUser);
+        when(snapOnDataChangeReadUser.child("BobUID")).thenReturn(snapInitCurUser);
         when(snapInitCurUser.child("followedUsers")).thenReturn(snapInitUser);
         when(snapInitChildrenUser.child("name")).thenReturn(snapInitUser);
         when(snapInitUser.getValue((String.class))).thenReturn("Bob");
+        when(snapInitUser.exists()).thenReturn(true);
+        when(snapInitCurUser.exists()).thenReturn(true);
+        when(snapInitCurUser.child("name")).thenReturn(snapInitCurUserName);
+        when(snapInitCurUserName.getValue()).thenReturn("Bob");
 
+        when(snapInitChildrenUser.getValue()).thenReturn(fake_user);
+        when(snapInitChildrenUser.getKey()).thenReturn("1");
         when(snapInitChildrenUser.child("uid")).thenReturn(snapInitChildrenID);
         when(snapInitChildrenID.getValue((String.class))).thenReturn("1");
 

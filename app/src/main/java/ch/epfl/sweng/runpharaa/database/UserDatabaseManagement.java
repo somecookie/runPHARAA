@@ -15,6 +15,7 @@ import java.util.List;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
@@ -206,23 +207,28 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
     public static User getUser(DataSnapshot data, String uId) {
         User user = null;
-        for (DataSnapshot u : data.getChildren()) {
-            if (u.getValue() != null && u.getKey().equals(uId)) {
-                user = new User();
-                user.setUid(uId);
-                if (u.child(NAME).exists()) {
-                    user.setName(u.child(NAME).getValue().toString());
-                }
-                List<String> createdTracks = new ArrayList<>();
+        DataSnapshot u = data.child(uId);
+        if (u.exists()){
+            user = new User();
+            user.setUid(uId);
+            if (u.child(NAME).exists()) {
+                user.setName(u.child(NAME).getValue().toString());
+            }
+            List<String> createdTracks = new ArrayList<>();
+            if(!Config.isTest){
                 for (DataSnapshot c : u.child(CREATE).getChildren()) {
                     createdTracks.add(c.getValue().toString());
                 }
-                user.setCreatedTracks(createdTracks);
-                List<String> favoriteTracks = new ArrayList<>();
+            }
+            user.setCreatedTracks(createdTracks);
+            List<String> favoriteTracks = new ArrayList<>();
+            if(!Config.isTest){
                 for (DataSnapshot c : u.child(FAVORITE).getChildren()) {
                     favoriteTracks.add(c.getValue().toString());
                 }
-                user.setFavoriteTracks(favoriteTracks);
+            }
+            user.setFavoriteTracks(favoriteTracks);
+            if(!Config.isTest){
                 if (u.child(PICTURE).exists()) {
                     user.setPicture(u.child(PICTURE).getValue().toString());
                 }
