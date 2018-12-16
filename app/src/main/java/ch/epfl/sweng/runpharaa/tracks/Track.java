@@ -38,7 +38,7 @@ public class Track implements Comparable<Track> {
 
     private TrackProperties properties;
 
-    public Track(){};
+    public Track(){}
 
     public Track(String trackUid, String creatorUid, String name, List<CustLatLng> path, List<Comment> comment, TrackProperties properties) {
 
@@ -135,8 +135,6 @@ public class Track implements Comparable<Track> {
     public String getCreatorUid() { return creatorUid; }
 
     public String getCreatorName() { return creatorName; }
-
-    public Double getHeightDifference() {return properties.getHeightDifference();}
 
     public List<CustLatLng> getPath() { return path; }
 

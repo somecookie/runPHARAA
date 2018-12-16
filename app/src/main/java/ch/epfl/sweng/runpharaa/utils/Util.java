@@ -1,21 +1,15 @@
 package ch.epfl.sweng.runpharaa.utils;
 
-import android.app.ActionBar;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -120,7 +114,6 @@ public interface Util {
     }
 
 
-
     /**
      * Remove the accents of the string and transform it to lower case
      *
@@ -146,7 +139,7 @@ public interface Util {
         activity.startActivity(intent);
     }
 
-    static void prepareHomeButton(AppCompatActivity activity){
+    static void prepareHomeButton(AppCompatActivity activity) {
         activity.getSupportActionBar().setHomeButtonEnabled(true);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);

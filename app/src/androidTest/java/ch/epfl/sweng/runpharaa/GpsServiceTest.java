@@ -38,7 +38,7 @@ public class GpsServiceTest extends TestInitLocation {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, true, false);
-    Context c;
+    private Context c;
 
     @Before
     public void initUser() {
