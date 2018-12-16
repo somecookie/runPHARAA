@@ -148,11 +148,14 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
 
         initSocialMediaButtons(track);
-
         initCommentButton(track);
+        initFeedbackButton(trackID, track);
 
-        Button propertiesButton = findViewById(R.id.feedbackButton);
-        propertiesButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
+    }
+
+    private void initFeedbackButton(String trackID, Track track) {
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
             @Override
             public void onSuccess(PropertiesOnClickListener value) {
 
@@ -170,7 +173,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 }
             }
         }));
-
     }
 
     private void relaunchActivity() {

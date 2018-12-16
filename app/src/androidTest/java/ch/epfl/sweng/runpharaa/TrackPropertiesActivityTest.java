@@ -93,6 +93,46 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
+    public void cannotGiveFeedbackTwice(){
+        Track t1 = createTrack();
+        User.instance.addNewFeedBack(t1.getTrackUid());
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.feedbackButton)).perform(click());
+
+        onView(withId(R.id.time)).perform(typeText("10.00"))
+                .perform(pressKey(KeyEvent.KEYCODE_ENTER))
+                .perform(closeSoftKeyboard());
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.feedback_exists)))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void cannotGiveFeedbackWithoutSettingTime(){
+        Track t1 = createTrack();
+        User.instance.addNewFeedBack(t1.getTrackUid());
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.feedbackButton)).perform(click());
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.prop_miss)))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
     public void shareOnFacebook() {
         Track t1 = createTrack();
         launchWithExtras(t1);
