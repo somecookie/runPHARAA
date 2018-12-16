@@ -12,14 +12,13 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 import static android.os.SystemClock.sleep;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ImageLoaderTest {
-    ImageView view;
-    Context context;
-    String url1 = "https://picsum.photos/200";
-    String url2 = "https://picsum.photos/200/300";
+    private ImageView view;
+    private Context context;
+    private String url1 = "https://picsum.photos/200";
+    private String url2 = "https://picsum.photos/200/300";
 
     @Before
     public void init() {
@@ -41,7 +40,7 @@ public class ImageLoaderTest {
     }
 
     @Test
-    public void downloadSeperateImages() {
+    public void downloadSeparateImages() {
         ImageLoader.getLoader(context).displayImage(url1, view);
         ImageLoader.getLoader(context).displayImage(url2, view);
     }

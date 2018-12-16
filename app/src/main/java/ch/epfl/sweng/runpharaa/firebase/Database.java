@@ -36,14 +36,14 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    public final static String COMMENTS = "comments";
+    private final static String COMMENTS = "comments";
     private final static String s_tracks = "tracks";
     private final static String s_user = "users";
     private final static String s_favorite = "favoriteTracks";
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
-    public final static String s_notification_key = "NotificationKey";
+    private final static String s_notification_key = "NotificationKey";
 
 
     private final static String keyWriteTrack = "key";
@@ -248,7 +248,7 @@ public class Database {
     }
 
     public static FirebaseDatabase getInstance() {
-        return (Config.isTest) ? new Database().instanciateMock() : FirebaseDatabase.getInstance();
+        return (Config.isTest) ? new Database().instantiateMock() : FirebaseDatabase.getInstance();
     }
 
     public static void setShouldFail(boolean shouldFail) {
@@ -267,30 +267,30 @@ public class Database {
         return fake_user;
     }
 
-    private FirebaseDatabase instanciateMock() {
+    private FirebaseDatabase instantiateMock() {
         MockitoAnnotations.initMocks(this);
         createTrack();
-        instanciateDB();
-        instanciateDBRef();
-        instanciatedrTracks();
-        instanciatedrKeys();
-        instanciatedrUsers();
-        instanciateRead();
-        instanciateSnapshots();
+        instantiateDB();
+        instantiateDBRef();
+        instantiateDrTracks();
+        instanciateDrKeys();
+        instantiatedrUsers();
+        instantiateRead();
+        instantiateSnapshots();
         return firebaseDatabaseMock;
     }
 
-    private void instanciateDB() {
+    private void instantiateDB() {
         when(firebaseDatabaseMock.getReference()).thenReturn(databaseReferenceMock);
     }
 
-    private void instanciateDBRef() {
+    private void instantiateDBRef() {
         when(databaseReferenceMock.child(s_tracks)).thenReturn(drTracks);
         when(databaseReferenceMock.child(s_key)).thenReturn(drKey);
         when(databaseReferenceMock.child(s_user)).thenReturn(drUser);
     }
 
-    private void instanciateSnapshots() {
+    private void instantiateSnapshots() {
         when(snapInit.child(s_tracks)).thenReturn(snapInitTrack);
 
         when(snapOnDataChangeReadUser.getChildren()).thenReturn(Collections.singletonList(snapInitChildrenUser));
@@ -340,7 +340,7 @@ public class Database {
 
     }
 
-    private void instanciatedrUsers() {
+    private void instantiatedrUsers() {
         when(drUser.child(any(String.class))).thenReturn(drUserAnyChild);
 
         //write new user
@@ -412,7 +412,8 @@ public class Database {
             }
         });
 
-        instatntiateSetTrackListToUser();
+
+        instantiateSetTrackListToUser();
 
         when(drUserAnyChildFavorites.child(any(String.class))).thenReturn(drUserAnyChildFavoritesChild);
         when(drUserAnyChildLikes.child(any(String.class))).thenReturn(drUserAnyChildLikesChild);
@@ -469,7 +470,7 @@ public class Database {
     }
 
     private void instantiateListenersForSingleValueEvent() {
-        instantiateUserOperationsOnSinlgeTrack();
+        instantiateUserOperationsOnSingleTrack();
 
         doAnswer((Answer<ValueEventListener>) invocation -> {
             ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
@@ -502,7 +503,7 @@ public class Database {
         }).when(drUserAnyChildKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
-    private void instantiateUserOperationsOnSinlgeTrack() {
+    private void instantiateUserOperationsOnSingleTrack() {
         doAnswer((Answer<ValueEventListener>) invocation -> {
             ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
             if (isCancelled) {
@@ -534,7 +535,7 @@ public class Database {
         }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
-    private void instatntiateSetTrackListToUser() {
+    private void instantiateSetTrackListToUser() {
         when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer((Answer<Task<Void>>) invocation -> {
             fake_user.setFavoriteTracks(userFavoritesList);
             return null;
@@ -551,7 +552,7 @@ public class Database {
         });
     }
 
-    private void instanciatedrTracks() {
+    private void instantiateDrTracks() {
         when(drTracks.push()).thenReturn(drTracksPush);
         when(drTracksPush.getKey()).thenReturn(keyWriteTrack);
 
@@ -607,7 +608,7 @@ public class Database {
         });
     }
 
-    private void instanciatedrKeys() {
+    private void instanciateDrKeys() {
         when(drKey.setValue(track)).thenReturn(setValueTrack);
         when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
@@ -618,7 +619,7 @@ public class Database {
         });
     }
 
-    private void instanciateRead() {
+    private void instantiateRead() {
         //Read tracks from drTracks
         doAnswer((Answer<ValueEventListener>) invocation -> {
             ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
@@ -659,7 +660,7 @@ public class Database {
 
     }
 
-    private void instanciateError(){
+    private void instantiateError(){
         when(snapOnDataErrorRead.toException()).thenReturn(dbExceptionReadTrack);
     }
 
@@ -669,11 +670,11 @@ public class Database {
         CustLatLng coord0 = new CustLatLng(37.422, -122.084);
         CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         int length = 100;
-        int heigthDiff = 10;
+        int heightDiff = 10;
 
         t = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID",
                 "Bob", Arrays.asList(coord0, coord1), "imageUri",
-                types, length, heigthDiff, 1, 1, 1, 1,
+                types, length, heightDiff, 1, 1, 1, 1,
                 0, 0, new ArrayList<>());
 
     }

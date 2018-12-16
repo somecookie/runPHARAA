@@ -4,9 +4,9 @@ public class CardItem {
     private String name;
     private String imageUrl;
 
-    public CardItem() {}
+    CardItem() {}
 
-    public CardItem(String name, String imageUrl) {
+    CardItem(String name, String imageUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
     }

@@ -18,13 +18,12 @@ import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 
 public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<AdapterTracksToRecyclerViewItem.viewHolder> {
-    List<TrackCardItem> createdTracks;
-    AdapterTracksToRecyclerViewItem.OnItemClickListener listener;
-    Context context;
+    private List<TrackCardItem> createdTracks;
+    private Context context;
 
     public AdapterTracksToRecyclerViewItem(Context context, List<TrackCardItem> createdTracks, AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
         this.createdTracks = createdTracks;
-        this.listener = listener;
+        OnItemClickListener listener1 = listener;
         this.context = context;
     }
 
@@ -68,13 +67,13 @@ public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<Adapte
         ImageView background_img;
         TextView name;
 
-        public viewHolder(@NonNull View itemView) {
+        viewHolder(@NonNull View itemView) {
             super(itemView);
             background_img = itemView.findViewById(R.id.cardBackgroundId);
             name = itemView.findViewById(R.id.nameID);
         }
 
-        public void bind(final TrackCardItem item, final AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
+        void bind(final TrackCardItem item, final AdapterTracksToRecyclerViewItem.OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

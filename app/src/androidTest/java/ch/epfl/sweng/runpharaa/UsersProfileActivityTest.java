@@ -18,15 +18,12 @@ import org.junit.runner.RunWith;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.FragmentMyTracks;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
-import ch.epfl.sweng.runpharaa.utils.Callback;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -42,7 +39,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class UsersProfileActivityTest extends TestInitLocation {
@@ -164,11 +160,11 @@ public class UsersProfileActivityTest extends TestInitLocation {
         mActivityRule.launchActivity(null);
         onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
         sleep(2000);
-        clickOnDifferenttrophies();
+        clickOnDifferentTrophies();
     }
 
     @Test
-    public void trophiesWithOneofEach(){
+    public void trophiesWithOneOfEach(){
         User.instance.addToCreatedTracks("0");
         User.instance.like("track");
         User.instance.addToFavorites("fav");
@@ -177,11 +173,11 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
         sleep(2000);
 
-        clickOnDifferenttrophies();
+        clickOnDifferentTrophies();
     }
 
     @Test
-    public void trophiesWithTwoofEach(){
+    public void trophiesWithTwoOfEach(){
         User.instance.addToCreatedTracks("0");
         User.instance.addToCreatedTracks("1");
         User.instance.like("track");
@@ -194,11 +190,11 @@ public class UsersProfileActivityTest extends TestInitLocation {
         sleep(2000);
 
 
-        clickOnDifferenttrophies();
+        clickOnDifferentTrophies();
     }
 
     @Test
-    public void trophiesWithTenofEach(){
+    public void trophiesWithTenOfEach(){
         for(int i = 0; i < 13; i++){
             User.instance.addToCreatedTracks(String.valueOf(i));
             User.instance.like(String.valueOf(i));
@@ -209,7 +205,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         onView(withId(R.id.viewPagerUser)).perform(swipeLeft());
         sleep(2000);
 
-        clickOnDifferenttrophies();
+        clickOnDifferentTrophies();
     }
 
     @After
@@ -217,7 +213,7 @@ public class UsersProfileActivityTest extends TestInitLocation {
         Intents.release();
     }
 
-    private void clickOnDifferenttrophies() {
+    private void clickOnDifferentTrophies() {
         onView(withId(R.id.trophies_create)).perform(click());
         sleep(WAIT_TIME);
         Espresso.pressBack();

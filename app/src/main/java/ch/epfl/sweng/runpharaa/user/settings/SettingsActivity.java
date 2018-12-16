@@ -1,6 +1,6 @@
 package ch.epfl.sweng.runpharaa.user.settings;
 
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,7 +25,7 @@ import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
-import ch.epfl.sweng.runpharaa.tracks.Track;
+
 import ch.epfl.sweng.runpharaa.user.User;
 
 
@@ -35,8 +34,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_TIME_INTERVAL = "time_interval";
     public static final String PREF_KEY_MIN_TIME_INTERVAL = "min_time_interval";
     public static final String PREF_KEY_MIN_DISTANCE = "min_distance_interval";
-    public static final String PREF_KEY_RESET_PREFS = "reset_prefs";
-    public static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
+    private static final String PREF_KEY_RESET_PREFS = "reset_prefs";
+    private static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

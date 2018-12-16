@@ -15,7 +15,7 @@ import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class FragmentMyTrophies extends Fragment {
-    protected View v;
+    private View v;
 
     @Nullable
     @Override

@@ -1,15 +1,11 @@
 package ch.epfl.sweng.runpharaa.utils;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 
 import com.google.android.gms.maps.model.LatLng;
 
