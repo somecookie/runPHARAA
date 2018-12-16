@@ -307,6 +307,7 @@ public class Database {
 
         //changer le nom
         when(snapOnDataChangeReadUser.child("BobUID")).thenReturn(snapInitCurUser);
+        when(snapOnDataChangeReadUser.child("1")).thenReturn(snapInitCurUser);
         when(snapInitCurUser.child("followedUsers")).thenReturn(snapInitUser);
         when(snapInitChildrenUser.child("name")).thenReturn(snapInitUser);
         when(snapInitUser.getValue((String.class))).thenReturn("Bob");

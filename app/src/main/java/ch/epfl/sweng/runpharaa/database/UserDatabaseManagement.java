@@ -201,7 +201,6 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             }
         }
         UserDatabaseManagement.updateFollowedUsers(User.instance);
-
         return users;
     }
 
