@@ -1,5 +1,6 @@
 package ch.epfl.sweng.runpharaa;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -51,12 +52,14 @@ import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
@@ -101,6 +104,17 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @Before
     public void initUserAndTracks() {
         User.instance = Database.getUser();
+        Intents.init();
+    }
+
+    @Test
+    public void clickOnHomeButton(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        //The description only works if the app is in english, there could be an issue if not
+        onView(withContentDescription("Navigate up")).perform(click());
+        sleep(2000);
+        intended(hasComponent(MainActivity.class.getName()));
     }
 
 

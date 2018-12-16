@@ -70,7 +70,7 @@
 
         <activity
             android:name=".TrackPropertiesActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
 
         <activity android:name=".FullMapActivity" />
 

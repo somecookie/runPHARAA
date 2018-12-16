@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -60,6 +61,7 @@ import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
 import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -79,6 +81,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         super.onCreate(savedInstanceState);
 
         startIntent = getIntent();
+
+        Util.prepareHomeButton(this);
+
         setContentView(R.layout.activity_track_properties);
 
         Twitter.initialize(this);
@@ -120,6 +125,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Util.goHome(this);
+        return true;
+    }
+
 
     private void setButtonsOfProperties(String trackID, Track track) {
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
@@ -440,6 +452,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             f.sendToToken(key);
         } catch (Exception e) {
             e.printStackTrace();
-            }
+        }
     }
 }
