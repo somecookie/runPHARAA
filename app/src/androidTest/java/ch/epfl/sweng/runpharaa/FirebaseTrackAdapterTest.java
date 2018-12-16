@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
+import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 
@@ -67,5 +68,16 @@ public class FirebaseTrackAdapterTest {
         assertEquals(t.getImageStorageUri(), "someuri.com");
         t.setComments(new ArrayList<>());
         assertTrue(t.getComments().isEmpty());
+    }
+
+   @Test(expected = NullPointerException.class)
+    public void failOnNullIsDeleted(){
+        new FirebaseTrackAdapter(new Track("A", "b", "c", path, new ArrayList<>(), tp), null);
+   }
+
+    @Test
+    public void createsInstanceWithCorrectInputs2() {
+        FirebaseTrackAdapter t = new FirebaseTrackAdapter(new Track("A", "Bob", "c", path, new ArrayList<>(), tp), false);
+        assertEquals(t.getIsDeleted(), false);
     }
 }

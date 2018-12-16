@@ -69,11 +69,7 @@ public class FirebaseTrackAdapter {
     }
 
     public FirebaseTrackAdapter(Track track, Boolean isDeleted){
-        Required.nonNull(track.getName(), "Track name send to database must be non null");
-        Required.nonNull(track.getCreatorUid(), "Track creatorId send to database must be non null");
-        Required.nonNull(track.getCreatorName(), "Track creator name send to database must be non null");
-        Required.nonNull(track.getPath(), "Track path sent to database must be non null");
-        Required.nonNull(track.getProperties(), "Track properties sent to database must must be non null");
+        //Track attributes are assumed non-null
         Required.nonNull(isDeleted, "Specify if the track is deleted or not");
 
         this.name = track.getName();
