@@ -3,12 +3,23 @@ package ch.epfl.sweng.runpharaa;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -26,7 +37,9 @@ import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
@@ -39,12 +52,16 @@ import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
@@ -54,11 +71,17 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @BeforeClass
     public static void initUser() {
         User.instance = Database.getUser();
+        User.instance.setStreakManager(new StreakManager(1,1,1));
     }
 
     @Rule
     public ActivityTestRule<TrackPropertiesActivity> mActivityRule =
             new ActivityTestRule<>(TrackPropertiesActivity.class, false, false);
+
+    @Before
+    public void init(){
+        Intents.init();
+    }
 
     @Before
     public void initUserAndTracks() {
@@ -267,6 +290,46 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(3000);
     }
 
+    @Test
+    public void goToAnotherProfilFromComment(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.commentsID)).perform(click());
+        sleep(2000);
+        onView(withId(R.id.comments_editText)).perform(replaceText("Hey, very nice track, love it!"));
+        sleep(2000);
+        Comment com = new Comment(User.instance.getUid(), "Hey, very nice track, love it!", new Date());
+        t1.addComment(com);
+        onView(withId(R.id.post_button)).perform(click());
+        sleep(2000);
+        onView(withId(R.id.commentsID)).perform(click());
+        sleep(2000);
+        onView(allOf(withId(R.id.comment_rv), isDisplayed())).perform(
+                actionOnItemAtPosition(0, new ViewAction() {
+                    @Override
+                    public Matcher<View> getConstraints() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "Click on inside button";
+                    }
+
+                    @Override
+                    public void perform(UiController uiController, View view) {
+                        AppCompatTextView name = view.findViewById(R.id.comment_name);
+                        name.performClick();
+                    }
+                }));
+        sleep(2000);
+
+        intended(hasComponent(UsersProfileActivity.class.getName()));
+
+
+    }
+
     private Track createTrack() {
         Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
@@ -274,7 +337,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
         CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
-
 
         return new Track("0", "Bob","Cours forest !", Arrays.asList(coord0, coord1),new ArrayList<>(), p);
     }
@@ -286,6 +348,11 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         intent.putExtra("TrackID", t.getTrackUid());
         mActivityRule.launchActivity(intent);
         sleep(1_000);
+    }
+
+    @After
+    public void releaseIntents() {
+        Intents.release();
     }
 
 }

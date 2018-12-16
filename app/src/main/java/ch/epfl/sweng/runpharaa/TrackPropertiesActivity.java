@@ -206,6 +206,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     TrackDatabaseManagement.updateComments(track);
                     tv.setText("");
                     hideKeyboardFrom(getBaseContext(), mView);
+                    relaunchActivity();
                 } else {
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
                 }
