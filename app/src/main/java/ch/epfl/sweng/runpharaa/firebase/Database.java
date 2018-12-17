@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
-    public final static String s_notification_key = "NotificationKey";
+    private final static String s_notification_key = "NotificationKey";
     private final static String COMMENTS = "comments";
     private final static String s_tracks = "tracks";
     private final static String s_user = "users";
