@@ -34,6 +34,7 @@ import static org.mockito.Mockito.when;
 
 public class Database {
 
+    private final static String s_notification_key = "NotificationKey";
     private final static String COMMENTS = "comments";
     private final static String s_tracks = "tracks";
     private final static String s_user = "users";
@@ -41,9 +42,7 @@ public class Database {
     private final static String s_likes = "likedTracks";
     private final static String s_create = "createdTracks";
     private final static String s_key = "key";
-    private final static String s_notification_key = "NotificationKey";
-
-
+    private final static String s_feedback = "feedback";
     private final static String keyWriteTrack = "key";
     private final static User fake_user = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
     //Tracks already in the fakeDB
@@ -103,8 +102,10 @@ public class Database {
     private DatabaseReference drUserAnyChildPicture;
 
     @Mock
-    private DatabaseReference drUserAnyChildKey;
+    private DatabaseReference drUserAnyChildFeedback;
 
+    @Mock
+    private DatabaseReference drUserAnyChildKey;
 
     @Mock
     private DataSnapshot snapInitUser;
@@ -360,13 +361,14 @@ public class Database {
         when(drUserAnyChild.child(s_favorite)).thenReturn(drUserAnyChildFavorites);
         when(drUserAnyChild.child(s_likes)).thenReturn(drUserAnyChildLikes);
         when(drUserAnyChild.child(s_create)).thenReturn(drUserAnyChildCreate);
+        when(drUserAnyChild.child(s_feedback)).thenReturn(drUserAnyChildFeedback);
         when(drUserAnyChild.child("name")).thenReturn(drUserAnyChildName);
         when(drUserAnyChild.child("picture")).thenReturn(drUserAnyChildPicture);
         when(drUserAnyChild.child(s_notification_key)).thenReturn(drUserAnyChildKey);
 
 
         when(drUserAnyChild.child("followedUsers")).thenReturn(drUserAnyChildFollow);
-      
+
         instantiateSetTrackListToUser();
 
         when(drUserAnyChildFavorites.child(any(String.class))).thenReturn(drUserAnyChildFavoritesChild);
@@ -387,6 +389,7 @@ public class Database {
         when(drUserAnyChildLikes.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildFavorites.setValue(any(List.class))).thenReturn(setValueTask);
         when(drUserAnyChildCreate.setValue(any(List.class))).thenReturn(setValueTask);
+        when(drUserAnyChildFeedback.setValue(any(List.class))).thenReturn(setValueTask);
 
         when(drUserAnyChildCreatesChild.setValue(any(String.class))).thenReturn(setValueTask);
         when(drUserAnyChildLikesChild.setValue(any(String.class))).thenReturn(setValueTask);
@@ -601,7 +604,7 @@ public class Database {
 
     }
 
-    private void instantiateError(){
+    private void instantiateError() {
         when(snapOnDataErrorRead.toException()).thenReturn(dbExceptionReadTrack);
     }
 

@@ -26,6 +26,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String FOLLOWING = "followedUsers";
     private final static String PICTURE = "picture";
     private final static String ID = "uid";
+    private static final String FEEDBACK = "feedback";
 
     public static void writeNewUser(final User user, final Callback<User> callback) {
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
@@ -44,6 +45,8 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                         storedUser.setFavoriteTracks(new ArrayList<>());
                     if (!dataSnapshot.child(FOLLOWING).exists())
                         storedUser.setFollowedUsers(new ArrayList<>());
+                    if(!dataSnapshot.child(FEEDBACK).exists())
+                        storedUser.setFeedbackTracks(new ArrayList<>());
 
                     callback.onSuccess(storedUser);
 
@@ -250,6 +253,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                 Log.e("DatabaseError", databaseError.getDetails());
             }
         });
+    }
+
+
+    public static void updateFeedBackTracks(User user) {
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FEEDBACK);
+        createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
     }
 
     public static void writeNotificationKey(String key){
