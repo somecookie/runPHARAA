@@ -48,15 +48,19 @@ public abstract class UpdatableCardItemFragment extends Fragment implements Swip
         swipeLayout = v.findViewById(R.id.refreshNearMe);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_orange, R.color.refresh_red, R.color.refresh_blue, R.color.refresh_green);
-        // Load initial data
         if(!Config.isTest) loadData();
-
         return v;
     }
 
     @Override
     public void onRefresh() {
         loadData();
+    }
+
+    @Override
+    public void onResume() {
+        if(!Config.isTest) loadData();
+        super.onResume();
     }
 
     protected abstract void setEmptyMessage();

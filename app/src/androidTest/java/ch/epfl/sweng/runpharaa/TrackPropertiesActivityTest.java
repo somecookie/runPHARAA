@@ -1,9 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.ComponentName;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
@@ -21,7 +20,6 @@ import com.google.android.gms.maps.model.LatLng;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +40,6 @@ import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
-import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -64,6 +61,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackPropertiesActivityTest extends TestInitLocation {
@@ -202,6 +200,25 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
+    public void deletedTrackTest(){
+        Track t1 = createTrack();
+        String s = User.instance.getUid();
+        User.instance.setUid("BobUID");
+        launchWithExtras(t1);
+        onView(withId(R.id.deleteButton))
+                .perform(click());
+        onView(withText(R.string.cancel)).perform(click());
+
+        onView(withId(R.id.deleteButton))
+                .perform(click());
+        onView(withText(R.string.delete)).perform(click());
+
+        assertTrue(mActivityRule.getActivity().isFinishing());
+
+        User.instance.setUid(s);
+    }
+
+    @Test
     public void testLike() {
         Track t1 = createTrack();
         launchWithExtras(t1);
@@ -337,7 +354,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     private Track createTrack() {
-        Bitmap b = Util.createImage(200, 100, R.color.colorPrimary);
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
         CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm

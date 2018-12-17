@@ -3,6 +3,7 @@ package ch.epfl.sweng.runpharaa;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
+import static java.security.AccessController.getContext;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -102,7 +104,16 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
                 final String trackID = intent.getStringExtra("TrackID");
                 final Track track = TrackDatabaseManagement.initTrack(data, trackID);
+                if(track == null){
+                    Toast t = Toast.makeText(getApplicationContext(), R.string.deleted_track, Toast.LENGTH_SHORT);
+                    t.show();
+                    finish();
+                    return;
+                }
                 points = CustLatLng.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
+
+                setDeleteButton(track);
+
 
                 TrackProperties tp = track.getProperties();
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
@@ -124,6 +135,50 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 Log.d("DB Read: ", "Failed to read data from DB in TrackPropertiesActivity.");
             }
         });
+    }
+
+
+    private void setDeleteButton(Track track){
+        ImageButton deleteButton = findViewById(R.id.deleteButton);
+        if(track.getCreatorUid().equals(User.instance.getUid()))
+        {
+            deleteButton.setVisibility(Button.VISIBLE);
+            deleteButton.setClickable(true);
+            deleteButton.setOnClickListener(view -> {
+                AlertDialog diaBox = deleteTrackConfirmation(track);
+                diaBox.show();
+            });
+        }
+        else {
+            deleteButton.setVisibility(Button.INVISIBLE);
+            deleteButton.setClickable(false);
+        }
+    }
+
+    private void deleteTrack(Track track){
+        TrackDatabaseManagement.deleteTrack(track.getTrackUid());
+        Toast t = Toast.makeText(this, R.string.track_deleted, Toast.LENGTH_LONG);
+        t.show();
+        finish();
+    }
+
+    private AlertDialog deleteTrackConfirmation(Track track)
+    {
+        AlertDialog deleteTrackDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle(R.string.delete_track)
+                .setMessage(R.string.want_to_delete_this_track)
+                .setIcon(R.drawable.ic_delete)
+
+                .setPositiveButton(R.string.delete, (dialog, whichButton) -> {
+                    deleteTrack(track);
+                    dialog.dismiss();
+                })
+
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create();
+        return deleteTrackDialogBox;
+
     }
 
     @Override

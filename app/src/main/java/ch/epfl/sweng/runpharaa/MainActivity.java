@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private static boolean[] checkedTypes;
     private ViewPager viewPager;
 
+
     public static boolean passFilters(Track t) {
         return filterTime(t) && filterDifficulty(t) && filterTypes(t);
     }
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         difficultyIsFiltered = false;
         timeIsFiltered = false;
         typesAreFiltered = false;
@@ -86,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         listTypesStr = getResources().getStringArray(R.array.track_types);
         checkedTypes = new boolean[listTypesStr.length];
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         TabLayout tabLayout = findViewById(R.id.tabLayoutId);
@@ -121,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
             startActivity(createTrack);
         });
-
     }
 
     @Override
