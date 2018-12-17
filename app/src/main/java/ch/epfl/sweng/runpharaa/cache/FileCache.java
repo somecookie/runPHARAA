@@ -5,7 +5,7 @@ import android.os.Environment;
 
 import java.io.File;
 
-public class FileCache {
+class FileCache {
     private File cacheDir;
 
     public FileCache(Context context) {

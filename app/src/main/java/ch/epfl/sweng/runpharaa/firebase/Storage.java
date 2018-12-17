@@ -21,7 +21,6 @@ import static org.mockito.Mockito.when;
 
 public class Storage {
     private static Boolean shouldFail = false;
-    private static Boolean shouldNotComplete = false;
     private final static String key = "key";
     private final static String s_trackImage = "TrackImages";
 
@@ -53,21 +52,21 @@ public class Storage {
     private Task<Uri> addTrackToStorageTask;
 
     public static FirebaseStorage getInstance(){
-        return (Config.isTest)? new Storage().instanciateMock() : FirebaseStorage.getInstance();
+        return (Config.isTest)? new Storage().instantiateMock() : FirebaseStorage.getInstance();
     }
 
-    private FirebaseStorage instanciateMock(){
+    private FirebaseStorage instantiateMock(){
         if(Config.isTest){
             MockitoAnnotations.initMocks(this);
-            instanciateStorage();
-            instanciateTrackImage();
+            instantiateStorage();
+            instantiateTrackImage();
             return firebaseStorageMock;
         } else {
             return FirebaseStorage.getInstance();
         }
     }
 
-    private void instanciateStorage(){
+    private void instantiateStorage(){
         //First layer
         when(firebaseStorageMock.getReference()).thenReturn(referenceStorageMock);
 
@@ -76,12 +75,12 @@ public class Storage {
 
     }
 
-    private void instanciateTrackImage(){
+    private void instantiateTrackImage(){
         when(rsTrackImage.child(key)).thenReturn(rsTrackImageKey);
         when(rsTrackImageKey.putBytes(any(byte[].class))).thenReturn(uploadTask);
         when(uploadTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
                 if(shouldFail){
                     l.onFailure(new IllegalStateException("Failed to upload image"));
@@ -91,7 +90,7 @@ public class Storage {
         });
         when(uploadTask.addOnCompleteListener(any(OnCompleteListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
                 if(!shouldFail){
                     l.onComplete(uploadTaskSuccessful);
@@ -107,7 +106,7 @@ public class Storage {
         when(rsTrackImageKey.getDownloadUrl()).thenReturn(downloadUrlTask);
         when(downloadUrlTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
                 if(shouldFail){
                     l.onFailure(new IllegalStateException("Failed to download URL"));
@@ -118,7 +117,7 @@ public class Storage {
 
         when(downloadUrlTask.addOnCompleteListener(any(OnCompleteListener.class))).thenAnswer(new Answer<Task>() {
             @Override
-            public Task answer(InvocationOnMock invocation) throws Throwable {
+            public Task answer(InvocationOnMock invocation) {
                 OnCompleteListener l = (OnCompleteListener) invocation.getArguments()[0];
                 l.onComplete(downloadUrlTaskSuccessful);
                 return downloadUrlTaskSuccessful;

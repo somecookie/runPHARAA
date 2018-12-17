@@ -11,10 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class FragmentMyTrophies extends Fragment {
-    protected View v;
+    private View v;
 
     @Nullable
     @Override
@@ -58,10 +59,12 @@ public class FragmentMyTrophies extends Fragment {
 
         setImages(nbCreated,R.drawable.create_one_track_reward,create);
 
+        UserDatabaseManagement.updateLikedTracks(User.instance);
         int nbLike = User.instance.getLikedTracks().size();
 
         setImages(nbLike,R.drawable.like_one_track_reward,like);
 
+        UserDatabaseManagement.updateFavoriteTracks(User.instance);
         int nbFav = User.instance.getLikedTracks().size();
 
         setImages(nbFav,R.drawable.favorite_one_track_reward,fav);

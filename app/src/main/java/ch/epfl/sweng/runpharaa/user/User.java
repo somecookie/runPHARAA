@@ -36,6 +36,7 @@ public final class User implements Serializable {
     private String notificationKey;
     private List<String> createdTracks;
     private List<String> favoriteTracks;
+    private List<String> feedbackTracks;
     private transient List<String> likedTracks;
     private transient List<String> followedUsers;
 
@@ -55,6 +56,7 @@ public final class User implements Serializable {
         this.favoriteTracks = new ArrayList<>();
         this.likedTracks = new ArrayList<>();
         this.followedUsers = new ArrayList<>();
+        this.feedbackTracks = new ArrayList<>();
         this.location = location;
         this.uid = uid;
     }
@@ -176,6 +178,7 @@ public final class User implements Serializable {
      *
      * @param u
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean alreadyInFollowed(User u) {
         for (String serializedUser : followedUsers) {
             User user = deserialize(serializedUser);
@@ -209,6 +212,12 @@ public final class User implements Serializable {
                 followedUsers.remove(serializedUser);
                 return;
             }
+        }
+    }
+
+    public void addNewFeedBack(String trackID){
+        if(!feedbackTracks.contains(trackID)){
+            feedbackTracks.add(trackID);
         }
     }
 
@@ -294,6 +303,15 @@ public final class User implements Serializable {
 
     public void setFollowedUsers(List<String> followedUsers) {
         this.followedUsers = followedUsers;
+    }
+
+
+    public List<String> getFeedbackTracks() {
+        return feedbackTracks;
+    }
+
+    public void setFeedbackTracks(List<String> feedbackTracks) {
+        this.feedbackTracks = feedbackTracks;
     }
 
     @Override

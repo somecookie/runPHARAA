@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,40 +42,35 @@ import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final int IMAGE_GALLERY_REQUEST = 20;
-    public static final int REQ_WIDTH = 480;
-    public static final int REQ_HEIGHT = 200;
+    private static final int IMAGE_GALLERY_REQUEST = 20;
+    private static final int REQ_WIDTH = 480;
+    private static final int REQ_HEIGHT = 200;
 
     private GoogleMap map;
     private TextView totalDistanceText, totalAltitudeText;
     private EditText nameText;
     private ImageView trackImage;
 
-    private EditText mTime;
-    private SeekBar mSeekBar;
-    private TextView mDiffText;
-
-    private Location[] locations;
     private LatLng[] points;
     private Bitmap trackPhoto;
-    private int difficulty = 3;
-    private double time;
 
-    private boolean propertiesSet = false;
     private boolean typesSet = false;
     private TrackProperties trackProperties;
 
-    private double totalDistance, totalAltitudeChange;
+    private double totalAltitudeChange;
 
     private String[] listTypesStr;
     private boolean[] checkedTypes;
     private Set<TrackType> types = new HashSet<>();
+
+    private PropertiesOnClickListener propListener = new PropertiesOnClickListener(this, true);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +84,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         totalAltitudeText = findViewById(R.id.create_text_total_altitude);
         nameText = findViewById(R.id.create_text_name);
         Button createButton = findViewById(R.id.create_track_button);
+
         createButton.setOnClickListener(v -> {
 
             // Create track
@@ -97,16 +92,22 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 trackPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
             }
 
-            if (!propertiesSet) {
+            if (!propListener.isPropertiesSet()) {
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.properties_not_set), Toast.LENGTH_SHORT).show();
             } else if (!typesSet) {
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.types_not_set), Toast.LENGTH_SHORT).show();
             } else if (nameText.getText().toString().isEmpty()) {
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.need_name), Toast.LENGTH_SHORT).show();
             } else {
-                trackProperties = new TrackProperties(totalDistance, totalAltitudeChange, time, difficulty, types);
+                trackProperties = new TrackProperties(propListener.getTotalDistance(),
+                        totalAltitudeChange, propListener.getTime(), propListener.getDifficulty(),
+                        types);
 
-                FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(), User.instance.getUid(), User.instance.getName(), trackPhoto, CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties, new ArrayList<>());
+                FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(),
+                        User.instance.getUid(), User.instance.getName(), trackPhoto,
+                        CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties,
+                        new ArrayList<>());
+
                 TrackDatabaseManagement.writeNewTrack(track);
 
                 finish();
@@ -131,55 +132,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         });
 
         Button propButton = findViewById(R.id.set_properties);
-        propButton.setOnClickListener(v -> {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
-            final View mView = getLayoutInflater().inflate(R.layout.dialog_properties, null);
-
-            mTime = mView.findViewById(R.id.time);
-
-            mDiffText = mView.findViewById(R.id.diff_text);
-            mDiffText.setText(getResources().getString(R.string.difficulty_is) + difficulty);
-
-            mSeekBar = mView.findViewById(R.id.difficulty_bar);
-            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    difficulty = progress;
-                    mDiffText.setText(getResources().getString(R.string.difficulty_is) + difficulty);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-
-            mBuilder.setCancelable(false);
-
-            mBuilder.setPositiveButton(getResources().getText(R.string.OK), (dialog, which) -> {
-                if (!mTime.getText().toString().isEmpty()) {
-                    time = Double.parseDouble(mTime.getText().toString());
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.default_time), Toast.LENGTH_SHORT).show();
-                    time = totalDistance / 133;
-                }
-                propertiesSet = true;
-            });
-
-            mBuilder.setNegativeButton(getResources().getString(R.string.dismiss), (dialog, which) -> {
-                difficulty = 3;
-                dialog.dismiss();
-            });
-
-
-            mBuilder.setView(mView);
-            AlertDialog dialog = mBuilder.create();
-            dialog.show();
-
-        });
+        propButton.setOnClickListener(propListener);
 
         Button typeButton = findViewById(R.id.types);
         typeButton.setOnClickListener(v -> {
@@ -219,7 +172,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view);
         mapFragment.getMapAsync(this);
-        if(Config.isTest) {
+        if (Config.isTest) {
             onMapReady(Config.getFakeMap());
         }
     }
@@ -259,16 +212,16 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             Parcelable[] a = bundle.getParcelableArray("locations");
-            locations = Arrays.copyOf(a, a.length, Location[].class);
+            Location[] locations = Arrays.copyOf(a, a.length, Location[].class);
             a = bundle.getParcelableArray("points");
             points = Arrays.copyOf(a, a.length, LatLng[].class);
 
             double[] values = Util.computeDistanceAndElevationChange(locations);
-            totalDistance = values[0];
+            propListener.setTotalDistance(values[0]);
             totalAltitudeChange = values[1];
 
             // Show extracted info
-            totalDistanceText.setText(String.format("Total distance: %.2f m", totalDistance));
+            totalDistanceText.setText(String.format("Total distance: %.2f m", propListener.getTotalDistance()));
             totalAltitudeText.setText(String.format("Total altitude difference: %.2f m", totalAltitudeChange));
         }
     }

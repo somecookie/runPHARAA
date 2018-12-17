@@ -40,12 +40,14 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setGone;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -104,6 +106,19 @@ public class MainActivityTest extends TestInitLocation {
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOpenAndCloseHelp() {
+        // display the popup
+        onView(withId(R.id.helpIcon)).perform(click());
+        // dismiss the popup by clicking on it
+        onView(withContentDescription(R.string.popup_description))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .perform(click());
+        // check that the main activity is visible by checking that its button and tabs are displayed
+        onView(withId(R.id.profileIcon)).check(matches(isDisplayed()));
+        onView(withId(R.id.tabLayoutId)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -218,9 +233,9 @@ public class MainActivityTest extends TestInitLocation {
         CustLatLng coord0 = new CustLatLng(37.422, -122.084);
         CustLatLng coord1 = new CustLatLng(37.425, -122.082);
         int length = 100;
-        int heigthDiff = 10;
+        int heightDiff = 10;
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "0", "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
-                types, length, heigthDiff, 2, 1, 40, 1, 0, 0,new ArrayList<>() );
+                types, length, heightDiff, 2, 1, 40, 1, 0, 0,new ArrayList<>() );
         Track t = new Track(track);
 
         assertTrue(MainActivity.passFilters(t));

@@ -53,6 +53,8 @@
     <string name="no_user_found">No user is called %s!</string>
     <string name="search_users">Currently search for: users</string>
     <string name="search_tracks">Currently search for: tracks</string>
+    <string name="prop_miss">Missing properties, try again!</string>
+    <string name="feedback_exists">You\'ve already given a feedback</string>
 
 
     <string-array name="track_types">
@@ -130,5 +132,18 @@
     <string name="two_tracks">Two tracks</string>
     <string name="ten_tracks">Ten tracks</string>
     <string name="create_tracks">Create tracks</string>
+
+    <string name="delete">Delete</string>
+    <string name="delete_track">Delete ?</string>
+    <string name="track_deleted">Deleted</string>
+    <string name="want_to_delete_this_track">Do you want to delete this track ?</string>
+    <string name="cancel">Cancel</string>
+    <string name="deleted_track">Sorry this track has been deleted</string>
+    <string name="want_to_delete_your_account">Do you want to delete your account ?</string>
     <string name="logout">Log out</string>
+    <string name="explanation_popup">Welcome to RunPharaa!\nHere are some tips and tricks to use the app:\n\n- You can create a track by pressing the + button!\n\n- On the map, you can change your location by long pressing anywhere in it!\n\n- You can go back to your actual location by clicking on the orange pin and chose "Get me to my location"!\n\n- Press anywhere on this popup window to close it!\n
+    </string>
+    <string name="help">Help</string>
+    <string name="popup_description">help_popup</string>
+    <string name="get_me_to_my_location">Get me to my location</string>
 </resources>

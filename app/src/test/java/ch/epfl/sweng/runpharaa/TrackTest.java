@@ -25,12 +25,12 @@ public class TrackTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void teststandardDatabaseConstructor(){
+    public void testStandardDatabaseConstructor(){
         assertNotNull(new Track());
     }
 
     @Test
-    public void testExeptionOnFireBaseConstructor(){
+    public void testExceptionOnFireBaseConstructor(){
         List<CustLatLng> path = new ArrayList<>();
         path.add(new CustLatLng(1.0, 1.0));
         Set<TrackType> types = new HashSet<>();
@@ -41,7 +41,7 @@ public class TrackTest {
     }
 
     @Test
-    public void testExeptionOnTrackAdapterConstructor(){
+    public void testExceptionOnTrackAdapterConstructor(){
         List<CustLatLng> path = new ArrayList<>();
         path.add(new CustLatLng(1.0, 1.0));
         Set<TrackType> types = new HashSet<>();
