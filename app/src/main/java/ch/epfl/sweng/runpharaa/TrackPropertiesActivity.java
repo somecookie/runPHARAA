@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +61,7 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
@@ -75,13 +75,16 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private LatLng[] points;
     private TextView testText;
 
+    private Intent startIntent;
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Util.prepareHomeButton(this);
+        startIntent = getIntent();
 
+        Util.prepareHomeButton(this);
 
         setContentView(R.layout.activity_track_properties);
 
@@ -122,7 +125,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 // Get fakeMap
                 SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
                 mapFragment.getMapAsync(onMapReadyCallback);
-                if(Config.isTest) {
+                if (Config.isTest) {
                     onMapReady(Config.getFakeMap());
                 }
             }
@@ -213,8 +216,36 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
 
         initSocialMediaButtons(track);
-
         initCommentButton(track);
+        initFeedbackButton(trackID, track);
+
+    }
+
+    private void initFeedbackButton(String trackID, Track track) {
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
+            @Override
+            public void onSuccess(PropertiesOnClickListener value) {
+
+                if (!value.isPropertiesSet()) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.prop_miss), Toast.LENGTH_LONG).show();
+                } else if (User.instance.getFeedbackTracks().contains(trackID)) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.feedback_exists), Toast.LENGTH_LONG).show();
+                } else {
+                    TrackProperties tp = track.getProperties();
+                    tp.addNewDuration(value.getTime());
+                    tp.addNewDifficulty(value.getDifficulty());
+                    TrackDatabaseManagement.updateTrack(track);
+                    UserDatabaseManagement.updateFeedBackTracks(User.instance);
+                    relaunchActivity();
+                }
+            }
+        }));
+    }
+
+    private void relaunchActivity() {
+        finish();
+        startActivity(startIntent);
     }
 
     private void initCommentButton(Track track) {
@@ -242,6 +273,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     TrackDatabaseManagement.updateComments(track);
                     tv.setText("");
                     hideKeyboardFrom(getBaseContext(), mView);
+                    relaunchActivity();
                 } else {
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
                 }
@@ -475,6 +507,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             f.sendToToken(key);
         } catch (Exception e) {
             e.printStackTrace();
-            }
+        }
     }
 }
