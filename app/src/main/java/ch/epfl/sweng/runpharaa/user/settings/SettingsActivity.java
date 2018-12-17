@@ -36,11 +36,54 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static final String PREF_KEY_MIN_DISTANCE = "min_distance_interval";
     private static final String PREF_KEY_RESET_PREFS = "reset_prefs";
     private static final String PREF_KEY_CLEAR_CACHE = "clear_cache";
+    private static Preference.OnPreferenceClickListener resetPrefsListener = preference -> {
+        // Clear the preferences
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+        // Reset the default values
+        PreferenceManager.setDefaultValues(preference.getContext(), R.xml.preferences, true);
+        Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
+        return true;
+    };
+    private static Preference.OnPreferenceClickListener clearCacheListener = preference -> {
+        ImageLoader.getLoader(preference.getContext()).clearCache();
+        Toast.makeText(preference.getContext(), "Cache cleared !", Toast.LENGTH_SHORT).show();
+        return true;
+    };
+
+    /**
+     * Helper function to use instead of sharedPreference.getFloat(key, default) because EditTextPreferences use Strings for values
+     *
+     * @param sp           the shared preferences
+     * @param key          the key of the preference
+     * @param defaultValue the default value
+     * @return the float contained in the preference
+     */
+    public static float getFloat(SharedPreferences sp, String key, float defaultValue) {
+        String val = sp.getString(key, defaultValue + "");
+        return Float.parseFloat(val);
+    }
+
+    /**
+     * Helper function to use instead of sharedPreference.getInt(key, default) because EditTextPreferences use Strings for values
+     *
+     * @param sp           the shared preferences
+     * @param key          the key of the preference
+     * @param defaultValue the default value
+     * @return the integer contained in the preference
+     */
+    public static int getInt(SharedPreferences sp, String key, int defaultValue) {
+        String val = sp.getString(key, defaultValue + "");
+        return Integer.parseInt(val);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+
     }
 
     @Override
@@ -107,10 +150,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.preferences);
             // Initialise all values for the first time
             SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
-            for(String key : sp.getAll().keySet())
+            for (String key : sp.getAll().keySet())
                 onSharedPreferenceChanged(sp, key);
             // Add reset preferences "button"
             findPreference(PREF_KEY_RESET_PREFS).setOnPreferenceClickListener(resetPrefsListener);
@@ -132,7 +176,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            switch(key) {
+            switch (key) {
                 case PREF_KEY_RADIUS: {
                     Preference p = findPreference(key);
                     float prefRadius = getFloat(sharedPreferences, key, 2f);
@@ -168,46 +212,4 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
         }
     }
-
-    /**
-     * Helper function to use instead of sharedPreference.getFloat(key, default) because EditTextPreferences use Strings for values
-     * @param sp the shared preferences
-     * @param key the key of the preference
-     * @param defaultValue the default value
-     * @return the float contained in the preference
-     */
-    public static float getFloat(SharedPreferences sp, String key, float defaultValue) {
-        String val = sp.getString(key, defaultValue+"");
-        return Float.parseFloat(val);
-    }
-
-    /**
-     * Helper function to use instead of sharedPreference.getInt(key, default) because EditTextPreferences use Strings for values
-     * @param sp the shared preferences
-     * @param key the key of the preference
-     * @param defaultValue the default value
-     * @return the integer contained in the preference
-     */
-    public static int getInt(SharedPreferences sp, String key, int defaultValue) {
-        String val = sp.getString(key, defaultValue+"");
-        return Integer.parseInt(val);
-    }
-
-    private static Preference.OnPreferenceClickListener resetPrefsListener = preference ->  {
-            // Clear the preferences
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
-            editor.apply();
-            // Reset the default values
-            PreferenceManager.setDefaultValues(preference.getContext(), R.xml.preferences, true);
-            Toast.makeText(preference.getContext(), "Preferences were reset !", Toast.LENGTH_SHORT).show();
-            return true;
-        };
-
-    private static Preference.OnPreferenceClickListener clearCacheListener = preference -> {
-            ImageLoader.getLoader(preference.getContext()).clearCache();
-            Toast.makeText(preference.getContext(), "Cache cleared !", Toast.LENGTH_SHORT).show();
-            return true;
-        };
 }

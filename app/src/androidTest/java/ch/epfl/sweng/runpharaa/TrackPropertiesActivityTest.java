@@ -1,16 +1,16 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.app.AlertDialog;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.auth.api.credentials.CredentialRequestResponse;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -30,15 +30,17 @@ import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
-import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
@@ -59,6 +61,17 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     @Before
     public void initUserAndTracks() {
         User.instance = Database.getUser();
+        Intents.init();
+    }
+
+    @Test
+    public void clickOnHomeButton(){
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        //The description only works if the app is in english, there could be an issue if not
+        onView(withContentDescription("Navigate up")).perform(click());
+        sleep(2000);
+        intended(hasComponent(MainActivity.class.getName()));
     }
 
     @Test
@@ -215,12 +228,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         sleep(3000);
     }
 
-    @Test
-    public void testDeletedButtonVisibility(){
-
-        
-    }
-
     private Track createTrack() {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
@@ -239,6 +246,11 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         intent.putExtra("TrackID", t.getTrackUid());
         mActivityRule.launchActivity(intent);
         sleep(1_000);
+    }
+
+    @After
+    public void releaseIntents() {
+        Intents.release();
     }
 
 }
