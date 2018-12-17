@@ -69,7 +69,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         GoogleSignInClient mGoogleSignInClient = mGoogleAuth.getClient(this, gso);
 
         mAuth = FirebaseAuthentication.getInstance();
-
     }
 
     @Override

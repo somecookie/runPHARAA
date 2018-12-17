@@ -27,6 +27,7 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -69,12 +70,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
-    private Boolean isMapOpen;
+    private SupportMapFragment mapFragment;
 
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isMapOpen = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_properties);
 
@@ -104,7 +104,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 setButtonsOfProperties(trackID, track);
 
                 // Get fakeMap
-                SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
+                mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
                 mapFragment.getMapAsync(onMapReadyCallback);
                 if(Config.isTest) {
                     onMapReady(Config.getFakeMap());
@@ -360,7 +360,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         testText.setText("ready");
 
-        ScrollView mScrollView = findViewById(R.id.scrollID); //parent scrollview in xml, give your scrollview id value
+        ScrollView mScrollView = findViewById(R.id.scrollID);
         ((CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2))
                 .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
 
