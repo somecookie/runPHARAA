@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.location.GpsService;
+import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
@@ -31,6 +32,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
@@ -73,6 +75,10 @@ public class SettingsActivityTest extends TestInitLocation {
         onView(withId(R.id.delete_account))
                 .perform(click());
         onView(withText(R.string.delete)).perform(click());
+
+        sleep(3000);
+        onView(withId(R.id.sign_in_button_google)).check(matches(isDisplayed()));
+        intended(hasComponent(LoginActivity.class.getName()));
     }
         
     public void clickOnHomeButton(){
