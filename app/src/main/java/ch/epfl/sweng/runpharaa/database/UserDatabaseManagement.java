@@ -207,7 +207,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     public static User getUser(DataSnapshot data, String uId) {
         User user = null;
         DataSnapshot u = data.child(uId);
-        if (u.exists()){
+        if (u != null && u.exists()){
             user = new User();
             user.setUid(uId);
             if (u.child(NAME).exists()) {
