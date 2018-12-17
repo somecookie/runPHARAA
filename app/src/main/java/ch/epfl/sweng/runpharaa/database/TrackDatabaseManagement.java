@@ -231,7 +231,7 @@ public class TrackDatabaseManagement {
      * @param list a List<String> containing all the deleted Tracks
      * @return a List<String> without the deleted Tracks
      */
-    public static List<String> deleteDeletedTrackFromList(DataSnapshot dataSnapshot, List<String> list){
+    static List<String> deleteDeletedTrackFromList(DataSnapshot dataSnapshot, List<String> list){
         if(list != null){
             for(DataSnapshot c : dataSnapshot.getChildren()){
                 if(list.contains(c.getKey())){

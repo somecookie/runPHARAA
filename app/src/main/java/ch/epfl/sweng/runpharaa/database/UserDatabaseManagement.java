@@ -30,6 +30,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private final static String ID = "uid";
     private static final String FEEDBACK = "feedback";
 
+    /**
+     * Add a non-existent User in the Database
+     *
+     * @param user the User to add to the Database
+     * @param callback a Callback<User>
+     */
     public static void writeNewUser(final User user, final Callback<User> callback) {
         DatabaseReference usersRef = mDataBaseRef.child(USERS).child(user.getUid());
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -67,6 +73,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
+    /**
+     * Update a User's list of favorite tracks in the Database
+     *
+     * @param user the User we want to update
+     */
     public static void updateFavoriteTracks(final User user) {
         DatabaseReference favRef = mDataBaseRef.child(USERS);
         DatabaseReference favRef2 = favRef.child(user.getUid());
@@ -89,6 +100,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
     }
 
+    /**
+     * Remove the given track from a User's list of favorite tracks
+     *
+     * @param trackID the track to remove ID
+     */
     public static void removeFavoriteTrack(final String trackID) {
         DatabaseReference favRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FAVORITE).child(trackID);
         favRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,6 +121,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
+    /**
+     * Update the list of a User's liked tracks
+     *
+     * @param user the User we want to update
+     */
     public static void updateLikedTracks(final User user) {
         DatabaseReference likedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(LIKES);
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -123,6 +144,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
+    /**
+     * Remove a given track from the User's list of liked tracks
+     *
+     * @param trackID a Track unique ID
+     */
     public static void removeLikedTrack(final String trackID) {
         DatabaseReference likeRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FAVORITE).child(trackID);
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -139,7 +165,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-    public static void updateCreatedTracks(final User user) {
+    /**
+     * Update the list of created tracks of the given User
+     *
+     * @param user the User we want to update
+     */
+    static void updateCreatedTracks(final User user) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE);
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -158,11 +189,21 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
     }
 
+    /**
+     * Update the list of followed users of the given User
+     *
+     * @param user the User we want to update
+     */
     public static void updateFollowedUsers(final User user) {
         DatabaseReference followedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FOLLOWING);
         followedRef.setValue(user.getFollowedUsers()).addOnFailureListener(Throwable::printStackTrace);
     }
 
+    /**
+     * Remove a given user from the User's list of followed
+     *
+     * @param user the User we want to remove
+     */
     public static void removeFollowedUser(final User user) {
         DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING);
 
@@ -189,6 +230,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
+    /**
+     * Initialize the "FollowingFragment" from the MainActivity
+     *
+     * @param data a Datasnapshot from the Database
+     * @return the list of Users to display in the fragment
+     */
     public static List<User> initFollowingFragment(DataSnapshot data) {
         List<User> users = new ArrayList<>();
         DataSnapshot followed = data.child(User.instance.getUid()).child(FOLLOWING);
@@ -207,6 +254,13 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         return users;
     }
 
+    /**
+     * Retrieve a User in the Database
+     *
+     * @param data a Datasnapshot of the Database
+     * @param uId the User we want to get unique ID
+     * @return the User corresponding to the uId
+     */
     public static User getUser(DataSnapshot data, String uId) {
         User user = null;
         DataSnapshot u = data.child(uId);
@@ -239,6 +293,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         return user;
     }
 
+    /**
+     * Retrieve a user's name from the Database from its unique ID
+     *
+     * @param UID the User's unique ID
+     * @param callback a Callback<String>
+     */
     public static void getUserNameFromID(String UID, Callback<String> callback) {
         DatabaseReference nameRef = mDataBaseRef.child(USERS).child(UID).child(NAME);
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -260,6 +320,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
+    /**
+     * Get a User's picture give the User's unique ID
+     *
+     * @param UID the User's unique ID
+     * @param callback a Callback<String>
+     */
     public static void getUserPictureFromID(String UID, Callback<String> callback) {
         DatabaseReference pictureRef = mDataBaseRef.child(USERS).child(UID).child(PICTURE);
         pictureRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -281,7 +347,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-
+    /**
+     * Get a User's unique ID give the User's name
+     *
+     * @param name the User's name
+     * @param callback a Callback<String>
+     */
     public static void findUserUIDByName(final String name, Callback<String> callback) {
         DatabaseReference ref = mDataBaseRef.child(USERS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -308,7 +379,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         });
     }
 
-
+    /**
+     * Delete a User from the Database
+     *
+     * @param user the user to delete
+     */
     public static void deleteUser(User user) {
         //Delete all created tracks
         for (String trackUID : user.getCreatedTracks()) {
@@ -317,17 +392,33 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         //Set track to deleted
         mDataBaseRef.child(USERS).child(user.getUid()).removeValue();
     }
+
+    /**
+     * Update the feedback of the created tracks from the given User
+     *
+     * @param user the user we update
+     */
     public static void updateFeedBackTracks(User user) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FEEDBACK);
         createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
     }
 
+    /**
+     * Give a notification key to a User in the Database
+     *
+     * @param key a String containing the notification key
+     */
     public static void writeNotificationKey(String key){
         DatabaseReference keyRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child("NotificationKey");
         keyRef.setValue(key).addOnFailureListener(Throwable::printStackTrace);
-
     }
 
+    /**
+     * Retrieve a User's notification key given its unique ID
+     *
+     * @param uid the User's unique ID
+     * @param callback a Callback<String>
+     */
     public static void getNotificationKeyFromUID(String uid, Callback<String> callback){
         DatabaseReference nameRef = mDataBaseRef.child(USERS).child(uid).child("NotificationKey");
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
