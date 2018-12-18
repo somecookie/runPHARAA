@@ -8,6 +8,11 @@ public abstract class GpsService extends Service {
 
     private static GpsService instance;
 
+    /**
+     * Get the instance of GpsService
+     *
+     * @return the instance of GpsService
+     */
     public static GpsService getInstance() {
         if(instance == null)
             instance = new RealGpsService();
@@ -20,6 +25,11 @@ public abstract class GpsService extends Service {
         super.onDestroy();
     }
 
+    /**
+     * Init the FakeGpsService
+     *
+     * @param s the FakeGpsService to init
+     */
     public static void initFakeGps(FakeGpsService s) {
         if(instance == null)
             instance = s;
