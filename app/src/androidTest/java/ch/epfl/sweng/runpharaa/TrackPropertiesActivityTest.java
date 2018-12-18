@@ -36,8 +36,10 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -190,6 +192,22 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
         onView(withId(R.id.post_button)).perform(click());
 
         sleep(3000);
+    }
+
+    @Test
+    public void testOpenAndCloseReport() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(5_000);
+        // display the popup
+        onView(withId(R.id.reportID)).perform(click());
+        // dismiss the popup by clicking on it
+        onView(withContentDescription(R.string.report_description))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .perform(click());
+        // check that the activity is visible by checking that its button and map are displayed
+        onView(withId(R.id.buttonLikeID)).check(matches(isDisplayed()));
+        onView(withId(R.id.create_map_view2)).check(matches(isDisplayed()));
     }
 
     private Track createTrack() {
