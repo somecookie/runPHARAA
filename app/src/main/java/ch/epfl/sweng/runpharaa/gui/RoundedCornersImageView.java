@@ -11,24 +11,11 @@ import ch.epfl.sweng.runpharaa.R;
 
 public class RoundedCornersImageView extends android.support.v7.widget.AppCompatImageView {
 
-    private float radius = 24.f;
+    private float radius;
     private Path path;
-
-    public RoundedCornersImageView(Context context) {
-        super(context);
-        init();
-    }
 
     public RoundedCornersImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RoundedCornersImageView);
-        radius = a.getFloat(0, 24.f);
-        a.recycle();
-        init();
-    }
-
-    public RoundedCornersImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RoundedCornersImageView);
         radius = a.getFloat(0, 24.f);
         a.recycle();

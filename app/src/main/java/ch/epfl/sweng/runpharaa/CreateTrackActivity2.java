@@ -108,9 +108,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                         CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties,
                         new ArrayList<>());
 
-                TrackDatabaseManagement.writeNewTrack(track);
-
-                finish();
+                new Thread( () -> {
+                    TrackDatabaseManagement.writeNewTrack(track);
+                    finish();
+                }).start();
             }
         });
         //Open Gallery view when we click on the button
