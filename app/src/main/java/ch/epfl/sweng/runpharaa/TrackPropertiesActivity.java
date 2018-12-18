@@ -167,7 +167,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
 
-
             final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
             EditText tv = mView.findViewById(R.id.comments_editText);
             tv.setHint(String.format(getResources().getString(R.string.comment_hint), Comment.MAX_LENGTH));
@@ -351,7 +350,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
-
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -402,7 +400,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
 
     public void sentToNotification(String key, String title, String message) {
 

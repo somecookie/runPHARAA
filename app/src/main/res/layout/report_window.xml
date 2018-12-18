@@ -5,8 +5,40 @@
     android:layout_height="wrap_content"
     android:background="#ffffff">
 
-    <TextView
+    <Button
+        android:id="@+id/button_inappropriate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="0dp"
+        android:text="Inappropriate Content" />
 
-        />
+    <Button
+        android:id="@+id/button_abusiveLang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="0dp"
+        android:text="Abusive Language" />
+
+    <Button
+        android:id="@+id/button_fakeInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="0dp"
+        android:text="Fake/Dangerous Information" />
 
 </RelativeLayout>
