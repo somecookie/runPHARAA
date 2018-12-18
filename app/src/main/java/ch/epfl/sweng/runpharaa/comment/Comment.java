@@ -23,7 +23,7 @@ public class Comment implements Comparable<Comment>{
         Required.nonNull(creatorID, "Creator ID of a comment cannot be null");
         Required.nonNull(comment, "Comment cannot be null");
         Required.nonNull(postedDate, "Date cannot be null");
-        if(!checkSizeComment(comment))throw new IllegalArgumentException("Maximum size of a comment is +"+MAX_LENGTH+" characters");
+        if(!checkSizeComment(comment))throw new IllegalArgumentException("The size of a comment must be between 0 and "+MAX_LENGTH+" characters");
 
         this.creatorID = creatorID;
         this.comment = comment;
@@ -58,7 +58,7 @@ public class Comment implements Comparable<Comment>{
     }
 
     public static boolean checkSizeComment(String comment) {
-        return comment.length() < MAX_LENGTH;
+        return comment.length() < MAX_LENGTH && comment.length() > 0;
     }
 
     public String getDate(){
