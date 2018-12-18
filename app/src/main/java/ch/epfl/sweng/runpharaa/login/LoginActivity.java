@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Updates the user interface. Launch the app if the user is already signed in.
      *
-     * @param currentUser
+     * @param currentUser the current User
      */
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
@@ -157,11 +157,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Set the loading text with the one given in parameter
+     *
+     * @param text the new loading text
+     */
     private void setLoadingText(String text) {
         TextView textView = findViewById(R.id.loading_text);
         textView.setText(text);
     }
 
+    /**
+     * Start the custom loading animation
+     */
     private void startLoadingAnimation() {
         setContentView(R.layout.loading_screen);
         ImageView imageView = findViewById(R.id.anim_view);
@@ -205,6 +213,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }.start();
     }
 
+    /**
+     * Authenticate the User with his Google account
+     *
+     * @param acct the Google account
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(Config.isTest ? "token" : acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
