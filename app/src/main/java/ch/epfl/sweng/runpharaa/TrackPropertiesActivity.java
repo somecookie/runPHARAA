@@ -287,8 +287,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     tv.setText("");
                     hideKeyboardFrom(getBaseContext(), mView);
                     relaunchActivity();
-                } else {
+                } else if(comment.length() > 0) {
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_short), Toast.LENGTH_LONG).show();
                 }
 
             });
