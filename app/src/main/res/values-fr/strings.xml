@@ -120,5 +120,6 @@
     <string name="unfollow">Désabonner</string>
     <string name="name">Nom</string>
     <string name="comments">Commentaires</string>
+    <string name="comment_too_short">Un commentaire ne peut pas être vide</string>
 
 </resources>

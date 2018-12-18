@@ -309,6 +309,28 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     }
 
     @Test
+    public void testEmptyComment() {
+        Track t1 = createTrack();
+        launchWithExtras(t1);
+        sleep(2000);
+        onView(withId(R.id.commentsID)).perform(click());
+
+        sleep(2000);
+
+        onView(withId(R.id.comments_editText)).perform(replaceText(""));
+
+        sleep(2000);
+
+        onView(withId(R.id.post_button)).perform(click());
+
+        Espresso.pressBack();
+
+        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.comment_too_short)))
+                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testAddingCorrectComment() {
         postComment();
         withId(R.id.commentsID).matches(withText("1"));

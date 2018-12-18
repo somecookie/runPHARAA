@@ -150,4 +150,5 @@
     <string name="unfollow">Unfollow</string>
     <string name="name">Name</string>
     <string name="comments">Comments</string>
+    <string name="comment_too_short">Comment cannot be empty</string>
 </resources>
