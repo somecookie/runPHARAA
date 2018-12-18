@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context=".TrackPropertiesActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,123 +19,162 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/trackBackgroundID"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:background="@color/tw__solid_white"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/small_margin"
+                android:layout_margin="8dp"
                 android:orientation="vertical">
 
-                <android.support.constraint.ConstraintLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/trackTitleID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Track Title"
+                            android:textColor="#000"
+                            android:textSize="@dimen/large_text"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/trackCreatorID"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Track Creator"
+                            android:textAllCaps="false"
+                            android:textColor="@color/com_facebook_button_login_background_color"
+                            android:textStyle="bold|italic"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/trackTitleID"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/deleteButton"
+                        android:layout_width="@dimen/large_text"
+                        android:layout_height="@dimen/large_text"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_delete"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/small_margin">
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/trackTitleID"
+                    <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:text="Track Title"
-                        android:textColor="#000"
-                        android:textSize="@dimen/large_text"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <TextView
-                        android:id="@+id/trackCreatorID"
-                        android:layout_width="222dp"
                         android:layout_height="wrap_content"
-                        android:text="Track Creator"
-                        android:textAllCaps="false"
-                        android:textColor="@color/com_facebook_button_login_background_color"
-                        android:textStyle="bold|italic"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/trackTitleID"
-                        app:layout_constraintVertical_bias="0.0" />
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/classic_margin"
+                        app:srcCompat="@drawable/ic_info" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                </android.support.constraint.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/trackDurationID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/small_margin"
+                            android:text="Track Duration" />
 
-                <TextView
-                    android:id="@+id/trackDurationID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Track Duration" />
+                        <TextView
+                            android:id="@+id/trackLengthID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/small_margin"
+                            android:text="Track Length" />
 
-                <TextView
-                    android:id="@+id/trackLengthID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Track Length" />
+                        <TextView
+                            android:id="@+id/track_difficulty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/small_margin"
+                            android:text="Difficulty" />
 
-                <TextView
-                    android:id="@+id/track_difficulty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Difficulty" />
+                        <TextView
+                            android:id="@+id/trackTagsID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/small_margin"
+                            android:text="Tags" />
 
-                <TextView
-                    android:id="@+id/trackTagsID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/small_margin"
-                    android:text="Tags" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/rounded_corners">
 
                     <Button
                         android:id="@+id/commentsID"
                         android:layout_width="@dimen/large_text"
                         android:layout_height="@dimen/large_text"
-                        android:layout_marginEnd="24dp"
                         android:background="@drawable/ic_mode_comment_black_24dp"
                         android:text=""
                         android:textOff=""
                         android:textOn=""
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/trackLikesID"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/trackCommentsID"
                         android:layout_width="wrap_content"
-                        android:layout_height="19dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/commentsID"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.538" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
                         android:id="@+id/buttonLikeID"
                         android:layout_width="@dimen/large_text"
                         android:layout_height="@dimen/large_text"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginRight="24dp"
                         android:background="@drawable/ic_button_like"
                         android:checked="false"
                         android:text=""
                         android:textOff=""
                         android:textOn=""
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/trackFavouritesID"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.7"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ToggleButton
@@ -148,38 +188,39 @@
                         android:textOn=""
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.9"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/trackLikesID"
                         android:layout_width="wrap_content"
-                        android:layout_height="19dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/buttonLikeID"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.538" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/trackFavouritesID"
                         android:layout_width="wrap_content"
-                        android:layout_height="19dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/buttonFavoriteID"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.538" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
                         android:id="@+id/feedbackButton"
                         android:layout_width="@dimen/large_text"
                         android:layout_height="@dimen/large_text"
-                        android:layout_marginEnd="24dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:background="@drawable/ic_tune_black"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/trackCommentsID"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.1"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
@@ -191,16 +232,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/feedbackButton"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/deleteButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="invisible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_delete" />
 
                 </android.support.constraint.ConstraintLayout>
 
@@ -217,28 +248,27 @@
                     android:layout_height="0dp"
                     android:text="" />
 
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <ImageButton
         android:id="@+id/fb_share_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="@dimen/classic_margin"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/classic_margin"
+        android:layout_marginEnd="@dimen/classic_margin"
         android:background="@drawable/ic_facebook_logo" />
 
     <ImageButton
         android:id="@+id/twitter_share_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="14dp"
         android:background="@drawable/ic_twitter" />
 </RelativeLayout>
