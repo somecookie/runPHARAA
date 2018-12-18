@@ -41,6 +41,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
+import static ch.epfl.sweng.runpharaa.util.ViewUtils.testToastDisplay;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -115,9 +116,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_name)).perform(typeText("Buckingham to pub")).perform(closeSoftKeyboard());
         sleep(WAIT_TIME);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.properties_not_set)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.properties_not_set));
     }
 
     @Test
@@ -135,9 +134,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         sleep(WAIT_TIME);
         selectAllTypes(false);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.types_not_set)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.types_not_set));
     }
 
     @Test
@@ -153,15 +150,11 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.default_time)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.default_time));
         sleep(WAIT_TIME);
         selectFirstType(true);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.need_name)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.need_name));
     }
 
     @Test
@@ -179,9 +172,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         sleep(WAIT_TIME);
         selectAllTypes(true);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.need_name)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.need_name));
     }
 
     private void selectFirstType(boolean pressOk) {

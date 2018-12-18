@@ -30,6 +30,7 @@ import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static ch.epfl.sweng.runpharaa.utils.Util.createImage;
 import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
@@ -169,7 +170,6 @@ public class TrackDatabaseManagement {
             int userPreferredRadius = User.instance.getPreferredRadius();
 
             if (c.child("path").child("0").getValue(CustLatLng.class) != null) {
-                Log.d("Database", "track near me");
                 if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius &&
                         !c.child(IS_DELETED).getValue(Boolean.class)) {
                     tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
