@@ -367,7 +367,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
                 .perform(click());
         // check that the activity is visible by checking that its button and map are displayed
         onView(withId(R.id.buttonLikeID)).check(matches(isDisplayed()));
-        onView(withId(R.id.create_map_view2)).check(matches(isDisplayed()));
     }
 
     private Track createTrack() {
