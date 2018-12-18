@@ -145,6 +145,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
 
+    /**
+     * Set the delete button to visible/invisible depending if the {@link Track} can be deleted
+     * @param track
+     */
     private void setDeleteButton(Track track){
         Button deleteButton = findViewById(R.id.deleteButton);
         if(track.getCreatorUid().equals(User.instance.getUid()))
@@ -162,6 +166,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }
     }
 
+    /**
+     * Delete the track and finish the activity
+     * @param track
+     */
     private void deleteTrack(Track track){
         TrackDatabaseManagement.deleteTrack(track.getTrackUid());
         Toast t = Toast.makeText(this, R.string.track_deleted, Toast.LENGTH_LONG);
@@ -169,6 +177,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         finish();
     }
 
+    /**
+     * Open an {@link AlertDialog} to confirm if the user really want to delete the track
+     * @param track
+     * @return
+     */
     private AlertDialog deleteTrackConfirmation(Track track)
     {
         AlertDialog deleteTrackDialogBox = new AlertDialog.Builder(this)

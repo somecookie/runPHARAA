@@ -86,6 +86,9 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
         sendBroadcast(new Intent("location_update"));
     }
 
+    /**
+     * Init a location request by initializing all the settings with the user settings from the SettingsActivity
+     */
     private void initLocationRequest() {
         // Create the LocationRequest object
         locationRequest = LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -100,6 +103,9 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
         setMinDistanceInterval(minDistance);
     }
 
+    /**
+     * Initialize the location CallBack
+     */
     private void initLocationCallBack() {
         locationCallback = new LocationCallback() {
             @Override

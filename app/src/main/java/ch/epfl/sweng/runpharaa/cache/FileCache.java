@@ -8,7 +8,7 @@ import java.io.File;
 class FileCache {
     private File cacheDir;
 
-    public FileCache(Context context) {
+    FileCache(Context context) {
         if(Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED)) {
             cacheDir = new File(Environment.getExternalStorageDirectory(), "runpharaaImages");
         } else {
@@ -18,11 +18,20 @@ class FileCache {
             cacheDir.mkdirs();
     }
 
-    public File getFile(String url) {
+    /**
+     * Return a file from the cache at the given URL
+     *
+     * @param url a String
+     * @return a File
+     */
+    File getFile(String url) {
         String fileName = String.valueOf(url.hashCode());
         return new File(cacheDir, fileName);
     }
 
+    /**
+     * Clear the cache
+     */
     public void clear() {
         File[] files = cacheDir.listFiles();
         if(files == null) return;

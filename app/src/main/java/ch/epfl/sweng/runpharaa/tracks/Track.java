@@ -121,31 +121,91 @@ public class Track implements Comparable<Track> {
         allTracks = all;
     }
 
+    /**
+     * Get the properties of the Track
+     *
+     * @return the Track's properties
+     */
     public TrackProperties getProperties() { return properties; }
 
+    /**
+     * Get the Track's CardItem
+     *
+     * @return the Track's CardItem
+     */
     @Exclude
     public TrackCardItem getTrackCardItem() { return trackCardItem; }
 
+    /**
+     * Get the Track's starting point
+     *
+     * @return a CustLatLng corresponding to the Track's starting point
+     */
     public CustLatLng getStartingPoint() { return startingPoint; }
 
+    /**
+     * Get the Track's name
+     *
+     * @return the Track's name
+     */
     public String getName() { return name; }
 
+    /**
+     * Get the Track's unique ID
+     *
+     * @return the Track's unique ID
+     */
     public String getTrackUid() { return trackUid; }
 
+    /**
+     * Get the Track's creator unique ID
+     *
+     * @return the unique ID of the Track's creator
+     */
     public String getCreatorUid() { return creatorUid; }
 
+    /**
+     * Get the Track's creator name
+     *
+     * @return the Track's creator name
+     */
     public String getCreatorName() { return creatorName; }
 
+    /**
+     * Get the Track's path
+     *
+     * @return a List<CustLatLng> containing the Track's path
+     */
     public List<CustLatLng> getPath() { return path; }
 
+    /**
+     * Get the Track's image URI
+     *
+     * @return the Track's image URI
+     */
     public String getImageStorageUri() { return imageStorageUri; }
 
+    /**
+     * Set this Track's CardItem with the one given in argument
+     *
+     * @param trackCardItem the CardItem we want to set for the Track
+     */
     public void setTrackCardItem(TrackCardItem trackCardItem) { this.trackCardItem = trackCardItem; }
 
+    /**
+     * Get this Track's oomments
+     *
+     * @return a List<Comment>
+     */
     public List<Comment> getComments() {
         return comments;
     }
 
+    /**
+     * Add the given comment to this Track's comments
+     *
+     * @param comment the comment we want to add to the Track
+     */
     public void addComment(Comment comment){
         if(!comments.contains(comment)){
             comments.add(comment);

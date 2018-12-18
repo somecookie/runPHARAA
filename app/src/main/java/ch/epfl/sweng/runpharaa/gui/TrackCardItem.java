@@ -10,7 +10,17 @@ public class TrackCardItem extends CardItem{
         this.parentTrackID = parentTrackID;
     }
 
+    /**
+     * Get the track ID
+     *
+     * @return the track ID
+     */
     public String getParentTrackID() { return parentTrackID; }
 
+    /**
+     * Set the CardItem track given its unique ID
+     *
+     * @param parentTrackID the track ID
+     */
     public void setParentTrackID(String parentTrackID) { this.parentTrackID = parentTrackID; }
 }

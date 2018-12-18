@@ -12,10 +12,25 @@ public class UserCardItem extends CardItem {
         this.nbCreatedTracks = nbCreatedTracks;
     }
 
+    /**
+     * Get the User's ID
+     *
+     * @return the User's ID
+     */
     public String getParentUserID() { return parentUserID; }
 
+    /**
+     * Get the User's number of created tracks
+     *
+     * @return the User's number of created tracks
+     */
     public int getNbCreatedTracks() { return this.nbCreatedTracks; }
 
+    /**
+     * Set the CardItem User given its ID
+     *
+     * @param parentUserID the User's unique ID
+     */
     public void setParentUserID(String parentUserID) { this.parentUserID = parentUserID; }
 
 }

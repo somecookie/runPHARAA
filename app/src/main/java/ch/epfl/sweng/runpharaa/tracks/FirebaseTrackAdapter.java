@@ -11,6 +11,9 @@ import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
+/**
+ * Adapter for database track to local {@link Track}
+ */
 public class FirebaseTrackAdapter {
 
     private String name;

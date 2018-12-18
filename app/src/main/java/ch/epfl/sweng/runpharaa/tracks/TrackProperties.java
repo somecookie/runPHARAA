@@ -54,8 +54,8 @@ public class TrackProperties {
     public void addNewDifficulty(int diff){
         avgDiff.add(diff);
     }
-    public int getAvgDifficultyTotal() { return avgDiff.getTotal();}
-    public int getAvgDifficultyNbr() { return avgDiff.getNbr();}
+    int getAvgDifficultyTotal() { return avgDiff.getTotal();}
+    int getAvgDifficultyNbr() { return avgDiff.getNbr();}
 
     public double getAvgDuration(){
         return avgDur.getAverage();
@@ -63,8 +63,8 @@ public class TrackProperties {
     public void addNewDuration(double dur){
         avgDur.add(dur);
     }
-    public double getAvgDurationTotal() { return avgDur.getTotal();}
-    public int getAvgDurationNbr() { return avgDur.getNbr();}
+    double getAvgDurationTotal() { return avgDur.getTotal();}
+    int getAvgDurationNbr() { return avgDur.getNbr();}
 
     public void addLike(){ likes++; }
     public void removeLike(){ if(likes > 0) likes--; }

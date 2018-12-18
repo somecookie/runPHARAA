@@ -10,7 +10,7 @@ import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FilterProperties {
 
-    //TODO Tweak it to find most stable parameters
+    //To tweak to find most stable parameters
     private static final int LENGTHCOEFF = 1;
     private static final int DIFFICULTYCOEFF = 1000;
     private static final int DURATIONCOEFF = 100;
@@ -38,6 +38,10 @@ public class FilterProperties {
         }
     }
 
+    /**
+     * Add a list of {@link Track} to the filtered tracks
+     * @param tracks the list of {@link Track}
+     */
     public void add(List<Track> tracks){
         for (Track track : tracks){
             add(track.getProperties().getLength(), track.getProperties().getAvgDifficulty(),
@@ -45,6 +49,13 @@ public class FilterProperties {
         }
     }
 
+    /**
+     * Add the specified properties of a {@link Track} to the filtered tracks
+     * @param length the length of the track (Greater or equal than zero)
+     * @param difficulty the difficultly of th track (Greater or equal than zero)
+     * @param duration the duration of the track (Greater or equal than zero)
+     * @param t the {@link TrackType} of the track (Non-null)
+     */
     public void add(double length, double difficulty, double duration, Set<TrackType> t){
         Required.greaterOrEqualZero(length, "Length must be positive");
         Required.greaterOrEqualZero(difficulty, "Difficulty must be positive");
@@ -62,18 +73,30 @@ public class FilterProperties {
         }
     }
 
+    /**
+     * @return the average length of the filtered tracks
+     */
     private double getPreferredLength(){
         return lengthTot / nbLength;
     }
 
+    /**
+     * @return the average difficulty of the filtered tracks
+     */
     private double getPreferredDifficulty(){
         return difficultyTot / nbDifficulties;
     }
 
+    /**
+     * @return the average duration of the filtered tracks
+     */
     private double getPreferredDuration(){
         return durationTot / nbDurations;
     }
 
+    /**
+     * @return the most recurrent {@link TrackType} of the filtered tracks
+     */
     private TrackType getPreferredTrackType(){
         TrackType trackType = TrackType.BEACH;
         int max = 0;
@@ -86,6 +109,12 @@ public class FilterProperties {
         return trackType;
     }
 
+    /**
+     * Given a list of {@link Track} and the previously added tracks, choose the {@link Track} that
+     * match the most the previously added ones. (In term of length, duration, difficulty and {@link TrackType})
+     * @param tracks the list of tracks
+     * @return the lucky {@link Track} from the given list
+     */
     public Track chooseLuckyTrack(List<Track> tracks){
         Track best = tracks.get(0);
         double min = Double.MAX_VALUE;
@@ -99,6 +128,11 @@ public class FilterProperties {
         return best;
     }
 
+    /**
+     * Compute the coefficient of matching of a track with the virtual perfect track
+     * @param track the {@link Track} on which to compute the coefficient on
+     * @return the coefficient in a {@link Double}
+     */
     private Double computeCoeff(Track track){
         double lengthDiff = Math.abs(track.getProperties().getLength() - getPreferredLength());
         double difficultyDiff = Math.abs(track.getProperties().getAvgDifficulty() - getPreferredDifficulty());
