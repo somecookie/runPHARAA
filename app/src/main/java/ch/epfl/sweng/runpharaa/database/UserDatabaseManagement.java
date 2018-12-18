@@ -194,7 +194,10 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         DataSnapshot followed = data.child(User.instance.getUid()).child(FOLLOWING);
         for (DataSnapshot f : followed.getChildren()) {
             if (f.getValue() != null) {
+                Log.i("WESHHHHHHHHHHHH", f.toString());
+                Log.i("WESHHHHHHHHHHHH", f.getValue().toString());
                 User user = User.deserialize(f.getValue().toString());
+                Log.i("WESHHHHHHHHHHHH", user.getName());
                 if(!data.child(user.getUid()).exists()){
                     User.instance.removeFromFollowed(user);
                 }

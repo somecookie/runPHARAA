@@ -92,7 +92,7 @@ public final class User implements Serializable {
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             return (User) objectInputStream.readObject();
         } catch (Exception e) {
-            Log.d("Deserialization Error", e.toString());
+            Log.i("Deserialization Error", e.toString());
             return null;
         }
     }
@@ -195,7 +195,7 @@ public final class User implements Serializable {
      * @param u
      */
     public void addToFollowed(User u) {
-        String serializedUser = u.serialize();
+        String serializedUser = User.serialize(u);
         if (!alreadyInFollowed(u))
             followedUsers.add(serializedUser);
     }
@@ -328,18 +328,23 @@ public final class User implements Serializable {
         return uid.hashCode();
     }
 
-    private String serialize() {
-        String serialized = "";
+    public static String serialize(User user) {
+        String serialized = "truc";
 
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(this);
+            objectOutputStream.writeObject(user);
             objectOutputStream.flush();
             serialized = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
         } catch (Exception e) {
+            //throw new IllegalStateException();
             Log.d("Serialization Error", e.toString());
+            Log.i("WESHHHHHHHH", "ric michto");
         }
+
+            Log.i("WESHHHHHHH", "VALOU :" + user.getUid());
+
 
         return serialized;
     }

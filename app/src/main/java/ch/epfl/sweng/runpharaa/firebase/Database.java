@@ -30,6 +30,7 @@ import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Config;
 
+import static ch.epfl.sweng.runpharaa.user.User.serialize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -47,9 +48,11 @@ public class Database {
     private final static String s_feedback = "feedback";
     private final static String keyWriteTrack = "key";
     private final static User fake_user = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+    private final static String fake_user_ser = serialize(fake_user);
     //Tracks already in the fakeDB
     private final static String trackUID = "TrackID";
     private final static String trackName = "name";
+    private final static String s_following = "followedUsers";
     private static boolean shouldFail = false;
     private static boolean isCancelled = false;
     private static boolean userExists = false;
@@ -116,6 +119,9 @@ public class Database {
     private DataSnapshot snapInitUser;
 
     @Mock
+    private DataSnapshot snapInitFollowedUsers;
+
+    @Mock
     private DatabaseReference drUserAnyChildFavoritesChild;
 
     @Mock
@@ -173,7 +179,13 @@ public class Database {
     private DataSnapshot snapOnDataUserKey;
 
     @Mock
+    private DataSnapshot snapOnDataFollowSystem;
+
+    @Mock
     private DataSnapshot snapOnDataChangeUser;
+
+    @Mock
+    private DataSnapshot snapOnDataFollowSystemUser;
 
     @Mock
     private DataSnapshot snapOnDataChangeUserChild;
@@ -237,6 +249,8 @@ public class Database {
 
     @Mock
     private DatabaseReference drUserAnyChildFollow;
+
+
     private Answer snapOnDataChangedAnswer = invocation -> {
         ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
         if (isCancelled) {
@@ -307,10 +321,12 @@ public class Database {
         when(snapInitFollowChildrens.getValue()).thenReturn(null);
 
         //changer le nom
-        when(snapOnDataChangeReadUser.child("BobUID")).thenReturn(snapInitCurUser);
-        when(snapOnDataChangeReadUser.child("1")).thenReturn(snapInitCurUser);
+        when(snapOnDataChangeReadUser.child(any(String.class))).thenReturn(snapInitCurUser);
+        //when(snapOnDataChangeReadUser.child("1")).thenReturn(snapInitCurUser);
         when(snapInitCurUser.child("followedUsers")).thenReturn(snapInitUser);
         when(snapInitChildrenUser.child("name")).thenReturn(snapInitUser);
+        when(snapInitUser.getChildren()).thenReturn(Collections.singletonList(snapInitFollowedUsers));
+        when(snapInitFollowedUsers.getValue()).thenReturn(fake_user_ser);
         when(snapInitUser.getValue((String.class))).thenReturn("Bob");
         when(snapInitUser.exists()).thenReturn(true);
         when(snapInitCurUser.exists()).thenReturn(true);
@@ -348,11 +364,24 @@ public class Database {
         when(snapOnDataUserPicture.exists()).thenReturn(true);
         when(snapOnDataUserPicture.getValue((String.class))).thenReturn("");
 
+        when(snapOnDataFollowSystem.child(any(String.class))).thenReturn(snapOnDataFollowSystemUser);
+        when(snapOnDataFollowSystemUser.child(s_following)).thenReturn(snapInitFollowChildrens);
+
 
     }
 
     private void instantiatedrUsers() {
         when(drUser.child(any(String.class))).thenReturn(drUserAnyChild);
+
+        doAnswer((Answer<ValueEventListener>) invocation -> {
+            ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
+            if (isCancelled) {
+                l.onCancelled(snapOnDataErrorUser);
+            } else {
+                l.onDataChange(snapOnDataFollowSystem);
+            }
+            return l;
+        }).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
         //write new user
         doAnswer((Answer<ValueEventListener>) invocation -> {
@@ -684,7 +713,7 @@ public class Database {
         int length = 100;
         int heightDiff = 10;
 
-        t = new FirebaseTrackAdapter("Cours forest !", trackUID, "BobUID",
+        t = new FirebaseTrackAdapter("Cours forest !", trackUID, "1",
                 "Bob", Arrays.asList(coord0, coord1), "imageUri",
                 types, length, heightDiff, 1, 1, 1, 1,
                 0, 0, new ArrayList<>());
