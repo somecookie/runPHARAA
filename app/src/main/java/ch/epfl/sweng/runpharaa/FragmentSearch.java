@@ -52,6 +52,9 @@ public class FragmentSearch extends Fragment {
     }
 
     @Override
+    /**
+     * Initialize the lucky button
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.luckyIcon){
             FilterProperties properties = new FilterProperties();

@@ -49,7 +49,7 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Track a {@link Track} and add it to the database
+     * Give a UID to a given {@link Track} and add it to the Firebase database
      *
      * @param track a Track
      */
@@ -143,7 +143,7 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database and a track key, return the corresponding track.
+     * Given a DataSnapshot at the Tracks level from the Firebase Database and a track key, return the corresponding track.
      *
      * @param dataSnapshot a dataSnapshot from the database
      * @param key a track key

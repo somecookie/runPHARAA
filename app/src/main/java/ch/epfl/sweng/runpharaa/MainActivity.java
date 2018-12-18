@@ -46,10 +46,20 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
 
+    /**
+     * Check if the given {@link Track} pass the filters
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     public static boolean passFilters(Track t) {
         return filterTime(t) && filterDifficulty(t) && filterTypes(t);
     }
 
+    /**
+     * Check if the given {@link Track} pass the time filter
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     private static boolean filterTime(Track t) {
         if(timeIsFiltered){
             return t.getProperties().getAvgDuration() <= timeFilter;
@@ -58,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check if the given {@link Track} pass the difficulty filter
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     private static boolean filterDifficulty(Track t) {
         if(difficultyIsFiltered){
             return t.getProperties().getAvgDifficulty() <= difficultyFilter;
@@ -66,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check if the given {@link Track} pass the type filter
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     private static boolean filterTypes(Track t) {
         if(typesAreFiltered){
             return t.getProperties().getType().containsAll(typesFilter);
@@ -148,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Open a {@link AlertDialog} for the user to set up or remove filters
+     */
     private void filterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         final View mView = getLayoutInflater().inflate(R.layout.dialog_filters, null, false);
