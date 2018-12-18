@@ -326,7 +326,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
     public static void updateFeedBackTracks(User user) {
         DatabaseReference createRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FEEDBACK);
-        createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
+        createRef.setValue(user.getFeedbackTracks()).addOnFailureListener(Throwable::printStackTrace);
     }
 
     public static void writeNotificationKey(String key){
