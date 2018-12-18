@@ -148,4 +148,6 @@
     <string name="get_me_to_my_location">Get me to my location</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="name">Name</string>
+    <string name="comments">Comments</string>
 </resources>

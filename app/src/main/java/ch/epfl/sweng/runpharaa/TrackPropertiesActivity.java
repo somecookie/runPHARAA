@@ -139,7 +139,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
 
     private void setDeleteButton(Track track){
-        ImageButton deleteButton = findViewById(R.id.deleteButton);
+        Button deleteButton = findViewById(R.id.deleteButton);
         if(track.getCreatorUid().equals(User.instance.getUid()))
         {
             deleteButton.setVisibility(Button.VISIBLE);
@@ -150,7 +150,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             });
         }
         else {
-            deleteButton.setVisibility(Button.INVISIBLE);
+            deleteButton.setVisibility(Button.GONE);
             deleteButton.setClickable(false);
         }
     }
