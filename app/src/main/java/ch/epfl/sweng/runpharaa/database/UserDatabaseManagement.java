@@ -170,8 +170,8 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
      *
      * @param user the User we want to update
      */
-    static void updateCreatedTracks(final User user) {
-        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE);
+    public static void updateCreatedTracks(final User user) {
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(user.getUid()).child(CREATE);
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

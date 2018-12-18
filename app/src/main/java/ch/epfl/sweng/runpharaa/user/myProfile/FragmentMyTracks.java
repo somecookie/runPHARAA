@@ -28,6 +28,7 @@ public final class FragmentMyTracks extends UpdatableCardItemFragment {
     @Override
     protected void setEmptyMessage() {
         emptyMessage.setText(R.string.no_created_self);
+        emptyMessage.setTextColor(getResources().getColor(R.color.text_dark));
         emptyMessage.setVisibility(View.VISIBLE);
     }
 

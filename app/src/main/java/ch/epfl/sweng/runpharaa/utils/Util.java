@@ -143,6 +143,7 @@ public interface Util {
         Intent intent = new Intent(activity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.fade_in, R.anim.compress_to_top_left);
     }
 
     static void prepareHomeButton(AppCompatActivity activity) {

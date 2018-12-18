@@ -108,9 +108,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                         CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties,
                         new ArrayList<>());
 
-                TrackDatabaseManagement.writeNewTrack(track);
-
-                finish();
+                new Thread( () -> {
+                    TrackDatabaseManagement.writeNewTrack(track);
+                    finish();
+                }).start();
             }
         });
         //Open Gallery view when we click on the button
@@ -249,7 +250,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
                 boundsBuilder.include(point);
             LatLngBounds bounds = boundsBuilder.build();
             int width = getResources().getDisplayMetrics().widthPixels;
-            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.35);
+            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.3);
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, 0));
             // Add lines
             map.addPolyline(new PolylineOptions().addAll(Arrays.asList(points)));
