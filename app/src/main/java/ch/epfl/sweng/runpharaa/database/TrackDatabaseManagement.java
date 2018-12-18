@@ -137,6 +137,11 @@ public class TrackDatabaseManagement {
         });
     }
 
+    /**
+     * Given a track, update its comments in the Firebase Database
+     *
+     * @param track a track
+     */
     public static void updateComments(Track track) {
         DatabaseReference commentsRef = mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).child(COMMENTS);
         commentsRef.setValue(track.getComments()).addOnFailureListener(Throwable::printStackTrace);
@@ -226,6 +231,8 @@ public class TrackDatabaseManagement {
     }
 
     /**
+     * Given a DataSnapshot from the Firebase Database, return a list containing the ID of the
+     * tracks to delete
      *
      * @param dataSnapshot a dataSnapshot from the database
      * @param list a List<String> containing all the deleted Tracks
