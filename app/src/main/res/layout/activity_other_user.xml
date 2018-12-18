@@ -1,138 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".user.myProfile.UsersProfileActivity">
+    android:background="@drawable/background_gradient"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_corners"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <ch.epfl.sweng.runpharaa.gui.RoundedCornersImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/unknown_person"
+            app:corner_radius="200" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            android:layout_weight="1"
+            android:text="USER"
+            android:textAlignment="center"
+            android:textSize="24sp" />
     </LinearLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_picture"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="230dp"
-        android:src="@drawable/unknown_person"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="0dp" />
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
+    <Button
+        android:textColor="@color/text_dark"
+        android:id="@+id/follow_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="45dp"
-        android:text="USER"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:background="@drawable/rounded_corners"
+        android:text="@string/follow"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="145dp"
-        android:orientation="vertical">
+        android:background="@drawable/rounded_corners"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_graph" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/nbTracks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/nbTracks"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView134"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Number of tracks created" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="53dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/nbFav"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Number of favorite tracks" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/textView134"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="created tracks !"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
-        <Button
-            style="@style/ButtonStyle"
-            android:id="@+id/follow_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="FOLLOW" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nbFav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="favorite(s) !"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_corners"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/emptyMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:gravity="center"
             android:padding="@dimen/classic_margin"
+            android:textAlignment="center"
             android:textSize="@dimen/normal_text"
             android:visibility="gone" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/createdTracksCardListId"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:visibility="visible" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

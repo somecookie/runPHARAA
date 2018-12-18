@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
-        android:textSize="22sp"
+        android:textSize="@dimen/normal_text"
         android:text="@string/explanation_popup"
         android:contentDescription="@string/popup_description"/>
 
