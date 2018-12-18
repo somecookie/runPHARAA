@@ -1,21 +1,30 @@
 package ch.epfl.sweng.runpharaa.utils;
 
-import android.content.Context;
+
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import ch.epfl.sweng.runpharaa.MainActivity;
+import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
 public interface Util {
 
@@ -111,7 +120,6 @@ public interface Util {
     }
 
 
-
     /**
      * Remove the accents of the string and transform it to lower case
      *
@@ -129,5 +137,37 @@ public interface Util {
         s = s.replaceAll("[àâ]", "a");
         s = s.replaceAll("Ô", "o");
         return s;
+    }
+
+    static void goHome(Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+    }
+
+    static void prepareHomeButton(AppCompatActivity activity) {
+        activity.getSupportActionBar().setHomeButtonEnabled(true);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+    }
+
+    static void signOut(Activity activity) {
+        if (Config.isTest) {
+            goToLogin(activity);
+            return;
+        }
+        FirebaseAuth.getInstance().signOut();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(activity.getString(R.string.default_web_client_id)).requestEmail().build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(activity, gso);
+        mGoogleSignInClient.signOut().addOnCompleteListener(activity, task -> goToLogin(activity));
+    }
+
+    static void goToLogin(Activity activity) {
+        Toast.makeText(activity.getBaseContext(), activity.getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
+        Intent login = new Intent(activity.getBaseContext(), LoginActivity.class);
+        login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(login);
+        activity.finish();
     }
 }

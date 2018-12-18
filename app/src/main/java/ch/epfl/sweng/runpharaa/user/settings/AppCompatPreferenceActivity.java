@@ -4,13 +4,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 /**
  * A {@link PreferenceActivity} which implements and proxies the necessary calls
@@ -28,12 +29,26 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        getDelegate().getSupportActionBar().setHomeButtonEnabled(true);
+        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getDelegate().getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
         getDelegate().onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Util.goHome(this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /*public ActionBar getSupportActionBar() {

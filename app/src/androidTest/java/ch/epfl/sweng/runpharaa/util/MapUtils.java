@@ -60,191 +60,191 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import java.util.List;
 
-public interface MapUtils {
+interface MapUtils {
 
-    static final GoogleMap FAKE_MAP =
+    GoogleMap FAKE_MAP =
 
             new GoogleMap(new IGoogleMapDelegate() {
                 @Override
-                public CameraPosition getCameraPosition() throws RemoteException {
+                public CameraPosition getCameraPosition() {
                     return null;
                 }
 
                 @Override
-                public float getMaxZoomLevel() throws RemoteException {
+                public float getMaxZoomLevel() {
                     return 0;
                 }
 
                 @Override
-                public float getMinZoomLevel() throws RemoteException {
+                public float getMinZoomLevel() {
                     return 0;
                 }
 
                 @Override
-                public void moveCamera(IObjectWrapper iObjectWrapper) throws RemoteException {
+                public void moveCamera(IObjectWrapper iObjectWrapper) {
 
                 }
 
                 @Override
-                public void animateCamera(IObjectWrapper iObjectWrapper) throws RemoteException {
+                public void animateCamera(IObjectWrapper iObjectWrapper) {
                     //for overriding
                 }
 
                 @Override
-                public void animateCameraWithCallback(IObjectWrapper iObjectWrapper, zzc zzc) throws RemoteException {
+                public void animateCameraWithCallback(IObjectWrapper iObjectWrapper, zzc zzc) {
                     //for overriding
                 }
 
                 @Override
-                public void animateCameraWithDurationAndCallback(IObjectWrapper iObjectWrapper, int i, zzc zzc) throws RemoteException {
+                public void animateCameraWithDurationAndCallback(IObjectWrapper iObjectWrapper, int i, zzc zzc) {
                     //for overriding
                 }
 
                 @Override
-                public void stopAnimation() throws RemoteException {
+                public void stopAnimation() {
                     //for overriding
                 }
 
                 @Override
-                public zzz addPolyline(PolylineOptions polylineOptions) throws RemoteException {
+                public zzz addPolyline(PolylineOptions polylineOptions) {
                     return new zzz() {
                         @Override
-                        public void remove() throws RemoteException {
+                        public void remove() {
 
                         }
 
                         @Override
-                        public String getId() throws RemoteException {
+                        public String getId() {
                             return null;
                         }
 
                         @Override
-                        public List<LatLng> getPoints() throws RemoteException {
+                        public List<LatLng> getPoints() {
                             return null;
                         }
 
                         @Override
-                        public void setPoints(List<LatLng> list) throws RemoteException {
+                        public void setPoints(List<LatLng> list) {
 
                         }
 
                         @Override
-                        public float getWidth() throws RemoteException {
+                        public float getWidth() {
                             return 0;
                         }
 
                         @Override
-                        public void setWidth(float v) throws RemoteException {
+                        public void setWidth(float v) {
 
                         }
 
                         @Override
-                        public int getColor() throws RemoteException {
+                        public int getColor() {
                             return 0;
                         }
 
                         @Override
-                        public void setColor(int i) throws RemoteException {
+                        public void setColor(int i) {
 
                         }
 
                         @Override
-                        public void setZIndex(float v) throws RemoteException {
+                        public void setZIndex(float v) {
 
                         }
 
                         @Override
-                        public float getZIndex() throws RemoteException {
+                        public float getZIndex() {
                             return 0;
                         }
 
                         @Override
-                        public void setVisible(boolean b) throws RemoteException {
+                        public void setVisible(boolean b) {
 
                         }
 
                         @Override
-                        public boolean isVisible() throws RemoteException {
+                        public boolean isVisible() {
                             return false;
                         }
 
                         @Override
-                        public boolean isGeodesic() throws RemoteException {
+                        public boolean isGeodesic() {
                             return false;
                         }
 
                         @Override
-                        public void setGeodesic(boolean b) throws RemoteException {
+                        public void setGeodesic(boolean b) {
 
                         }
 
                         @Override
-                        public boolean zzb(zzz zzz) throws RemoteException {
+                        public boolean zzb(zzz zzz) {
                             return false;
                         }
 
                         @Override
-                        public int zzi() throws RemoteException {
+                        public int zzi() {
                             return 0;
                         }
 
                         @Override
-                        public void setClickable(boolean b) throws RemoteException {
+                        public void setClickable(boolean b) {
 
                         }
 
                         @Override
-                        public boolean isClickable() throws RemoteException {
+                        public boolean isClickable() {
                             return false;
                         }
 
                         @Override
-                        public Cap getStartCap() throws RemoteException {
+                        public Cap getStartCap() {
                             return null;
                         }
 
                         @Override
-                        public void setStartCap(Cap cap) throws RemoteException {
+                        public void setStartCap(Cap cap) {
 
                         }
 
                         @Override
-                        public Cap getEndCap() throws RemoteException {
+                        public Cap getEndCap() {
                             return null;
                         }
 
                         @Override
-                        public void setEndCap(Cap cap) throws RemoteException {
+                        public void setEndCap(Cap cap) {
 
                         }
 
                         @Override
-                        public int getJointType() throws RemoteException {
+                        public int getJointType() {
                             return 0;
                         }
 
                         @Override
-                        public void setJointType(int i) throws RemoteException {
+                        public void setJointType(int i) {
 
                         }
 
                         @Override
-                        public List<PatternItem> getPattern() throws RemoteException {
+                        public List<PatternItem> getPattern() {
                             return null;
                         }
 
                         @Override
-                        public void setPattern(List<PatternItem> list) throws RemoteException {
+                        public void setPattern(List<PatternItem> list) {
 
                         }
 
                         @Override
-                        public void zze(IObjectWrapper iObjectWrapper) throws RemoteException {
+                        public void zze(IObjectWrapper iObjectWrapper) {
 
                         }
 
                         @Override
-                        public IObjectWrapper zzj() throws RemoteException {
+                        public IObjectWrapper zzj() {
                             return null;
                         }
 
@@ -256,160 +256,160 @@ public interface MapUtils {
                 }
 
                 @Override
-                public zzw addPolygon(PolygonOptions polygonOptions) throws RemoteException {
+                public zzw addPolygon(PolygonOptions polygonOptions) {
                     return null;
                 }
 
                 @Override
-                public zzt addMarker(MarkerOptions markerOptions) throws RemoteException {
+                public zzt addMarker(MarkerOptions markerOptions) {
                     return new zzt() {
                         @Override
-                        public void remove() throws RemoteException {
+                        public void remove() {
 
                         }
 
                         @Override
-                        public String getId() throws RemoteException {
+                        public String getId() {
                             return null;
                         }
 
                         @Override
-                        public LatLng getPosition() throws RemoteException {
+                        public LatLng getPosition() {
                             return null;
                         }
 
                         @Override
-                        public void setPosition(LatLng latLng) throws RemoteException {
+                        public void setPosition(LatLng latLng) {
 
                         }
 
                         @Override
-                        public String getTitle() throws RemoteException {
+                        public String getTitle() {
                             return null;
                         }
 
                         @Override
-                        public void setTitle(String s) throws RemoteException {
+                        public void setTitle(String s) {
 
                         }
 
                         @Override
-                        public String getSnippet() throws RemoteException {
+                        public String getSnippet() {
                             return null;
                         }
 
                         @Override
-                        public void setSnippet(String s) throws RemoteException {
+                        public void setSnippet(String s) {
 
                         }
 
                         @Override
-                        public boolean isDraggable() throws RemoteException {
+                        public boolean isDraggable() {
                             return false;
                         }
 
                         @Override
-                        public void setDraggable(boolean b) throws RemoteException {
+                        public void setDraggable(boolean b) {
 
                         }
 
                         @Override
-                        public void showInfoWindow() throws RemoteException {
+                        public void showInfoWindow() {
 
                         }
 
                         @Override
-                        public void hideInfoWindow() throws RemoteException {
+                        public void hideInfoWindow() {
 
                         }
 
                         @Override
-                        public boolean isInfoWindowShown() throws RemoteException {
+                        public boolean isInfoWindowShown() {
                             return false;
                         }
 
                         @Override
-                        public void setVisible(boolean b) throws RemoteException {
+                        public void setVisible(boolean b) {
 
                         }
 
                         @Override
-                        public boolean isVisible() throws RemoteException {
+                        public boolean isVisible() {
                             return false;
                         }
 
                         @Override
-                        public boolean zzj(zzt zzt) throws RemoteException {
+                        public boolean zzj(zzt zzt) {
                             return false;
                         }
 
                         @Override
-                        public int zzi() throws RemoteException {
+                        public int zzi() {
                             return 0;
                         }
 
                         @Override
-                        public void zzg(IObjectWrapper iObjectWrapper) throws RemoteException {
+                        public void zzg(IObjectWrapper iObjectWrapper) {
 
                         }
 
                         @Override
-                        public void setAnchor(float v, float v1) throws RemoteException {
+                        public void setAnchor(float v, float v1) {
 
                         }
 
                         @Override
-                        public boolean isFlat() throws RemoteException {
+                        public boolean isFlat() {
                             return false;
                         }
 
                         @Override
-                        public void setFlat(boolean b) throws RemoteException {
+                        public void setFlat(boolean b) {
 
                         }
 
                         @Override
-                        public float getRotation() throws RemoteException {
+                        public float getRotation() {
                             return 0;
                         }
 
                         @Override
-                        public void setRotation(float v) throws RemoteException {
+                        public void setRotation(float v) {
 
                         }
 
                         @Override
-                        public void setInfoWindowAnchor(float v, float v1) throws RemoteException {
+                        public void setInfoWindowAnchor(float v, float v1) {
 
                         }
 
                         @Override
-                        public float getAlpha() throws RemoteException {
+                        public float getAlpha() {
                             return 0;
                         }
 
                         @Override
-                        public void setAlpha(float v) throws RemoteException {
+                        public void setAlpha(float v) {
 
                         }
 
                         @Override
-                        public void setZIndex(float v) throws RemoteException {
+                        public void setZIndex(float v) {
 
                         }
 
                         @Override
-                        public float getZIndex() throws RemoteException {
+                        public float getZIndex() {
                             return 0;
                         }
 
                         @Override
-                        public void zze(IObjectWrapper iObjectWrapper) throws RemoteException {
+                        public void zze(IObjectWrapper iObjectWrapper) {
 
                         }
 
                         @Override
-                        public IObjectWrapper zzj() throws RemoteException {
+                        public IObjectWrapper zzj() {
                             return new IObjectWrapper() {
                                 @Override
                                 public IBinder asBinder() {
@@ -426,165 +426,165 @@ public interface MapUtils {
                 }
 
                 @Override
-                public zzk addGroundOverlay(GroundOverlayOptions groundOverlayOptions) throws RemoteException {
+                public zzk addGroundOverlay(GroundOverlayOptions groundOverlayOptions) {
                     return null;
                 }
 
                 @Override
-                public zzac addTileOverlay(TileOverlayOptions tileOverlayOptions) throws RemoteException {
+                public zzac addTileOverlay(TileOverlayOptions tileOverlayOptions) {
                     return null;
                 }
 
                 @Override
-                public void clear() throws RemoteException {
+                public void clear() {
                     //for overriding
                 }
 
                 @Override
-                public int getMapType() throws RemoteException {
+                public int getMapType() {
                     return 0;
                 }
 
                 @Override
-                public void setMapType(int i) throws RemoteException {
+                public void setMapType(int i) {
                     //for overriding
                 }
 
                 @Override
-                public boolean isTrafficEnabled() throws RemoteException {
+                public boolean isTrafficEnabled() {
                     return false;
                 }
 
                 @Override
-                public void setTrafficEnabled(boolean b) throws RemoteException {
+                public void setTrafficEnabled(boolean b) {
                     //for overriding
                 }
 
                 @Override
-                public boolean isIndoorEnabled() throws RemoteException {
+                public boolean isIndoorEnabled() {
                     return false;
                 }
 
                 @Override
-                public boolean setIndoorEnabled(boolean b) throws RemoteException {
+                public boolean setIndoorEnabled(boolean b) {
                     return false;
                 }
 
                 @Override
-                public boolean isMyLocationEnabled() throws RemoteException {
+                public boolean isMyLocationEnabled() {
                     return false;
                 }
 
                 @Override
-                public void setMyLocationEnabled(boolean b) throws RemoteException {
+                public void setMyLocationEnabled(boolean b) {
                     //for overriding
                 }
 
                 @Override
-                public Location getMyLocation() throws RemoteException {
+                public Location getMyLocation() {
                     return null;
                 }
 
                 @Override
-                public void setLocationSource(ILocationSourceDelegate iLocationSourceDelegate) throws RemoteException {
+                public void setLocationSource(ILocationSourceDelegate iLocationSourceDelegate) {
                     //for overriding
                 }
 
                 @Override
-                public IUiSettingsDelegate getUiSettings() throws RemoteException {
+                public IUiSettingsDelegate getUiSettings() {
                     return new IUiSettingsDelegate() {
                         @Override
-                        public void setAllGesturesEnabled(boolean b) throws RemoteException {
+                        public void setAllGesturesEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isZoomControlsEnabled() throws RemoteException {
+                        public boolean isZoomControlsEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setZoomControlsEnabled(boolean b) throws RemoteException {
+                        public void setZoomControlsEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isCompassEnabled() throws RemoteException {
+                        public boolean isCompassEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setCompassEnabled(boolean b) throws RemoteException {
+                        public void setCompassEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isMyLocationButtonEnabled() throws RemoteException {
+                        public boolean isMyLocationButtonEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setMyLocationButtonEnabled(boolean b) throws RemoteException {
+                        public void setMyLocationButtonEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isScrollGesturesEnabled() throws RemoteException {
+                        public boolean isScrollGesturesEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setScrollGesturesEnabled(boolean b) throws RemoteException {
+                        public void setScrollGesturesEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isZoomGesturesEnabled() throws RemoteException {
+                        public boolean isZoomGesturesEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setZoomGesturesEnabled(boolean b) throws RemoteException {
+                        public void setZoomGesturesEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isTiltGesturesEnabled() throws RemoteException {
+                        public boolean isTiltGesturesEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setTiltGesturesEnabled(boolean b) throws RemoteException {
+                        public void setTiltGesturesEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isRotateGesturesEnabled() throws RemoteException {
+                        public boolean isRotateGesturesEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setRotateGesturesEnabled(boolean b) throws RemoteException {
+                        public void setRotateGesturesEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isIndoorLevelPickerEnabled() throws RemoteException {
+                        public boolean isIndoorLevelPickerEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setIndoorLevelPickerEnabled(boolean b) throws RemoteException {
+                        public void setIndoorLevelPickerEnabled(boolean b) {
                             //for overriding
                         }
 
                         @Override
-                        public boolean isMapToolbarEnabled() throws RemoteException {
+                        public boolean isMapToolbarEnabled() {
                             return false;
                         }
 
                         @Override
-                        public void setMapToolbarEnabled(boolean b) throws RemoteException {
+                        public void setMapToolbarEnabled(boolean b) {
                             //for overriding
                         }
 
@@ -596,165 +596,165 @@ public interface MapUtils {
                 }
 
                 @Override
-                public IProjectionDelegate getProjection() throws RemoteException {
+                public IProjectionDelegate getProjection() {
                     return null;
                 }
 
                 @Override
-                public void setOnCameraChangeListener(zzl zzl) throws RemoteException {
+                public void setOnCameraChangeListener(zzl zzl) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMapClickListener(zzaj zzaj) throws RemoteException {
+                public void setOnMapClickListener(zzaj zzaj) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMapLongClickListener(zzan zzan) throws RemoteException {
+                public void setOnMapLongClickListener(zzan zzan) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMarkerClickListener(zzar zzar) throws RemoteException {
+                public void setOnMarkerClickListener(zzar zzar) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMarkerDragListener(zzat zzat) throws RemoteException {
+                public void setOnMarkerDragListener(zzat zzat) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnInfoWindowClickListener(zzab zzab) throws RemoteException {
+                public void setOnInfoWindowClickListener(zzab zzab) {
                     //for overriding
                 }
 
                 @Override
-                public void setInfoWindowAdapter(zzh zzh) throws RemoteException {
+                public void setInfoWindowAdapter(zzh zzh) {
                     //for overriding
                 }
 
                 @Override
-                public com.google.android.gms.internal.maps.zzh addCircle(CircleOptions circleOptions) throws RemoteException {
+                public com.google.android.gms.internal.maps.zzh addCircle(CircleOptions circleOptions) {
                     return new com.google.android.gms.internal.maps.zzh() {
                         @Override
-                        public void remove() throws RemoteException {
+                        public void remove() {
 
                         }
 
                         @Override
-                        public String getId() throws RemoteException {
+                        public String getId() {
                             return null;
                         }
 
                         @Override
-                        public LatLng getCenter() throws RemoteException {
+                        public LatLng getCenter() {
                             return null;
                         }
 
                         @Override
-                        public void setCenter(LatLng latLng) throws RemoteException {
+                        public void setCenter(LatLng latLng) {
 
                         }
 
                         @Override
-                        public double getRadius() throws RemoteException {
+                        public double getRadius() {
                             return 0;
                         }
 
                         @Override
-                        public void setRadius(double v) throws RemoteException {
+                        public void setRadius(double v) {
 
                         }
 
                         @Override
-                        public float getStrokeWidth() throws RemoteException {
+                        public float getStrokeWidth() {
                             return 0;
                         }
 
                         @Override
-                        public void setStrokeWidth(float v) throws RemoteException {
+                        public void setStrokeWidth(float v) {
 
                         }
 
                         @Override
-                        public int getStrokeColor() throws RemoteException {
+                        public int getStrokeColor() {
                             return 0;
                         }
 
                         @Override
-                        public void setStrokeColor(int i) throws RemoteException {
+                        public void setStrokeColor(int i) {
 
                         }
 
                         @Override
-                        public int getFillColor() throws RemoteException {
+                        public int getFillColor() {
                             return 0;
                         }
 
                         @Override
-                        public void setFillColor(int i) throws RemoteException {
+                        public void setFillColor(int i) {
 
                         }
 
                         @Override
-                        public float getZIndex() throws RemoteException {
+                        public float getZIndex() {
                             return 0;
                         }
 
                         @Override
-                        public void setZIndex(float v) throws RemoteException {
+                        public void setZIndex(float v) {
 
                         }
 
                         @Override
-                        public boolean isVisible() throws RemoteException {
+                        public boolean isVisible() {
                             return false;
                         }
 
                         @Override
-                        public void setVisible(boolean b) throws RemoteException {
+                        public void setVisible(boolean b) {
 
                         }
 
                         @Override
-                        public boolean zzb(com.google.android.gms.internal.maps.zzh zzh) throws RemoteException {
+                        public boolean zzb(com.google.android.gms.internal.maps.zzh zzh) {
                             return false;
                         }
 
                         @Override
-                        public int zzi() throws RemoteException {
+                        public int zzi() {
                             return 0;
                         }
 
                         @Override
-                        public boolean isClickable() throws RemoteException {
+                        public boolean isClickable() {
                             return false;
                         }
 
                         @Override
-                        public void setClickable(boolean b) throws RemoteException {
+                        public void setClickable(boolean b) {
 
                         }
 
                         @Override
-                        public List<PatternItem> getStrokePattern() throws RemoteException {
+                        public List<PatternItem> getStrokePattern() {
                             return null;
                         }
 
                         @Override
-                        public void setStrokePattern(List<PatternItem> list) throws RemoteException {
+                        public void setStrokePattern(List<PatternItem> list) {
 
                         }
 
                         @Override
-                        public void zze(IObjectWrapper iObjectWrapper) throws RemoteException {
+                        public void zze(IObjectWrapper iObjectWrapper) {
 
                         }
 
                         @Override
-                        public IObjectWrapper zzj() throws RemoteException {
+                        public IObjectWrapper zzj() {
                             return null;
                         }
 
@@ -766,207 +766,207 @@ public interface MapUtils {
                 }
 
                 @Override
-                public void setOnMyLocationChangeListener(zzax zzax) throws RemoteException {
+                public void setOnMyLocationChangeListener(zzax zzax) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMyLocationButtonClickListener(zzav zzav) throws RemoteException {
+                public void setOnMyLocationButtonClickListener(zzav zzav) {
                     //for overriding
                 }
 
                 @Override
-                public void snapshot(zzbs zzbs, IObjectWrapper iObjectWrapper) throws RemoteException {
+                public void snapshot(zzbs zzbs, IObjectWrapper iObjectWrapper) {
                     //for overriding
                 }
 
                 @Override
-                public void setPadding(int i, int i1, int i2, int i3) throws RemoteException {
+                public void setPadding(int i, int i1, int i2, int i3) {
                     //for overriding
                 }
 
                 @Override
-                public boolean isBuildingsEnabled() throws RemoteException {
+                public boolean isBuildingsEnabled() {
                     return false;
                 }
 
                 @Override
-                public void setBuildingsEnabled(boolean b) throws RemoteException {
+                public void setBuildingsEnabled(boolean b) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMapLoadedCallback(zzal zzal) throws RemoteException {
+                public void setOnMapLoadedCallback(zzal zzal) {
                     //for overriding
                 }
 
                 @Override
-                public zzn getFocusedBuilding() throws RemoteException {
+                public zzn getFocusedBuilding() {
                     return null;
                 }
 
                 @Override
-                public void setOnIndoorStateChangeListener(com.google.android.gms.maps.internal.zzz zzz) throws RemoteException {
+                public void setOnIndoorStateChangeListener(com.google.android.gms.maps.internal.zzz zzz) {
                     //for overriding
                 }
 
                 @Override
-                public void setWatermarkEnabled(boolean b) throws RemoteException {
+                public void setWatermarkEnabled(boolean b) {
                     //for overriding
                 }
 
                 @Override
-                public void getMapAsync(zzap zzap) throws RemoteException {
+                public void getMapAsync(zzap zzap) {
                     //for overriding
                 }
 
                 @Override
-                public void onCreate(Bundle bundle) throws RemoteException {
+                public void onCreate(Bundle bundle) {
                     //for overriding
                 }
 
                 @Override
-                public void onResume() throws RemoteException {
+                public void onResume() {
                     //for overriding
                 }
 
                 @Override
-                public void onPause() throws RemoteException {
+                public void onPause() {
                     //for overriding
                 }
 
                 @Override
-                public void onDestroy() throws RemoteException {
+                public void onDestroy() {
                     //for overriding
                 }
 
                 @Override
-                public void onLowMemory() throws RemoteException {
+                public void onLowMemory() {
                     //for overriding
                 }
 
                 @Override
-                public boolean useViewLifecycleWhenInFragment() throws RemoteException {
+                public boolean useViewLifecycleWhenInFragment() {
                     return false;
                 }
 
                 @Override
-                public void onSaveInstanceState(Bundle bundle) throws RemoteException {
+                public void onSaveInstanceState(Bundle bundle) {
                     //for overriding
                 }
 
                 @Override
-                public void setContentDescription(String s) throws RemoteException {
+                public void setContentDescription(String s) {
                     //for overriding
                 }
 
                 @Override
-                public void snapshotForTest(zzbs zzbs) throws RemoteException {
+                public void snapshotForTest(zzbs zzbs) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnPoiClickListener(zzbb zzbb) throws RemoteException {
+                public void setOnPoiClickListener(zzbb zzbb) {
                     //for overriding
                 }
 
                 @Override
-                public void onEnterAmbient(Bundle bundle) throws RemoteException {
+                public void onEnterAmbient(Bundle bundle) {
                     //for overriding
                 }
 
                 @Override
-                public void onExitAmbient() throws RemoteException {
+                public void onExitAmbient() {
                     //for overriding
                 }
 
                 @Override
-                public void setOnGroundOverlayClickListener(zzx zzx) throws RemoteException {
+                public void setOnGroundOverlayClickListener(zzx zzx) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnInfoWindowLongClickListener(zzaf zzaf) throws RemoteException {
+                public void setOnInfoWindowLongClickListener(zzaf zzaf) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnPolygonClickListener(zzbd zzbd) throws RemoteException {
+                public void setOnPolygonClickListener(zzbd zzbd) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnInfoWindowCloseListener(zzad zzad) throws RemoteException {
+                public void setOnInfoWindowCloseListener(zzad zzad) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnPolylineClickListener(zzbf zzbf) throws RemoteException {
+                public void setOnPolylineClickListener(zzbf zzbf) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnCircleClickListener(zzv zzv) throws RemoteException {
+                public void setOnCircleClickListener(zzv zzv) {
                     //for overriding
                 }
 
                 @Override
-                public void setMinZoomPreference(float v) throws RemoteException {
+                public void setMinZoomPreference(float v) {
                     //for overriding
                 }
 
                 @Override
-                public void setMaxZoomPreference(float v) throws RemoteException {
+                public void setMaxZoomPreference(float v) {
                     //for overriding
                 }
 
                 @Override
-                public void resetMinMaxZoomPreference() throws RemoteException {
+                public void resetMinMaxZoomPreference() {
                     //for overriding
                 }
 
                 @Override
-                public void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds) throws RemoteException {
+                public void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnCameraMoveStartedListener(com.google.android.gms.maps.internal.zzt zzt) throws RemoteException {
+                public void setOnCameraMoveStartedListener(com.google.android.gms.maps.internal.zzt zzt) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnCameraMoveListener(zzr zzr) throws RemoteException {
+                public void setOnCameraMoveListener(zzr zzr) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnCameraMoveCanceledListener(zzp zzp) throws RemoteException {
+                public void setOnCameraMoveCanceledListener(zzp zzp) {
                     //for overriding
                 }
 
                 @Override
-                public void setOnCameraIdleListener(com.google.android.gms.maps.internal.zzn zzn) throws RemoteException {
+                public void setOnCameraIdleListener(com.google.android.gms.maps.internal.zzn zzn) {
                     //for overriding
                 }
 
                 @Override
-                public boolean setMapStyle(MapStyleOptions mapStyleOptions) throws RemoteException {
+                public boolean setMapStyle(MapStyleOptions mapStyleOptions) {
                     return false;
                 }
 
                 @Override
-                public void onStart() throws RemoteException {
+                public void onStart() {
                     //for overriding
                 }
 
                 @Override
-                public void onStop() throws RemoteException {
+                public void onStop() {
                     //for overriding
                 }
 
                 @Override
-                public void setOnMyLocationClickListener(zzaz zzaz) throws RemoteException {
+                public void setOnMyLocationClickListener(zzaz zzaz) {
                     //for overriding
                 }
 
@@ -981,37 +981,37 @@ public interface MapUtils {
      static void initBitmapDescriptorFactory() {
         BitmapDescriptorFactory.zza(new zze() {
             @Override
-            public IObjectWrapper zza(int i) throws RemoteException {
+            public IObjectWrapper zza(int i) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zza(String s) throws RemoteException {
+            public IObjectWrapper zza(String s) {
                 return null;
             }
 
             @Override
-            public IObjectWrapper zzb(String s) throws RemoteException {
+            public IObjectWrapper zzb(String s) {
                 return null;
             }
 
             @Override
-            public IObjectWrapper zzh() throws RemoteException {
+            public IObjectWrapper zzh() {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zza(float v) throws RemoteException {
+            public IObjectWrapper zza(float v) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zza(Bitmap bitmap) throws RemoteException {
+            public IObjectWrapper zza(Bitmap bitmap) {
                 return null;
             }
 
             @Override
-            public IObjectWrapper zzc(String s) throws RemoteException {
+            public IObjectWrapper zzc(String s) {
                 return null;
             }
 
@@ -1025,57 +1025,57 @@ public interface MapUtils {
      static void initCameraUpdateFactory() {
         CameraUpdateFactory.zza(new ICameraUpdateFactoryDelegate() {
             @Override
-            public IObjectWrapper zoomIn() throws RemoteException {
+            public IObjectWrapper zoomIn() {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zoomOut() throws RemoteException {
+            public IObjectWrapper zoomOut() {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper scrollBy(float v, float v1) throws RemoteException {
+            public IObjectWrapper scrollBy(float v, float v1) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zoomTo(float v) throws RemoteException {
+            public IObjectWrapper zoomTo(float v) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zoomBy(float v) throws RemoteException {
+            public IObjectWrapper zoomBy(float v) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper zoomByWithFocus(float v, int i, int i1) throws RemoteException {
+            public IObjectWrapper zoomByWithFocus(float v, int i, int i1) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper newCameraPosition(CameraPosition cameraPosition) throws RemoteException {
+            public IObjectWrapper newCameraPosition(CameraPosition cameraPosition) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper newLatLng(LatLng latLng) throws RemoteException {
+            public IObjectWrapper newLatLng(LatLng latLng) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper newLatLngZoom(LatLng latLng, float v) throws RemoteException {
+            public IObjectWrapper newLatLngZoom(LatLng latLng, float v) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException {
+            public IObjectWrapper newLatLngBounds(LatLngBounds latLngBounds, int i) {
                 return () -> null;
             }
 
             @Override
-            public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i1, int i2) throws RemoteException {
+            public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i1, int i2) {
                 return () -> null;
             }
 

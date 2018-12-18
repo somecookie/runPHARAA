@@ -3,6 +3,7 @@ package ch.epfl.sweng.runpharaa;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -59,23 +61,31 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
+import static java.security.AccessController.getContext;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ShareDialog shareDialog;
-    TweetComposer.Builder tweetBuilder;
+    private ShareDialog shareDialog;
+    private TweetComposer.Builder tweetBuilder;
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
-    private Boolean isMapOpen;
+
+    private Intent startIntent;
 
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isMapOpen = false;
         super.onCreate(savedInstanceState);
+
+        startIntent = getIntent();
+
+        Util.prepareHomeButton(this);
+
         setContentView(R.layout.activity_track_properties);
 
         Twitter.initialize(this);
@@ -94,7 +104,16 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
                 final String trackID = intent.getStringExtra("TrackID");
                 final Track track = TrackDatabaseManagement.initTrack(data, trackID);
+                if(track == null){
+                    Toast t = Toast.makeText(getApplicationContext(), R.string.deleted_track, Toast.LENGTH_SHORT);
+                    t.show();
+                    finish();
+                    return;
+                }
                 points = CustLatLng.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
+
+                setDeleteButton(track);
+
 
                 TrackProperties tp = track.getProperties();
                 ImageView trackBackground = findViewById(R.id.trackBackgroundID);
@@ -106,7 +125,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 // Get fakeMap
                 SupportMapFragment mapFragment = (CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2);
                 mapFragment.getMapAsync(onMapReadyCallback);
-                if(Config.isTest) {
+                if (Config.isTest) {
                     onMapReady(Config.getFakeMap());
                 }
             }
@@ -117,6 +136,57 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
         });
     }
+
+
+    private void setDeleteButton(Track track){
+        ImageButton deleteButton = findViewById(R.id.deleteButton);
+        if(track.getCreatorUid().equals(User.instance.getUid()))
+        {
+            deleteButton.setVisibility(Button.VISIBLE);
+            deleteButton.setClickable(true);
+            deleteButton.setOnClickListener(view -> {
+                AlertDialog diaBox = deleteTrackConfirmation(track);
+                diaBox.show();
+            });
+        }
+        else {
+            deleteButton.setVisibility(Button.INVISIBLE);
+            deleteButton.setClickable(false);
+        }
+    }
+
+    private void deleteTrack(Track track){
+        TrackDatabaseManagement.deleteTrack(track.getTrackUid());
+        Toast t = Toast.makeText(this, R.string.track_deleted, Toast.LENGTH_LONG);
+        t.show();
+        finish();
+    }
+
+    private AlertDialog deleteTrackConfirmation(Track track)
+    {
+        AlertDialog deleteTrackDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle(R.string.delete_track)
+                .setMessage(R.string.want_to_delete_this_track)
+                .setIcon(R.drawable.ic_delete)
+
+                .setPositiveButton(R.string.delete, (dialog, whichButton) -> {
+                    deleteTrack(track);
+                    dialog.dismiss();
+                })
+
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create();
+        return deleteTrackDialogBox;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Util.goHome(this);
+        return true;
+    }
+
 
     private void setButtonsOfProperties(String trackID, Track track) {
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
@@ -146,8 +216,36 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
 
         initSocialMediaButtons(track);
-
         initCommentButton(track);
+        initFeedbackButton(trackID, track);
+
+    }
+
+    private void initFeedbackButton(String trackID, Track track) {
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
+            @Override
+            public void onSuccess(PropertiesOnClickListener value) {
+
+                if (!value.isPropertiesSet()) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.prop_miss), Toast.LENGTH_LONG).show();
+                } else if (User.instance.getFeedbackTracks().contains(trackID)) {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.feedback_exists), Toast.LENGTH_LONG).show();
+                } else {
+                    TrackProperties tp = track.getProperties();
+                    tp.addNewDuration(value.getTime());
+                    tp.addNewDifficulty(value.getDifficulty());
+                    TrackDatabaseManagement.updateTrack(track);
+                    UserDatabaseManagement.updateFeedBackTracks(User.instance);
+                    relaunchActivity();
+                }
+            }
+        }));
+    }
+
+    private void relaunchActivity() {
+        finish();
+        startActivity(startIntent);
     }
 
     private void initCommentButton(Track track) {
@@ -175,6 +273,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     TrackDatabaseManagement.updateComments(track);
                     tv.setText("");
                     hideKeyboardFrom(getBaseContext(), mView);
+                    relaunchActivity();
                 } else {
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.comment_too_long), Toast.LENGTH_LONG).show();
                 }
@@ -282,7 +381,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             sb.append(trackType[TrackType.valueOf(tt.name()).ordinal()]);
             if (i < nbrTypes - 2) sb.append(", ");
             else if (i == nbrTypes - 2)
-                sb.append(" " + getResources().getString(R.string.and) + " ");
+                sb.append(" ").append(getResources().getString(R.string.and)).append(" ");
 
             i++;
         }
@@ -395,7 +494,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
 
-    public void sentToNotification(String key, String title, String message) {
+    private void sentToNotification(String key, String title, String message) {
 
         FireMessage f = null;
         try {
@@ -408,6 +507,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             f.sendToToken(key);
         } catch (Exception e) {
             e.printStackTrace();
-            }
+        }
     }
 }

@@ -94,8 +94,6 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     protected void handleNewLocation() {
         final LatLng position = (userFocused) ? User.instance.getLocation() : longClickLocation;
 
-        Context context = this;
-
         final String trackUidInfoWindow = trackUidMarkerWithInfoWindowOpen();
 
         mMap.clear();
@@ -180,7 +178,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
     /**
      * Private class that applies the customized info window layout
      */
-    public class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
+    class InfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
         private Context context;
 

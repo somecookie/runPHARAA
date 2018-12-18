@@ -33,6 +33,8 @@ public class FirebaseTrackAdapter {
     private int likes;
     private int favorites;
 
+    private Boolean isDeleted;
+
     public FirebaseTrackAdapter(String name, String creatorId, String creatorName, Bitmap image, List<CustLatLng> path, TrackProperties properties, List<Comment> comments){
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
@@ -62,14 +64,13 @@ public class FirebaseTrackAdapter {
         this.avgDurNbr = properties.getAvgDurationNbr();
         this.likes = 0;
         this.favorites = 0;
+
+        this.isDeleted = false;
     }
 
-    public FirebaseTrackAdapter(Track track){
-        Required.nonNull(track.getName(), "Track name send to database must be non null");
-        Required.nonNull(track.getCreatorUid(), "Track creatorId send to database must be non null");
-        Required.nonNull(track.getCreatorName(), "Track creator name send to database must be non null");
-        Required.nonNull(track.getPath(), "Track path sent to database must be non null");
-        Required.nonNull(track.getProperties(), "Track properties sent to database must must be non null");
+    public FirebaseTrackAdapter(Track track, Boolean isDeleted){
+        //Track attributes are assumed non-null
+        Required.nonNull(isDeleted, "Specify if the track is deleted or not");
 
         this.name = track.getName();
         this.creatorId = track.getCreatorUid();
@@ -93,6 +94,7 @@ public class FirebaseTrackAdapter {
         this.favorites = track.getProperties().getFavorites();
         this.imageStorageUri = track.getImageStorageUri();
         this.comments = track.getComments();
+        this.isDeleted = isDeleted;
     }
 
     public FirebaseTrackAdapter(String name, String trackUid, String creatorId, String creatorName, List<CustLatLng> path,
@@ -129,6 +131,7 @@ public class FirebaseTrackAdapter {
         this.likes = likes;
         this.favorites = favorites;
         this.comments = comments;
+        this.isDeleted = false;
     }
 
     //For Firebase
@@ -196,6 +199,8 @@ public class FirebaseTrackAdapter {
     public int getFavorites() {
         return favorites;
     }
+
+    public Boolean getIsDeleted() { return isDeleted;}
 
     public void setTrackUid(String trackUid) {
         this.trackUid = trackUid;

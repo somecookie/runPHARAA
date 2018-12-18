@@ -110,8 +110,7 @@
                         android:textOn=""
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/trackLikesID"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/trackCommentsID"
@@ -173,6 +172,28 @@
                         app:layout_constraintEnd_toStartOf="@+id/buttonFavoriteID"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.538" />
+
+                    <Button
+                        android:id="@+id/feedbackButton"
+                        android:layout_width="@dimen/large_text"
+                        android:layout_height="@dimen/large_text"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/ic_tune_black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/trackCommentsID"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/deleteButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_delete" />
+
+
 
 
                 </android.support.constraint.ConstraintLayout>
