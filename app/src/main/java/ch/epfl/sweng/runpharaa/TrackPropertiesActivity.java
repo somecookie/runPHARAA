@@ -402,7 +402,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
                 @Override
                 public void onSuccess(String value) {
-                    sentToNotification(value, "LIKE ALERT", "The user " + User.instance.getName() + " liked your track " + track.getName());
+                    if(value != null){
+                        sentToNotification(value, "LIKE ALERT", "The user " + User.instance.getName() + " liked your track " + track.getName());
+                    }
                 }
             });
 
@@ -427,7 +429,9 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
                 @Override
                 public void onSuccess(String value) {
-                    sentToNotification(value, "FAV ALERT", "The user " + User.instance.getName() + " added one track ( " + track.getName() + " ) to his favorite");
+                    if(value != null){
+                        sentToNotification(value, "FAV ALERT", "The user " + User.instance.getName() + " added one track ( " + track.getName() + " ) to his favorite");
+                    }
                 }
             });
             track.getProperties().addFavorite();

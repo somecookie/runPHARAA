@@ -194,10 +194,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         DataSnapshot followed = data.child(User.instance.getUid()).child(FOLLOWING);
         for (DataSnapshot f : followed.getChildren()) {
             if (f.getValue() != null) {
-                Log.i("WESHHHHHHHHHHHH", f.toString());
-                Log.i("WESHHHHHHHHHHHH", f.getValue().toString());
                 User user = User.deserialize(f.getValue().toString());
-                Log.i("WESHHHHHHHHHHHH", user.getName());
                 if(!data.child(user.getUid()).exists()){
                     User.instance.removeFromFollowed(user);
                 }
@@ -336,10 +333,12 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists()){
                     String name = dataSnapshot.getValue(String.class);
-                    callback.onSuccess(name);
-                    return;
+                    if(name != User.instance.getNotificationKey()){
+                        callback.onSuccess(name);
+                        return;
+                    }
                 }
 
                 callback.onSuccess(null);

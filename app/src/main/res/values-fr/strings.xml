@@ -109,7 +109,6 @@
     <string name="prop_miss">Recommence il manque une propriété!</string>
     <string name="feedback_exists">Tu as déjà donné ton opinion</string>
     <string name="logout">Log out</string>
-    <string name="delete_track">Supprimer ?</string>
     <string name="explanation_popup">Bienvenue sur RunPharaa!\n\nVoici quelques trucs et astuces:\n\n- Tu peux créer un parcours en appuyant sur le bouton +!\n\n- Tu peux changer ta location sur la carte en appuyant longtemps à un endroit.\n\n- Retourne à ta vraie position en appuyant sur la flèche orange!\n\n- Appuie n'importe où pour fermer cette fenêtre!\n
     </string>
     <string name="help">Aide</string>

@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,6 +20,7 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
@@ -93,6 +95,22 @@ public class FollowingFragmentTest extends TestInitLocation {
         sleep(1000);
 
         intended(hasComponent(OtherUsersProfileActivity.class.getName()), times(2));
+    }
+
+    @Test
+    public void databaseErrorFollowing() throws Throwable {
+
+        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+
+        Database.setIsCancelled(true);
+
+        runOnUiThread(() ->((FragmentFollowing)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(1)).onRefresh());
+
+        onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_follow)));
+
+        //For further tests
+        Database.setIsCancelled(false);
+
     }
 
     @After
