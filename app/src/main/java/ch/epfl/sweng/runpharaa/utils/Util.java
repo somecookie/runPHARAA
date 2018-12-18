@@ -151,6 +151,10 @@ public interface Util {
         activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
     }
 
+    /**
+     * Sign out the current user of the app, finish the current {@link Activity} and launch the {@link LoginActivity}
+     * @param activity the current {@link Activity}
+     */
     static void signOut(Activity activity) {
         if (Config.isTest) {
             goToLogin(activity);
@@ -163,6 +167,10 @@ public interface Util {
         mGoogleSignInClient.signOut().addOnCompleteListener(activity, task -> goToLogin(activity));
     }
 
+    /**
+     * Launch the {@link LoginActivity} and finish the current one
+     * @param activity the current {@link Activity}
+     */
     static void goToLogin(Activity activity) {
         Toast.makeText(activity.getBaseContext(), activity.getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
         Intent login = new Intent(activity.getBaseContext(), LoginActivity.class);

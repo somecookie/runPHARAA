@@ -82,6 +82,10 @@ public class CustLatLng {
         return R*c;
     }
 
+    /**
+     * Convert the current {@link CustLatLng} into a {@link LatLng}
+     * @return
+     */
     public LatLng ToLatLng(){
         return new LatLng(latitude, longitude);
     }
@@ -110,6 +114,11 @@ public class CustLatLng {
         return result;
     }
 
+    /**
+     * Convert a list of {@link CustLatLng} to a list of {@link LatLng}
+     * @param l
+     * @return
+     */
     public static  List<LatLng> CustLatLngToLatLng(List<CustLatLng> l) {
         List<LatLng> result = new ArrayList<>();
         for(CustLatLng p : l){
