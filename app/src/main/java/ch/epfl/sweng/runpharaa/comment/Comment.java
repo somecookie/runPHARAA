@@ -30,18 +30,38 @@ public class Comment implements Comparable<Comment>{
         this.dateStamp = postedDate.getTime();
     }
 
+    /**
+     * Get the comment's creator ID
+     *
+     * @return the creator ID
+     */
     public String getCreatorID() {
         return creatorID;
     }
 
+    /**
+     * Set the creator's ID
+     *
+     * @param creatorID a String
+     */
     public void setCreatorID(String creatorID) {
         this.creatorID = creatorID;
     }
 
+    /**
+     * Get the comment
+     *
+     * @return a String containing the comment
+     */
     public String getComment() {
         return comment;
     }
 
+    /**
+     * Set the comment
+     *
+     * @param comment a String, cannot be null
+     */
     public void setComment(String comment) {
         Required.nonNull(comment, "A comment cannot be null");
         checkSizeComment(comment);
@@ -49,18 +69,39 @@ public class Comment implements Comparable<Comment>{
 
     }
 
+    /**
+     * Get the Comment's data stamp
+     *
+     * @return the data stamp
+     */
     public long getDateStamp() {
         return dateStamp;
     }
 
+    /**
+     * Set the Comment's data stamp
+     *
+     * @param dateStamp a long
+     */
     public void setDateStamp(long dateStamp) {
         this.dateStamp = dateStamp;
     }
 
+    /**
+     * Check that the comment is of size smaller than MAX_LENGTH
+     *
+     * @param comment a String
+     * @return true if the comment is smaller than MAX_LENGTH
+     */
     public static boolean checkSizeComment(String comment) {
         return comment.length() < MAX_LENGTH && comment.length() > 0;
     }
 
+    /**
+     * Get the Comment's date of creation
+     *
+     * @return a String containing the date
+     */
     public String getDate(){
         Date d = new Date(dateStamp);
 
@@ -68,7 +109,6 @@ public class Comment implements Comparable<Comment>{
 
         return mediumDf.format(d);
     }
-
 
     @Override
     public int compareTo(Comment rev) {
