@@ -380,10 +380,10 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void testOpenAndCloseReport() {
         Track t1 = createTrack();
         launchWithExtras(t1);
-        sleep(5_000);
+        sleep(2000);
         // display the popup
         onView(withId(R.id.reportID)).perform(click());
-        sleep(1_000);
+        sleep(2000);
         // dismiss the popup by clicking on it
         onView(withContentDescription(R.string.report_description))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))

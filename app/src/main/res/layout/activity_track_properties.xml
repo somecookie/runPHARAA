@@ -99,20 +99,6 @@
                     android:layout_marginBottom="10dp">
 
                     <Button
-                        android:id="@+id/reportID"
-                        android:layout_width="@dimen/large_text"
-                        android:layout_height="@dimen/large_text"
-                        android:layout_marginEnd="80dp"
-                        android:background="@drawable/ic_button_report"
-                        android:text=""
-                        android:textOff=""
-                        android:textOn=""
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/trackLikesID"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <Button
                         android:id="@+id/commentsID"
                         android:layout_width="@dimen/large_text"
                         android:layout_height="@dimen/large_text"
@@ -196,6 +182,16 @@
                         app:layout_constraintEnd_toStartOf="@+id/trackCommentsID"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <Button
+                        android:id="@+id/reportID"
+                        android:layout_width="@dimen/large_text"
+                        android:layout_height="@dimen/large_text"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/ic_button_report"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/feedbackButton"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <ImageButton
                         android:id="@+id/deleteButton"
                         android:layout_width="wrap_content"
@@ -205,9 +201,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_delete" />
-
-
-
 
                 </android.support.constraint.ConstraintLayout>
 
