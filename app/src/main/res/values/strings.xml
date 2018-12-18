@@ -143,8 +143,10 @@
     <string name="logout">Log out</string>
     <string name="explanation_popup">Welcome to RunPharaa!\nHere are some tips and tricks to use the app:\n\n- You can create a track by pressing the + button!\n\n- On the map, you can change your location by long pressing anywhere in it!\n\n- You can go back to your actual location by clicking on the orange pin and chose "Get me to my location"!\n\n- Press anywhere on this popup window to close it!\n
     </string>
+    <string name="report">To send a report to one of our developers, please write to:\n\nrun.PHARAA.sweng@gmail.com\n\nThank you for making runPHARAA a better app!</string>
     <string name="help">Help</string>
     <string name="popup_description">help_popup</string>
+    <string name="report_description">report_popup</string>
     <string name="get_me_to_my_location">Get me to my location</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>

@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -164,7 +171,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     private AlertDialog deleteTrackConfirmation(Track track)
     {
-        AlertDialog deleteTrackDialogBox =new AlertDialog.Builder(this)
+        AlertDialog deleteTrackDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete_track)
                 .setMessage(R.string.want_to_delete_this_track)
@@ -214,11 +221,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
         });
 
-
         initSocialMediaButtons(track);
         initCommentButton(track);
+        initReportButton();
         initFeedbackButton(trackID, track);
-
     }
 
     private void initFeedbackButton(String trackID, Track track) {
@@ -256,7 +262,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         commentsButton.setOnClickListener(v -> {
 
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(TrackPropertiesActivity.this);
-
 
             final View mView = getLayoutInflater().inflate(R.layout.dialog_comments, null);
             EditText tv = mView.findViewById(R.id.comments_editText);
@@ -444,7 +449,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
-
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -496,7 +500,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-
     private void sentToNotification(String key, String title, String message) {
 
         FireMessage f = null;
@@ -511,5 +514,30 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void initReportButton() {
+        Button reportButton = findViewById(R.id.reportID);
+        reportButton.setOnClickListener(this::showReportPopup);
+    }
+
+    public void showReportPopup(View view) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.report_window, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindowGuide = new PopupWindow(popupView, width, height, true);
+        popupWindowGuide.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        popupWindowGuide.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        // dismiss the popup on click
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindowGuide.dismiss();
+                return true;
+            }
+        });
     }
 }
