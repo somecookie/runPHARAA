@@ -140,7 +140,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     public static void updateCreatedTracks(final User user) {
-        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(CREATE);
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(user.getUid()).child(CREATE);
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -164,7 +164,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     public static void removeFollowedUser(final User user) {
-        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING);
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FOLLOWING);
 
         followedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -318,7 +318,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         mDataBaseRef.child(USERS).child(user.getUid()).removeValue();
     }
     public static void updateFeedBackTracks(User user) {
-        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FEEDBACK);
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FEEDBACK);
         createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
     }
 
