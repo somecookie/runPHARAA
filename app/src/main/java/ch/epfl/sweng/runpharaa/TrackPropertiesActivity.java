@@ -29,6 +29,7 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -74,7 +75,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
-
     private Intent startIntent;
 
     @SuppressLint("MissingPermission")
@@ -139,7 +139,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
 
     private void setDeleteButton(Track track){
-        ImageButton deleteButton = findViewById(R.id.deleteButton);
+        Button deleteButton = findViewById(R.id.deleteButton);
         if(track.getCreatorUid().equals(User.instance.getUid()))
         {
             deleteButton.setVisibility(Button.VISIBLE);
@@ -150,7 +150,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             });
         }
         else {
-            deleteButton.setVisibility(Button.INVISIBLE);
+            deleteButton.setVisibility(Button.GONE);
             deleteButton.setClickable(false);
         }
     }
@@ -461,7 +461,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         testText.setText("ready");
 
-        ScrollView mScrollView = findViewById(R.id.scrollID); //parent scrollview in xml, give your scrollview id value
+        ScrollView mScrollView = findViewById(R.id.scrollID);
         ((CustomMapFragment) getSupportFragmentManager().findFragmentById(R.id.create_map_view2))
                 .setListener(() -> mScrollView.requestDisallowInterceptTouchEvent(true));
 
