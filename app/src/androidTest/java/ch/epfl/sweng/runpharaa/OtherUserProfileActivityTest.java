@@ -62,27 +62,6 @@ public class OtherUserProfileActivityTest extends TestInitLocation {
         intended(hasComponent(MainActivity.class.getName()));
     }
 
-    @Test
-    public void testFollowButtonAppears() throws Throwable {
-        sleep(2000);
-        // refresh
-        runOnUiThread(() ->((FragmentNearMe)mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
-        sleep(1000);
-
-        onView(allOf(withId(R.id.cardListId), isDisplayed())).perform(
-                actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.trackCreatorID)).perform(click());
-
-        Resources r = getTargetContext().getResources();
-
-        onView(withId(R.id.follow_button)).check(matches(withText(r.getString(R.string.follow))));
-        onView(withId(R.id.follow_button)).perform(click());
-        sleep(1000);
-        onView(withId(R.id.follow_button)).check(matches(withText(r.getString(R.string.unfollow))));
-        onView(withId(R.id.follow_button)).perform(click());
-        onView(withId(R.id.follow_button)).check(matches(withText(r.getString(R.string.follow))));
-    }
-
     @After
     public void releaseIntents() {
         Intents.release();
