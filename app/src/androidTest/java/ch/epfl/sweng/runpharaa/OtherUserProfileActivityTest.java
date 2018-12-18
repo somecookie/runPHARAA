@@ -1,6 +1,7 @@
 package ch.epfl.sweng.runpharaa;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
@@ -18,6 +19,7 @@ import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
 import static android.os.SystemClock.sleep;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -71,12 +73,14 @@ public class OtherUserProfileActivityTest extends TestInitLocation {
                 actionOnItemAtPosition(0, click()));
         onView(withId(R.id.trackCreatorID)).perform(click());
 
-        onView(withId(R.id.follow_button)).check(matches(withText("FOLLOW")));
+        Resources r = getTargetContext().getResources();
+
+        onView(withId(R.id.follow_button)).check(matches(withText(r.getString(R.string.follow))));
         onView(withId(R.id.follow_button)).perform(click());
         sleep(1000);
-        onView(withId(R.id.follow_button)).check(matches(withText("UNFOLLOW")));
+        onView(withId(R.id.follow_button)).check(matches(withText(r.getString(R.string.unfollow))));
         onView(withId(R.id.follow_button)).perform(click());
-        onView(withId(R.id.follow_button)).check(matches(withText("FOLLOW")));
+        onView(withId(R.id.follow_button)).check(matches(withText(r.getString(R.string.follow))));
     }
 
     @After

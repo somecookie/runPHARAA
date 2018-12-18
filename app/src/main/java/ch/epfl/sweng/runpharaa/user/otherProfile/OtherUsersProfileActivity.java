@@ -2,6 +2,7 @@ package ch.epfl.sweng.runpharaa.user.otherProfile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -107,9 +108,11 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         User self = User.instance;
         Button followButton = findViewById(R.id.follow_button);
         if (!self.alreadyInFollowed(user)) {
-            followButton.setText("FOLLOW");
+            followButton.setText(getResources().getString(R.string.follow));
+            followButton.setBackgroundResource(R.drawable.rounded_corners_color);
+            followButton.setTextColor(getResources().getColor(R.color.text_light));
         } else {
-            followButton.setText("UNFOLLOW");
+            followButton.setText(getResources().getString(R.string.unfollow));
         }
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,11 +120,15 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
                 if (!self.alreadyInFollowed(user)) {
                     self.addToFollowed(user);
                     UserDatabaseManagement.updateFollowedUsers(self);
-                    followButton.setText("UNFOLLOW");
+                    followButton.setText(getResources().getString(R.string.unfollow));
+                    followButton.setBackgroundResource(R.drawable.rounded_corners);
+                    followButton.setTextColor(getResources().getColor(R.color.text_dark));
                 } else {
                     self.removeFromFollowed(user);
                     UserDatabaseManagement.removeFollowedUser(user);
-                    followButton.setText("FOLLOW");
+                    followButton.setText(getResources().getString(R.string.follow));
+                    followButton.setBackgroundResource(R.drawable.rounded_corners_color);
+                    followButton.setTextColor(getResources().getColor(R.color.text_light));
                 }
             }
         });
