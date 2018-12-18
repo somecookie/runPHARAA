@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     android:orientation="vertical">
 
     <fragment
@@ -11,23 +11,25 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="65"
+        android:layout_weight="7"
         tools:context=".CreateTrackActivity2" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="35"
+        android:layout_weight="3"
+        android:background="@drawable/rounded_corners"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="8dp"
+        android:layout_margin="8dp">
 
         <EditText
             android:id="@+id/create_text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Name"
+            android:hint="@string/name"
             android:inputType="text" />
 
         <TextView
@@ -52,33 +54,32 @@
             android:rowCount="2">
 
             <Button
-                style="@style/ButtonStyleCreateTrack"
                 android:id="@+id/create_track_button"
+                style="@style/ButtonStyleCreateTrack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:text="@string/create_track" />
 
             <Button
-                style="@style/ButtonStyle"
                 android:id="@+id/add_photo_from_gallery"
+                style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:text="@string/add_photo"
-                app:layout_constraintStart_toEndOf="@+id/create_track_button" />
+                android:text="@string/add_photo" />
 
             <Button
-                style="@style/ButtonStyle"
                 android:id="@+id/set_properties"
+                style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:text="@string/set_properties" />
 
             <Button
-                style="@style/ButtonStyle"
                 android:id="@+id/types"
+                style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -91,8 +92,8 @@
             android:id="@+id/track_photo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
             android:layout_marginTop="@dimen/classic_margin"
+            android:scaleType="centerCrop"
             android:visibility="invisible" />
 
     </LinearLayout>

@@ -116,6 +116,10 @@
     <string name="popup_description">help_popup</string>
     <string name="get_me_to_my_location">Me ramener à ma location</string>
     <string name="track_deleted">Supprimé</string>
+    <string name="follow">Abonner</string>
+    <string name="unfollow">Désabonner</string>
+    <string name="name">Nom</string>
+    <string name="comments">Commentaires</string>
     <string name="comment_too_short">Un commentaire ne peut pas être vide</string>
 
 </resources>

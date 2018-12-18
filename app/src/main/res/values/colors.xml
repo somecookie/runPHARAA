@@ -10,4 +10,6 @@
     <color name="refresh_red">#ff0000</color>
     <color name="refresh_green">#0fdc00</color>
     <color name="light_grey">#f8fff8</color>
+    <color name="text_dark">#ff555555</color>
+    <color name="text_light">#ffcccccc</color>
 </resources>

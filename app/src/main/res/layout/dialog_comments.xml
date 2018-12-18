@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:background="@drawable/rounded_corners"
+    android:orientation="vertical"
+    android:padding="@dimen/small_margin">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:text="@string/comments"
+        android:textSize="@dimen/large_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/small_margin"
         android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/comments_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:drawable/editbox_background"
+            android:hint="@string/comment_hint"
+            android:inputType="textAutoCorrect|textMultiLine"
+            android:selectAllOnFocus="false"
+            android:singleLine="false"
+            android:textAlignment="viewStart" />
+
         <Button
             android:id="@+id/post_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="15dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="center"
             android:background="@android:drawable/ic_menu_send" />
-        <EditText
-            android:id="@+id/comments_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@android:drawable/editbox_background"
-            android:hint=""
-            android:inputType="textAutoCorrect|textMultiLine"
-            android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toStartOf="@id/post_button" />
 
 
     </LinearLayout>
@@ -38,11 +44,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/comment_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:visibility="visible">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 

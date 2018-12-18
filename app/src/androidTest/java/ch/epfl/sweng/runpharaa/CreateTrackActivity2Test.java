@@ -55,7 +55,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
 
     @Rule
     public ActivityTestRule<CreateTrackActivity2> mActivityRule =
-            new ActivityTestRule<>(CreateTrackActivity2.class, true, false);
+            new ActivityTestRule<>(CreateTrackActivity2.class, false, false);
 
     // ------------- COORDS --------------
     private LatLng inm = new LatLng(46.518577, 6.563165); //inm
@@ -105,7 +105,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         selectFirstType(true);
         sleep(WAIT_TIME * 2);
         //TODO: MAKE THIS WORK
-        //onView(withId(R.id.create_track_button)).perform(click());
+        onView(withId(R.id.create_track_button)).perform(click());
     }
 
     @Test
