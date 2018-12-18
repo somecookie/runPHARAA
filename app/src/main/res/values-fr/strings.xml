@@ -86,8 +86,6 @@
     <string name="comment_hint">Exprime toi en moins de %d caractères!</string>
     <string name="comment_too_long">Ton commentaire est trop long!</string>
     <string name="no_favorites_and_likes">Aimes quelque tracks et ajoutes les à tes favoris pour un meilleur supposition!</string>
-
-
     <string name="creation_trophies"> Création</string>
     <string name="like_trophies"> J\'aime</string>
     <string name="fav_trophies"> Favoris</string>
@@ -103,7 +101,15 @@
     <string name="two_tracks">Deux courses</string>
     <string name="ten_tracks">Dix courses</string>
     <string name="create_tracks">Créez des courses</string>
+    <string name="delete">Supprimer</string>
+    <string name="want_to_delete_this_track">Voulez-vous supprimer ce parcours ?</string>
+    <string name="cancel">Annuler</string>
+    <string name="deleted_track">Désolé ce parcours a été supprimé</string>
+    <string name="want_to_delete_your_account">Voulez-vous supprimer votre compte ?</string>
+    <string name="prop_miss">Recommence il manque une propriété!</string>
+    <string name="feedback_exists">Tu as déjà donné ton opinion</string>
     <string name="logout">Log out</string>
+    <string name="delete_track">Supprimer ?</string>
     <string name="explanation_popup">Bienvenue sur RunPharaa!\n\nVoici quelques trucs et astuces:\n\n- Tu peux créer un parcours en appuyant sur le bouton +!\n\n- Tu peux changer ta location sur la carte en appuyant longtemps à un endroit.\n\n- Retourne à ta vraie position en appuyant sur la flèche orange!\n\n- Appuie n'importe où pour fermer cette fenêtre!\n
     </string>
     <string name="report">Pour signaler un utilisateur à l\'un de nos developpeurs, veuillez écrire à:\n\nrun.PHARAA.sweng@gmail.com\n\nMerci de faire de runPHARAA une meilleure app!</string>
@@ -111,4 +117,6 @@
     <string name="popup_description">help_popup</string>
     <string name="report_description">report_popup</string>
     <string name="get_me_to_my_location">Me ramener à ma location</string>
+    <string name="track_deleted">Supprimé</string>
+
 </resources>

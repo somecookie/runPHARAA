@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,24 +18,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.AdapterTracksToRecyclerViewItem;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class OtherUsersProfileActivity extends AppCompatActivity {
 
-    TextView emptyMessage;
+    private TextView emptyMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Util.prepareHomeButton(this);
         final String finalProfileUserId = userProfileUid();
 
         setContentView(R.layout.activity_other_user);
@@ -58,6 +60,16 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            Util.goHome(this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private String userProfileUid() {
         Intent i = getIntent();
@@ -70,7 +82,7 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         return profileUserId;
     }
 
-    protected void setEmptyMessage() {
+    private void setEmptyMessage() {
         emptyMessage.setText(R.string.no_created_other);
         emptyMessage.setVisibility(View.VISIBLE);
     }

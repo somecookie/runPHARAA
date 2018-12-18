@@ -110,8 +110,8 @@ public class ImageLoader {
      * Wrapper class representing a photo to be loaded into an image view
      */
     private class PhotoToLoad {
-        public String url;
-        public ImageView imageView;
+        String url;
+        ImageView imageView;
 
         PhotoToLoad(String url, ImageView view) {
             this.url = url;

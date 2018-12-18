@@ -3,7 +3,6 @@ package ch.epfl.sweng.runpharaa;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,29 +17,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
-import ch.epfl.sweng.runpharaa.notification.FirebaseNotification;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    //TODO: remove me
 
     public static boolean difficultyIsFiltered;
     public static int difficultyFilter;
@@ -51,11 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public static boolean typesAreFiltered;
     private static String[] listTypesStr;
     private static boolean[] checkedTypes;
-    private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
-    private FloatingActionButton fab;
-    private FirebaseUser user;
+
 
     public static boolean passFilters(Track t) {
         return filterTime(t) && filterDifficulty(t) && filterTypes(t);
@@ -87,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         difficultyIsFiltered = false;
         timeIsFiltered = false;
         typesAreFiltered = false;
@@ -98,13 +88,12 @@ public class MainActivity extends AppCompatActivity {
         listTypesStr = getResources().getStringArray(R.array.track_types);
         checkedTypes = new boolean[listTypesStr.length];
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tabLayout = findViewById(R.id.tabLayoutId);
+        TabLayout tabLayout = findViewById(R.id.tabLayoutId);
         viewPager = findViewById(R.id.viewPagerId);
-        fab = findViewById(R.id.fab);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        FloatingActionButton fab = findViewById(R.id.fab);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Add fragments
         adapter.addFragment(new FragmentNearMe());
@@ -133,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
             startActivity(createTrack);
         });
-
     }
 
     @Override
@@ -252,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
     }
 
-    public void showPopup(View view) {
+    private void showPopup(View view) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.popup_window, null);
 

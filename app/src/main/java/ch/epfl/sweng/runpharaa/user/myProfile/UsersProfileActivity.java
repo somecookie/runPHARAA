@@ -1,11 +1,12 @@
 package ch.epfl.sweng.runpharaa.user.myProfile;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -24,12 +25,15 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class UsersProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Util.prepareHomeButton(this);
 
         setContentView(R.layout.activity_user);
         loadActivity(User.instance);
@@ -76,7 +80,10 @@ public class UsersProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
             case R.id.signOutIcon:
-                signOut();
+                Util.signOut(this);
+                return true;
+            case android.R.id.home:
+                Util.goHome(this);
                 return true;
         }
 
@@ -100,25 +107,5 @@ public class UsersProfileActivity extends AppCompatActivity {
 
         ImageView picture = findViewById(R.id.profile_picture);
         ImageLoader.getLoader(this).displayImage(User.instance.getPicture(), picture);
-    }
-
-    private void signOut() {
-        if(Config.isTest) {
-            goToLogin();
-            return;
-        }
-        FirebaseAuth.getInstance().signOut();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-        // Build a GoogleSignInClient with the options specified by gso.
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> goToLogin());
-    }
-
-    private void goToLogin() {
-        Toast.makeText(getBaseContext(), getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
-        Intent login = new Intent(getBaseContext(), LoginActivity.class);
-        login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(login);
-        finish();
     }
 }
