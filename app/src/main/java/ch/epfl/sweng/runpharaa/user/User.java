@@ -61,6 +61,14 @@ public final class User implements Serializable {
         this.uid = uid;
     }
 
+    /**
+     * General setter for various field
+     * @param name a String for the User's name
+     * @param preferredRadius a float for the User's preferred radius
+     * @param picture an URI for the User's picture
+     * @param location a LatLng containing the User's location
+     * @param uId a String for the User's unique ID
+     */
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
