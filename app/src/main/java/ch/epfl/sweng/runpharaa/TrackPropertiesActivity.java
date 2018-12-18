@@ -171,7 +171,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     private AlertDialog deleteTrackConfirmation(Track track)
     {
-        AlertDialog deleteTrackDialogBox =new AlertDialog.Builder(this)
+        AlertDialog deleteTrackDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete_track)
                 .setMessage(R.string.want_to_delete_this_track)
@@ -221,12 +221,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             }
         });
 
-
         initSocialMediaButtons(track);
         initCommentButton(track);
         initReportButton();
         initFeedbackButton(trackID, track);
-
     }
 
     private void initFeedbackButton(String trackID, Track track) {
@@ -519,9 +517,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     private void initReportButton() {
         Button reportButton = findViewById(R.id.reportID);
-        reportButton.setOnClickListener(v -> {
-            showReportPopup(v);
-        });
+        reportButton.setOnClickListener(this::showReportPopup);
     }
 
     public void showReportPopup(View view) {
@@ -530,8 +526,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true; // click outside the popup dismiss it
-        final PopupWindow popupWindowGuide = new PopupWindow(popupView, width, height, focusable);
+        final PopupWindow popupWindowGuide = new PopupWindow(popupView, width, height, true);
         popupWindowGuide.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         popupWindowGuide.showAtLocation(view, Gravity.CENTER, 0, 0);
 
