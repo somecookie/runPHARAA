@@ -57,21 +57,21 @@ public class FragmentMyTrophies extends Fragment {
 
         int nbCreated = User.instance.getCreatedTracks().size();
 
-        setImages(nbCreated,R.drawable.create_one_track_reward,create);
+        setImages(nbCreated,R.drawable.create_one_track_reward, R.drawable.lock, create);
 
         UserDatabaseManagement.updateLikedTracks(User.instance);
         int nbLike = User.instance.getLikedTracks().size();
 
-        setImages(nbLike,R.drawable.like_one_track_reward,like);
+        setImages(nbLike,R.drawable.like_one_track_reward, R.drawable.lock, like);
 
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
-        int nbFav = User.instance.getLikedTracks().size();
+        int nbFav = User.instance.getFavoriteTracks().size();
 
-        setImages(nbFav,R.drawable.favorite_one_track_reward,fav);
+        setImages(nbFav,R.drawable.favorite_one_track_reward, R.drawable.lock, fav);
 
     }
 
-    private void setImages(int param, int image, ImageView v){
+    private void setImages(int param, int image, int imageDefault, ImageView v){
         if (param >= 10) {
             v.setImageResource(image);
         } else if (param >= 2) {
@@ -79,7 +79,7 @@ public class FragmentMyTrophies extends Fragment {
         } else if (param >= 1) {
             v.setImageResource(image);
         } else {
-            v.setImageResource(image);
+            v.setImageResource(imageDefault);
         }
     }
 }

@@ -329,7 +329,7 @@ public final class User implements Serializable {
     }
 
     public static String serialize(User user) {
-        String serialized = "truc";
+        String serialized = "";
 
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -340,11 +340,7 @@ public final class User implements Serializable {
         } catch (Exception e) {
             //throw new IllegalStateException();
             Log.d("Serialization Error", e.toString());
-            Log.i("WESHHHHHHHH", "ric michto");
         }
-
-            Log.i("WESHHHHHHH", "VALOU :" + user.getUid());
-
 
         return serialized;
     }

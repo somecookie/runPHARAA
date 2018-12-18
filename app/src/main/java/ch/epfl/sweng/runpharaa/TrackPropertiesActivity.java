@@ -399,14 +399,16 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             User.instance.unlike(trackID);
             UserDatabaseManagement.removeLikedTrack(trackID);
         } else {
-            UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
-                @Override
-                public void onSuccess(String value) {
-                    if(value != null){
-                        sentToNotification(value, "LIKE ALERT", "The user " + User.instance.getName() + " liked your track " + track.getName());
+            if(!track.getCreatorUid().equals(User.instance.getUid())){
+                UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
+                    @Override
+                    public void onSuccess(String value) {
+                        if(value != null){
+                            sentToNotification(value, "LIKE ALERT", "The user " + User.instance.getName() + " liked your track " + track.getName());
+                        }
                     }
-                }
-            });
+                });
+            }
 
             track.getProperties().addLike();
             User.instance.like(trackID);
@@ -426,14 +428,16 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
             User.instance.removeFromFavorites(trackID);
             UserDatabaseManagement.removeFavoriteTrack(trackID);
         } else {
-            UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
-                @Override
-                public void onSuccess(String value) {
-                    if(value != null){
-                        sentToNotification(value, "FAV ALERT", "The user " + User.instance.getName() + " added one track ( " + track.getName() + " ) to his favorite");
+            if(!track.getCreatorUid().equals(User.instance.getUid())) {
+                UserDatabaseManagement.getNotificationKeyFromUID(track.getCreatorUid(), new Callback<String>() {
+                    @Override
+                    public void onSuccess(String value) {
+                        if (value != null) {
+                            sentToNotification(value, "FAV ALERT", "The user " + User.instance.getName() + " added one track ( " + track.getName() + " ) to his favorite");
+                        }
                     }
-                }
-            });
+                });
+            }
             track.getProperties().addFavorite();
             User.instance.addToFavorites(trackID);
         }

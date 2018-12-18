@@ -334,11 +334,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    String name = dataSnapshot.getValue(String.class);
-                    if(name != User.instance.getNotificationKey()){
-                        callback.onSuccess(name);
-                        return;
-                    }
+                    String key = dataSnapshot.getValue(String.class);
+                    callback.onSuccess(key);
+                    return;
                 }
 
                 callback.onSuccess(null);
