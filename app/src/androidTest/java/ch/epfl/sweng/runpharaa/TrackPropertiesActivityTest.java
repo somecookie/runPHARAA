@@ -113,6 +113,9 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void giveFeedBack() {
         Track t1 = createTrack();
         launchWithExtras(t1);
+
+        User.instance = new User("Alice", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "2");
+
         sleep(2000);
         onView(withId(R.id.feedbackButton)).perform(click());
 
