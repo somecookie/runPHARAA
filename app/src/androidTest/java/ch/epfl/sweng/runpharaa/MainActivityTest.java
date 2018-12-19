@@ -206,7 +206,6 @@ public class MainActivityTest extends TestInitLocation {
         sleep(1000);
 
         onView(withId(R.id.luckyIcon)).perform(click());
-        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.no_tracks));
     }
 
     @Test
@@ -218,7 +217,6 @@ public class MainActivityTest extends TestInitLocation {
         //User near track
         User.instance.setLocation(new LatLng(37.422, -122.084));
         onView(withId(R.id.luckyIcon)).perform(click());
-        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.no_favorites_and_likes));
         intended(hasComponent(TrackPropertiesActivity.class.getName()));
     }
 
