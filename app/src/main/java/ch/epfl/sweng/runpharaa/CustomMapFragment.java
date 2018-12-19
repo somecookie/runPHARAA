@@ -27,6 +27,11 @@ public class CustomMapFragment extends SupportMapFragment {
         return layout;
     }
 
+    /**
+     * Set the listener for the map fragment
+     *
+     * @param listener the listener
+     */
     public void setListener(OnTouchListener listener) {
         mListener = listener;
     }

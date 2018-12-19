@@ -140,7 +140,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     /**
      * Set the delete button to visible/invisible depending if the {@link Track} can be deleted
-     * @param track
+     * @param track a Track
      */
     private void setDeleteButton(Track track){
         Button deleteButton = findViewById(R.id.deleteButton);
@@ -161,7 +161,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     /**
      * Delete the track and finish the activity
-     * @param track
+     * @param track the Track to delete
      */
     private void deleteTrack(Track track){
         TrackDatabaseManagement.deleteTrack(track.getTrackUid());
@@ -172,8 +172,8 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     /**
      * Open an {@link AlertDialog} to confirm if the user really want to delete the track
-     * @param track
-     * @return
+     * @param track a Track
+     * @return an AlertDialog
      */
     private AlertDialog deleteTrackConfirmation(Track track)
     {
@@ -200,7 +200,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         return true;
     }
 
-
+    /**
+     * Initialize and set the properties buttons
+     *
+     * @param trackID the Track's unique ID
+     * @param track the Track
+     */
     private void setButtonsOfProperties(String trackID, Track track) {
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
@@ -234,6 +239,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
+    /**
+     * Initialize the feedback button
+     *
+     * @param trackID a track unique ID
+     * @param track a Track
+     */
     private void initFeedbackButton(String trackID, Track track) {
         Button feedbackButton = findViewById(R.id.feedbackButton);
         feedbackButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
@@ -256,11 +267,19 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }));
     }
 
+    /**
+     * Relaunch the activity
+     */
     private void relaunchActivity() {
         finish();
         startActivity(startIntent);
     }
 
+    /**
+     * Initialize the comment button
+     *
+     * @param track a Track
+     */
     private void initCommentButton(Track track) {
         Button commentsButton = findViewById(R.id.commentsID);
         TextView nbrComments = findViewById(R.id.trackCommentsID);
@@ -311,6 +330,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
     }
 
+    /**
+     * Initialize the social media buttons
+     *
+     * @param track a Track
+     */
     private void initSocialMediaButtons(Track track) {
         // Share on Facebook
         ImageButton fb = findViewById(R.id.fb_share_button);
@@ -324,7 +348,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 shareDialog.show(content);
             }
         });
-
 
         // Share on Twitter
         ImageButton twitter = findViewById(R.id.twitter_share_button);
@@ -341,6 +364,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
     }
 
+    /**
+     * Set the different texts for properties of the given track
+     *
+     * @param track a Track
+     * @param tp a TrackProperties
+     */
     private void setTextOfProperties(Track track, TrackProperties tp) {
         TextView trackTitle = findViewById(R.id.trackTitleID);
         trackTitle.setText(track.getName());
@@ -379,6 +408,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
+    /**
+     * Create a tag for the given Track
+     *
+     * @param track a Track
+     * @return the created tag
+     */
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -403,9 +438,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         return sb.toString();
     }
 
+    /**
+     * Update the number of likes for a given track
+     *
+     * @param track1 a Track
+     * @param trackID a Track's unique ID
+     */
     private void updateLikes(Track track1, String trackID) {
-
-
         final Track track = track1;
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
@@ -430,6 +469,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
     }
 
+    /**
+     * Update the number of favorites for a given track
+     *
+     * @param track1 a Track
+     * @param trackID a Track's unique ID
+     */
     private void updateNbFavorites(Track track1, String trackID) {
         final Track track = track1;
         if (User.instance.alreadyInFavorites(trackID)) {
@@ -503,14 +548,26 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }
     }
 
+    /**
+     * Hide the keyboard from a given View in a given Context
+     *
+     * @param context a Context
+     * @param view a View
+     */
     private void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 
+    /**
+     * Send a notification to the given key with the given title and message
+     *
+     * @param key the key
+     * @param title the message's title
+     * @param message the message
+     */
     private void sentToNotification(String key, String title, String message) {
-
         FireMessage f = null;
         try {
             f = new FireMessage(title, message);
