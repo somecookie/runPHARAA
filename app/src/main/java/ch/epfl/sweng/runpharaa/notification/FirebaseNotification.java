@@ -19,6 +19,7 @@ import java.util.Date;
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.user.User;
 
 
 /**
@@ -79,7 +80,9 @@ public class FirebaseNotification extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(String token){
+        if(User.instance != null){
         UserDatabaseManagement.writeNotificationKey(token);
+        }
     }
 }
 
