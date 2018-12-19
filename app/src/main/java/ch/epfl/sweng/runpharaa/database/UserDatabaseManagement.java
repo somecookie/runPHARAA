@@ -340,9 +340,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String name = dataSnapshot.getValue(String.class);
-                    callback.onSuccess(name);
+                if (dataSnapshot.exists()){
+                    String key = dataSnapshot.getValue(String.class);
+                    callback.onSuccess(key);
                     return;
                 }
 

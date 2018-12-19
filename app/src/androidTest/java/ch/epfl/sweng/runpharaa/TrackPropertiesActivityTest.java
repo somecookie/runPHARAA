@@ -203,7 +203,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void deletedTrackTest(){
         Track t1 = createTrack();
         String s = User.instance.getUid();
-        User.instance.setUid("BobUID");
         launchWithExtras(t1);
         onView(withId(R.id.deleteButton))
                 .perform(click());
@@ -243,24 +242,30 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void pressingLikeUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);
+        String s = User.instance.getUid();
+        User.instance.setUid("23");
         int likesBefore = createTrack().getProperties().getLikes();
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore));
+        User.instance.setUid(s);
     }
 
     @Test
     public void addingToFavoritesUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);
+        String s = User.instance.getUid();
+        User.instance.setUid("23");
         int favsBefore = createTrack().getProperties().getLikes();
         onView(withId(R.id.buttonFavoriteID)).perform(click());
-        withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore + 1));
+        withId(R.id.trackFavouritesID).matches(withText("Fav: " + favsBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
-        withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore));
+        withId(R.id.trackFavouritesID).matches(withText("Fav: " + favsBefore));
+        User.instance.setUid(s);
     }
 
     @Test
