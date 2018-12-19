@@ -104,7 +104,6 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         sleep(WAIT_TIME);
         selectFirstType(true);
         sleep(WAIT_TIME * 2);
-        //TODO: MAKE THIS WORK
         onView(withId(R.id.create_track_button)).perform(click());
     }
 
