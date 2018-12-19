@@ -99,10 +99,10 @@ public class LoginActivityTest extends TestInitLocation {
     }
 
     @Test
-    public void testWriteUser(){
+    public void testWriteUserShouldNotCreateError(){
         Database.setShouldFail(false);
 
-        User u = new User("Bob", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "1");
+        User u = new User("USER_WRITTEN", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "42");
         Callback<User> callback = new Callback<User>() {
             @Override
             public void onSuccess(User value) {

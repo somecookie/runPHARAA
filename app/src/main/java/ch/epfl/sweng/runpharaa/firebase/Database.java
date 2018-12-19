@@ -355,8 +355,10 @@ public class Database {
         when(snapOnDataChangeReadChildPath0.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
         when(snapOnDataChangeReadChildIsDeleted.getValue(Boolean.class)).thenReturn(false);
 
+        when(snapOnDataChangeUser.exists()).thenReturn(true);
         when(snapOnDataChangeUser.child(any(String.class))).thenReturn(snapOnDataChangeUserChild);
-        when(snapOnDataChangeUserChild.exists()).thenReturn(userExists);
+        when(snapOnDataChangeUserChild.exists()).thenReturn(false);
+        when(snapOnDataChangeUser.getValue(User.class)).thenReturn(new User("USER_WRITTEN", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "42"));
 
         when(snapOnDataUserName.exists()).thenReturn(true);
         when(snapOnDataUserName.getValue((String.class))).thenReturn("Bob");

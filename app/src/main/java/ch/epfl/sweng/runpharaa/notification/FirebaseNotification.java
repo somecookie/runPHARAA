@@ -42,35 +42,37 @@ public class FirebaseNotification extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, idRequest,
                 intent, PendingIntent.FLAG_ONE_SHOT);
 
-        System.out.print(remoteMessage.getData());
+        if(remoteMessage != null) {
 
-        NotificationCompat.Builder notificationBuilder = new
-                NotificationCompat.Builder(this, "notification")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(remoteMessage.getData().get("title"))
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")))
-                .setContentText(remoteMessage.getData().get("message"))
-                .setAutoCancel(true)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setContentIntent(pendingIntent);
+            NotificationCompat.Builder notificationBuilder = new
+                    NotificationCompat.Builder(this, "notification")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle(remoteMessage.getData().get("title"))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")))
+                    .setContentText(remoteMessage.getData().get("message"))
+                    .setAutoCancel(true)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setDefaults(Notification.DEFAULT_VIBRATE)
+                    .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager)
-                        getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager =
+                    (NotificationManager)
+                            getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = "1";
-            @SuppressLint("WrongConstant") NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_MAX);
-            notificationManager.createNotificationChannel(channel);
-            notificationBuilder.setChannelId(channelId);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                String channelId = "1";
+                @SuppressLint("WrongConstant") NotificationChannel channel = new NotificationChannel(channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_MAX);
+                notificationManager.createNotificationChannel(channel);
+                notificationBuilder.setChannelId(channelId);
+
+            }
+
+            //The first parameter is a random number to allow to have multiple different notification
+            //Put a fixed number to allow only one notification
+            notificationManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), notificationBuilder.build());
         }
-
-        //The first parameter is a random number to allow to have multiple different notification
-        //Put a fixed number to allow only one notification
-        notificationManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), notificationBuilder.build());
     }
 
 
