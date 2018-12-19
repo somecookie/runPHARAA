@@ -242,26 +242,30 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void pressingLikeUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);
-        User.instance.setNotificationKey("OtherNotificationKey");
+        String s = User.instance.getUid();
+        User.instance.setUid("23");
         int likesBefore = createTrack().getProperties().getLikes();
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore));
+        User.instance.setUid(s);
     }
 
     @Test
     public void addingToFavoritesUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);
-        User.instance.setNotificationKey("OtherNotificationKey");
+        String s = User.instance.getUid();
+        User.instance.setUid("23");
         int favsBefore = createTrack().getProperties().getLikes();
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("Fav: " + favsBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
         withId(R.id.trackFavouritesID).matches(withText("Fav: " + favsBefore));
+        User.instance.setUid(s);
     }
 
     @Test
