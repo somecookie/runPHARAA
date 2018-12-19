@@ -94,6 +94,8 @@ public class FollowingFragmentTest extends TestInitLocation {
                 actionOnItemAtPosition(0, click()));
         sleep(1000);
 
+        onView(withId(R.id.follow_button)).perform(click());
+
         intended(hasComponent(OtherUsersProfileActivity.class.getName()), times(2));
     }
 
