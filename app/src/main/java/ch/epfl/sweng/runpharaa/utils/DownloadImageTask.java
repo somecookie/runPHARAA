@@ -20,6 +20,12 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         this.res = res;
     }
 
+    /**
+     * Download and create Bitmap from urls.
+     *
+     * @param urls
+     * @return
+     */
     protected Bitmap doInBackground(String... urls) {
         String urlDisplay = urls[0];
         Bitmap mIcon11 = BitmapFactory.decodeResource(res, R.drawable.default_photo);

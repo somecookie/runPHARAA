@@ -34,6 +34,11 @@ public class DialogCreation extends DialogFragment {
         super.onResume();
     }
 
+    /**
+     * Update images in view.
+     *
+     * @param v
+     */
     private void updateImages(View v) {
 
         ImageView one = v.findViewById(R.id.trophy_one_track);

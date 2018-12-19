@@ -90,6 +90,11 @@ public class UsersProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Load activity for UsersProfile.
+     *
+     * @param user
+     */
     private void loadActivity(User user) {
         TextView streakCount = findViewById(R.id.current_streak);
         streakCount.setText(Integer.toString(User.getStreakManager().getCurrentStreak()));

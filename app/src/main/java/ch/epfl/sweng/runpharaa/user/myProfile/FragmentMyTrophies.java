@@ -49,6 +49,11 @@ public class FragmentMyTrophies extends Fragment {
         super.onResume();
     }
 
+    /**
+     * Update images in view.
+     *
+     * @param v
+     */
     private void updateImages(View v) {
 
         ImageView create = v.findViewById(R.id.trophies_create);
@@ -71,6 +76,13 @@ public class FragmentMyTrophies extends Fragment {
 
     }
 
+    /**
+     * Set image in view.
+     *
+     * @param param
+     * @param image
+     * @param v
+     */
     private void setImages(int param, int image, ImageView v){
         if (param >= 10) {
             v.setImageResource(image);
