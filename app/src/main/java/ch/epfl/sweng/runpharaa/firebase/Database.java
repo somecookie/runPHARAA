@@ -493,7 +493,7 @@ public class Database {
         });
 
 
-        when(setValueFavoriteTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+        /*when(setValueFavoriteTask.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
             if (shouldFail) {
                 l.onFailure(new IllegalStateException("Cant set value"));
@@ -507,11 +507,11 @@ public class Database {
                 l.onFailure(new IllegalStateException("Cant set value"));
             }
             return setValueLikeTask;
-        });
+        });*/
     }
 
     private void instantiateListenersForSingleValueEvent() {
-        instantiateUserOperationsOnSingleTrack();
+        //instantiateUserOperationsOnSingleTrack();
 
         doAnswer((Answer<ValueEventListener>) invocation -> {
             ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
@@ -544,6 +544,7 @@ public class Database {
         }).when(drUserAnyChildKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
+    /*
     private void instantiateUserOperationsOnSingleTrack() {
         doAnswer((Answer<ValueEventListener>) invocation -> {
             ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
@@ -574,7 +575,7 @@ public class Database {
             }
             return l;
         }).when(drUserAnyChildLikesChild).addListenerForSingleValueEvent(any(ValueEventListener.class));
-    }
+    }*/
 
     private void instantiateSetTrackListToUser() {
         when(drUserAnyChildFavorites.setValue(userFavoritesList)).thenAnswer((Answer<Task<Void>>) invocation -> {
@@ -651,13 +652,13 @@ public class Database {
 
     private void instanciateDrKeys() {
         when(drKey.setValue(track)).thenReturn(setValueTrack);
-        when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
+       /* when(setValueTrack.addOnFailureListener(any(OnFailureListener.class))).thenAnswer((Answer<Task<Void>>) invocation -> {
             OnFailureListener l = (OnFailureListener) invocation.getArguments()[0];
             if (shouldFail) {
                 l.onFailure(new IllegalStateException("Could not add track to DB"));
             }
             return setValueTrack;
-        });
+        });*/
     }
 
     private void instantiateRead() {
@@ -672,7 +673,7 @@ public class Database {
             return l;
         }).when(drTracks).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
-        doAnswer((Answer<ValueEventListener>) invocation -> {
+        /*doAnswer((Answer<ValueEventListener>) invocation -> {
             ValueEventListener l = (ValueEventListener) invocation.getArguments()[0];
             if (isCancelled) {
                 l.onCancelled(snapOnDataErrorRead);
@@ -691,7 +692,7 @@ public class Database {
                 l.onDataChange(snapOnDataChangeRead);
             }
             return l;
-        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        }).when(drKey).addListenerForSingleValueEvent(any(ValueEventListener.class));*/
 
 
         doAnswer(snapOnDataChangedAnswer).when(drUser).addListenerForSingleValueEvent(any(ValueEventListener.class));

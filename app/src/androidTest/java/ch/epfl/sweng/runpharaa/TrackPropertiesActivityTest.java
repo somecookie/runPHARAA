@@ -203,7 +203,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void deletedTrackTest(){
         Track t1 = createTrack();
         String s = User.instance.getUid();
-        User.instance.setUid("BobUID");
         launchWithExtras(t1);
         onView(withId(R.id.deleteButton))
                 .perform(click());
