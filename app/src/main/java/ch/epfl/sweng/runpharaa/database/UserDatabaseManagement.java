@@ -66,9 +66,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //TODO:Don't forget to change back -> try for Travis
-                //Log.e("DatabaseError", databaseError.getDetails());
-                Log.e("DatabaseError", "error");
+                Log.e("DatabaseError", databaseError.getDetails());
             }
         });
     }

@@ -6,7 +6,6 @@ public class Required {
      * Test is a given object is null
      * @param o object to test
      * @param messageError the message to given to the error
-     * @throw NullPointerException if the object is null
      */
     public static void nonNull(Object o, String messageError){
         if(o == null) throw new NullPointerException(messageError);
@@ -16,7 +15,6 @@ public class Required {
      * Test if the given int is greater or equal than zero
      * @param i the int to test
      * @param messageError the message to given to the error
-     * @throw IllegalArgumentException if the int is not greater or equal than zero
      */
     public static void greaterOrEqualZero(int i, String messageError) {
         if(i < 0) throw new IllegalArgumentException(messageError);
@@ -26,7 +24,6 @@ public class Required {
      * Test if the given double is greater or equal than zero
      * @param i the double to test
      * @param messageError the message to given to the error
-     * @throw IllegalArgumentException if the double is not greater or equal than zero
      */
     public static void greaterOrEqualZero(double i, String messageError) {
         if(i < 0) throw new IllegalArgumentException(messageError);
