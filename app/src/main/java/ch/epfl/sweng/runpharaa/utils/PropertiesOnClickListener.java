@@ -91,7 +91,7 @@ public class PropertiesOnClickListener implements View.OnClickListener {
     /**
      * Return boolean value of propertiesSet.
      *
-     * @return
+     * @return a boolean
      */
     public boolean isPropertiesSet() {
         return propertiesSet;
@@ -100,7 +100,7 @@ public class PropertiesOnClickListener implements View.OnClickListener {
     /**
      * Get attribute time.
      *
-     * @return
+     * @return the time
      */
     public double getTime() {
         return time;
@@ -109,7 +109,7 @@ public class PropertiesOnClickListener implements View.OnClickListener {
     /**
      * Get attribute difficulty.
      *
-     * @return
+     * @return the difficulty
      */
     public int getDifficulty() {
         return difficulty;
@@ -118,7 +118,7 @@ public class PropertiesOnClickListener implements View.OnClickListener {
     /**
      * Get attribute totalDistance.
      *
-     * @return
+     * @return the total distance
      */
     public double getTotalDistance() {
         return totalDistance;
@@ -127,7 +127,7 @@ public class PropertiesOnClickListener implements View.OnClickListener {
     /**
      * Set attribute totalDistance.
      *
-     * @param totalDistance
+     * @param totalDistance the new total distance
      */
     public void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;

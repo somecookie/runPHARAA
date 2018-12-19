@@ -23,8 +23,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     /**
      * Download and create Bitmap from urls.
      *
-     * @param urls
-     * @return
+     * @param urls the urls
+     * @return a Bitmap
      */
     protected Bitmap doInBackground(String... urls) {
         String urlDisplay = urls[0];
@@ -42,7 +42,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     /**
      * Set the ImageView to the bitmap result
      *
-     * @param result
+     * @param result a Bitmap
      */
     protected void onPostExecute(Bitmap result) {
         bmImage.setImageBitmap(result);

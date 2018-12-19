@@ -19,7 +19,7 @@ public abstract class Config {
     /**
      * Get fakeMap.
      *
-     * @return
+     * @return the fake map
      */
     public static GoogleMap getFakeMap() {
         return fakeMap;
