@@ -49,6 +49,11 @@ public class FragmentMyTrophies extends Fragment {
         super.onResume();
     }
 
+    /**
+     * Update images in view.
+     *
+     * @param v
+     */
     private void updateImages(View v) {
 
         ImageView create = v.findViewById(R.id.trophies_create);
@@ -71,6 +76,14 @@ public class FragmentMyTrophies extends Fragment {
 
     }
 
+    /**
+     * Set the images depending on the trophies the User gets
+     *
+     * @param param the number tested to see if the User has the trophy or not
+     * @param image the trophy image
+     * @param imageDefault the default lock image
+     * @param v an ImageView
+     */
     private void setImages(int param, int image, int imageDefault, ImageView v){
         if (param >= 10) {
             v.setImageResource(image);

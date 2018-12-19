@@ -20,8 +20,8 @@ public class CustLatLng {
 
     /**
      * Basic constructor that takes a latitude and a longitude
-     * @param latitude
-     * @param longitude
+     * @param latitude a double
+     * @param longitude a double
      */
     public CustLatLng(Double latitude, Double longitude) {
         //The bound used are from the LatLng google class
@@ -36,17 +36,17 @@ public class CustLatLng {
 
     /**
      * Return the latitude as a {@link Double}
-     * @return
+     * @return the latitude
      */
-    public Double getLatitude() {
+    Double getLatitude() {
         return latitude;
     }
 
     /**
      * Return the longitude as a {@link Double}
-     * @return
+     * @return the longitude
      */
-    public Double getLongitude() {
+    Double getLongitude() {
         return longitude;
     }
 
@@ -55,7 +55,7 @@ public class CustLatLng {
      * See formula at: http://www.movable-type.co.uk/scripts/latlong.html
      * Set p1 as this and p2 as other
      *
-     * @param otherLocation
+     * @param otherLocation another location
      * @return the distance between a point and the track (this)
      */
     public double distance(CustLatLng otherLocation){
@@ -82,6 +82,10 @@ public class CustLatLng {
         return R*c;
     }
 
+    /**
+     * Convert the current {@link CustLatLng} into a {@link LatLng}
+     * @return
+     */
     public LatLng ToLatLng(){
         return new LatLng(latitude, longitude);
     }
@@ -89,8 +93,8 @@ public class CustLatLng {
     /**
      * Convert given LatLng to CustLatLng.
      *
-     * @param p
-     * @return
+     * @param p the LatLng to convert
+     * @return the converted LatLng
      */
     public static CustLatLng LatLngToCustLatLng(LatLng p){
         return new CustLatLng(p.latitude, p.longitude);
@@ -99,8 +103,8 @@ public class CustLatLng {
     /**
      * Convert List<LatLng> to List<CustLatLng>.
      *
-     * @param l
-     * @return
+     * @param l the list to convert
+     * @return the converted list
      */
     public static List<CustLatLng> LatLngToCustLatLng(List<LatLng> l){
         List<CustLatLng> result = new ArrayList<>();
@@ -110,6 +114,11 @@ public class CustLatLng {
         return result;
     }
 
+    /**
+     * Convert a list of {@link CustLatLng} to a list of {@link LatLng}
+     * @param l the list to convert
+     * @return the converted list
+     */
     public static  List<LatLng> CustLatLngToLatLng(List<CustLatLng> l) {
         List<LatLng> result = new ArrayList<>();
         for(CustLatLng p : l){

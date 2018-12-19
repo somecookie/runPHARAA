@@ -33,8 +33,6 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO: remove me
-
     public static boolean difficultyIsFiltered;
     public static int difficultyFilter;
     public static boolean timeIsFiltered;
@@ -46,10 +44,20 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
 
+    /**
+     * Check if the given {@link Track} pass the filters
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     public static boolean passFilters(Track t) {
         return filterTime(t) && filterDifficulty(t) && filterTypes(t);
     }
 
+    /**
+     * Check if the given {@link Track} pass the time filter
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     private static boolean filterTime(Track t) {
         if(timeIsFiltered){
             return t.getProperties().getAvgDuration() <= timeFilter;
@@ -58,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check if the given {@link Track} pass the difficulty filter
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     private static boolean filterDifficulty(Track t) {
         if(difficultyIsFiltered){
             return t.getProperties().getAvgDifficulty() <= difficultyFilter;
@@ -66,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check if the given {@link Track} pass the type filter
+     * @param t the given {@link Track}
+     * @return true or false
+     */
     private static boolean filterTypes(Track t) {
         if(typesAreFiltered){
             return t.getProperties().getType().containsAll(typesFilter);
@@ -148,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Open a {@link AlertDialog} for the user to set up or remove filters
+     */
     private void filterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         final View mView = getLayoutInflater().inflate(R.layout.dialog_filters, null, false);
@@ -240,6 +261,11 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
     }
 
+    /**
+     * Show the help popup
+     *
+     * @param view a View
+     */
     private void showPopup(View view) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.popup_window, null);

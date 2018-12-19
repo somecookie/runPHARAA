@@ -33,6 +33,11 @@ public class DialogFavorite extends DialogFragment {
         super.onResume();
     }
 
+    /**
+     * Update images in view.
+     *
+     * @param v
+     */
     private void updateImages(View v) {
 
         ImageView one = v.findViewById(R.id.trophy_one_fav);

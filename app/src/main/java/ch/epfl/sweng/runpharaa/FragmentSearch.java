@@ -52,6 +52,9 @@ public class FragmentSearch extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * Initialize the lucky button
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.luckyIcon){
@@ -86,12 +89,22 @@ public class FragmentSearch extends Fragment {
         return true;
     }
 
+    /**
+     * Start the TrackPropertiesActivity for the given Track (represented by its unique ID)
+     *
+     * @param trackUID the Track's unique ID
+     */
     private void startTrackPropertiesWith(String trackUID){
         Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
         intent.putExtra("TrackID", trackUID);
         startActivity(intent);
     }
 
+    /**
+     * Initialize the fragment with the given Menu
+     *
+     * @param menu a Menu
+     */
     private void initSearch(Menu menu) {
         MenuItem item = menu.findItem(R.id.searchIcon);
         SearchView sv = (SearchView) item.getActionView();
@@ -143,6 +156,11 @@ public class FragmentSearch extends Fragment {
         sv.requestFocusFromTouch();
     }
 
+    /**
+     * Get the search fragment Menu
+     *
+     * @return the fragment Menu
+     */
     public Menu getMenu() {
         return menu;
     }

@@ -16,8 +16,6 @@ public final class FakeGpsService extends GpsService {
     public static FakeGpsService GOOGLE = new FakeGpsService(new LatLng(37.422, -122.084));
     public static FakeGpsService SAT = new FakeGpsService(Util.locationFromLatLng(new LatLng(46.520566, 6.567820)));
 
-    public FakeGpsService() {}
-
     public FakeGpsService(Location initialLocation) {
         currentLocation = initialLocation;
     }

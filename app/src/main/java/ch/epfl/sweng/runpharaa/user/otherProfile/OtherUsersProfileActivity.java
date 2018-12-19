@@ -72,6 +72,11 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Get user profile id.
+     *
+     * @return
+     */
     private String userProfileUid() {
         Intent i = getIntent();
         String profileUserId = null;
@@ -88,6 +93,11 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         emptyMessage.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Load activity for OtherUsersProfile.
+     *
+     * @param user
+     */
     private void loadActivity(User user) {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);

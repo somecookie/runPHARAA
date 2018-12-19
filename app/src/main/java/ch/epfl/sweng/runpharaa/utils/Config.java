@@ -7,10 +7,20 @@ public abstract class Config {
 
     private static GoogleMap fakeMap;
 
+    /**
+     * Set fakeMap.
+     *
+     * @param map
+     */
     public static void setFakeMap(GoogleMap map) {
         Config.fakeMap = map;
     }
 
+    /**
+     * Get fakeMap.
+     *
+     * @return the fake map
+     */
     public static GoogleMap getFakeMap() {
         return fakeMap;
     }

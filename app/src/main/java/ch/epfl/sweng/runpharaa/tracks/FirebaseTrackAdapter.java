@@ -11,6 +11,9 @@ import ch.epfl.sweng.runpharaa.CustLatLng;
 import ch.epfl.sweng.runpharaa.comment.Comment;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
+/**
+ * Adapter for database track to local {@link Track}
+ */
 public class FirebaseTrackAdapter {
 
     private String name;
@@ -137,14 +140,29 @@ public class FirebaseTrackAdapter {
     //For Firebase
     public FirebaseTrackAdapter(){}
 
+    /**
+     * Get name.
+     *
+     * @return String
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get creatorID.
+     *
+     * @return String
+     */
     public String getCreatorId() {
         return creatorId;
     }
 
+    /**
+     * Get creatorName.
+     *
+     * @return String
+     */
     public String getCreatorName() { return creatorName;}
 
     @Exclude
@@ -152,68 +170,153 @@ public class FirebaseTrackAdapter {
         return image;
     }
 
+    /**
+     * Get path.
+     *
+     * @return List<CustLatLng>
+     */
     public List<CustLatLng> getPath() {
         return path;
     }
 
+    /**
+     * Get imageStorageUri.
+     *
+     * @return String
+     */
     public String getImageStorageUri() {
         return imageStorageUri;
     }
 
+    /**
+     * Get track id.
+     *
+     * @return String
+     */
     public String getTrackUid() {
         return trackUid;
     }
 
+    /**
+     * Get track types.
+     *
+     * @return List<String>
+     */
     public List<String> getTrackTypes() {
         return trackTypes;
     }
 
+    /**
+     * Get length.
+     *
+     * @return double
+     */
     public double getLength() {
         return length;
     }
 
+    /**
+     * Get height difference.
+     *
+     * @return double
+     */
     public double getHeightDifference() {
         return heightDifference;
     }
 
+    /**
+     * Get average total difference.
+     *
+     * @return int
+     */
     public int getAvgDiffTotal() {
         return avgDiffTotal;
     }
 
+    /**
+     * Get average difference number.
+     *
+     * @return int
+     */
     public int getAvgDiffNbr() {
         return avgDiffNbr;
     }
 
+    /**
+     * Get average total duration.
+     *
+     * @return double
+     */
     public double getAvgDurTotal() {
         return avgDurTotal;
     }
 
+    /**
+     * Get average duration number.
+     *
+     * @return int
+     */
     public int getAvgDurNbr() {
         return avgDurNbr;
     }
 
+    /**
+     * Get number of likes.
+     *
+     * @return int
+     */
     public int getLikes() {
         return likes;
     }
 
+    /**
+     * Get number of favourites.
+     *
+     * @return
+     */
     public int getFavorites() {
         return favorites;
     }
 
+    /**
+     * Return true if track is deleted.
+     *
+     * @return Boolean
+     */
     public Boolean getIsDeleted() { return isDeleted;}
 
+    /**
+     * Set track id.
+     *
+     * @param trackUid
+     */
     public void setTrackUid(String trackUid) {
         this.trackUid = trackUid;
     }
 
+    /**
+     * Set image storage uri.
+     *
+     * @param imageStorageUri
+     */
     public void setImageStorageUri(String imageStorageUri) {
         this.imageStorageUri = imageStorageUri;
     }
 
+    /**
+     * Get comments.
+     *
+     * @return List<Comment>
+     */
     public List<Comment> getComments() {
         return comments;
     }
 
+    /**
+     * Set comments.
+     *
+     * @param comments
+     */
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }

@@ -27,6 +27,7 @@ public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCal
     private LatLng[] points;
     private TextView testText;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_map);
@@ -58,6 +59,9 @@ public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCal
         testText.setText("ready");
     }
 
+    /**
+     * Draw the Track on the map by following the locations and drawing line between them
+     */
     private void drawTrackOnMap() {
         if (map != null && points != null) {
             Log.i("Create Map : ", "Drawing on fakeMap in FullMapActivity.");

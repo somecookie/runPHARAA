@@ -20,15 +20,14 @@ import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentNearMe extends UpdatableCardItemFragment {
 
-
     public FragmentNearMe() {
     }
 
+    @Override
     protected void setEmptyMessage() {
         emptyMessage.setText(R.string.no_tracks);
         emptyMessage.setVisibility(View.VISIBLE);
     }
-
 
     /**
      * Create the recyclerView and the list of cardItem used to draw the list of tracks "near me".

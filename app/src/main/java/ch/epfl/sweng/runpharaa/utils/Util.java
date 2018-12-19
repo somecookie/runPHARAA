@@ -28,6 +28,12 @@ import ch.epfl.sweng.runpharaa.login.LoginActivity;
 
 public interface Util {
 
+    /**
+     * Create and return a Location from given LatLng.
+     *
+     * @param p
+     * @return
+     */
     static Location locationFromLatLng(LatLng p) {
         Location l = new Location(LocationManager.GPS_PROVIDER);
         l.setLatitude(p.latitude);
@@ -38,6 +44,12 @@ public interface Util {
         return l;
     }
 
+    /**
+     * Copy input stream to output stream.
+     *
+     * @param is
+     * @param os
+     */
     static void copyStream(InputStream is, OutputStream os) {
         final int bufferSize = 1024;
         try {
@@ -70,6 +82,12 @@ public interface Util {
         return bitmap;
     }
 
+    /**
+     * Compute distance and elevation change (as an array) from an array of locations.
+     *
+     * @param locations
+     * @return
+     */
     static double[] computeDistanceAndElevationChange(Location[] locations) {
 
         double maxAltitude = Double.NEGATIVE_INFINITY;
@@ -89,6 +107,14 @@ public interface Util {
         return res;
     }
 
+    /**
+     * Decode Bitmap from given data, using required width and height.
+     *
+     * @param data
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
     static Bitmap decodeSampledBitmap(byte[] data, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -98,6 +124,14 @@ public interface Util {
         return BitmapFactory.decodeStream(new ByteArrayInputStream(data), null, options);
     }
 
+    /**
+     * Calculate largest sample size value, that is a power of 2, and keeps both height and width larger than the requested height and width.
+     *
+     * @param options
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
     static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -139,6 +173,11 @@ public interface Util {
         return s;
     }
 
+    /**
+     * Method that goes to the MainActivity ("Home") from given activity.
+     *
+     * @param activity
+     */
     static void goHome(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -146,12 +185,21 @@ public interface Util {
         activity.overridePendingTransition(R.anim.fade_in, R.anim.compress_to_top_left);
     }
 
+    /**
+     * Prepares the home button (to go back to the MainActivity) from given activity.
+     *
+     * @param activity
+     */
     static void prepareHomeButton(AppCompatActivity activity) {
         activity.getSupportActionBar().setHomeButtonEnabled(true);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
     }
 
+    /**
+     * Sign out the current user of the app, finish the current {@link Activity} and launch the {@link LoginActivity}
+     * @param activity the current {@link Activity}
+     */
     static void signOut(Activity activity) {
         if (Config.isTest) {
             goToLogin(activity);
@@ -164,6 +212,10 @@ public interface Util {
         mGoogleSignInClient.signOut().addOnCompleteListener(activity, task -> goToLogin(activity));
     }
 
+    /**
+     * Launch the {@link LoginActivity} and finish the current one
+     * @param activity the current {@link Activity}
+     */
     static void goToLogin(Activity activity) {
         Toast.makeText(activity.getBaseContext(), activity.getResources().getString(R.string.loggedOut), Toast.LENGTH_SHORT).show();
         Intent login = new Intent(activity.getBaseContext(), LoginActivity.class);
