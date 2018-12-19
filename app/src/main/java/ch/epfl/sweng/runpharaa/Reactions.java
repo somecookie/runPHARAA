@@ -1,28 +1,25 @@
 package ch.epfl.sweng.runpharaa;
 
-public class Reactions {
+class Reactions {
 
     private final int likes;
     private final int dislikes;
 
-    public Reactions()
-    {
+    Reactions() {
         this.likes = 0;
         this.dislikes = 0;
     }
 
     /**
      * Basic constructor with all arguments known
-     * @param likes
-     * @param dislikes
+     * @param likes an int
+     * @param dislikes an int
      */
-    public Reactions(int likes, int dislikes) {
-        if(likes < 0)
-        {
+    Reactions(int likes, int dislikes) {
+        if (likes < 0) {
             throw new IllegalArgumentException("likes argument strictly smaller than zero");
         }
-        if(dislikes < 0)
-        {
+        if (dislikes < 0) {
             throw new IllegalArgumentException("dislikes argument strictly smaller than zero");
         }
         this.likes = likes;
@@ -31,17 +28,17 @@ public class Reactions {
 
     /**
      * likes getter
-     * @return
+     * @return the likes
      */
-    public int getLikes() {
+    int getLikes() {
         return likes;
     }
 
     /**
      * dislikes getter
-     * @return
+     * @return the dislikes
      */
-    public int getDislikes() {
+    int getDislikes() {
         return dislikes;
     }
 
@@ -49,7 +46,7 @@ public class Reactions {
      * Create a new {@link Reactions} with the same attributes as the current one but with one more like
      * @return the new {@link Reactions}
      */
-    public Reactions withNewLike()
+    Reactions withNewLike()
     {
         return new Reactions(likes + 1, dislikes);
     }
@@ -58,16 +55,16 @@ public class Reactions {
      * Create a new {@link Reactions} with the same attributes as the current one but with one more dislike
      * @return the new {@link Reactions}
      */
-    public Reactions withNewDislike()
+    Reactions withNewDislike()
     {
         return new Reactions(likes, dislikes + 1);
     }
 
     /**
      * Return the number of likes minus the number of dislikes
-     * @return
+     * @return difference of likes minus the dislikes
      */
-    public int getLikesCount()
+    int getLikesCount()
     {
         return likes - dislikes;
     }
@@ -77,14 +74,10 @@ public class Reactions {
      * It return 1, if there is no likes or dislikes
      * @return the ratio as a double
      */
-    public double getLikesRatio()
-    {
-        if(getTotalReactions() > 0)
-        {
+    double getLikesRatio() {
+        if (getTotalReactions() > 0) {
             return likes / (likes + dislikes);
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }

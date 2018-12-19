@@ -33,8 +33,6 @@ import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO: remove me
-
     public static boolean difficultyIsFiltered;
     public static int difficultyFilter;
     public static boolean timeIsFiltered;
@@ -263,6 +261,11 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
     }
 
+    /**
+     * Show the help popup
+     *
+     * @param view a View
+     */
     private void showPopup(View view) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.popup_window, null);
