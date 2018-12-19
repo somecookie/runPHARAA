@@ -131,11 +131,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 UserDatabaseManagement.writeNewUser(User.instance, new Callback<User>() {
                     @Override
                     public void onSuccess(User value) {
-                      FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(t -> {
-                        String key = t.getToken();
-                        User.instance.setNotificationKey(key);
-                        UserDatabaseManagement.writeNotificationKey(key);
-                         });
                         User.setLoadedData(value);
                         launchApp();
                     }
@@ -211,6 +206,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         }.start();
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(t -> {
+            String key = t.getToken();
+            User.instance.setNotificationKey(key);
+            UserDatabaseManagement.writeNotificationKey(key);
+        });
     }
 
     /**

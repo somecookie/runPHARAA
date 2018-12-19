@@ -43,6 +43,7 @@ import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressKey;
@@ -112,6 +113,9 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void giveFeedBack() {
         Track t1 = createTrack();
         launchWithExtras(t1);
+
+        User.instance = new User("Alice", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "2");
+
         sleep(2000);
         onView(withId(R.id.feedbackButton)).perform(click());
 
@@ -119,19 +123,14 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
                 .perform(pressKey(KeyEvent.KEYCODE_ENTER))
                 .perform(closeSoftKeyboard());
 
+        t1.getProperties().addNewDuration(10.00);
+
         onView(withText(mActivityRule.getActivity().getResources().getString(R.string.OK)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
 
         sleep(2000);
-
-        String difficulty = mActivityRule.getActivity().getResources().getString(R.string.difficulty);
-        String time = mActivityRule.getActivity().getResources().getString(R.string.duration);
-
-        withId(R.id.trackDurationID).matches(withText(String.format(time, 5.50)));
-        withId(R.id.track_difficulty).matches(withText(String.format(difficulty, 2.00)));
-
     }
 
     @Test
@@ -204,7 +203,6 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void deletedTrackTest(){
         Track t1 = createTrack();
         String s = User.instance.getUid();
-        User.instance.setUid("BobUID");
         launchWithExtras(t1);
         onView(withId(R.id.deleteButton))
                 .perform(click());
@@ -244,24 +242,30 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     public void pressingLikeUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);
+        String s = User.instance.getUid();
+        User.instance.setUid("23");
         int likesBefore = createTrack().getProperties().getLikes();
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonLikeID)).perform(click());
         withId(R.id.trackLikesID).matches(withText("Likes: " + likesBefore));
+        User.instance.setUid(s);
     }
 
     @Test
     public void addingToFavoritesUpdatesValue() {
         Track t1 = createTrack();
         launchWithExtras(t1);
+        String s = User.instance.getUid();
+        User.instance.setUid("23");
         int favsBefore = createTrack().getProperties().getLikes();
         onView(withId(R.id.buttonFavoriteID)).perform(click());
-        withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore + 1));
+        withId(R.id.trackFavouritesID).matches(withText("Fav: " + favsBefore + 1));
         sleep(500);
         onView(withId(R.id.buttonFavoriteID)).perform(click());
-        withId(R.id.trackFavouritesID).matches(withText("Likes: " + favsBefore));
+        withId(R.id.trackFavouritesID).matches(withText("Fav: " + favsBefore));
+        User.instance.setUid(s);
     }
 
     @Test

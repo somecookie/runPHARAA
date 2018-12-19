@@ -39,7 +39,7 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
         // Create a fresh recyclerView and listCardItem
         String s = TrackDatabaseManagement.TRACKS_PATH;
 
-        TrackDatabaseManagement.mReadDataOnce(s, new Callback<DataSnapshot>() {
+        Callback c = new Callback<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot value) {
                 RecyclerView recyclerView = v.findViewById(R.id.cardListId);
@@ -79,6 +79,8 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
                 swipeLayout.setRefreshing(false);
             }
 
-        });
+        };
+
+        TrackDatabaseManagement.mReadDataOnce(s, c);
     }
 }
