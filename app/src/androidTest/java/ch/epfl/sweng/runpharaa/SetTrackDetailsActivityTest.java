@@ -21,7 +21,8 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.creation.SetTrackDetailsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -35,7 +36,6 @@ import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -49,13 +49,13 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateTrackActivity2Test extends TestInitLocation {
+public class SetTrackDetailsActivityTest extends TestInitLocation {
 
     private static final int WAIT_TIME = 1000;
 
     @Rule
-    public ActivityTestRule<CreateTrackActivity2> mActivityRule =
-            new ActivityTestRule<>(CreateTrackActivity2.class, false, false);
+    public ActivityTestRule<SetTrackDetailsActivity> mActivityRule =
+            new ActivityTestRule<>(SetTrackDetailsActivity.class, false, false);
 
     // ------------- COORDS --------------
     private LatLng inm = new LatLng(46.518577, 6.563165); //inm
@@ -224,7 +224,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     private void launchWithExtras(Location[] locations, LatLng[] points) {
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
-        Intent intent = new Intent(targetContext, CreateTrackActivity2.class);
+        Intent intent = new Intent(targetContext, SetTrackDetailsActivity.class);
         intent.putExtra("locations", locations);
         intent.putExtra("points", points);
         mActivityRule.launchActivity(intent);

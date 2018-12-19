@@ -12,10 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.tracks.FilterProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.FilterProperties;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -50,7 +51,7 @@ public class FilterPropertiesTest {
         Set<TrackType> tt2 = new HashSet<>();
         tt2.add(TrackType.SEASIDE);
         TrackProperties tp2 = new TrackProperties(5000, 0, 30, 2, tt2);
-        List<CustLatLng> path = Arrays.asList(new CustLatLng(0.,0.), new CustLatLng(0.,0.));
+        List<LatLngAdapter> path = Arrays.asList(new LatLngAdapter(0.,0.), new LatLngAdapter(0.,0.));
         Track t1 = new Track("t1", "t1UDI", "t1Creator", path, new ArrayList<>(), tp1);
         Track t2 = new Track("t2", "t2UDI", "t2Creator", path, new ArrayList<>(), tp2);
         List<Track> favs = Arrays.asList(t1, t2);

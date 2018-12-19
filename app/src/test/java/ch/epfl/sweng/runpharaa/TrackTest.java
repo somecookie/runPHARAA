@@ -13,8 +13,9 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -31,8 +32,8 @@ public class TrackTest {
 
     @Test
     public void testExceptionOnFireBaseConstructor(){
-        List<CustLatLng> path = new ArrayList<>();
-        path.add(new CustLatLng(1.0, 1.0));
+        List<LatLngAdapter> path = new ArrayList<>();
+        path.add(new LatLngAdapter(1.0, 1.0));
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.BEACH);
         TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
@@ -42,8 +43,8 @@ public class TrackTest {
 
     @Test
     public void testExceptionOnTrackAdapterConstructor(){
-        List<CustLatLng> path = new ArrayList<>();
-        path.add(new CustLatLng(1.0, 1.0));
+        List<LatLngAdapter> path = new ArrayList<>();
+        path.add(new LatLngAdapter(1.0, 1.0));
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.BEACH);
         TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);

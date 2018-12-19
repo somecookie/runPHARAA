@@ -1,9 +1,8 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +35,6 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,25 +53,26 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.comment.Comment;
-import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.Comment;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.CommentAdapter;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.map.CustomMapFragment;
+import ch.epfl.sweng.runpharaa.map.FullMapActivity;
 import ch.epfl.sweng.runpharaa.notification.FireMessage;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
-import static java.security.AccessController.getContext;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -117,7 +116,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     finish();
                     return;
                 }
-                points = CustLatLng.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
+                points = LatLngAdapter.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
 
                 setDeleteButton(track);
 

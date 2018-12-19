@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.tracks.creation;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,10 +19,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.location.GpsService;
+import ch.epfl.sweng.runpharaa.location.LocationUpdateReceiverActivity;
 import ch.epfl.sweng.runpharaa.utils.Config;
 
-public final class CreateTrackActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
+public final class CreateTrackOnMapActivity extends LocationUpdateReceiverActivity implements OnMapReadyCallback {
 
     private PolylineOptions lines;
     private ArrayList<LatLng> points = new ArrayList<>();
@@ -59,12 +61,12 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
         createButton.setOnClickListener(buttonOnClickListener);
         createButton.setText("START");
         // Obtain the SupportMapFragment and get notified when the fakeMap is ready to be used.
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-            if(Config.isTest) {
-                onMapReady(Config.getFakeMap());
-            }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        if (Config.isTest) {
+            onMapReady(Config.getFakeMap());
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -109,7 +111,7 @@ public final class CreateTrackActivity extends LocationUpdateReceiverActivity im
      * Starts the second part of creating a track
      */
     private void launchSecondPart() {
-        Intent i = new Intent(getApplicationContext(), CreateTrackActivity2.class);
+        Intent i = new Intent(getApplicationContext(), SetTrackDetailsActivity.class);
         // Add the extras
         i.putExtra("points", points.toArray(new LatLng[points.size()]));
         i.putExtra("locations", locations.toArray(new Location[locations.size()]));

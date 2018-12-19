@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.tracks;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
 public class FilterProperties {

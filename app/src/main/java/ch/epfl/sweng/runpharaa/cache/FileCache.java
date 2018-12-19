@@ -9,12 +9,12 @@ class FileCache {
     private File cacheDir;
 
     FileCache(Context context) {
-        if(Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED)) {
+        if (Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED)) {
             cacheDir = new File(Environment.getExternalStorageDirectory(), "runpharaaImages");
         } else {
             cacheDir = context.getCacheDir();
         }
-        if(!cacheDir.mkdirs())
+        if (!cacheDir.mkdirs())
             cacheDir.mkdirs();
     }
 
@@ -34,8 +34,8 @@ class FileCache {
      */
     public void clear() {
         File[] files = cacheDir.listFiles();
-        if(files == null) return;
-        for(File f : files)
+        if (files == null) return;
+        for (File f : files)
             f.delete();
     }
 }

@@ -3,7 +3,6 @@ package ch.epfl.sweng.runpharaa;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
@@ -18,25 +17,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
+import ch.epfl.sweng.runpharaa.map.MapsActivity;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.user.StreakManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -54,7 +52,6 @@ import static android.support.test.internal.runner.junit4.statement.UiThreadStat
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setGone;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.swipeToFragmentSearch;
-import static ch.epfl.sweng.runpharaa.util.ViewUtils.testToastDisplay;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
@@ -73,7 +70,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = Database.getUser();
+        User.instance = DatabaseMock.getUser();
         Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
         StreakManager.setFakeCalendar(fakeCalendar);
         User.setStreakManager(new StreakManager());
@@ -251,8 +248,8 @@ public class MainActivityTest extends TestInitLocation {
         MainActivity.typesFilter.add(TrackType.FOREST);
         List<String> types = new ArrayList<>();
         types.add(TrackType.FOREST.toString());
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084);
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082);
+        LatLngAdapter coord0 = new LatLngAdapter(37.422, -122.084);
+        LatLngAdapter coord1 = new LatLngAdapter(37.425, -122.082);
         int length = 100;
         int heightDiff = 10;
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "0", "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
@@ -290,14 +287,14 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void databaseErrorNearMe() throws Throwable {
-        Database.setIsCancelled(true);
+        DatabaseMock.setIsCancelled(true);
 
         runOnUiThread(() ->((FragmentNearMe)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
 
         //Tried to get the string but it did not work, put a hardcoded string for now
         onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_tracks)));
 
-        Database.setIsCancelled(false);
+        DatabaseMock.setIsCancelled(false);
     }
 
     private void selectAllTypes(boolean pressOk) {

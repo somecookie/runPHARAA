@@ -17,22 +17,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.creation.SetTrackDetailsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitNoLocation;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static org.junit.Assert.assertEquals;
 
-public class TrackDatabaseManagementTest extends TestInitNoLocation {
+public class TrackDatabaseMockManagementTest extends TestInitNoLocation {
 
     @Rule
-    public ActivityTestRule<CreateTrackActivity2> mActivityRule =
-            new ActivityTestRule<>(CreateTrackActivity2.class, true, false);
+    public ActivityTestRule<SetTrackDetailsActivity> mActivityRule =
+            new ActivityTestRule<>(SetTrackDetailsActivity.class, true, false);
 
     @Before
     public void initUser() {
@@ -45,7 +47,7 @@ public class TrackDatabaseManagementTest extends TestInitNoLocation {
 
     @Test
     public void pushTrackToDatabaseWithoutError(){
-        List<CustLatLng> path = new ArrayList<>(Arrays.asList(new CustLatLng(1.0,1.0), new CustLatLng(1.0, 0.0)));
+        List<LatLngAdapter> path = new ArrayList<>(Arrays.asList(new LatLngAdapter(1.0,1.0), new LatLngAdapter(1.0, 0.0)));
         Set<TrackType> types = new HashSet<>(Collections.singleton(TrackType.BEACH));
         TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
 

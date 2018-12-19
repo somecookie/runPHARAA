@@ -11,17 +11,19 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.gui.CardItem;
-import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.gui.UpdatableUserCardItemFragment;
 import ch.epfl.sweng.runpharaa.gui.UserCardItem;
+import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentFollowing extends UpdatableUserCardItemFragment {
 
-    public FragmentFollowing() {}
+    public FragmentFollowing() {
+    }
 
     @Override
     protected void setEmptyMessage() {
@@ -47,19 +49,20 @@ public class FragmentFollowing extends UpdatableUserCardItemFragment {
                     @Override
                     public void onItemClick(CardItem item) {
                         Intent intent;
-                        if (!((UserCardItem)item).getParentUserID().equals(User.instance.getUid())) {
+                        if (!((UserCardItem) item).getParentUserID().equals(User.instance.getUid())) {
                             intent = new Intent(getContext(), OtherUsersProfileActivity.class);
                         } else {
                             intent = new Intent(getContext(), UsersProfileActivity.class);
                         }
-                        intent.putExtra("userId", ((UserCardItem)item).getParentUserID());
+                        intent.putExtra("userId", ((UserCardItem) item).getParentUserID());
                         startActivity(intent);
                     }
                 };
 
                 List<User> users = UserDatabaseManagement.initFollowingFragment(data);
                 for (User u : users) {
-                    if(u == null) continue; // don't load the users that have changed or were deleted
+                    if (u == null)
+                        continue; // don't load the users that have changed or were deleted
                     u.setUserCardItem(new UserCardItem(u.getName(), u.getUid(), u.getPicture(), u.getCreatedTracks().size()));
                     listUserCardItem.add(u.getUserCardItem());
                 }

@@ -31,7 +31,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.login.firebase.FirebaseAuthentication;
 import ch.epfl.sweng.runpharaa.login.google.GoogleAuthentication;

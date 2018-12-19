@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.map;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -18,11 +18,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Arrays;
 
+import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.utils.Config;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
-public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCallback {
+public class FullMapActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
     private LatLng[] points;
     private TextView testText;
@@ -40,7 +41,7 @@ public class FullMapActivity  extends AppCompatActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.create_map_view3);
         mapFragment.getMapAsync(this);
-        if(Config.isTest){
+        if (Config.isTest) {
             onMapReady(Config.getFakeMap());
         }
     }

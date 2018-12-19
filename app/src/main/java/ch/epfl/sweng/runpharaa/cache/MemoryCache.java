@@ -1,7 +1,6 @@
 package ch.epfl.sweng.runpharaa.cache;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,7 +61,7 @@ public class MemoryCache {
      * Put a Bitmap in the cache at the given key (ID)
      *
      * @param id a key
-     * @param b a Bitmap
+     * @param b  a Bitmap
      */
     public void put(String id, Bitmap b) {
         if (cache.containsKey(id))

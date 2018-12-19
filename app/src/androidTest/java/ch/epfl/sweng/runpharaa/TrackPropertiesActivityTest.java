@@ -30,20 +30,21 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.comment.Comment;
-import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.Comment;
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
 import ch.epfl.sweng.runpharaa.user.StreakManager;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressKey;
@@ -93,7 +94,7 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
 
     @Before
     public void init() {
-        User.instance = Database.getUser();
+        User.instance = DatabaseMock.getUser();
         User.instance.setStreakManager(new StreakManager(1, 1, 1));
         Intents.init();
     }
@@ -399,8 +400,8 @@ public class TrackPropertiesActivityTest extends TestInitLocation {
     private Track createTrack() {
         Set<TrackType> types = new HashSet<>();
         types.add(TrackType.FOREST);
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
+        LatLngAdapter coord0 = new LatLngAdapter(37.422, -122.084); //inm
+        LatLngAdapter coord1 = new LatLngAdapter(37.425, -122.082); //inm
         TrackProperties p = new TrackProperties(100, 10, 1, 1, types);
 
         return new Track("0", "Bob", "Cours forest !", Arrays.asList(coord0, coord1), new ArrayList<>(), p);

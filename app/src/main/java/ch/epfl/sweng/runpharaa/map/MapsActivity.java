@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -28,9 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.location.LocationUpdateReceiverActivity;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
@@ -57,7 +60,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         markers = new ArrayList<>();
-        if(Config.isTest){
+        if (Config.isTest) {
             onMapReady(Config.getFakeMap());
         }
     }
@@ -149,7 +152,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        if(marker.getTitle().equals("selected Position")) {
+        if (marker.getTitle().equals("selected Position")) {
             longClickLocation = null;
             userFocused = true;
             handleNewLocation();
@@ -194,7 +197,7 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
         @SuppressLint("SetTextI18n")
         @Override
         public View getInfoContents(final Marker marker) {
-            if(!marker.getTitle().equals("selected Position")) {
+            if (!marker.getTitle().equals("selected Position")) {
                 return getInfoTracks(marker);
             } else {
                 return getReturnToLocation();
@@ -203,10 +206,11 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         /**
          * Handle the windows that display the properties of the track in the fakeMap
+         *
          * @param marker
          * @return
          */
-        private View getInfoTracks(final Marker marker){
+        private View getInfoTracks(final Marker marker) {
             View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_info_window, null);
 
@@ -233,9 +237,10 @@ public final class MapsActivity extends LocationUpdateReceiverActivity implement
 
         /**
          * Handle the window that allow the user to go back from a certain position to its location
+         *
          * @return
          */
-        private View getReturnToLocation(){
+        private View getReturnToLocation() {
             View view = ((Activity) context).getLayoutInflater()
                     .inflate(R.layout.marker_other_location, null);
 

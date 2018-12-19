@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -9,44 +9,47 @@ import java.util.List;
  * Custom class that copy the {@link com.google.android.gms.maps.model.LatLng} class
  * Useful for it's empty constructor need in database exchanges
  */
-public class CustLatLng {
+public class LatLngAdapter {
     private Double latitude;
     private Double longitude;
 
     /**
      * Empty constructor needed for database exchanges
      */
-    public CustLatLng() { }
+    public LatLngAdapter() {
+    }
 
     /**
      * Basic constructor that takes a latitude and a longitude
-     * @param latitude a double
+     *
+     * @param latitude  a double
      * @param longitude a double
      */
-    public CustLatLng(Double latitude, Double longitude) {
+    public LatLngAdapter(Double latitude, Double longitude) {
         //The bound used are from the LatLng google class
         this.latitude = Math.max(-90.0D, Math.min(90.0D, latitude));
-        if (-180.0D <= longitude && longitude < 180.0D){
+        if (-180.0D <= longitude && longitude < 180.0D) {
             this.longitude = longitude;
-        }
-        else{
+        } else {
             this.longitude = ((longitude - 180.0D) % 360.0D + 360.0D) % 360.0D - 180.0D;
         }
     }
 
     /**
      * Return the latitude as a {@link Double}
+     *
      * @return the latitude
      */
-    Double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
     /**
      * Return the longitude as a {@link Double}
+     *
      * @return the longitude
      */
-    Double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
@@ -58,7 +61,7 @@ public class CustLatLng {
      * @param otherLocation another location
      * @return the distance between a point and the track (this)
      */
-    public double distance(CustLatLng otherLocation){
+    public double distance(LatLngAdapter otherLocation) {
         int R = 6378137; //Earth's mean radius in meter
 
         //angular differences in radians
@@ -70,58 +73,60 @@ public class CustLatLng {
         double lat2 = Math.toRadians(otherLocation.getLatitude());
 
         //compute some factor a
-        double a1 = Math.sin(dLat/2)*Math.sin(dLat/2);
-        double a2 = Math.cos(lat1)*Math.cos(lat2);
-        double a3 = Math.sin(dLong/2)*Math.sin(dLong/2);
+        double a1 = Math.sin(dLat / 2) * Math.sin(dLat / 2);
+        double a2 = Math.cos(lat1) * Math.cos(lat2);
+        double a3 = Math.sin(dLong / 2) * Math.sin(dLong / 2);
 
-        double a = a1 + a2*a3;
+        double a = a1 + a2 * a3;
 
         //compute some factor c
-        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return R*c;
+        return R * c;
     }
 
     /**
-     * Convert the current {@link CustLatLng} into a {@link LatLng}
+     * Convert the current {@link LatLngAdapter} into a {@link LatLng}
+     *
      * @return
      */
-    public LatLng ToLatLng(){
+    public LatLng ToLatLng() {
         return new LatLng(latitude, longitude);
     }
 
     /**
-     * Convert given LatLng to CustLatLng.
+     * Convert given LatLng to LatLngAdapter.
      *
      * @param p the LatLng to convert
      * @return the converted LatLng
      */
-    public static CustLatLng LatLngToCustLatLng(LatLng p){
-        return new CustLatLng(p.latitude, p.longitude);
+    public static LatLngAdapter LatLngToCustLatLng(LatLng p) {
+        return new LatLngAdapter(p.latitude, p.longitude);
     }
 
     /**
-     * Convert List<LatLng> to List<CustLatLng>.
+     * Convert List<LatLng> to List<LatLngAdapter>.
      *
      * @param l the list to convert
      * @return the converted list
      */
-    public static List<CustLatLng> LatLngToCustLatLng(List<LatLng> l){
-        List<CustLatLng> result = new ArrayList<>();
-        for(LatLng p : l){
+    public static List<LatLngAdapter> LatLngToCustLatLng(List<LatLng> l) {
+        List<LatLngAdapter> result = new ArrayList<>();
+        for (LatLng p : l) {
             result.add(LatLngToCustLatLng(p));
         }
         return result;
     }
 
     /**
-     * Convert a list of {@link CustLatLng} to a list of {@link LatLng}
+     * Convert a list of {@link LatLngAdapter} to a list of {@link LatLng}
+     *
      * @param l the list to convert
      * @return the converted list
      */
-    public static  List<LatLng> CustLatLngToLatLng(List<CustLatLng> l) {
+    public static List<LatLng> CustLatLngToLatLng(List<LatLngAdapter> l) {
         List<LatLng> result = new ArrayList<>();
-        for(CustLatLng p : l){
+        for (LatLngAdapter p : l) {
             result.add(new LatLng(p.latitude, p.longitude));
         }
         return result;

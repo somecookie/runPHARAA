@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.tracks;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 /**
  * Contain all the possible types to classify Tracks

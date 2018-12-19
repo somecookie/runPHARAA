@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,10 +20,11 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.List;
 import java.util.Random;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.tracks.FilterProperties;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.properties.FilterProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
@@ -57,25 +57,24 @@ public class FragmentSearch extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.luckyIcon){
+        if (item.getItemId() == R.id.luckyIcon) {
             FilterProperties properties = new FilterProperties();
             TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
                 @Override
                 public void onSuccess(DataSnapshot value) {
                     List<Track> nearMe = TrackDatabaseManagement.initTracksNearLocation(value, User.instance.getLocation());
-                    if(nearMe.isEmpty()) {
-                        Toast.makeText(getContext(),R.string.no_tracks, Toast.LENGTH_LONG).show();
+                    if (nearMe.isEmpty()) {
+                        Toast.makeText(getContext(), R.string.no_tracks, Toast.LENGTH_LONG).show();
                         return;
                     }
                     List<Track> favorites = TrackDatabaseManagement.initFavouritesTracks(value);
-                    if(favorites.isEmpty()){
+                    if (favorites.isEmpty()) {
                         List<Track> liked = TrackDatabaseManagement.initCreatedTracks(value, User.instance);
-                        if(liked.isEmpty()) {
-                            Toast.makeText(getContext(),R.string.no_favorites_and_likes, Toast.LENGTH_LONG).show();
+                        if (liked.isEmpty()) {
+                            Toast.makeText(getContext(), R.string.no_favorites_and_likes, Toast.LENGTH_LONG).show();
                             Random r = new Random();
                             startTrackPropertiesWith(nearMe.get(r.nextInt(nearMe.size())).getTrackUid());
-                        }
-                        else {
+                        } else {
                             properties.add(liked);
                             startTrackPropertiesWith(properties.chooseLuckyTrack(nearMe).getTrackUid());
                         }
@@ -94,7 +93,7 @@ public class FragmentSearch extends Fragment {
      *
      * @param trackUID the Track's unique ID
      */
-    private void startTrackPropertiesWith(String trackUID){
+    private void startTrackPropertiesWith(String trackUID) {
         Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
         intent.putExtra("TrackID", trackUID);
         startActivity(intent);

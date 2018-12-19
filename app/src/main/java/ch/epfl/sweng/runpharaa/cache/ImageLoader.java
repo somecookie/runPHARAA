@@ -51,7 +51,7 @@ public class ImageLoader {
     /**
      * Display the image from the given URL in the given ImageView
      *
-     * @param url the image's URL
+     * @param url  the image's URL
      * @param view an ImageView to display the image
      */
     public void displayImage(String url, ImageView view) {
@@ -62,8 +62,8 @@ public class ImageLoader {
      * Display the image from the given URL in the given ImageView. Will display a default image
      * if defaultWhileLoad is true and the image at the given URL is null
      *
-     * @param url the image's URL
-     * @param view an ImageView to display the image
+     * @param url              the image's URL
+     * @param view             an ImageView to display the image
      * @param defaultWhileLoad if true, will display a default image if needed
      */
     public void displayImage(String url, ImageView view, boolean defaultWhileLoad) {
@@ -81,7 +81,7 @@ public class ImageLoader {
     /**
      * Enqueue an image to load
      *
-     * @param url the image's URL
+     * @param url   the image's URL
      * @param image an ImageView to display the image
      */
     private void queuePhoto(String url, ImageView image) {

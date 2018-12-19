@@ -13,12 +13,11 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-
 import java.util.Date;
 
 import ch.epfl.sweng.runpharaa.MainActivity;
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
 
 
@@ -28,8 +27,10 @@ import ch.epfl.sweng.runpharaa.user.User;
 public class FirebaseNotification extends FirebaseMessagingService {
 
     private static final int idRequest = 1410;
+
     /**
      * The method receive a remoteMessage that will be converted into a android notification
+     *
      * @param remoteMessage
      */
     @Override
@@ -42,7 +43,7 @@ public class FirebaseNotification extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, idRequest,
                 intent, PendingIntent.FLAG_ONE_SHOT);
 
-        if(remoteMessage != null) {
+        if (remoteMessage != null) {
 
             NotificationCompat.Builder notificationBuilder = new
                     NotificationCompat.Builder(this, "notification")
@@ -78,12 +79,13 @@ public class FirebaseNotification extends FirebaseMessagingService {
 
     /**
      * Overriding the method that updates the token creation to put it in the firebase as well
+     *
      * @param token
      */
     @Override
-    public void onNewToken(String token){
-        if(User.instance != null){
-        UserDatabaseManagement.writeNotificationKey(token);
+    public void onNewToken(String token) {
+        if (User.instance != null) {
+            UserDatabaseManagement.writeNotificationKey(token);
         }
     }
 }

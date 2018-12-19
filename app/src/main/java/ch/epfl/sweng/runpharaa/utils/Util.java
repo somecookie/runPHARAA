@@ -198,6 +198,7 @@ public interface Util {
 
     /**
      * Sign out the current user of the app, finish the current {@link Activity} and launch the {@link LoginActivity}
+     *
      * @param activity the current {@link Activity}
      */
     static void signOut(Activity activity) {
@@ -214,6 +215,7 @@ public interface Util {
 
     /**
      * Launch the {@link LoginActivity} and finish the current one
+     *
      * @param activity the current {@link Activity}
      */
     static void goToLogin(Activity activity) {

@@ -23,7 +23,7 @@ public abstract class GoogleAuthentication {
     /**
      * Method the get the client if any
      *
-     * @param activity an Activity
+     * @param activity            an Activity
      * @param googleSignInOptions a GoogleSignInOptions
      * @return the GoogleSignInClient
      */

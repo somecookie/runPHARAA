@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.firebase;
+package ch.epfl.sweng.runpharaa.database.mock;
 
 import android.net.Uri;
 
@@ -23,19 +23,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static ch.epfl.sweng.runpharaa.user.User.serialize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-public class Database {
+public class DatabaseMock {
 
     private final static String s_notification_key = "NotificationKey";
     private final static String COMMENTS = "comments";
@@ -261,24 +261,24 @@ public class Database {
         return null;
     };
 
-    private Database() {
+    private DatabaseMock() {
 
     }
 
     public static FirebaseDatabase getInstance() {
-        return (Config.isTest) ? new Database().instantiateMock() : FirebaseDatabase.getInstance();
+        return (Config.isTest) ? new DatabaseMock().instantiateMock() : FirebaseDatabase.getInstance();
     }
 
     public static void setShouldFail(boolean shouldFail) {
-        Database.shouldFail = shouldFail;
+        DatabaseMock.shouldFail = shouldFail;
     }
 
     public static void setIsCancelled(boolean isCancelled) {
-        Database.isCancelled = isCancelled;
+        DatabaseMock.isCancelled = isCancelled;
     }
 
     public static void setUserExists(boolean userExists) {
-        Database.userExists = userExists;
+        DatabaseMock.userExists = userExists;
     }
 
     public static User getUser() {
@@ -352,7 +352,7 @@ public class Database {
         when(snapOnDataChangeReadChildPath.getValue((String.class))).thenReturn("Cours forest !");
         when(snapOnDataChangedChildTrackUID.getValue((String.class))).thenReturn(trackUID);
         when(snapOnDataChangeReadChildPath.child("0")).thenReturn(snapOnDataChangeReadChildPath0);
-        when(snapOnDataChangeReadChildPath0.getValue(CustLatLng.class)).thenReturn(new CustLatLng(37.422, -122.084));
+        when(snapOnDataChangeReadChildPath0.getValue(LatLngAdapter.class)).thenReturn(new LatLngAdapter(37.422, -122.084));
         when(snapOnDataChangeReadChildIsDeleted.getValue(Boolean.class)).thenReturn(false);
 
         when(snapOnDataChangeUser.exists()).thenReturn(true);
@@ -425,7 +425,7 @@ public class Database {
 
         when(drUserAnyChildFollow.setValue(userFollowedList)).thenAnswer(new Answer<Task<Void>>() {
             @Override
-            public Task<Void> answer(InvocationOnMock invocation){
+            public Task<Void> answer(InvocationOnMock invocation) {
                 fake_user.setFollowedUsers(userFollowedList);
                 return null;
             }
@@ -632,8 +632,8 @@ public class Database {
     private void createTrack() {
         List<String> types = new ArrayList<>();
         types.add(TrackType.FOREST.toString());
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084);
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082);
+        LatLngAdapter coord0 = new LatLngAdapter(37.422, -122.084);
+        LatLngAdapter coord1 = new LatLngAdapter(37.425, -122.082);
         int length = 100;
         int heightDiff = 10;
 

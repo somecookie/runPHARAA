@@ -16,7 +16,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
@@ -103,7 +103,7 @@ public class FavoritesFragmentTest extends TestInitLocation {
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
 
-        Database.setIsCancelled(true);
+        DatabaseMock.setIsCancelled(true);
 
         runOnUiThread(() ->((FragmentFavourites)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(2)).onRefresh());
 
@@ -111,7 +111,7 @@ public class FavoritesFragmentTest extends TestInitLocation {
         onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_favorite)));
 
         //For further tests
-        Database.setIsCancelled(false);
+        DatabaseMock.setIsCancelled(false);
 
     }
 

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.database;
+package ch.epfl.sweng.runpharaa.database.firebase;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,7 +12,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
@@ -31,9 +30,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     private static final String FEEDBACK = "feedback";
 
     /**
-     * Add a non-existent User in the Database
+     * Add a non-existent User in the DatabaseMock
      *
-     * @param user the User to add to the Database
+     * @param user     the User to add to the DatabaseMock
      * @param callback a Callback<User>
      */
     public static void writeNewUser(final User user, final Callback<User> callback) {
@@ -53,7 +52,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                         storedUser.setFavoriteTracks(new ArrayList<>());
                     if (!dataSnapshot.child(FOLLOWING).exists())
                         storedUser.setFollowedUsers(new ArrayList<>());
-                    if(!dataSnapshot.child(FEEDBACK).exists())
+                    if (!dataSnapshot.child(FEEDBACK).exists())
                         storedUser.setFeedbackTracks(new ArrayList<>());
 
                     callback.onSuccess(storedUser);
@@ -72,7 +71,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     /**
-     * Update a User's list of favorite tracks in the Database
+     * Update a User's list of favorite tracks in the DatabaseMock
      *
      * @param user the User we want to update
      */
@@ -83,7 +82,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     user.setFavoriteTracks(TrackDatabaseManagement.deleteDeletedTrackFromList(dataSnapshot, user.getFavoriteTracks()));
                     Task<Void> t = favRef3.setValue(user.getFavoriteTracks());
                     t.addOnFailureListener(Throwable::printStackTrace);
@@ -129,7 +128,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     user.setLikedTracks(TrackDatabaseManagement.deleteDeletedTrackFromList(dataSnapshot, user.getLikedTracks()));
                     likedRef.setValue(user.getLikedTracks()).addOnFailureListener(Throwable::printStackTrace);
                 }
@@ -173,7 +172,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     user.setCreatedTracks(TrackDatabaseManagement.deleteDeletedTrackFromList(dataSnapshot, user.getCreatedTracks()));
                     createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
                 }
@@ -231,7 +230,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     /**
      * Initialize the "FollowingFragment" from the MainActivity
      *
-     * @param data a Datasnapshot from the Database
+     * @param data a Datasnapshot from the DatabaseMock
      * @return the list of Users to display in the fragment
      */
     public static List<User> initFollowingFragment(DataSnapshot data) {
@@ -240,10 +239,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
         for (DataSnapshot f : followed.getChildren()) {
             if (f.getValue() != null) {
                 User user = User.deserialize(f.getValue().toString());
-                if(!data.child(user.getUid()).exists()){
+                if (!data.child(user.getUid()).exists()) {
                     User.instance.removeFromFollowed(user);
-                }
-                else{
+                } else {
                     users.add(User.deserialize(f.getValue().toString()));
                 }
             }
@@ -253,36 +251,36 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     /**
-     * Retrieve a User in the Database
+     * Retrieve a User in the DatabaseMock
      *
-     * @param data a Datasnapshot of the Database
-     * @param uId the User we want to get unique ID
+     * @param data a Datasnapshot of the DatabaseMock
+     * @param uId  the User we want to get unique ID
      * @return the User corresponding to the uId
      */
     public static User getUser(DataSnapshot data, String uId) {
         User user = null;
         DataSnapshot u = data.child(uId);
-        if (u != null && u.exists()){
+        if (u != null && u.exists()) {
             user = new User();
             user.setUid(uId);
             if (u.child(NAME).exists()) {
                 user.setName(u.child(NAME).getValue().toString());
             }
             List<String> createdTracks = new ArrayList<>();
-            if(!Config.isTest){
+            if (!Config.isTest) {
                 for (DataSnapshot c : u.child(CREATE).getChildren()) {
                     createdTracks.add(c.getValue().toString());
                 }
             }
             user.setCreatedTracks(createdTracks);
             List<String> favoriteTracks = new ArrayList<>();
-            if(!Config.isTest){
+            if (!Config.isTest) {
                 for (DataSnapshot c : u.child(FAVORITE).getChildren()) {
                     favoriteTracks.add(c.getValue().toString());
                 }
             }
             user.setFavoriteTracks(favoriteTracks);
-            if(!Config.isTest){
+            if (!Config.isTest) {
                 if (u.child(PICTURE).exists()) {
                     user.setPicture(u.child(PICTURE).getValue().toString());
                 }
@@ -292,9 +290,9 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     /**
-     * Retrieve a user's name from the Database from its unique ID
+     * Retrieve a user's name from the DatabaseMock from its unique ID
      *
-     * @param UID the User's unique ID
+     * @param UID      the User's unique ID
      * @param callback a Callback<String>
      */
     public static void getUserNameFromID(String UID, Callback<String> callback) {
@@ -321,7 +319,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     /**
      * Get a User's picture give the User's unique ID
      *
-     * @param UID the User's unique ID
+     * @param UID      the User's unique ID
      * @param callback a Callback<String>
      */
     public static void getUserPictureFromID(String UID, Callback<String> callback) {
@@ -348,7 +346,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     /**
      * Get a User's unique ID give the User's name
      *
-     * @param name the User's name
+     * @param name     the User's name
      * @param callback a Callback<String>
      */
     public static void findUserUIDByName(final String name, Callback<String> callback) {
@@ -360,7 +358,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
                     String dataName = data.child(NAME).getValue(String.class);
 
 
-                    if(dataName == null){
+                    if (dataName == null) {
                         continue;
                     }
 
@@ -385,7 +383,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     /**
-     * Delete a User from the Database
+     * Delete a User from the DatabaseMock
      *
      * @param user the user to delete
      */
@@ -409,11 +407,11 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     }
 
     /**
-     * Give a notification key to a User in the Database
+     * Give a notification key to a User in the DatabaseMock
      *
      * @param key a String containing the notification key
      */
-    public static void writeNotificationKey(String key){
+    public static void writeNotificationKey(String key) {
         DatabaseReference keyRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child("NotificationKey");
         keyRef.setValue(key).addOnFailureListener(Throwable::printStackTrace);
     }
@@ -421,15 +419,15 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
     /**
      * Retrieve a User's notification key given its unique ID
      *
-     * @param uid the User's unique ID
+     * @param uid      the User's unique ID
      * @param callback a Callback<String>
      */
-    public static void getNotificationKeyFromUID(String uid, Callback<String> callback){
+    public static void getNotificationKeyFromUID(String uid, Callback<String> callback) {
         DatabaseReference nameRef = mDataBaseRef.child(USERS).child(uid).child("NotificationKey");
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     String key = dataSnapshot.getValue(String.class);
                     callback.onSuccess(key);
                     return;

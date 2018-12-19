@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.comment;
+package ch.epfl.sweng.runpharaa.tracks.properties.comment;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;

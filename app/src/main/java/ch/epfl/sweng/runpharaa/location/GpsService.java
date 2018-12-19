@@ -14,7 +14,7 @@ public abstract class GpsService extends Service {
      * @return the instance of GpsService
      */
     public static GpsService getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new RealGpsService();
         return instance;
     }
@@ -31,18 +31,24 @@ public abstract class GpsService extends Service {
      * @param s the FakeGpsService to init
      */
     public static void initFakeGps(FakeGpsService s) {
-        if(instance == null)
+        if (instance == null)
             instance = s;
     }
 
     static Location currentLocation;
 
     public abstract Location getCurrentLocation();
+
     public abstract void setNewLocation(Context context, Location location);
 
     protected abstract void updateAndSendNewLocation(Location location);
 
-    public void setTimeInterval(int interval) {}
-    public void setMinTimeInterval(int interval) {}
-    public void setMinDistanceInterval(int interval) {}
+    public void setTimeInterval(int interval) {
+    }
+
+    public void setMinTimeInterval(int interval) {
+    }
+
+    public void setMinDistanceInterval(int interval) {
+    }
 }

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.database;
+package ch.epfl.sweng.runpharaa.database.firebase;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -20,14 +20,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.firebase.Database;
-import ch.epfl.sweng.runpharaa.firebase.Storage;
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
+import ch.epfl.sweng.runpharaa.database.mock.StorageMock;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
-import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static ch.epfl.sweng.runpharaa.utils.Util.formatString;
 
@@ -41,9 +40,9 @@ public class TrackDatabaseManagement {
     public final static String IS_DELETED = "isDeleted";
 
 
-    private static FirebaseDatabase mFirebaseDatabase = Database.getInstance();
+    private static FirebaseDatabase mFirebaseDatabase = DatabaseMock.getInstance();
     static DatabaseReference mDataBaseRef = mFirebaseDatabase.getReference();
-    private static FirebaseStorage mFirebaseStorage = Storage.getInstance();
+    private static FirebaseStorage mFirebaseStorage = StorageMock.getInstance();
     private static StorageReference mStorageRef = mFirebaseStorage.getReference();
 
     TrackDatabaseManagement() {
@@ -65,14 +64,14 @@ public class TrackDatabaseManagement {
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mStorageRef.child(TRACK_IMAGE_PATH).child(key).putBytes(data);
-        uploadTask.addOnFailureListener(e -> Log.e("Storage", "Failed to upload image to storage :" + e.getMessage()));
+        uploadTask.addOnFailureListener(e -> Log.e("StorageMock", "Failed to upload image to storage :" + e.getMessage()));
         uploadTask.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(e -> Log.e("Storage", "Failed to download image url :" + e.getMessage())).addOnCompleteListener(task1 -> {
+                mStorageRef.child(TRACK_IMAGE_PATH).child(key).getDownloadUrl().addOnFailureListener(e -> Log.e("StorageMock", "Failed to download image url :" + e.getMessage())).addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         track.setImageStorageUri(task1.getResult().toString());
                         track.setTrackUid(key);
-                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(e -> Log.e("Database", "Failed to upload new track :" + e.getMessage())).addOnSuccessListener(aVoid -> {
+                        mDataBaseRef.child(TRACKS_PATH).child(key).setValue(track).addOnFailureListener(e -> Log.e("DatabaseMock", "Failed to upload new track :" + e.getMessage())).addOnSuccessListener(aVoid -> {
                             User.instance.addToCreatedTracks(key);
                             User.instance.addNewFeedBack(key);
                             UserDatabaseManagement.updateFeedBackTracks(User.instance);
@@ -87,7 +86,7 @@ public class TrackDatabaseManagement {
     /**
      * Retrieve a Track's unique ID given its name
      *
-     * @param name the track's name
+     * @param name     the track's name
      * @param callback a Callback
      */
     public static void findTrackUIDByName(final String name, Callback<String> callback) {
@@ -116,7 +115,7 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a track, updates the corresponding entry in the Firebase Database.
+     * Given a track, updates the corresponding entry in the Firebase DatabaseMock.
      *
      * @param track a track
      */
@@ -124,7 +123,7 @@ public class TrackDatabaseManagement {
         mDataBaseRef.child(TRACKS_PATH).child(track.getTrackUid()).child(IS_DELETED).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     Boolean isDeleted = dataSnapshot.getValue(Boolean.class);
                     FirebaseTrackAdapter adapter = new FirebaseTrackAdapter(track, isDeleted);
                     mDataBaseRef.child(TRACKS_PATH).child(adapter.getTrackUid()).setValue(adapter);
@@ -139,7 +138,7 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a track, update its comments in the Firebase Database
+     * Given a track, update its comments in the Firebase DatabaseMock
      *
      * @param track a track
      */
@@ -149,35 +148,35 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot at the Tracks level from the Firebase Database and a track key, return the corresponding track.
+     * Given a DataSnapshot at the Tracks level from the Firebase DatabaseMock and a track key, return the corresponding track.
      *
      * @param dataSnapshot a dataSnapshot from the database
-     * @param key a track key
+     * @param key          a track key
      * @return the initiated Track
      */
     public static Track initTrack(DataSnapshot dataSnapshot, String key) {
         boolean isDeleted = dataSnapshot.child(key).child(IS_DELETED).getValue(Boolean.class);
-        if(isDeleted){
+        if (isDeleted) {
             return null;
         }
         return new Track(dataSnapshot.child(key).getValue(FirebaseTrackAdapter.class));
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of tracks near location.
+     * Given a DataSnapshot from the Firebase DatabaseMock, returns the list of tracks near location.
      *
      * @param dataSnapshot a dataSnapshot from the database
-     * @param location the location we want the tracks nearby
+     * @param location     the location we want the tracks nearby
      * @return a List<Track> that are near the given location
      */
     public static List<Track> initTracksNearLocation(DataSnapshot dataSnapshot, LatLng location) {
         List<Track> tracksNearMe = new ArrayList<>();
         for (DataSnapshot c : dataSnapshot.getChildren()) {
-            CustLatLng requestedLocation = new CustLatLng(location.latitude, location.longitude);
+            LatLngAdapter requestedLocation = new LatLngAdapter(location.latitude, location.longitude);
             int userPreferredRadius = User.instance.getPreferredRadius();
 
-            if (c.child("path").child("0").getValue(CustLatLng.class) != null) {
-                if (c.child("path").child("0").getValue(CustLatLng.class).distance(requestedLocation) <= userPreferredRadius &&
+            if (c.child("path").child("0").getValue(LatLngAdapter.class) != null) {
+                if (c.child("path").child("0").getValue(LatLngAdapter.class).distance(requestedLocation) <= userPreferredRadius &&
                         !c.child(IS_DELETED).getValue(Boolean.class)) {
                     tracksNearMe.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                 }
@@ -192,19 +191,18 @@ public class TrackDatabaseManagement {
      * Retrieve the tracks and the deleted tracks from the databases and combine them in a Pair
      *
      * @param dataSnapshot a dataSnapshot from the database
-     * @param tracksUID a Track's unique ID
+     * @param tracksUID    a Track's unique ID
      * @return a Pair<List<Track>, List<String>> containing the tracks and the deleted tracks
      */
-    private static Pair<List<Track>, List<String>> initTracksList(DataSnapshot dataSnapshot, List<String> tracksUID){
+    private static Pair<List<Track>, List<String>> initTracksList(DataSnapshot dataSnapshot, List<String> tracksUID) {
         List<Track> tracks = new ArrayList<>();
         List<String> deletedTracks = new ArrayList<>();
-        for(DataSnapshot c : dataSnapshot.getChildren()){
-            if(tracksUID != null){
-                if(tracksUID.contains(c.getKey())){
-                    if(c.child(IS_DELETED).getValue(Boolean.class)){
+        for (DataSnapshot c : dataSnapshot.getChildren()) {
+            if (tracksUID != null) {
+                if (tracksUID.contains(c.getKey())) {
+                    if (c.child(IS_DELETED).getValue(Boolean.class)) {
                         deletedTracks.add(c.getKey());
-                    }
-                    else{
+                    } else {
                         tracks.add(new Track(c.getValue(FirebaseTrackAdapter.class)));
                     }
                 }
@@ -215,13 +213,13 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of created tracks.
+     * Given a DataSnapshot from the Firebase DatabaseMock, returns the list of created tracks.
      *
      * @param dataSnapshot a dataSnapshot from the database
-     * @param user the target user
+     * @param user         the target user
      * @return a List<Track> of a user's created tracks
      */
-    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user){
+    public static List<Track> initCreatedTracks(DataSnapshot dataSnapshot, User user) {
         Pair<List<Track>, List<String>> p = initTracksList(dataSnapshot, user.getCreatedTracks());
         List<String> createdTracks = user.getCreatedTracks();
         createdTracks.removeAll(p.getSecond());
@@ -231,18 +229,18 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, return a list containing the ID of the
+     * Given a DataSnapshot from the Firebase DatabaseMock, return a list containing the ID of the
      * tracks to delete
      *
      * @param dataSnapshot a dataSnapshot from the database
-     * @param list a List<String> containing all the deleted Tracks
+     * @param list         a List<String> containing all the deleted Tracks
      * @return a List<String> without the deleted Tracks
      */
-    static List<String> deleteDeletedTrackFromList(DataSnapshot dataSnapshot, List<String> list){
-        if(list != null){
-            for(DataSnapshot c : dataSnapshot.getChildren()){
-                if(list.contains(c.getKey())){
-                    if(c.child(IS_DELETED).getValue(Boolean.class)){
+    static List<String> deleteDeletedTrackFromList(DataSnapshot dataSnapshot, List<String> list) {
+        if (list != null) {
+            for (DataSnapshot c : dataSnapshot.getChildren()) {
+                if (list.contains(c.getKey())) {
+                    if (c.child(IS_DELETED).getValue(Boolean.class)) {
                         list.remove(c.getKey());
                     }
                 }
@@ -252,7 +250,7 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Given a DataSnapshot from the Firebase Database, returns the list of favourite tracks.
+     * Given a DataSnapshot from the Firebase DatabaseMock, returns the list of favourite tracks.
      *
      * @param dataSnapshot a dataSnapshot from the database
      * @return a List<Track> of the favourite tracks of the user instance
@@ -267,11 +265,11 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Delete a Track by adding a flag to it in the Database
+     * Delete a Track by adding a flag to it in the DatabaseMock
      *
      * @param trackUID a Track's unique ID
      */
-    public static void deleteTrack(String trackUID){
+    public static void deleteTrack(String trackUID) {
         List<String> createdTracks = User.instance.getCreatedTracks();
         createdTracks.remove(trackUID);
         User.instance.setCreatedTracks(createdTracks);
@@ -280,9 +278,9 @@ public class TrackDatabaseManagement {
     }
 
     /**
-     * Read the data from the Firebase Database. Two methods to override.
+     * Read the data from the Firebase DatabaseMock. Two methods to override.
      *
-     * @param child a String corresponding to a child in the Database
+     * @param child    a String corresponding to a child in the DatabaseMock
      * @param listener a Callback<DataSnapshot>
      */
     public static void mReadDataOnce(String child, final Callback<DataSnapshot> listener) {

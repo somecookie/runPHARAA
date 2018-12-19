@@ -1,31 +1,20 @@
 package ch.epfl.sweng.runpharaa.user.settings;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.login.LoginActivity;
-
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
@@ -95,17 +84,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.delete_account :
+        switch (item.getItemId()) {
+            case R.id.delete_account:
                 AlertDialog alertDialog = deleteUserConfirmation();
                 alertDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private AlertDialog deleteUserConfirmation()
-    {
-        AlertDialog deleteUserDialogBox =new AlertDialog.Builder(this)
+    private AlertDialog deleteUserConfirmation() {
+        AlertDialog deleteUserDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle(R.string.delete_track)
                 .setMessage(R.string.want_to_delete_your_account)

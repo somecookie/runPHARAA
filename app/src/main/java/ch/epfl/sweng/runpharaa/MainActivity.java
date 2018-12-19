@@ -20,14 +20,14 @@ import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.HashSet;
 import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
+import ch.epfl.sweng.runpharaa.map.MapsActivity;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.creation.CreateTrackOnMapActivity;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 
 
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Check if the given {@link Track} pass the filters
+     *
      * @param t the given {@link Track}
      * @return true or false
      */
@@ -55,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Check if the given {@link Track} pass the time filter
+     *
      * @param t the given {@link Track}
      * @return true or false
      */
     private static boolean filterTime(Track t) {
-        if(timeIsFiltered){
+        if (timeIsFiltered) {
             return t.getProperties().getAvgDuration() <= timeFilter;
         } else {
             return true;
@@ -68,11 +70,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Check if the given {@link Track} pass the difficulty filter
+     *
      * @param t the given {@link Track}
      * @return true or false
      */
     private static boolean filterDifficulty(Track t) {
-        if(difficultyIsFiltered){
+        if (difficultyIsFiltered) {
             return t.getProperties().getAvgDifficulty() <= difficultyFilter;
         } else {
             return true;
@@ -81,11 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Check if the given {@link Track} pass the type filter
+     *
      * @param t the given {@link Track}
      * @return true or false
      */
     private static boolean filterTypes(Track t) {
-        if(typesAreFiltered){
+        if (typesAreFiltered) {
             return t.getProperties().getType().containsAll(typesFilter);
         } else {
             return true;
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add the floating action button
         fab.setOnClickListener(v -> {
-            Intent createTrack = new Intent(getBaseContext(), CreateTrackActivity.class);
+            Intent createTrack = new Intent(getBaseContext(), CreateTrackOnMapActivity.class);
             startActivity(createTrack);
         });
     }
@@ -256,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to change the thread policy that sometimes block the json send
      */
-    private void removeStrictMode(){
+    private void removeStrictMode() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
     }

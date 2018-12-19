@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.tracks;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 import java.util.Set;
 
@@ -71,14 +71,14 @@ public class TrackProperties {
      *
      * @return int
      */
-    int getAvgDifficultyTotal() { return avgDiff.getTotal();}
+    public int getAvgDifficultyTotal() { return avgDiff.getTotal();}
 
     /**
      * Get average difficulty number.
      *
      * @return int
      */
-    int getAvgDifficultyNbr() { return avgDiff.getNbr();}
+    public int getAvgDifficultyNbr() { return avgDiff.getNbr();}
 
     /**
      * Get average duration.
@@ -103,14 +103,14 @@ public class TrackProperties {
      *
      * @return double
      */
-    double getAvgDurationTotal() { return avgDur.getTotal();}
+    public double getAvgDurationTotal() { return avgDur.getTotal();}
 
     /**
      * Get average duration number.
      *
      * @return int
      */
-    int getAvgDurationNbr() { return avgDur.getNbr();}
+    public int getAvgDurationNbr() { return avgDur.getNbr();}
 
     /**
      * Add like.

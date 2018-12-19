@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
-import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
 import ch.epfl.sweng.runpharaa.login.LoginActivity;
@@ -84,7 +84,7 @@ public class LoginActivityTest extends TestInitLocation {
         sleep(3000);
         assertEquals(User.instance.getName(), "FakeUser");
         assertEquals(User.instance.getUid(), "1");
-        assertEquals(User.instance.getCreatedTracks(), Database.getUser().getCreatedTracks());
+        assertEquals(User.instance.getCreatedTracks(), DatabaseMock.getUser().getCreatedTracks());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class LoginActivityTest extends TestInitLocation {
 
     @Test
     public void testWriteUserShouldNotCreateError(){
-        Database.setShouldFail(false);
+        DatabaseMock.setShouldFail(false);
 
         User u = new User("USER_WRITTEN", 2000, Uri.parse(""), new LatLng(21.23, 12.112), "42");
         Callback<User> callback = new Callback<User>() {

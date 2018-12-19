@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.gui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.gui.UserCardItem;
 
 public abstract class UpdatableUserCardItemFragment extends UpdatableCardItemFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -22,7 +22,7 @@ public abstract class UpdatableUserCardItemFragment extends UpdatableCardItemFra
         List<UserCardItem> listUserCardItem;
         OnItemClickListener listener;
 
-        Adapter(Context context, List<UserCardItem> listUserCardItem, OnItemClickListener listener) {
+        public Adapter(Context context, List<UserCardItem> listUserCardItem, OnItemClickListener listener) {
             this.context = context;
             this.listUserCardItem = listUserCardItem;
             this.listener = listener;

@@ -63,11 +63,12 @@ public final class User implements Serializable {
 
     /**
      * General setter for various field
-     * @param name a String for the User's name
+     *
+     * @param name            a String for the User's name
      * @param preferredRadius a float for the User's preferred radius
-     * @param picture an URI for the User's picture
-     * @param location a LatLng containing the User's location
-     * @param uId a String for the User's unique ID
+     * @param picture         an URI for the User's picture
+     * @param location        a LatLng containing the User's location
+     * @param uId             a String for the User's unique ID
      */
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
@@ -233,8 +234,8 @@ public final class User implements Serializable {
      *
      * @param trackID a Track ID
      */
-    public void addNewFeedBack(String trackID){
-        if(!feedbackTracks.contains(trackID)){
+    public void addNewFeedBack(String trackID) {
+        if (!feedbackTracks.contains(trackID)) {
             feedbackTracks.add(trackID);
         }
     }
@@ -318,7 +319,7 @@ public final class User implements Serializable {
      *
      * @return the User's notification key
      */
-    public String getNotificationKey(){
+    public String getNotificationKey() {
         return notificationKey;
     }
 
@@ -327,7 +328,7 @@ public final class User implements Serializable {
      *
      * @param key the new notification key
      */
-    public void setNotificationKey(String key){
+    public void setNotificationKey(String key) {
         notificationKey = key;
     }
 

@@ -1,7 +1,5 @@
 package ch.epfl.sweng.runpharaa.user.myProfile;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,20 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
 import ch.epfl.sweng.runpharaa.gui.ViewPagerAdapter;
-import ch.epfl.sweng.runpharaa.login.LoginActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
-import ch.epfl.sweng.runpharaa.utils.Config;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 public class UsersProfileActivity extends AppCompatActivity {
