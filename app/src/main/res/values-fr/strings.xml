@@ -111,8 +111,10 @@
     <string name="logout">Log out</string>
     <string name="explanation_popup">Bienvenue sur RunPharaa!\n\nVoici quelques trucs et astuces:\n\n- Tu peux créer un parcours en appuyant sur le bouton +!\n\n- Tu peux changer ta location sur la carte en appuyant longtemps à un endroit.\n\n- Retourne à ta vraie position en appuyant sur la flèche orange!\n\n- Appuie n'importe où pour fermer cette fenêtre!\n
     </string>
+    <string name="report">Pour signaler un utilisateur à l\'un de nos developpeurs, veuillez écrire à:\n\nrun.PHARAA.sweng@gmail.com\n\nMerci de faire de runPHARAA une meilleure app!</string>
     <string name="help">Aide</string>
     <string name="popup_description">help_popup</string>
+    <string name="report_description">report_popup</string>
     <string name="get_me_to_my_location">Me ramener à ma location</string>
     <string name="track_deleted">Supprimé</string>
     <string name="follow">Abonner</string>
