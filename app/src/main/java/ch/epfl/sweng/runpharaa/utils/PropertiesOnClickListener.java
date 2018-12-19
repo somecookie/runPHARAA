@@ -88,22 +88,47 @@ public class PropertiesOnClickListener implements View.OnClickListener {
         dialog.show();
     }
 
+    /**
+     * Return boolean value of propertiesSet.
+     *
+     * @return a boolean
+     */
     public boolean isPropertiesSet() {
         return propertiesSet;
     }
 
+    /**
+     * Get attribute time.
+     *
+     * @return the time
+     */
     public double getTime() {
         return time;
     }
 
+    /**
+     * Get attribute difficulty.
+     *
+     * @return the difficulty
+     */
     public int getDifficulty() {
         return difficulty;
     }
 
+    /**
+     * Get attribute totalDistance.
+     *
+     * @return the total distance
+     */
     public double getTotalDistance() {
         return totalDistance;
     }
 
+    /**
+     * Set attribute totalDistance.
+     *
+     * @param totalDistance the new total distance
+     */
     public void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
     }

@@ -22,8 +22,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
+import ch.epfl.sweng.runpharaa.user.settings.SettingsActivity;
 
 import static ch.epfl.sweng.runpharaa.user.settings.SettingsActivity.getInt;
 
@@ -65,13 +65,14 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
     @SuppressLint("MissingPermission")
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-            initLocationCallBack();
+        initLocationCallBack();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
     @Override
-    public void onConnectionSuspended(int i) { }
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -81,11 +82,14 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
     @Override
     protected void updateAndSendNewLocation(Location location) {
         currentLocation = location;
-        if(User.instance != null)
+        if (User.instance != null)
             User.instance.setLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
         sendBroadcast(new Intent("location_update"));
     }
 
+    /**
+     * Init a location request by initializing all the settings with the user settings from the SettingsActivity
+     */
     private void initLocationRequest() {
         // Create the LocationRequest object
         locationRequest = LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -100,6 +104,9 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
         setMinDistanceInterval(minDistance);
     }
 
+    /**
+     * Initialize the location CallBack
+     */
     private void initLocationCallBack() {
         locationCallback = new LocationCallback() {
             @Override
@@ -113,34 +120,31 @@ public class RealGpsService extends GpsService implements GoogleApiClient.Connec
     // ---------- SETTERS ------------
 
     /**
-     *
      * @param newTimeInterval in seconds
      */
     @Override
     public void setTimeInterval(int newTimeInterval) {
-        if(locationRequest != null) {
+        if (locationRequest != null) {
             locationRequest.setInterval(newTimeInterval * 1000);
         }
     }
 
     /**
-     *
      * @param newMinTimeInterval in seconds
      */
     @Override
     public void setMinTimeInterval(int newMinTimeInterval) {
-        if(locationRequest != null) {
+        if (locationRequest != null) {
             locationRequest.setFastestInterval(newMinTimeInterval * 1000);
         }
     }
 
     /**
-     *
      * @param newMinDistanceInterval in meters
      */
     @Override
     public void setMinDistanceInterval(int newMinDistanceInterval) {
-        if(locationRequest != null) {
+        if (locationRequest != null) {
             locationRequest.setSmallestDisplacement(newMinDistanceInterval);
         }
     }

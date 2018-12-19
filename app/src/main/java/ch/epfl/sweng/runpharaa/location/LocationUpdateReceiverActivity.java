@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.location;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

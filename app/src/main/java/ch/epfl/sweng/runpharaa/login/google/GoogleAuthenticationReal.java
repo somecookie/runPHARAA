@@ -19,6 +19,6 @@ public class GoogleAuthenticationReal extends GoogleAuthentication {
 
     @Override
     public Intent getSignInIntent() {
-        return  gs.getSignInIntent();
+        return gs.getSignInIntent();
     }
 }

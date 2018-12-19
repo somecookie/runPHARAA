@@ -13,8 +13,9 @@ import java.util.Set;
 
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +24,7 @@ import static org.junit.Assert.assertNull;
 @RunWith(JUnit4.class)
 public class FirebaseTrackAdapterTest {
 
-    private List<CustLatLng> path = new ArrayList<>(Arrays.asList(new CustLatLng(1.0,1.0), new CustLatLng(1.0, 0.0)));
+    private List<LatLngAdapter> path = new ArrayList<>(Arrays.asList(new LatLngAdapter(1.0,1.0), new LatLngAdapter(1.0, 0.0)));
     private Set<TrackType> types = new HashSet<>(Collections.singleton(TrackType.BEACH));
     private TrackProperties tp = new TrackProperties(5.0, 200, 20, 5, types);
 

@@ -13,9 +13,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
-import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
+import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 
 public class AdapterTracksToRecyclerViewItem extends RecyclerView.Adapter<AdapterTracksToRecyclerViewItem.viewHolder> {
     private List<TrackCardItem> createdTracks;

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa.tracks;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 import java.util.Set;
 
@@ -48,54 +48,165 @@ public class TrackProperties {
         this.trackType = trackType;
     }
 
+    /**
+     * Get average difficulty.
+     *
+     * @return double
+     */
     public double getAvgDifficulty(){
         return avgDiff.getAverage();
     }
+
+    /**
+     * Add new difficulty.
+     *
+     * @param diff
+     */
     public void addNewDifficulty(int diff){
         avgDiff.add(diff);
     }
+
+    /**
+     * Get total average difficulty.
+     *
+     * @return int
+     */
     public int getAvgDifficultyTotal() { return avgDiff.getTotal();}
+
+    /**
+     * Get average difficulty number.
+     *
+     * @return int
+     */
     public int getAvgDifficultyNbr() { return avgDiff.getNbr();}
 
+    /**
+     * Get average duration.
+     *
+     * @return
+     */
     public double getAvgDuration(){
         return avgDur.getAverage();
     }
+
+    /**
+     * Add new duration.
+     *
+     * @param dur
+     */
     public void addNewDuration(double dur){
         avgDur.add(dur);
     }
+
+    /**
+     * Get average total duration.
+     *
+     * @return double
+     */
     public double getAvgDurationTotal() { return avgDur.getTotal();}
+
+    /**
+     * Get average duration number.
+     *
+     * @return int
+     */
     public int getAvgDurationNbr() { return avgDur.getNbr();}
 
+    /**
+     * Add like.
+     *
+     */
     public void addLike(){ likes++; }
+
+    /**
+     * Remove like.
+     *
+     */
     public void removeLike(){ if(likes > 0) likes--; }
+
+    /**
+     * Get number of likes.
+     *
+     * @return int
+     */
     public int getLikes(){ return likes; }
 
+    /**
+     * Add favourite.
+     *
+     */
     public void addFavorite(){ favorites++; }
+
+    /**
+     * Remove favourite.
+     *
+     */
     public void removeFavorite(){ if(favorites > 0) favorites--; }
+
+    /**
+     * Get number of favourites.
+     *
+     * @return int
+     */
     public int getFavorites(){ return favorites; }
 
+    /**
+     * Get track type.
+     *
+     * @return Set<TrackType>
+     */
     public Set<TrackType> getType(){return trackType;}
 
+    /**
+     * Get length.
+     *
+     * @return double
+     */
     public double getLength() {
         return length;
     }
 
+    /**
+     * Get height difference.
+     *
+     * @return double
+     */
     public double getHeightDifference() {
         return heightDifference;
     }
 
+    /**
+     * Set length.
+     *
+     * @param length
+     */
     public void setLength(double length) {
         this.length = length;
     }
 
+    /**
+     * Set height difference.
+     *
+     * @param heightDifference
+     */
     public void setHeightDifference(double heightDifference) {
         this.heightDifference = heightDifference;
     }
 
+    /**
+     * Set number of likes.
+     *
+     * @param likes
+     */
     public void setLikes(int likes) {
         this.likes = likes;
     }
 
+    /**
+     * Set number of favourites.
+     *
+     * @param favorites
+     */
     public void setFavorites(int favorites) {
         this.favorites = favorites;
     }
@@ -139,13 +250,27 @@ public class TrackProperties {
             nbr++;
         }
 
+        /**
+         * Get average.
+         *
+         * @return double
+         */
         double getAverage(){
             return (double)total/nbr;
         }
 
-
+        /**
+         * Get total.
+         *
+         * @return int
+         */
         int getTotal() { return total;}
 
+        /**
+         * Get number.
+         *
+         * @return int
+         */
         int getNbr() { return nbr; }
     }
 
@@ -188,12 +313,27 @@ public class TrackProperties {
             total += newDuration;
         }
 
+        /**
+         * Get average.
+         *
+         * @return double
+         */
         double getAverage(){
             return total/nbr;
         }
 
+        /**
+         * Get total.
+         *
+         * @return double
+         */
         double getTotal() { return total; }
 
+        /**
+         * Get number.
+         *
+         * @return int
+         */
         int getNbr() { return nbr; }
     }
 }

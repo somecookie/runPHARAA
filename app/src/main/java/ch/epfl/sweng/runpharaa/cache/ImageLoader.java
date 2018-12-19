@@ -35,6 +35,12 @@ public class ImageLoader {
         executor = Executors.newFixedThreadPool(5);
     }
 
+    /**
+     * Get the singleton ImageLoader, create it if it does not yet exist
+     *
+     * @param context a Context
+     * @return the instance of ImageLoader
+     */
     public static ImageLoader getLoader(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new ImageLoader(context);
@@ -42,10 +48,24 @@ public class ImageLoader {
         return INSTANCE;
     }
 
+    /**
+     * Display the image from the given URL in the given ImageView
+     *
+     * @param url  the image's URL
+     * @param view an ImageView to display the image
+     */
     public void displayImage(String url, ImageView view) {
         displayImage(url, view, true);
     }
 
+    /**
+     * Display the image from the given URL in the given ImageView. Will display a default image
+     * if defaultWhileLoad is true and the image at the given URL is null
+     *
+     * @param url              the image's URL
+     * @param view             an ImageView to display the image
+     * @param defaultWhileLoad if true, will display a default image if needed
+     */
     public void displayImage(String url, ImageView view, boolean defaultWhileLoad) {
         imageViews.put(view, url);
         Bitmap b = memoryCache.get(url);
@@ -58,11 +78,23 @@ public class ImageLoader {
         }
     }
 
+    /**
+     * Enqueue an image to load
+     *
+     * @param url   the image's URL
+     * @param image an ImageView to display the image
+     */
     private void queuePhoto(String url, ImageView image) {
         PhotoToLoad p = new PhotoToLoad(url, image);
         executor.submit(new PhotoLoader(p));
     }
 
+    /**
+     * Get the Bitmap located at the given URL
+     *
+     * @param url the Bitmap URL
+     * @return a Bitmap
+     */
     private Bitmap getBitmap(String url) {
         File f = fileCache.getFile(url);
         Bitmap b = decodeFile(f);
@@ -87,6 +119,12 @@ public class ImageLoader {
 
     }
 
+    /**
+     * Decode a file to transform it into a Bitmap
+     *
+     * @param f a File
+     * @return the decoded Bitmap
+     */
     private Bitmap decodeFile(File f) {
         try {
             return BitmapFactory.decodeStream(new FileInputStream(f));
@@ -96,11 +134,20 @@ public class ImageLoader {
         return null;
     }
 
+    /**
+     * Test if an ImageView of an image is null or its tag not equal to the image's URL
+     *
+     * @param p a PhotoToLoad
+     * @return true if the ImageView is Reused
+     */
     private boolean imageViewReused(PhotoToLoad p) {
         String tag = imageViews.get(p.imageView);
         return (tag == null || !tag.equals(p.url));
     }
 
+    /**
+     * Clear the cache
+     */
     public void clearCache() {
         memoryCache.clear();
         fileCache.clear();

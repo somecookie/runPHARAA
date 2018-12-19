@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.comment.Comment;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.Comment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

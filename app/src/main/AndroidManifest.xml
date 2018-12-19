@@ -50,16 +50,16 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".map.MapsActivity"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.runpharaa.MainActivity" />
         </activity>
         <activity
-            android:name=".CreateTrackActivity"
+            android:name=".tracks.creation.CreateTrackOnMapActivity"
             android:exported="true" />
-        <activity android:name=".CreateTrackActivity2" />
+        <activity android:name=".tracks.creation.SetTrackDetailsActivity" />
 
         <service android:name=".location.RealGpsService" />
         <service android:name=".location.FakeGpsService" />
@@ -69,10 +69,10 @@
             android:required="false" />
 
         <activity
-            android:name=".TrackPropertiesActivity"
+            android:name=".tracks.properties.TrackPropertiesActivity"
             />
 
-        <activity android:name=".FullMapActivity" />
+        <activity android:name=".map.FullMapActivity" />
 
         <activity android:name=".user.myProfile.UsersProfileActivity" />
 

@@ -22,10 +22,18 @@ public class RoundedCornersImageView extends android.support.v7.widget.AppCompat
         init();
     }
 
+    /**
+     * Init the ImageView Path
+     */
     private void init() {
         path = new Path();
     }
 
+    /**
+     * Get a RectF with the the RoundedCornersImageView width and height
+     *
+     * @return
+     */
     private RectF getRect() {
         return new RectF(0, 0, this.getWidth(), this.getHeight());
     }

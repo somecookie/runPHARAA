@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context=".TrackPropertiesActivity">
+    tools:context=".tracks.properties.TrackPropertiesActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -238,10 +238,10 @@
 
                 <fragment
                     android:id="@+id/create_map_view2"
-                    android:name="ch.epfl.sweng.runpharaa.CustomMapFragment"
+                    android:name="ch.epfl.sweng.runpharaa.map.CustomMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    tools:context=".TrackPropertiesActivity" />
+                    tools:context=".tracks.properties.TrackPropertiesActivity" />
 
                 <TextView
                     android:id="@+id/maps_test_text2"

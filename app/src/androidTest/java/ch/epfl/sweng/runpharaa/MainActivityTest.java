@@ -6,6 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
@@ -16,24 +18,27 @@ import org.junit.runner.RunWith;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
+import ch.epfl.sweng.runpharaa.map.MapsActivity;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.user.StreakManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.firebase.Database;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -46,6 +51,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setGone;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
+import static ch.epfl.sweng.runpharaa.util.ViewUtils.swipeToFragmentSearch;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
@@ -64,7 +70,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @BeforeClass
     public static void initUser() {
-        User.instance = Database.getUser();
+        User.instance = DatabaseMock.getUser();
         Calendar fakeCalendar = new GregorianCalendar(2018, Calendar.DECEMBER, 24);
         StreakManager.setFakeCalendar(fakeCalendar);
         User.setStreakManager(new StreakManager());
@@ -82,9 +88,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void testChangeFragment() {
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        swipeToFragmentSearch();
         sleep(2000);
     }
 
@@ -148,9 +152,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void testUnsuccessfulUserSearch(){
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        swipeToFragmentSearch();
         sleep(1000);
         searchFor("travis scott", true);
         sleep(500);
@@ -162,9 +164,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void testSuccessfulUserSearch(){
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        swipeToFragmentSearch();
         sleep(1000);
         searchFor("Bob", true);
         sleep(4000);
@@ -173,9 +173,7 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void testSuccessfulTrackSearch(){
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        swipeToFragmentSearch();
         // click on the toggleButton
         onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
@@ -186,19 +184,39 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void testUnsuccessfulTrackSearch(){
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
-        onView(withId(R.id.viewPagerId)).perform(swipeLeft());
+        swipeToFragmentSearch();
         // click on the toggleButton
         onView(withId(R.id.toggle_button)).perform(click());
         sleep(1000);
         searchFor("GradleBuildRunning", true);
-        sleep(500);
+        sleep(1000);
         String expected = String.format(mActivityRule.getActivity().getResources().getString(R.string.no_track_found), "GradleBuildRunning");
         onView(withText(expected))
                 .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testSuccessfulLuckyButtonOnNoTrackNearMe(){
+        swipeToFragmentSearch();
+
+        sleep(1000);
+
+        onView(withId(R.id.luckyIcon)).perform(click());
+    }
+
+    @Test
+    public void testSuccessfulLuckyButtonOnNoLikesFavs(){
+        swipeToFragmentSearch();
+
+        sleep(1000);
+
+        //User near track
+        User.instance.setLocation(new LatLng(37.422, -122.084));
+        onView(withId(R.id.luckyIcon)).perform(click());
+        intended(hasComponent(TrackPropertiesActivity.class.getName()));
+    }
+
 
     @Test
     public void testMaxTimeFilter() {
@@ -230,8 +248,8 @@ public class MainActivityTest extends TestInitLocation {
         MainActivity.typesFilter.add(TrackType.FOREST);
         List<String> types = new ArrayList<>();
         types.add(TrackType.FOREST.toString());
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084);
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082);
+        LatLngAdapter coord0 = new LatLngAdapter(37.422, -122.084);
+        LatLngAdapter coord1 = new LatLngAdapter(37.425, -122.082);
         int length = 100;
         int heightDiff = 10;
         FirebaseTrackAdapter track = new FirebaseTrackAdapter("Cours forest !", "0", "BobUID", "Bob", Arrays.asList(coord0, coord1), "imageUri",
@@ -269,14 +287,14 @@ public class MainActivityTest extends TestInitLocation {
 
     @Test
     public void databaseErrorNearMe() throws Throwable {
-        Database.setIsCancelled(true);
+        DatabaseMock.setIsCancelled(true);
 
         runOnUiThread(() ->((FragmentNearMe)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0)).onRefresh());
 
         //Tried to get the string but it did not work, put a hardcoded string for now
         onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_tracks)));
 
-        Database.setIsCancelled(false);
+        DatabaseMock.setIsCancelled(false);
     }
 
     private void selectAllTypes(boolean pressOk) {

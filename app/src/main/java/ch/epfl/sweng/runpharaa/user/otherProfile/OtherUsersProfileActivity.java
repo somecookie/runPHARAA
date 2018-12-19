@@ -2,7 +2,6 @@ package ch.epfl.sweng.runpharaa.user.otherProfile;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.user.AdapterTracksToRecyclerViewItem;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
@@ -72,6 +71,11 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Get user profile id.
+     *
+     * @return
+     */
     private String userProfileUid() {
         Intent i = getIntent();
         String profileUserId = null;
@@ -88,6 +92,11 @@ public class OtherUsersProfileActivity extends AppCompatActivity {
         emptyMessage.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Load activity for OtherUsersProfile.
+     *
+     * @param user
+     */
     private void loadActivity(User user) {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);

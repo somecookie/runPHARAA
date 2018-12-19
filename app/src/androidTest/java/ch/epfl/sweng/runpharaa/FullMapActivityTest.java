@@ -15,7 +15,9 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.sweng.runpharaa.map.FullMapActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 
 import static android.os.SystemClock.sleep;
 import static android.support.test.espresso.Espresso.onView;
@@ -32,10 +34,10 @@ public class FullMapActivityTest extends TestInitLocation {
 
     @Test
     public void testTrackPropertiesMap() {
-        CustLatLng coord0 = new CustLatLng(37.422, -122.084); //inm
-        CustLatLng coord1 = new CustLatLng(37.425, -122.082); //inm
-        List<CustLatLng> p = Arrays.asList(coord0, coord1);
-        LatLng[] points = CustLatLng.CustLatLngToLatLng(p).toArray(new LatLng[p.size()]);
+        LatLngAdapter coord0 = new LatLngAdapter(37.422, -122.084); //inm
+        LatLngAdapter coord1 = new LatLngAdapter(37.425, -122.082); //inm
+        List<LatLngAdapter> p = Arrays.asList(coord0, coord1);
+        LatLng[] points = LatLngAdapter.CustLatLngToLatLng(p).toArray(new LatLng[p.size()]);
         launchWithExtras(points);
         sleep(5_000);
         onView(withId(R.id.maps_test_text3)).check(matches(withText("ready")));

@@ -34,6 +34,7 @@ public class FireMessage {
 
     /**
      * Method that creates the JSON file that will be send
+     *
      * @return SUCCESS if operation successful
      * @throws Exception
      */

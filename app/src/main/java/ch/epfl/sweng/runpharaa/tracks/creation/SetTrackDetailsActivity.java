@@ -1,4 +1,4 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.tracks.creation;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -36,18 +36,20 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.R;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.tracks.FirebaseTrackAdapter;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
-public class CreateTrackActivity2 extends FragmentActivity implements OnMapReadyCallback {
+public class SetTrackDetailsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int IMAGE_GALLERY_REQUEST = 20;
     private static final int REQ_WIDTH = 480;
@@ -105,10 +107,10 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
                 FirebaseTrackAdapter track = new FirebaseTrackAdapter(nameText.getText().toString(),
                         User.instance.getUid(), User.instance.getName(), trackPhoto,
-                        CustLatLng.LatLngToCustLatLng(Arrays.asList(points)), trackProperties,
+                        LatLngAdapter.LatLngToCustLatLng(Arrays.asList(points)), trackProperties,
                         new ArrayList<>());
 
-                new Thread( () -> {
+                new Thread(() -> {
                     TrackDatabaseManagement.writeNewTrack(track);
                     finish();
                 }).start();
@@ -137,7 +139,7 @@ public class CreateTrackActivity2 extends FragmentActivity implements OnMapReady
 
         Button typeButton = findViewById(R.id.types);
         typeButton.setOnClickListener(v -> {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateTrackActivity2.this);
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(SetTrackDetailsActivity.this);
             mBuilder.setTitle(getResources().getString(R.string.choose_types));
             mBuilder.setMultiChoiceItems(listTypesStr, checkedTypes, (dialog, which, isChecked) -> checkedTypes[which] = isChecked);
 

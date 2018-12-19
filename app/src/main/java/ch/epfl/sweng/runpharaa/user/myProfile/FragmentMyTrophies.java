@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import ch.epfl.sweng.runpharaa.R;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
 import ch.epfl.sweng.runpharaa.user.User;
 
 public class FragmentMyTrophies extends Fragment {
@@ -49,6 +49,11 @@ public class FragmentMyTrophies extends Fragment {
         super.onResume();
     }
 
+    /**
+     * Update images in view.
+     *
+     * @param v
+     */
     private void updateImages(View v) {
 
         ImageView create = v.findViewById(R.id.trophies_create);
@@ -57,21 +62,29 @@ public class FragmentMyTrophies extends Fragment {
 
         int nbCreated = User.instance.getCreatedTracks().size();
 
-        setImages(nbCreated,R.drawable.create_one_track_reward, R.drawable.lock, create);
+        setImages(nbCreated, R.drawable.create_one_track_reward, R.drawable.lock, create);
 
         UserDatabaseManagement.updateLikedTracks(User.instance);
         int nbLike = User.instance.getLikedTracks().size();
 
-        setImages(nbLike,R.drawable.like_one_track_reward, R.drawable.lock, like);
+        setImages(nbLike, R.drawable.like_one_track_reward, R.drawable.lock, like);
 
         UserDatabaseManagement.updateFavoriteTracks(User.instance);
         int nbFav = User.instance.getFavoriteTracks().size();
 
-        setImages(nbFav,R.drawable.favorite_one_track_reward, R.drawable.lock, fav);
+        setImages(nbFav, R.drawable.favorite_one_track_reward, R.drawable.lock, fav);
 
     }
 
-    private void setImages(int param, int image, int imageDefault, ImageView v){
+    /**
+     * Set the images depending on the trophies the User gets
+     *
+     * @param param        the number tested to see if the User has the trophy or not
+     * @param image        the trophy image
+     * @param imageDefault the default lock image
+     * @param v            an ImageView
+     */
+    private void setImages(int param, int image, int imageDefault, ImageView v) {
         if (param >= 10) {
             v.setImageResource(image);
         } else if (param >= 2) {

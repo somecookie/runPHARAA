@@ -11,24 +11,25 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
 import ch.epfl.sweng.runpharaa.gui.CardItem;
 import ch.epfl.sweng.runpharaa.gui.TrackCardItem;
+import ch.epfl.sweng.runpharaa.gui.UpdatableCardItemFragment;
 import ch.epfl.sweng.runpharaa.tracks.Track;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackPropertiesActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 
 public class FragmentNearMe extends UpdatableCardItemFragment {
 
-
     public FragmentNearMe() {
     }
 
+    @Override
     protected void setEmptyMessage() {
         emptyMessage.setText(R.string.no_tracks);
         emptyMessage.setVisibility(View.VISIBLE);
     }
-
 
     /**
      * Create the recyclerView and the list of cardItem used to draw the list of tracks "near me".
@@ -57,7 +58,7 @@ public class FragmentNearMe extends UpdatableCardItemFragment {
                 }
                 OnItemClickListener listener = item -> {
                     Intent intent = new Intent(getContext(), TrackPropertiesActivity.class);
-                    intent.putExtra("TrackID", ((TrackCardItem)item).getParentTrackID());
+                    intent.putExtra("TrackID", ((TrackCardItem) item).getParentTrackID());
                     startActivity(intent);
                 };
 

@@ -21,7 +21,8 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.runpharaa.location.FakeGpsService;
 import ch.epfl.sweng.runpharaa.location.GpsService;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.creation.SetTrackDetailsActivity;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 import ch.epfl.sweng.runpharaa.utils.Util;
@@ -35,12 +36,12 @@ import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.runpharaa.util.ViewUtils.setProgress;
+import static ch.epfl.sweng.runpharaa.util.ViewUtils.testToastDisplay;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -48,13 +49,13 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateTrackActivity2Test extends TestInitLocation {
+public class SetTrackDetailsActivityTest extends TestInitLocation {
 
     private static final int WAIT_TIME = 1000;
 
     @Rule
-    public ActivityTestRule<CreateTrackActivity2> mActivityRule =
-            new ActivityTestRule<>(CreateTrackActivity2.class, false, false);
+    public ActivityTestRule<SetTrackDetailsActivity> mActivityRule =
+            new ActivityTestRule<>(SetTrackDetailsActivity.class, false, false);
 
     // ------------- COORDS --------------
     private LatLng inm = new LatLng(46.518577, 6.563165); //inm
@@ -114,9 +115,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         onView(withId(R.id.create_text_name)).perform(typeText("Buckingham to pub")).perform(closeSoftKeyboard());
         sleep(WAIT_TIME);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.properties_not_set)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.properties_not_set));
     }
 
     @Test
@@ -134,9 +133,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         sleep(WAIT_TIME);
         selectAllTypes(false);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.types_not_set)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.types_not_set));
     }
 
     @Test
@@ -152,15 +149,11 @@ public class CreateTrackActivity2Test extends TestInitLocation {
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.default_time)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.default_time));
         sleep(WAIT_TIME);
         selectFirstType(true);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.need_name)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.need_name));
     }
 
     @Test
@@ -178,9 +171,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
         sleep(WAIT_TIME);
         selectAllTypes(true);
         onView(withId(R.id.create_track_button)).perform(click());
-        onView(withText(mActivityRule.getActivity().getResources().getString(R.string.need_name)))
-                .inRoot(withDecorView(not(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        testToastDisplay(mActivityRule, mActivityRule.getActivity().getResources().getString(R.string.need_name));
     }
 
     private void selectFirstType(boolean pressOk) {
@@ -233,7 +224,7 @@ public class CreateTrackActivity2Test extends TestInitLocation {
     private void launchWithExtras(Location[] locations, LatLng[] points) {
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
-        Intent intent = new Intent(targetContext, CreateTrackActivity2.class);
+        Intent intent = new Intent(targetContext, SetTrackDetailsActivity.class);
         intent.putExtra("locations", locations);
         intent.putExtra("points", points);
         mActivityRule.launchActivity(intent);

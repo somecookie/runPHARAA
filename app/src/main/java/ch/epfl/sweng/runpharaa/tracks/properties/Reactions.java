@@ -1,28 +1,25 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 public class Reactions {
 
     private final int likes;
     private final int dislikes;
 
-    public Reactions()
-    {
+    public Reactions() {
         this.likes = 0;
         this.dislikes = 0;
     }
 
     /**
      * Basic constructor with all arguments known
-     * @param likes
-     * @param dislikes
+     * @param likes an int
+     * @param dislikes an int
      */
     public Reactions(int likes, int dislikes) {
-        if(likes < 0)
-        {
+        if (likes < 0) {
             throw new IllegalArgumentException("likes argument strictly smaller than zero");
         }
-        if(dislikes < 0)
-        {
+        if (dislikes < 0) {
             throw new IllegalArgumentException("dislikes argument strictly smaller than zero");
         }
         this.likes = likes;
@@ -31,7 +28,7 @@ public class Reactions {
 
     /**
      * likes getter
-     * @return
+     * @return the likes
      */
     public int getLikes() {
         return likes;
@@ -39,7 +36,7 @@ public class Reactions {
 
     /**
      * dislikes getter
-     * @return
+     * @return the dislikes
      */
     public int getDislikes() {
         return dislikes;
@@ -65,7 +62,7 @@ public class Reactions {
 
     /**
      * Return the number of likes minus the number of dislikes
-     * @return
+     * @return difference of likes minus the dislikes
      */
     public int getLikesCount()
     {
@@ -77,14 +74,10 @@ public class Reactions {
      * It return 1, if there is no likes or dislikes
      * @return the ratio as a double
      */
-    public double getLikesRatio()
-    {
-        if(getTotalReactions() > 0)
-        {
+    public double getLikesRatio() {
+        if (getTotalReactions() > 0) {
             return likes / (likes + dislikes);
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }

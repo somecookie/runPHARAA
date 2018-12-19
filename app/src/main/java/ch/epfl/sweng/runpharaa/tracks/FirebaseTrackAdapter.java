@@ -7,10 +7,15 @@ import com.google.firebase.database.Exclude;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.runpharaa.CustLatLng;
-import ch.epfl.sweng.runpharaa.comment.Comment;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackProperties;
+import ch.epfl.sweng.runpharaa.tracks.properties.TrackType;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.Comment;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 import ch.epfl.sweng.runpharaa.utils.Required;
 
+/**
+ * Adapter for database track to local {@link Track}
+ */
 public class FirebaseTrackAdapter {
 
     private String name;
@@ -18,7 +23,7 @@ public class FirebaseTrackAdapter {
     private String creatorId;
     private String creatorName;
     private Bitmap image;
-    private List<CustLatLng> path;
+    private List<LatLngAdapter> path;
     private String imageStorageUri;
     private List<Comment> comments;
 
@@ -35,7 +40,7 @@ public class FirebaseTrackAdapter {
 
     private Boolean isDeleted;
 
-    public FirebaseTrackAdapter(String name, String creatorId, String creatorName, Bitmap image, List<CustLatLng> path, TrackProperties properties, List<Comment> comments){
+    public FirebaseTrackAdapter(String name, String creatorId, String creatorName, Bitmap image, List<LatLngAdapter> path, TrackProperties properties, List<Comment> comments) {
         Required.nonNull(name, "Track name send to database must be non null");
         Required.nonNull(creatorId, "Track creatorId send to database must be non null");
         Required.nonNull(creatorName, "Track creator name send to database must be non null");
@@ -52,11 +57,11 @@ public class FirebaseTrackAdapter {
 
         //Initializing track properties
         List<String> types = new ArrayList<>();
-        for(TrackType t : properties.getType()){
+        for (TrackType t : properties.getType()) {
             types.add(t.toString());
         }
         this.trackTypes = types;
-        this.length= properties.getLength();
+        this.length = properties.getLength();
         this.heightDifference = properties.getHeightDifference();
         this.avgDiffTotal = properties.getAvgDifficultyTotal();
         this.avgDiffNbr = properties.getAvgDifficultyNbr();
@@ -68,7 +73,7 @@ public class FirebaseTrackAdapter {
         this.isDeleted = false;
     }
 
-    public FirebaseTrackAdapter(Track track, Boolean isDeleted){
+    public FirebaseTrackAdapter(Track track, Boolean isDeleted) {
         //Track attributes are assumed non-null
         Required.nonNull(isDeleted, "Specify if the track is deleted or not");
 
@@ -80,11 +85,11 @@ public class FirebaseTrackAdapter {
 
         //Initializing track properties
         List<String> types = new ArrayList<>();
-        for(TrackType t : track.getProperties().getType()){
+        for (TrackType t : track.getProperties().getType()) {
             types.add(t.toString());
         }
         this.trackTypes = types;
-        this.length= track.getProperties().getLength();
+        this.length = track.getProperties().getLength();
         this.heightDifference = track.getProperties().getHeightDifference();
         this.avgDiffTotal = track.getProperties().getAvgDifficultyTotal();
         this.avgDiffNbr = track.getProperties().getAvgDifficultyNbr();
@@ -97,7 +102,7 @@ public class FirebaseTrackAdapter {
         this.isDeleted = isDeleted;
     }
 
-    public FirebaseTrackAdapter(String name, String trackUid, String creatorId, String creatorName, List<CustLatLng> path,
+    public FirebaseTrackAdapter(String name, String trackUid, String creatorId, String creatorName, List<LatLngAdapter> path,
                                 String imageStorageUri, List<String> trackTypes, double length, double heightDifference,
                                 int avgDiffTotal, int avgDiffNbr, double avgDurTotal, int avgDurNbr, int likes, int favorites, List<Comment> comments) {
         Required.nonNull(name, "Track name send to database must be non null");
@@ -135,85 +140,190 @@ public class FirebaseTrackAdapter {
     }
 
     //For Firebase
-    public FirebaseTrackAdapter(){}
+    public FirebaseTrackAdapter() {
+    }
 
+    /**
+     * Get name.
+     *
+     * @return String
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get creatorID.
+     *
+     * @return String
+     */
     public String getCreatorId() {
         return creatorId;
     }
 
-    public String getCreatorName() { return creatorName;}
+    /**
+     * Get creatorName.
+     *
+     * @return String
+     */
+    public String getCreatorName() {
+        return creatorName;
+    }
 
     @Exclude
     public Bitmap getImage() {
         return image;
     }
 
-    public List<CustLatLng> getPath() {
+    /**
+     * Get path.
+     *
+     * @return List<LatLngAdapter>
+     */
+    public List<LatLngAdapter> getPath() {
         return path;
     }
 
+    /**
+     * Get imageStorageUri.
+     *
+     * @return String
+     */
     public String getImageStorageUri() {
         return imageStorageUri;
     }
 
+    /**
+     * Get track id.
+     *
+     * @return String
+     */
     public String getTrackUid() {
         return trackUid;
     }
 
+    /**
+     * Get track types.
+     *
+     * @return List<String>
+     */
     public List<String> getTrackTypes() {
         return trackTypes;
     }
 
+    /**
+     * Get length.
+     *
+     * @return double
+     */
     public double getLength() {
         return length;
     }
 
+    /**
+     * Get height difference.
+     *
+     * @return double
+     */
     public double getHeightDifference() {
         return heightDifference;
     }
 
+    /**
+     * Get average total difference.
+     *
+     * @return int
+     */
     public int getAvgDiffTotal() {
         return avgDiffTotal;
     }
 
+    /**
+     * Get average difference number.
+     *
+     * @return int
+     */
     public int getAvgDiffNbr() {
         return avgDiffNbr;
     }
 
+    /**
+     * Get average total duration.
+     *
+     * @return double
+     */
     public double getAvgDurTotal() {
         return avgDurTotal;
     }
 
+    /**
+     * Get average duration number.
+     *
+     * @return int
+     */
     public int getAvgDurNbr() {
         return avgDurNbr;
     }
 
+    /**
+     * Get number of likes.
+     *
+     * @return int
+     */
     public int getLikes() {
         return likes;
     }
 
+    /**
+     * Get number of favourites.
+     *
+     * @return
+     */
     public int getFavorites() {
         return favorites;
     }
 
-    public Boolean getIsDeleted() { return isDeleted;}
+    /**
+     * Return true if track is deleted.
+     *
+     * @return Boolean
+     */
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
 
+    /**
+     * Set track id.
+     *
+     * @param trackUid
+     */
     public void setTrackUid(String trackUid) {
         this.trackUid = trackUid;
     }
 
+    /**
+     * Set image storage uri.
+     *
+     * @param imageStorageUri
+     */
     public void setImageStorageUri(String imageStorageUri) {
         this.imageStorageUri = imageStorageUri;
     }
 
+    /**
+     * Get comments.
+     *
+     * @return List<Comment>
+     */
     public List<Comment> getComments() {
         return comments;
     }
 
+    /**
+     * Set comments.
+     *
+     * @param comments
+     */
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }

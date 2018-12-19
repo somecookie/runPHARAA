@@ -1,10 +1,8 @@
 package ch.epfl.sweng.runpharaa;
 
-import android.content.ComponentName;
 import android.net.Uri;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -15,18 +13,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ch.epfl.sweng.runpharaa.firebase.Database;
+import ch.epfl.sweng.runpharaa.database.mock.DatabaseMock;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.util.TestInitLocation;
 
 import static android.os.SystemClock.sleep;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
@@ -35,7 +28,6 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -104,14 +96,14 @@ public class FollowingFragmentTest extends TestInitLocation {
 
         onView(withId(R.id.viewPagerId)).perform(swipeLeft());
 
-        Database.setIsCancelled(true);
+        DatabaseMock.setIsCancelled(true);
 
         runOnUiThread(() ->((FragmentFollowing)this.mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(1)).onRefresh());
 
         onView(AllOf.allOf(withId(R.id.emptyMessage), isDisplayed())).check(matches(withText(R.string.no_follow)));
 
         //For further tests
-        Database.setIsCancelled(false);
+        DatabaseMock.setIsCancelled(false);
 
     }
 

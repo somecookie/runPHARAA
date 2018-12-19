@@ -61,6 +61,15 @@ public final class User implements Serializable {
         this.uid = uid;
     }
 
+    /**
+     * General setter for various field
+     *
+     * @param name            a String for the User's name
+     * @param preferredRadius a float for the User's preferred radius
+     * @param picture         an URI for the User's picture
+     * @param location        a LatLng containing the User's location
+     * @param uId             a String for the User's unique ID
+     */
     public static void set(String name, float preferredRadius, Uri picture, LatLng location, String uId) {
         instance = new User(name, (int) (preferredRadius * 1000), picture, location, uId);
     }
@@ -85,6 +94,12 @@ public final class User implements Serializable {
         instance = u;
     }
 
+    /**
+     * Deserialize a String back to a User
+     *
+     * @param s a String containing a serialized User
+     * @return a deserialized User
+     */
     public static User deserialize(String s) {
         try {
             byte b[] = Base64.decode(s.getBytes(), 0);
@@ -120,7 +135,7 @@ public final class User implements Serializable {
     /**
      * Add a track id in the set of liked tracks if it is not already there
      *
-     * @param trackId the track's id
+     * @param trackId the track's ID
      */
     public void like(String trackId) {
         if (!alreadyLiked(trackId)) likedTracks.add(trackId);
@@ -129,18 +144,17 @@ public final class User implements Serializable {
     /**
      * Check if the track is already in user's favorites
      *
-     * @param trackId the track's id
-     * @return true if the track is in the favorites
+     * @param trackId the track's ID
      */
     public void unlike(String trackId) {
         likedTracks.remove(trackId);
     }
 
     /**
-     * Check if Track is already in favourites.
+     * Check if Track is already in favourites
      *
-     * @param trackId
-     * @return
+     * @param trackId the track's ID
+     * @return true if the given Track is in the favourites
      */
     public boolean alreadyInFavorites(String trackId) {
         return favoriteTracks.contains(trackId);
@@ -158,7 +172,7 @@ public final class User implements Serializable {
     /**
      * Add a Track id in the set of created tracks.
      *
-     * @param trackId
+     * @param trackId the track's id
      */
     public void addToCreatedTracks(String trackId) {
         if (!createdTracks.contains(trackId)) createdTracks.add(trackId);
@@ -176,7 +190,7 @@ public final class User implements Serializable {
     /**
      * Check if a User id is in the set of followed users
      *
-     * @param u
+     * @param u a User
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean alreadyInFollowed(User u) {
@@ -192,7 +206,7 @@ public final class User implements Serializable {
     /**
      * Add a User id in the set of followed users
      *
-     * @param u
+     * @param u a User
      */
     public void addToFollowed(User u) {
         String serializedUser = User.serialize(u);
@@ -203,7 +217,7 @@ public final class User implements Serializable {
     /**
      * Remove a User id from the set of followed users
      *
-     * @param u
+     * @param u a User
      */
     public void removeFromFollowed(User u) {
         for (String serializedUser : followedUsers) {
@@ -215,8 +229,13 @@ public final class User implements Serializable {
         }
     }
 
-    public void addNewFeedBack(String trackID){
-        if(!feedbackTracks.contains(trackID)){
+    /**
+     * Add a new feedback for a track
+     *
+     * @param trackID a Track ID
+     */
+    public void addNewFeedBack(String trackID) {
+        if (!feedbackTracks.contains(trackID)) {
             feedbackTracks.add(trackID);
         }
     }
@@ -234,82 +253,171 @@ public final class User implements Serializable {
     /**
      * Update the user's location.
      *
-     * @param newLocation
+     * @param newLocation a LatLng representing the new location
      */
     @Exclude
     public void setLocation(LatLng newLocation) {
         this.location = newLocation;
     }
 
+    /**
+     * Get the User's name
+     *
+     * @return the User's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set a User's name
+     *
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the User's picture
+     *
+     * @return the User's picture
+     */
     public String getPicture() {
         return picture;
     }
 
+    /**
+     * Set the User's picture
+     *
+     * @param picture the new picture
+     */
     public void setPicture(String picture) {
         this.picture = picture;
     }
 
+    /**
+     * Get the User's unique ID
+     *
+     * @return the User's unique ID
+     */
     public String getUid() {
         return uid;
     }
 
+    /**
+     * Set the User's unique ID
+     *
+     * @param uid the new unique ID
+     */
     public void setUid(String uid) {
         this.uid = uid;
     }
 
-    public String getNotificationKey(){
+    /**
+     * Get the User's notification key
+     *
+     * @return the User's notification key
+     */
+    public String getNotificationKey() {
         return notificationKey;
     }
 
-    public void setNotificationKey(String key){
+    /**
+     * Set a notification key
+     *
+     * @param key the new notification key
+     */
+    public void setNotificationKey(String key) {
         notificationKey = key;
     }
 
+    /**
+     * Get the User's created tracks
+     *
+     * @return a list containing the created tracks ID
+     */
     public List<String> getCreatedTracks() {
         return createdTracks;
     }
 
+    /**
+     * Set the User's created tracks
+     *
+     * @param createdTracks a list of tracks
+     */
     public void setCreatedTracks(List<String> createdTracks) {
         this.createdTracks = createdTracks;
     }
 
+    /**
+     * Get the User's favorite tracks
+     *
+     * @return a list containing the User's favorite tracks
+     */
     public List<String> getFavoriteTracks() {
         return favoriteTracks;
     }
 
+    /**
+     * Set the User's favorite tracks
+     *
+     * @param favoriteTracks a list of tracks
+     */
     public void setFavoriteTracks(List<String> favoriteTracks) {
         this.favoriteTracks = favoriteTracks;
     }
 
+    /**
+     * Get the User's liked tracks
+     *
+     * @return a list containing the User's liked tracks
+     */
     public List<String> getLikedTracks() {
         return likedTracks;
     }
 
+    /**
+     * Set the User's liked tracks
+     *
+     * @param likedTracks a list of tracks
+     */
     public void setLikedTracks(List<String> likedTracks) {
         this.likedTracks = likedTracks;
     }
 
+    /**
+     * Get the User's followed users
+     *
+     * @return a list containing the User's followed users
+     */
     public List<String> getFollowedUsers() {
         return followedUsers;
     }
 
+    /**
+     * Set the User's followed users
+     *
+     * @param followedUsers a list of users
+     */
     public void setFollowedUsers(List<String> followedUsers) {
         this.followedUsers = followedUsers;
     }
 
-
+    /**
+     * Get the feedback
+     *
+     * @return a list of feedback
+     */
     public List<String> getFeedbackTracks() {
         return feedbackTracks;
     }
 
+    /**
+     * Set the feedback
+     *
+     * @param feedbackTracks a list of feedback
+     */
     public void setFeedbackTracks(List<String> feedbackTracks) {
         this.feedbackTracks = feedbackTracks;
     }
@@ -328,6 +436,12 @@ public final class User implements Serializable {
         return uid.hashCode();
     }
 
+    /**
+     * Serialize a User into a String
+     *
+     * @param user the User to serialize
+     * @return a String
+     */
     public static String serialize(User user) {
         String serialized = "";
 
@@ -345,11 +459,21 @@ public final class User implements Serializable {
         return serialized;
     }
 
+    /**
+     * Get the User's CardItem
+     *
+     * @return the User's CardItem
+     */
     @Exclude
     public UserCardItem getUserCardItem() {
         return userCardItem;
     }
 
+    /**
+     * Set the User's CardItem
+     *
+     * @param userCardItem a UserCardItem
+     */
     public void setUserCardItem(UserCardItem userCardItem) {
         this.userCardItem = userCardItem;
     }

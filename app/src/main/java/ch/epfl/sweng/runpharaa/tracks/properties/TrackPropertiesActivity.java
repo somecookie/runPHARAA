@@ -1,9 +1,8 @@
-package ch.epfl.sweng.runpharaa;
+package ch.epfl.sweng.runpharaa.tracks.properties;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +35,6 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,25 +53,26 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 
+import ch.epfl.sweng.runpharaa.R;
 import ch.epfl.sweng.runpharaa.cache.ImageLoader;
-import ch.epfl.sweng.runpharaa.comment.Comment;
-import ch.epfl.sweng.runpharaa.comment.CommentAdapter;
-import ch.epfl.sweng.runpharaa.database.TrackDatabaseManagement;
-import ch.epfl.sweng.runpharaa.database.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.Comment;
+import ch.epfl.sweng.runpharaa.tracks.properties.comment.CommentAdapter;
+import ch.epfl.sweng.runpharaa.database.firebase.TrackDatabaseManagement;
+import ch.epfl.sweng.runpharaa.database.firebase.UserDatabaseManagement;
+import ch.epfl.sweng.runpharaa.map.CustomMapFragment;
+import ch.epfl.sweng.runpharaa.map.FullMapActivity;
 import ch.epfl.sweng.runpharaa.notification.FireMessage;
 import ch.epfl.sweng.runpharaa.tracks.Track;
-import ch.epfl.sweng.runpharaa.tracks.TrackProperties;
-import ch.epfl.sweng.runpharaa.tracks.TrackType;
 import ch.epfl.sweng.runpharaa.user.User;
 import ch.epfl.sweng.runpharaa.user.myProfile.UsersProfileActivity;
 import ch.epfl.sweng.runpharaa.user.otherProfile.OtherUsersProfileActivity;
 import ch.epfl.sweng.runpharaa.utils.Callback;
 import ch.epfl.sweng.runpharaa.utils.Config;
+import ch.epfl.sweng.runpharaa.utils.LatLngAdapter;
 import ch.epfl.sweng.runpharaa.utils.PropertiesOnClickListener;
 import ch.epfl.sweng.runpharaa.utils.Util;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
-import static java.security.AccessController.getContext;
 
 public class TrackPropertiesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -117,7 +116,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     finish();
                     return;
                 }
-                points = CustLatLng.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
+                points = LatLngAdapter.CustLatLngToLatLng(track.getPath()).toArray(new LatLng[track.getPath().size()]);
 
                 setDeleteButton(track);
 
@@ -145,6 +144,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
     }
 
 
+    /**
+     * Set the delete button to visible/invisible depending if the {@link Track} can be deleted
+     * @param track a Track
+     */
     private void setDeleteButton(Track track){
         Button deleteButton = findViewById(R.id.deleteButton);
         if(track.getCreatorUid().equals(User.instance.getUid()))
@@ -162,6 +165,10 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }
     }
 
+    /**
+     * Delete the track and finish the activity
+     * @param track the Track to delete
+     */
     private void deleteTrack(Track track){
         TrackDatabaseManagement.deleteTrack(track.getTrackUid());
         Toast t = Toast.makeText(this, R.string.track_deleted, Toast.LENGTH_LONG);
@@ -169,6 +176,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         finish();
     }
 
+    /**
+     * Open an {@link AlertDialog} to confirm if the user really want to delete the track
+     * @param track a Track
+     * @return an AlertDialog
+     */
     private AlertDialog deleteTrackConfirmation(Track track)
     {
         AlertDialog deleteTrackDialogBox = new AlertDialog.Builder(this)
@@ -194,7 +206,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         return true;
     }
 
-
+    /**
+     * Initialize and set the properties buttons
+     *
+     * @param trackID the Track's unique ID
+     * @param track the Track
+     */
     private void setButtonsOfProperties(String trackID, Track track) {
         ToggleButton toggleLike = findViewById(R.id.buttonLikeID);
         ToggleButton toggleFavorite = findViewById(R.id.buttonFavoriteID);
@@ -227,6 +244,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         initFeedbackButton(trackID, track);
     }
 
+    /**
+     * Initialize the feedback button
+     *
+     * @param trackID a track unique ID
+     * @param track a Track
+     */
     private void initFeedbackButton(String trackID, Track track) {
         Button feedbackButton = findViewById(R.id.feedbackButton);
         feedbackButton.setOnClickListener(new PropertiesOnClickListener(this, new Callback<PropertiesOnClickListener>() {
@@ -250,11 +273,19 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }));
     }
 
+    /**
+     * Relaunch the activity
+     */
     private void relaunchActivity() {
         finish();
         startActivity(startIntent);
     }
 
+    /**
+     * Initialize the comment button
+     *
+     * @param track a Track
+     */
     private void initCommentButton(Track track) {
         Button commentsButton = findViewById(R.id.commentsID);
         TextView nbrComments = findViewById(R.id.trackCommentsID);
@@ -304,6 +335,11 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
     }
 
+    /**
+     * Initialize the social media buttons
+     *
+     * @param track a Track
+     */
     private void initSocialMediaButtons(Track track) {
         // Share on Facebook
         ImageButton fb = findViewById(R.id.fb_share_button);
@@ -317,7 +353,6 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                 shareDialog.show(content);
             }
         });
-
 
         // Share on Twitter
         ImageButton twitter = findViewById(R.id.twitter_share_button);
@@ -334,6 +369,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
     }
 
+    /**
+     * Set the different texts for properties of the given track
+     *
+     * @param track a Track
+     * @param tp a TrackProperties
+     */
     private void setTextOfProperties(Track track, TrackProperties tp) {
         TextView trackTitle = findViewById(R.id.trackTitleID);
         trackTitle.setText(track.getName());
@@ -372,6 +413,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
 
     }
 
+    /**
+     * Create a tag for the given Track
+     *
+     * @param track a Track
+     * @return the created tag
+     */
     private String createTagString(Track track) {
         Set<TrackType> typeSet = track.getProperties().getType();
         int nbrTypes = typeSet.size();
@@ -396,9 +443,13 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         return sb.toString();
     }
 
+    /**
+     * Update the number of likes for a given track
+     *
+     * @param track1 a Track
+     * @param trackID a Track's unique ID
+     */
     private void updateLikes(Track track1, String trackID) {
-
-
         final Track track = track1;
         if (User.instance.alreadyLiked(trackID)) {
             track.getProperties().removeLike();
@@ -427,6 +478,12 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         });
     }
 
+    /**
+     * Update the number of favorites for a given track
+     *
+     * @param track1 a Track
+     * @param trackID a Track's unique ID
+     */
     private void updateNbFavorites(Track track1, String trackID) {
         final Track track = track1;
         if (User.instance.alreadyInFavorites(trackID)) {
@@ -503,13 +560,25 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
         }
     }
 
+    /**
+     * Hide the keyboard from a given View in a given Context
+     *
+     * @param context a Context
+     * @param view a View
+     */
     private void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    /**
+     * Send a notification to the given key with the given title and message
+     *
+     * @param key the key
+     * @param title the message's title
+     * @param message the message
+     */
     private void sentToNotification(String key, String title, String message) {
-
         FireMessage f = null;
         try {
             f = new FireMessage(title, message);
