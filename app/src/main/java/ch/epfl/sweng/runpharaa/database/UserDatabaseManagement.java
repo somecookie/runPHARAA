@@ -203,7 +203,7 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
      * @param user the User we want to remove
      */
     public static void removeFollowedUser(final User user) {
-        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FOLLOWING);
+        DatabaseReference followedRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FOLLOWING);
 
         followedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -357,7 +357,14 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    String dataName = formatString(data.child(NAME).getValue(String.class));
+                    String dataName = data.child(NAME).getValue(String.class);
+
+
+                    if(dataName == null){
+                        continue;
+                    }
+
+                    dataName = formatString(dataName);
                     String formattedName = formatString(name);
 
                     if (dataName.equals(formattedName)) {
@@ -397,8 +404,8 @@ public class UserDatabaseManagement extends TrackDatabaseManagement {
      * @param user the user we update
      */
     public static void updateFeedBackTracks(User user) {
-        DatabaseReference createRef = mDataBaseRef.child(USERS).child(User.instance.getUid()).child(FEEDBACK);
-        createRef.setValue(user.getCreatedTracks()).addOnFailureListener(Throwable::printStackTrace);
+        DatabaseReference createRef = mDataBaseRef.child(USERS).child(user.getUid()).child(FEEDBACK);
+        createRef.setValue(user.getFeedbackTracks()).addOnFailureListener(Throwable::printStackTrace);
     }
 
     /**

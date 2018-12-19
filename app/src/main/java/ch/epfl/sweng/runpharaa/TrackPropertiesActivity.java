@@ -265,6 +265,7 @@ public class TrackPropertiesActivity extends AppCompatActivity implements OnMapR
                     TrackProperties tp = track.getProperties();
                     tp.addNewDuration(value.getTime());
                     tp.addNewDifficulty(value.getDifficulty());
+                    User.instance.addNewFeedBack(trackID);
                     TrackDatabaseManagement.updateTrack(track);
                     UserDatabaseManagement.updateFeedBackTracks(User.instance);
                     relaunchActivity();
