@@ -54,7 +54,7 @@ public class FragmentSearch extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.luckyIcon){
-            FilterProperties properties = new FilterProperties();
+            /*FilterProperties properties = new FilterProperties();
             TrackDatabaseManagement.mReadDataOnce(TrackDatabaseManagement.TRACKS_PATH, new Callback<DataSnapshot>() {
                 @Override
                 public void onSuccess(DataSnapshot value) {
@@ -80,7 +80,8 @@ public class FragmentSearch extends Fragment {
                         startTrackPropertiesWith(properties.chooseLuckyTrack(nearMe).getTrackUid());
                     }
                 }
-            });
+            });*/
+            startTrackPropertiesWith("-LUB6Tozo8BAY6F2VjX6"); // SAT
         }
         return true;
     }
